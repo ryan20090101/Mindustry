@@ -41,11 +41,13 @@ public class DistributionBlocks{
 	buffer = new Router("buffer"){{
         capacity = 200;
         bufferUpdate = true;
+		rotate = true;
 	}},
 
 	combiner = new Router("combiner"){{
         capacity = 5;
         bufferUpdate = true;
+        rotate = true;
 	}},
 	
 	junction = new Junction("junction"){{
