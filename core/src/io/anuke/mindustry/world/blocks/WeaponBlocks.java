@@ -50,10 +50,10 @@ public class WeaponBlocks{
 	
 	machineturret = new Turret("machineturret"){
 		{
-			range = 65;
-			reload = 7f;
-			bullet = BulletType.iron;
-			ammo = Item.iron;
+			range = 165;
+			reload = 30f;
+			bullet = BulletType.missile;
+			ammo = Item.stone;
 			health = 65;
 		}
 	},
@@ -62,7 +62,7 @@ public class WeaponBlocks{
 		{
 			range = 50;
 			reload = 30f;
-			bullet = BulletType.iron;
+			bullet = BulletType.missile;
 			ammo = Item.iron;
 			health = 70;
 			shots = 5;

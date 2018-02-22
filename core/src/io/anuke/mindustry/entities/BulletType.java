@@ -1,10 +1,15 @@
 package io.anuke.mindustry.entities;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.entities.effect.DamageArea;
 import io.anuke.mindustry.entities.effect.EMP;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.graphics.Fx;
+import io.anuke.mindustry.world.blocks.types.defense.Turret;
+import io.anuke.ucore.entities.Entities;
+import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Timers;
@@ -12,6 +17,7 @@ import io.anuke.ucore.entities.BaseBulletType;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
+import com.badlogic.gdx.utils.Array;
 
 import static io.anuke.mindustry.graphics.Fx.*;
 
@@ -54,6 +60,25 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		public void update(Bullet b){
 			if(b.timer.get(0, 4)){
 				Effects.effect(Fx.railsmoke, b.x, b.y);
+			}
+		}
+	},
+
+	missile = new BulletType(2f, 2) {
+		{
+			lifetime = 600f;
+		}
+		public void draw(Bullet b) {
+			Draw.color(Color.GRAY);
+			Draw.rect("bullet", b.x, b.y, b.angle());
+			Draw.reset();
+		}
+
+		public void update(Bullet b) {
+			Array<SolidEntity> enemies = Entities.getNearby(Vars.enemyGroup, b.x, b.y, 15);
+			for (SolidEntity entity : enemies) {
+				b.velocity = new Vector2(Math.max(0, Math.min(1, entity.x - b.x)), Math.max(0, Math.min(1, entity.y - b.y)));
+				break;
 			}
 		}
 	},
