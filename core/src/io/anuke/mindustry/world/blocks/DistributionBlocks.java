@@ -40,10 +40,12 @@ public class DistributionBlocks{
 
 	buffer = new Router("buffer"){{
         capacity = 200;
+        bufferUpdate = true;
 	}},
 
-	combiner = new Combiner("combiner"){{
-
+	combiner = new Router("combiner"){{
+        capacity = 5;
+        bufferUpdate = true;
 	}},
 	
 	junction = new Junction("junction"){{

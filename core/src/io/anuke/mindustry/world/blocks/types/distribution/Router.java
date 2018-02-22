@@ -13,6 +13,7 @@ public class Router extends Block{
 	protected final int timerDump = timers++;
 	
 	public int capacity = 20;
+    public boolean bufferUpdate = false;
 
 	public Router(String name) {
 		super(name);
@@ -34,21 +35,32 @@ public class Router extends Block{
 	
 	@Override
 	public void update(Tile tile){
-		tile.setRotation((byte)Mathf.mod(tile.getRotation(), 4));
+        if(!bufferUpdate){
+    
+            tile.setRotation((byte)Mathf.mod(tile.getRotation(), 4));
 
-		int iterations = Math.max(1, (int) (Timers.delta() + 0.4f));
+            int iterations = Math.max(1, (int) (Timers.delta() + 0.4f));
 
-		for(int i = 0; i < iterations; i ++) {
+            for(int i = 0; i < iterations; i ++) {
 
-			if (tile.entity.totalItems() > 0) {
-				if (tile.getExtra() != tile.getRotation()
-						|| Mathf.chance(0.35)) { //sometimes dump backwards at a 1/4 chance... this somehow works?
-					tryDump(tile, tile.getRotation(), null);
-				}
+                if (tile.entity.totalItems() > 0) {
+                    if (tile.getExtra() != tile.getRotation()
+                            || Mathf.chance(0.35)) { //sometimes dump backwards at a 1/4 chance... this somehow works?
+                        tryDump(tile, tile.getRotation(), null);
+                    }
 
-				tile.setRotation((byte) ((tile.getRotation() + 1) % 4));
-			}
-		}
+                    tile.setRotation((byte) ((tile.getRotation() + 1) % 4));
+                }
+            }
+        }else{
+            int iterations = Math.max(1, (int) (Timers.delta() + 0.4f));
+            for(int i = 0; i < iterations; i ++) {
+                if (tile.entity.totalItems() > 0) {
+                    tryDump(tile, tile.getRotation(), null);
+                }
+            }
+        }
+            
 	}
 	
 	@Override
