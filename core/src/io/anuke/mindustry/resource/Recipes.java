@@ -37,6 +37,7 @@ public class Recipes {
 			new Recipe(distribution, DistributionBlocks.liquidrouter, stack(Item.steel, 2)),
 			new Recipe(distribution, DistributionBlocks.liquidjunction, stack(Item.steel, 2)),
 			new Recipe(distribution, DistributionBlocks.sorter, stack(Item.steel, 2)),
+			new Recipe(distribution, DistributionBlocks.coreOut, stack(Item.stone, 2)),
 
 			new Recipe(weapon, WeaponBlocks.turret, stack(Item.stone, 4)),
 			new Recipe(weapon, WeaponBlocks.doubleturret, stack(Item.stone, 7)),

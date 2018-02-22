@@ -44,6 +44,9 @@ public class DistributionBlocks{
 		rotate = true;
 	}},
 
+	coreOut = new CorePuller("coreOut"){{
+	}},
+
 	combiner = new Router("combiner"){{
         capacity = 5;
         bufferUpdate = true;

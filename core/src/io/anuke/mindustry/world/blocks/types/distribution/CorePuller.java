@@ -3,96 +3,51 @@ package io.anuke.mindustry.world.blocks.types.distribution;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.entities.TileEntity;
+import io.anuke.mindustry.game.Inventory;
 import io.anuke.mindustry.resource.Item;
+import io.anuke.mindustry.resource.ItemStack;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
-import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.scene.style.TextureRegionDrawable;
 import io.anuke.ucore.scene.ui.ButtonGroup;
 import io.anuke.ucore.scene.ui.ImageButton;
 import io.anuke.ucore.scene.ui.layout.Table;
-import io.anuke.ucore.util.Mathf;
-import io.anuke.ucore.util.Tmp;
-import io.anuke.mindustry.game.Inventory;
+
+import static io.anuke.mindustry.Vars.state;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class CorePuller extends Block{
+
+	protected final int timerDump = timers++;
 	
-	public Sorter(String name) {
+	public CorePuller(String name) {
 		super(name);
 		update = true;
 		solid = true;
-		instantTransfer = true;
-	}
-	
-	@Override
-	public void draw(Tile tile){
-		super.draw(tile);
-		
-		CorePullerEntity entity = tile.entity();
-		
-		TextureRegion region = entity.sortItem.region;
-		Tmp.tr1.setRegion(region, 4, 4, 1, 1);
-		
-		Draw.rect(Tmp.tr1, tile.worldx(), tile.worldy(), 4f, 4f);
 	}
 
 	@Override
-	public boolean canReplace(Block other){
-		return other instanceof Conveyor || other instanceof Router;
-	}
-	
-	@Override
-	public void handleItem(Item item, Tile tile, Tile source){
+	public void update(Tile tile) {
+		CorePullerEntity ent = tile.entity();
 
-        if(Inventory.hasItem(entity.sortItem){
-            
-        /**Tile to = getTileTarget(item, tile, source, true);
-
-            to.block().handleItem(item, to, tile);**/
-	}
-	
-	/**Tile getTileTarget(Item item, Tile dest, Tile source, boolean flip){
-		CorePullerEntity entity = dest.entity();
-		
-		int dir = source.relativeTo(dest.x, dest.y);
-		if(dir == -1) return null;
-		Tile to;
-		
-		if(item == entity.sortItem){
-			to = dest.getNearby(dir);
-		}else{
-			Tile a = dest.getNearby(Mathf.mod(dir - 1, 4));
-			Tile b = dest.getNearby(Mathf.mod(dir + 1, 4));
-			boolean ac = !(a.block().instantTransfer && source.block().instantTransfer) &&
-								a.block().acceptItem(item, a, dest);
-			boolean bc = !(b.block().instantTransfer && source.block().instantTransfer) &&
-								b.block().acceptItem(item, b, dest);
-			
-			if(ac && !bc){
-				to = a;
-			}else if(bc && !ac){
-				to = b;
-			}else if(!bc){
-				return null;
-			}else{
-				if(dest.getDump() == 0){
-					to = a;
-					if(flip)
-						dest.setDump((byte)1);
-				}else{
-					to = b;
-					if(flip)
-						dest.setDump((byte)0);
+		for(int j = 0; j < 4; j ++) {
+			Tile other = tile.getNearby(j);
+			if (other != null && other.block().acceptItem(ent.sortItem, other, tile)) {
+				if (state.inventory.hasItem(new ItemStack(ent.sortItem,1))) {
+					state.inventory.removeItem(new ItemStack(ent.sortItem,1));
+					offloadNear(tile, ent.sortItem);
 				}
+
 			}
 		}
-		
-		return to;
-	}**/
+
+		if(ent.timer.get(timerDump, 30)){
+			tryDump(tile);
+		}
+	}
 
 	@Override
 	public void configure(Tile tile, byte data) {
@@ -102,11 +57,6 @@ public class CorePuller extends Block{
 		}
 	}
 
-	@Override
-	public boolean isConfigurable(Tile tile){
-		return true;
-	}
-	
 	@Override
 	public void buildTable(Tile tile, Table table){
 		CorePullerEntity entity = tile.entity();
@@ -137,10 +87,15 @@ public class CorePuller extends Block{
 
 		table.add(cont);
 	}
+
+	@Override
+	public boolean isConfigurable(Tile tile){
+		return true;
+	}
 	
 	@Override
 	public TileEntity getEntity(){
-		return new CorePullerEntity Entity();
+		return new CorePullerEntity();
 	}
 
 	public static class CorePullerEntity extends TileEntity{

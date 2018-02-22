@@ -51,6 +51,10 @@ public class Block{
 	public boolean solidifes;
 	/**whether this is rotateable*/
 	public boolean rotate;
+	/**whether this block is disabled using logic*/
+	public boolean logicDisabled;
+	/**whether this block supports logic*/
+	public boolean logic;
 	/**whether you can break this with rightclick*/
 	public boolean breakable;
 	/**whether this block can be drowned in*/

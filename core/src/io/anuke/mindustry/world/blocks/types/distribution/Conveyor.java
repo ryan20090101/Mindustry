@@ -95,6 +95,9 @@ public class Conveyor extends Block{
 	@Override
 	public void update(Tile tile){
 
+		if (logicDisabled)
+			return;
+
 		ConveyorEntity entity = tile.entity();
 		entity.minitem = 1f;
 
