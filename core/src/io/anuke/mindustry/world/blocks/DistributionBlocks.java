@@ -38,8 +38,8 @@ public class DistributionBlocks{
 
 	}},
 
-	buffer = new Buffer("buffer"){{
-
+	buffer = new Router("buffer"){{
+        capacity = 200;
 	}},
 
 	combiner = new Combiner("combiner"){{
