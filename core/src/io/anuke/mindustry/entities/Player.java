@@ -35,7 +35,7 @@ public class Player extends SyncEntity{
 	public String name = "name";
 	public boolean isAndroid;
 	public Color color = new Color();
-
+    public int radiationDeath = 200;
 	public Weapon weaponLeft = Weapon.blaster;
 	public Weapon weaponRight = Weapon.blaster;
 	public Mech mech = Mech.standard;
@@ -88,7 +88,7 @@ public class Player extends SyncEntity{
 		if(Net.active()){
 			NetEvents.handlePlayerDeath();
 		}
-
+        radiation=-99999;
 		Effects.effect(Fx.explosion, this);
 		Effects.shake(4f, 5f, this);
 		Effects.sound("die", this);
@@ -156,11 +156,13 @@ public class Player extends SyncEntity{
 			if(!isLocal) interpolate();
 			return;
 		}
-
 		Tile tile = world.tileWorld(x, y);
 
         if(radiation>=100){
-            onDeath();
+            damage(radiation-100);
+            if(radiation>=radiationDeath){
+                onDeath();
+            }
         }
         if(radiation>0&&cx>3){
             radiation=radiation-1;
@@ -205,6 +207,7 @@ public class Player extends SyncEntity{
 		boolean shooting = !Inputs.keyDown("dash") && Inputs.keyDown("shoot") && control.input().recipe == null
 				&& !ui.hasMouse() && !control.input().onConfigurable();
 		if(shooting){
+            radiation = radiation + 5;
 			weaponLeft.update(player, true);
 			weaponRight.update(player, false);
 		}
