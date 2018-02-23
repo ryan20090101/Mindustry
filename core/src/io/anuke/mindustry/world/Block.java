@@ -95,6 +95,8 @@ public class Block{
 	public boolean alwaysReplace = false;
 	/**whether this block has instant transfer checking. used for calculations to prevent infinite loops.*/
 	public boolean instantTransfer = false;
+	/**is the block radioactive.*/
+	public boolean radioactive = false;
 
 	public Block(String name) {
 		this.name = name;

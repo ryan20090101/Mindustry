@@ -142,13 +142,18 @@ public class HudFragment implements Fragment{
 		}}.end();
         //radiation table
 		new table(){{
-
-                visible(() -> state.is(State.playing)&&player.radiation>0);
-                atop();
-                new table("pane"){{
-                    new label("[green] "+ Bundles.get("text.radiation") + " " + Integer.toString(player.radiation)).scale(0.75f).pad(6);
-                }}.end();
-            
+			atop();
+        	new table("pane"){{
+				visible(() -> state.is(State.playing)&&control.getRadiation()>0);
+                new label("[green]"+Bundles.get("text.radiation") + " " + control.getRadiation()).scale(0.75f).pad(6);
+        	}}.end();
+		}}.end();
+		//respawn table
+		new table(){{
+			new table("pane"){{
+				new label(()->"[orange]"+Bundles.get("text.respawn")+" " + (int)(control.getRespawnTime()/60)).scale(0.75f).pad(10);
+				visible(()->control.getRespawnTime() > 0 && !state.is(State.menu));
+			}}.end();
 		}}.end();
 		//respawn background table
 		new table("white"){{
@@ -234,15 +239,6 @@ public class HudFragment implements Fragment{
 		respawntable.addAction(Actions.color(in ? new Color(0, 0, 0, 0.3f) : Color.CLEAR, 0.3f));
 	}
     public void drawRad(){
-        new table(){{
-            new table("pane"){{
-
-                new label(()->"[orange]"+Bundles.get("text.respawn")+" " + (int)(control.getRespawnTime()/60)).scale(0.75f).pad(10);
-
-                visible(()->control.getRespawnTime() > 0 && !state.is(State.menu));
-
-            }}.end();
-        }}.end();
     }
     
     

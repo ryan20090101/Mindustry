@@ -159,14 +159,15 @@ public class Player extends SyncEntity{
 
 		Tile tile = world.tileWorld(x, y);
 
-        if(radiation>=100){
-            onDeath();
-        }
-        if(radiation>0&&cx>3){
-            radiation=radiation-1;
-            cx=0;
-        }
+
+        if(radiation>=100) onDeath();
+
+        if(radiation>0&&cx>3&&!tile.floor().radioactive){radiation=radiation-1;cx=0;}
+
+		if (tile.floor().radioactive && cx>3) {radiation += 1;cx=0;}
+		
         cx=cx+1;
+
         
 		//if player is in solid block
 		if(tile != null && ((tile.floor().liquid && tile.block() == Blocks.air) || tile.solid())){

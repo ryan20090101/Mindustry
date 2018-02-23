@@ -99,6 +99,7 @@ public class Blocks{
 	
 	uranium = new Ore("uranium"){{
 		drops = new ItemStack(Item.uranium, 1);
+		radioactive = true;
 	}},
     lead = new Ore("lead"){{
         drops = new ItemStack(Item.lead, 1);
