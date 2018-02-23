@@ -15,7 +15,6 @@ _Keep in mind that this is just a basic outline of planned features, and will be
 - Movable turrets
 - Batteries or storage for anything
 - Customizable world ore generation + seed
-- Steam release
 - Research system, tech tree, persistent upgrades, upgrades at all
 - Missile enemies/turrets/weapons (both homing and non-homing)
 - Enemies dropping resources
@@ -28,7 +27,6 @@ _Keep in mind that this is just a basic outline of planned features, and will be
 - Deflector shields
 - Underground blocks
 - Configurable outputs/inputs
-- Getting items out of the core
 - Rockets to go to new areas
 - Agriculture
 - Wires
