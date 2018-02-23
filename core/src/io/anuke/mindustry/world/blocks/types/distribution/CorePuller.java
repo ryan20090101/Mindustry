@@ -37,16 +37,17 @@ public class CorePuller extends PowerBlock{
 	public void update(Tile tile) {
 		CorePullerEntity ent = tile.entity();
 
-		for(int j = 0; j < 4; j ++) {
-			if(!ent.timer.get(timerPull,ent.pullTime) && ent.power >= powerPerItem) break;
-			Tile other = tile.getNearby(j);
-			if (other != null && other.block().acceptItem(ent.sortItem, other, tile)) {
-				if (state.inventory.hasItem(new ItemStack(ent.sortItem,1))) {
-					state.inventory.removeItem(new ItemStack(ent.sortItem,1));
-					offloadNear(tile, ent.sortItem);
-					ent.power -= powerPerItem;
-				}
+		if(ent.timer.get(timerPull,ent.pullTime) && ent.power >= powerPerItem) {
+			for (int j = 0; j < 4; j++) {
+				Tile other = tile.getNearby(j);
+				if (other != null && other.block().acceptItem(ent.sortItem, other, tile)) {
+					if (state.inventory.hasItem(new ItemStack(ent.sortItem, 1))) {
+						state.inventory.removeItem(new ItemStack(ent.sortItem, 1));
+						offloadNear(tile, ent.sortItem);
+						ent.power -= powerPerItem;
+					}
 
+				}
 			}
 		}
 
@@ -120,13 +121,13 @@ public class CorePuller extends PowerBlock{
 		@Override
 		public void write(DataOutputStream stream) throws IOException{
 			stream.writeByte(sortItem.id);
-			stream.writeByte(pullTime);
+			stream.writeInt(pullTime);
 		}
 		
 		@Override
 		public void read(DataInputStream stream) throws IOException{
 			sortItem = Item.getAllItems().get(stream.readByte());
-			pullTime = stream.readByte();
+			pullTime = stream.readInt();
 		}
 	}
 }
