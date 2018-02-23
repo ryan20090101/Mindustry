@@ -199,6 +199,10 @@ public class NetServer extends Module{
         Net.handleServer(PlayerDeathPacket.class, (id, packet) -> {
             packet.id = connections.get(id).id;
             Net.sendExcept(id, packet, SendMode.tcp);
+            ChatPacket cpacket = new ChatPacket();
+            String x = connections.get(id).name + " has died.";
+            cpacket.text=x;
+            Net.send(cpacket, SendMode.tcp);
         });
     }
 
