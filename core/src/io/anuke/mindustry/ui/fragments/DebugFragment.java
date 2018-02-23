@@ -177,6 +177,8 @@ public class DebugFragment implements Fragment {
             result.append("   local: ");
             result.append(player.isLocal);
             result.append("\n");
+            result.append(player.radiation);
+            result.append("\n");
 
             result.append("\n");
         }

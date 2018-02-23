@@ -26,7 +26,7 @@ public class HudFragment implements Fragment{
 	private Table wavetable;
 	private Label infolabel;
 	private boolean shown = true;
-
+    @Override
 	public void build(){
 
 		//menu at top left
@@ -140,7 +140,16 @@ public class HudFragment implements Fragment{
 				new label("[orange]< "+ Bundles.get("text.paused") + " >").scale(0.75f).pad(6);
 			}}.end();
 		}}.end();
+        //radiation table
+		new table(){{
 
+                visible(() -> state.is(State.playing)&&player.radiation>0);
+                atop();
+                new table("pane"){{
+                    new label("[green] "+ Bundles.get("text.radiation") + " " + Integer.toString(player.radiation)).scale(0.75f).pad(6);
+                }}.end();
+            
+		}}.end();
 		//respawn background table
 		new table("white"){{
 			respawntable = get();
@@ -153,15 +162,6 @@ public class HudFragment implements Fragment{
 		}}.end();
 
 		//respawn table
-		new table(){{
-			new table("pane"){{
-
-				new label(()->"[orange]"+Bundles.get("text.respawn")+" " + (int)(control.getRespawnTime()/60)).scale(0.75f).pad(10);
-
-				visible(()->control.getRespawnTime() > 0 && !state.is(State.menu));
-
-			}}.end();
-		}}.end();
 
 		new table(){{
 			abottom();
@@ -233,4 +233,18 @@ public class HudFragment implements Fragment{
 	public void fadeRespawn(boolean in){
 		respawntable.addAction(Actions.color(in ? new Color(0, 0, 0, 0.3f) : Color.CLEAR, 0.3f));
 	}
+    public void drawRad(){
+        new table(){{
+            new table("pane"){{
+
+                new label(()->"[orange]"+Bundles.get("text.respawn")+" " + (int)(control.getRespawnTime()/60)).scale(0.75f).pad(10);
+
+                visible(()->control.getRespawnTime() > 0 && !state.is(State.menu));
+
+            }}.end();
+        }}.end();
+    }
+    
+    
+    
 }

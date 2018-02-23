@@ -16,7 +16,8 @@ public class Item{
 		titanium = new Item("titanium"),
 		dirium = new Item("dirium"),
 		uranium = new Item("uranium"){{material=false;}},
-		sand = new Item("sand");
+		sand = new Item("sand"),
+        lead = new Item("lead");
 		/*glass = new Item("glass"),
 		silicon = new Item("silicon");*/
 

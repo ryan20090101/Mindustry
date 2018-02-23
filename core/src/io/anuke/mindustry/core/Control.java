@@ -43,7 +43,6 @@ public class Control extends Module{
 	private boolean wasPaused = false;
 
 	private Saves saves;
-
 	private float respawntime;
 	private InputHandler input;
 
@@ -147,7 +146,6 @@ public class Control extends Module{
 			renderer.clearTiles();
 
 			player.set(world.getSpawnX(), world.getSpawnY());
-
 			Core.camera.position.set(player.x, player.y, 0);
 
 			ui.hudfrag.updateItems();
@@ -161,6 +159,7 @@ public class Control extends Module{
 
 			player.add();
 			player.heal();
+            player.radiation=0;
 
 			respawntime = -1;
 			hiscore = false;
@@ -294,7 +293,9 @@ public class Control extends Module{
 
 		checkOldUser();
 	}
-
+    public int getRadiation(){
+        return player.radiation;
+    }
 	@Override
 	public void update(){
 
@@ -383,6 +384,7 @@ public class Control extends Module{
 					if(respawntime <= 0){
 						player.set(world.getSpawnX(), world.getSpawnY());
 						player.heal();
+                        player.radiation=0;
 						player.add();
 						Effects.sound("respawn");
 						ui.hudfrag.fadeRespawn(false);

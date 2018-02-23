@@ -26,12 +26,12 @@ import static io.anuke.mindustry.Vars.*;
 public class Player extends SyncEntity{
 	static final float speed = 1.1f;
 	static final float dashSpeed = 1.8f;
-
+    public int radiation = 0;
 	static final int timerDash = 0;
 	static final int timerShootLeft = 1;
 	static final int timerShootRight = 2;
 	static final int timerRegen = 3;
-
+    private int cx = 0;
 	public String name = "name";
 	public boolean isAndroid;
 	public Color color = new Color();
@@ -57,6 +57,7 @@ public class Player extends SyncEntity{
 		
 		maxhealth = 200;
 		heal();
+        radiation=0;
 	}
 
 	@Override
@@ -105,6 +106,7 @@ public class Player extends SyncEntity{
 
 		Timers.run(respawnduration + 5f, () -> {
 			heal();
+            radiation=0;
 			set(world.getSpawnX(), world.getSpawnY());
 			interpolator.target.set(x, y);
 		});
@@ -157,6 +159,15 @@ public class Player extends SyncEntity{
 
 		Tile tile = world.tileWorld(x, y);
 
+        if(radiation>=100){
+            onDeath();
+        }
+        if(radiation>0&&cx>3){
+            radiation=radiation-1;
+            cx=0;
+        }
+        cx=cx+1;
+        
 		//if player is in solid block
 		if(tile != null && ((tile.floor().liquid && tile.block() == Blocks.air) || tile.solid())){
 			stucktime += Timers.delta();
@@ -177,6 +188,7 @@ public class Player extends SyncEntity{
 		
 		if(health < maxhealth && timer.get(timerRegen, 20))
 			health ++;
+        
 
 		health = Mathf.clamp(health, -1, maxhealth);
 		
@@ -192,8 +204,8 @@ public class Player extends SyncEntity{
 		
 		boolean shooting = !Inputs.keyDown("dash") && Inputs.keyDown("shoot") && control.input().recipe == null
 				&& !ui.hasMouse() && !control.input().onConfigurable();
-
 		if(shooting){
+            radiation=radiation+10;
 			weaponLeft.update(player, true);
 			weaponRight.update(player, false);
 		}
