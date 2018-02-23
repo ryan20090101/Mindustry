@@ -31,6 +31,8 @@ public class ServerDebug {
             build.append(player.name);
             build.append(" android: ");
             build.append(player.isAndroid);
+            build.append(" flying: ");
+            build.append(player.isFlying);
             build.append("'\n");
 
             for(Class<?> type : map.orderedKeys()){

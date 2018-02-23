@@ -131,6 +131,7 @@ public class Control extends Module{
 		player = new Player();
 		player.name = Settings.getString("name");
 		player.isAndroid = android;
+		player.isFlying = android;
 		player.color.set(Settings.getInt("color"));
 		player.isLocal = true;
 
@@ -293,9 +294,7 @@ public class Control extends Module{
 
 		checkOldUser();
 	}
-    public int getRadiation(){
-        return player.radiation;
-    }
+
 	@Override
 	public void update(){
 
@@ -400,5 +399,8 @@ public class Control extends Module{
 				Timers.update();
 			}
 		}
+		
+		if (Inputs.keyRelease("ship_mode")&&!player.isFlying) player.isFlying = true;
+		else if (Inputs.keyRelease("ship_mode")&&player.isFlying) player.isFlying = false;
 	}
 }

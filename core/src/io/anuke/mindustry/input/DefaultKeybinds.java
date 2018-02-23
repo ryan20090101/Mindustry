@@ -19,6 +19,7 @@ public class DefaultKeybinds {
                 "zoom_hold", Input.CONTROL_LEFT,
                 "zoom", new Axis(Input.SCROLL),
                 "menu", Gdx.app.getType() == ApplicationType.Android ? Input.BACK : Input.ESCAPE,
+                "ship_mode", Input.F,
                 "pause", Input.SPACE,
                 "dash", Input.SHIFT_LEFT,
                 "rotate_alt", new Axis(Input.R, Input.E),

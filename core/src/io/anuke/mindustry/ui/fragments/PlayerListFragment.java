@@ -77,11 +77,11 @@ public class PlayerListFragment implements Fragment{
             button.margin(5).marginBottom(10);
 
             Stack stack = new Stack();
-            BorderImage image = new BorderImage(Draw.region(player.isAndroid ? "ship-standard" : "mech-standard-icon"), 3f);
+            BorderImage image = new BorderImage(Draw.region(player.isFlying ? "ship-standard" : "mech-standard-icon"), 3f);
 
             stack.add(image);
 
-            if(!player.isAndroid) {
+            if(!player.isFlying) {
 
                 stack.add(new Element(){
                     public void draw(){

@@ -174,6 +174,9 @@ public class DebugFragment implements Fragment {
             result.append("   android: ");
             result.append(player.isAndroid);
             result.append("\n");
+            result.append("   flying: ");
+            result.append(player.isFlying);
+            result.append("\n");
             result.append("   local: ");
             result.append(player.isLocal);
             result.append("\n");

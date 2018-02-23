@@ -66,6 +66,7 @@ public class NetServer extends Module{
             player.clientid = id;
             player.name = packet.name;
             player.isAndroid = packet.android;
+            player.isFlying = packet.flying;
             player.set(world.getSpawnX(), world.getSpawnY());
             player.setNet(player.x, player.y);
             player.setNet(player.x, player.y);

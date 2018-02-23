@@ -32,6 +32,7 @@ public class Player extends SyncEntity{
 	static final int timerRegen = 3;
     private int cx = 0;
 	public String name = "name";
+	public boolean isFlying;
 	public boolean isAndroid;
 	public Color color = new Color();
 	public int radiation = 0;
@@ -62,7 +63,7 @@ public class Player extends SyncEntity{
 
 	@Override
 	public void damage(int amount){
-		if(debug || isAndroid) return;
+		if(debug || isFlying) return;
 
 		health -= amount;
 		if(health <= 0 && !dead && isLocal){ //remote players don't die normally
@@ -79,7 +80,7 @@ public class Player extends SyncEntity{
 				return false;
 			}
 		}
-		return !isDead() && super.collides(other) && !isAndroid;
+		return !isDead() && super.collides(other) && !isFlying;
 	}
 	
 	@Override
@@ -114,10 +115,10 @@ public class Player extends SyncEntity{
 	
 	@Override
 	public void drawSmooth(){
-		if((debug && (!showPlayer || !showUI)) || (isAndroid && isLocal) || (dead && !isLocal)) return;
+		if((debug && (!showPlayer || !showUI)) || (isFlying && isLocal) || (dead && !isLocal)) return;
         boolean snap = snapCamera && Settings.getBool("smoothcam") && Settings.getBool("pixelate") && isLocal;
 
-		String part = isAndroid ? "ship" : "mech";
+		String part = isFlying ? "ship" : "mech";
 
 		Shaders.outline.color.set(getColor());
 		Shaders.outline.lighten = 0f;
@@ -125,7 +126,7 @@ public class Player extends SyncEntity{
 
 		Shaders.outline.apply();
 
-		if(!isAndroid) {
+		if(!isFlying) {
 			for (int i : Mathf.signs) {
 				Weapon weapon = i < 0 ? weaponLeft : weaponRight;
 				tr.trns(angle - 90, 3*i, 2);
@@ -149,8 +150,8 @@ public class Player extends SyncEntity{
 	
 	@Override
 	public void update(){
-		if(!isLocal || isAndroid){
-			if(isAndroid && isLocal){
+		if(!isLocal || isFlying){
+			if(isFlying && isLocal){
 				angle = Mathf.lerpAngDelta(angle, targetAngle, 0.2f);
 			}
 			if(!isLocal) interpolate();
@@ -246,7 +247,7 @@ public class Player extends SyncEntity{
 
     @Override
     public String toString() {
-        return "Player{" + id + ", android=" + isAndroid + ", local=" + isLocal + ", " + x + ", " + y + "}\n";
+        return "Player{" + id + ", android=" + isFlying + ", local=" + isLocal + ", " + x + ", " + y + "}\n";
     }
 
 	@Override
@@ -255,7 +256,7 @@ public class Player extends SyncEntity{
 		buffer.put(name.getBytes());
 		buffer.put(weaponLeft.id);
 		buffer.put(weaponRight.id);
-		buffer.put(isAndroid ? 1 : (byte)0);
+		buffer.put(isFlying ? 1 : (byte)0);
 		buffer.putInt(Color.rgba8888(color));
 		buffer.putFloat(x);
 		buffer.putFloat(y);
@@ -269,7 +270,7 @@ public class Player extends SyncEntity{
 		name = new String(n);
 		weaponLeft = (Weapon) Upgrade.getByID(buffer.get());
 		weaponRight = (Weapon) Upgrade.getByID(buffer.get());
-		isAndroid = buffer.get() == 1;
+		isFlying = buffer.get() == 1;
 		color.set(buffer.getInt());
 		x = buffer.getFloat();
 		y = buffer.getFloat();
@@ -313,7 +314,7 @@ public class Player extends SyncEntity{
 		float tx = x + Angles.trnsx(angle + 180f, 4f);
 		float ty = y + Angles.trnsy(angle + 180f, 4f);
 
-		if(isAndroid && i.target.dst(i.last) > 2f && timer.get(timerDash, 1)){
+		if(isFlying && i.target.dst(i.last) > 2f && timer.get(timerDash, 1)){
 			Effects.effect(Fx.dashsmoke, tx, ty);
 		}
 
