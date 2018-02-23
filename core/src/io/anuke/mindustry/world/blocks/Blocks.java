@@ -100,12 +100,9 @@ public class Blocks{
 	uranium = new Ore("uranium"){{
 		drops = new ItemStack(Item.uranium, 1);
 	}},
-<<<<<<< HEAD
     lead = new Ore("lead"){{
         drops = new ItemStack(Item.lead, 1);
     }},
-	
-=======
 
 	copper = new Ore("copper"){{
 		drops = new ItemStack(Item.tin, 1);
@@ -115,7 +112,6 @@ public class Blocks{
 		drops = new ItemStack(Item.copper, 1);
 	}},
 
->>>>>>> d7b28aff44446d19af3356b1b0aaf7926d6c8435
 	dirt = new Floor("dirt"){},
 	
 	sand = new Floor("sand"){},

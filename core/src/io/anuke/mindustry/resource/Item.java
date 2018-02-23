@@ -17,18 +17,13 @@ public class Item{
 		dirium = new Item("dirium"),
 		uranium = new Item("uranium"){{material=false;}},
 		sand = new Item("sand"),
-<<<<<<< HEAD
-        lead = new Item("lead");
-		/*glass = new Item("glass"),
-		silicon = new Item("silicon");*/
-=======
+        lead = new Item("lead"),
 		glass = new Item("glass"),
 		silicon = new Item("silicon"),
 		copper = new Item("copper"),
 		tin = new Item("tin"),
 		gravel = new Item("gravel"),
 		dirt = new Item("dirt");
->>>>>>> d7b28aff44446d19af3356b1b0aaf7926d6c8435
 
 	public final int id;
 	public final String name;
