@@ -94,12 +94,14 @@ public class CorePuller extends PowerBlock{
 
 		TextField.TextFieldFilter filter = new TextField.TextFieldFilter.DigitsOnlyFilter();
 
+		cont.row();
+
 		cont.addField(Integer.toString(entity.pullTime), filter ,text -> {
 			if(text.isEmpty()) return;
 			int pullTime = Integer.parseInt(text);
 			if (pullTime < 0) return;
 			entity.pullTime = pullTime;
-		});
+		}).size(152,42).padBottom(-5.1f).bottom().colspan(4);
 
 		table.add(cont);
 	}
