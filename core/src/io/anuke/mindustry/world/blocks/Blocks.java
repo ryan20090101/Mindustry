@@ -39,6 +39,11 @@ public class Blocks{
 		liquidDrop = Liquid.water;
 		liquid = true;
 	}},
+    nucleargunk = new Floor("nucleargunk"){{
+        variants = 8;
+        solid = false;
+        radioactive = true;
+    }},
 	
 	lava = new Floor("lava"){
 		{

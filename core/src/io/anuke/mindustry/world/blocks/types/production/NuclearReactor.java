@@ -15,6 +15,7 @@ import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Strings;
 import io.anuke.ucore.util.Translator;
+import io.anuke.mindustry.blocks.Blocks;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
