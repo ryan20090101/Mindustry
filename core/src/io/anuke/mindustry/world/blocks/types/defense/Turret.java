@@ -53,7 +53,7 @@ public class Turret extends Block{
 	protected float shootShake = 0f;
 	protected int soundReload = 0;
 	protected Translator tr = new Translator();
-
+    protected boolean artilleryTurretBase = false;
 	public Turret(String name) {
 		super(name);
 		update = true;
@@ -83,11 +83,15 @@ public class Turret extends Block{
 	
 	@Override
 	public void draw(Tile tile){
-		if(isMultiblock()){
-			Draw.rect("block-" + width + "x" + height, tile.drawx(), tile.drawy());
-		}else{
-			Draw.rect("block", tile.drawx(), tile.drawy());
-		}
+        if(!artilleryTurretBase){
+            if(isMultiblock()){
+                Draw.rect("block-" + width + "x" + height, tile.drawx(), tile.drawy());
+            }else{
+                Draw.rect("block", tile.drawx(), tile.drawy());
+            }
+        }else{
+            Draw.rect("artilleryturretbase", tile.drawx(), tile.drawy());
+        }
 	}
 	
 	@Override

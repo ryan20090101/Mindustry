@@ -168,6 +168,7 @@ public class WeaponBlocks{
 			shootCone = 9f;
 			shootEffect = Fx.titanshot;
 			shootShake = 6f;
+            artilleryTurretBase = true;
 		}
 	},
 
