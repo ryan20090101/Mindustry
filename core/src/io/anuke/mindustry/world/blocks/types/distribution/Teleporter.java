@@ -12,6 +12,7 @@ import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.scene.ui.ButtonGroup;
 import io.anuke.ucore.scene.ui.ImageButton;
+import io.anuke.ucore.scene.ui.TextField.TextFieldFilter;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Strings;
@@ -23,12 +24,10 @@ import java.io.IOException;
 import static io.anuke.mindustry.Vars.syncBlockState;
 
 public class Teleporter extends PowerBlock{
-	public static final Color[] colorArray = {Color.ROYAL, Color.ORANGE, Color.SCARLET, Color.FOREST,
-			Color.PURPLE, Color.GOLD, Color.PINK, Color.BLACK};
-	public static final int colors = colorArray.length;
+	public static final int channels = 255; //maximum limit for Byte
+	private static byte lastChannel = 0;
 
-	private static ObjectSet<Tile>[] teleporters = new ObjectSet[colors];
-	private static byte lastColor = 0;
+	private static ObjectSet<Tile>[] teleporters = new ObjectSet[channels];
 
 	private Array<Tile> removal = new Array<>();
 	private Array<Tile> returns = new Array<>();
@@ -36,7 +35,7 @@ public class Teleporter extends PowerBlock{
 	protected float powerPerItem = 0.8f;
 
 	static{
-		for(int i = 0; i < colors; i ++){
+		for(int i = 0; i < channels; i ++){
 			teleporters[i] = new ObjectSet<>();
 		}
 	}
@@ -51,10 +50,16 @@ public class Teleporter extends PowerBlock{
 	}
 
 	@Override
+	public void placed(Tile tile){
+		tile.<TeleporterEntity>entity().channel = lastChannel;
+		Timers.run(1f, () -> setConfigure(tile, lastChannel));
+	}
+
+	@Override
 	public void configure(Tile tile, byte data) {
 		TeleporterEntity entity = tile.entity();
 		if(entity != null){
-			entity.color = data;
+			entity.channel = data;
 		}
 	}
 
@@ -63,20 +68,14 @@ public class Teleporter extends PowerBlock{
 		super.getStats(list);
 		list.add("[powerinfo]Power/item: " + Strings.toFixed(powerPerItem, 1));
 	}
-
-	@Override
-	public void placed(Tile tile){
-		tile.<TeleporterEntity>entity().color = lastColor;
-		Timers.run(1f, () -> setConfigure(tile, lastColor));
-	}
 	
 	@Override
 	public void draw(Tile tile){
-		TeleporterEntity entity = tile.entity();
-		
+		TeleporterEntity ent = tile.entity();
+
 		super.draw(tile);
-		
-		Draw.color(colorArray[entity.color]);
+
+		Draw.color(new Color(ent.channel));
 		Draw.rect("blank", tile.worldx(), tile.worldy(), 2, 2);
 		Draw.color(Color.WHITE);
 		Draw.alpha(0.45f + Mathf.absin(Timers.time(), 7f, 0.26f));
@@ -88,7 +87,7 @@ public class Teleporter extends PowerBlock{
 	public void update(Tile tile){
 		TeleporterEntity entity = tile.entity();
 
-		teleporters[entity.color].add(tile);
+		teleporters[entity.channel & 0xFF].add(tile);
 
 		if(entity.totalItems() > 0){
 			tryDump(tile);
@@ -112,20 +111,16 @@ public class Teleporter extends PowerBlock{
 		cont.add().colspan(4).height(105f);
 		cont.row();
 
-		for(int i = 0; i < colors; i ++){
-			final int f = i;
-			ImageButton button = cont.addImageButton("white", "toggle", 24, () -> {
-				entity.color = (byte)f;
-				lastColor = (byte)f;
-				setConfigure(tile, (byte)f);
-			}).size(34, 38).padBottom(-5.1f).group(group).get();
-			button.getStyle().imageUpColor = colorArray[f];
-			button.setChecked(entity.color == f);
+		TextFieldFilter.DigitsOnlyFilter filter = new TextFieldFilter.DigitsOnlyFilter();
 
-			if(i%4 == 3){
-				cont.row();
-			}
-		}
+		cont.addField(Integer.toString(entity.channel&0xFF), filter, text -> {
+			if(text.isEmpty()) return;
+			int chan = Integer.parseInt(text);
+			if (chan > channels-1) return;
+			if (chan < 0) return;
+			lastChannel = (byte) chan;
+			entity.channel = (byte) chan;
+		}).grow().pad(8);
 
 		table.add(cont);
 	}
@@ -163,10 +158,10 @@ public class Teleporter extends PowerBlock{
 		removal.clear();
 		returns.clear();
 		
-		for(Tile other : teleporters[entity.color]){
+		for(Tile other : teleporters[entity.channel]){
 			if(other != tile){
 				if(other.block() instanceof Teleporter){
-					if(other.<TeleporterEntity>entity().color != entity.color){
+					if(other.<TeleporterEntity>entity().channel != entity.channel){
 						removal.add(other);
 					}else if(other.entity.totalItems() == 0){
 						returns.add(other);
@@ -178,22 +173,22 @@ public class Teleporter extends PowerBlock{
 		}
 
 		for(Tile remove : removal)
-			teleporters[entity.color].remove(remove);
+			teleporters[entity.channel].remove(remove);
 		
 		return returns;
 	}
 
 	public static class TeleporterEntity extends PowerEntity{
-		public byte color = 0;
+		public byte channel = 0;
 		
 		@Override
 		public void write(DataOutputStream stream) throws IOException{
-			stream.writeByte(color);
+			stream.writeByte(channel);
 		}
 		
 		@Override
 		public void read(DataInputStream stream) throws IOException{
-			color = stream.readByte();
+			channel = stream.readByte();
 		}
 	}
 
