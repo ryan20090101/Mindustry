@@ -150,7 +150,7 @@ public class Player extends SyncEntity{
 	
 	@Override
 	public void update(){
-		if(!isLocal || isFlying){
+		if(!isLocal || isAndroid){
 			if(isFlying && isLocal){
 				angle = Mathf.lerpAngDelta(angle, targetAngle, 0.2f);
 			}
@@ -160,18 +160,27 @@ public class Player extends SyncEntity{
 
 		Tile tile = world.tileWorld(x, y);
 
-        if(radiation>0&&cx>3&&!tile.floor().radioactive){radiation-=1;cx=0;}
+		if(!isFlying) {
 
-		if (tile.floor().radioactive && cx>3) {radiation+=tile.floor().radioactivity;cx=0;}
-		
-        if(radiation>=100){
-            damage((radiation-100)/25);
-            if(radiation>=radiationDeath){
-                onDeath();
-            }
-        }
+			if (radiation > 0 && cx > 3 && !tile.floor().radioactive) {
+				radiation -= 1;
+				cx = 0;
+			}
 
-        cx=cx+1;
+			if (tile.floor().radioactive && cx > 3) {
+				radiation += tile.floor().radioactivity;
+				cx = 0;
+			}
+
+			if (radiation >= 100) {
+				damage((radiation - 100) / 25);
+				if (radiation >= radiationDeath) {
+					onDeath();
+				}
+			}
+
+			cx = cx + 1;
+		}
         
 		//if player is in solid block
 		if(tile != null && ((tile.floor().liquid && tile.block() == Blocks.air) || tile.solid())){
@@ -187,10 +196,17 @@ public class Player extends SyncEntity{
 
 		if(ui.chatfrag.chatOpen()) return;
 
+		float speed = Player.speed;
 		dashing = Inputs.keyDown("dash");
-		
-		float speed = dashing ? (debug ? Player.dashSpeed * 5f : Player.dashSpeed) : Player.speed;
-		
+
+		if (!isFlying) {
+			speed = dashing ? (debug ? Player.dashSpeed * 5f : Player.dashSpeed) : Player.speed;
+		}
+		else
+		{
+			speed = dashing ? Player.dashSpeed * 3f : Player.dashSpeed;
+		}
+
 		if(health < maxhealth && timer.get(timerRegen, 20))
 			health ++;
         
@@ -208,9 +224,8 @@ public class Player extends SyncEntity{
 		movement.x += xa*speed;
 		
 		boolean shooting = !Inputs.keyDown("dash") && Inputs.keyDown("shoot") && control.input().recipe == null
-				&& !ui.hasMouse() && !control.input().onConfigurable();
+				&& !ui.hasMouse() && !control.input().onConfigurable() && !isFlying;
 		if(shooting){
-            radiation = radiation + 5;
 			weaponLeft.update(player, true);
 			weaponRight.update(player, false);
 		}
@@ -221,11 +236,11 @@ public class Player extends SyncEntity{
 		
 		movement.limit(speed);
 		
-		if(!noclip){
-			move(movement.x*Timers.delta(), movement.y*Timers.delta());
-		}else{
+		if( isFlying || noclip ){
 			x += movement.x*Timers.delta();
 			y += movement.y*Timers.delta();
+		}else{
+			move(movement.x*Timers.delta(), movement.y*Timers.delta());
 		}
 		
 		if(!shooting){
