@@ -100,7 +100,15 @@ public class Blocks{
 	uranium = new Ore("uranium"){{
 		drops = new ItemStack(Item.uranium, 1);
 	}},
-	
+
+	copper = new Ore("copper"){{
+		drops = new ItemStack(Item.tin, 1);
+	}},
+
+	tin = new Ore("tin"){{
+		drops = new ItemStack(Item.copper, 1);
+	}},
+
 	dirt = new Floor("dirt"){},
 	
 	sand = new Floor("sand"){},

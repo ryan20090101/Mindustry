@@ -16,9 +16,13 @@ public class Item{
 		titanium = new Item("titanium"),
 		dirium = new Item("dirium"),
 		uranium = new Item("uranium"){{material=false;}},
-		sand = new Item("sand");
-		/*glass = new Item("glass"),
-		silicon = new Item("silicon");*/
+		sand = new Item("sand"),
+		glass = new Item("glass"),
+		silicon = new Item("silicon"),
+		copper = new Item("copper"),
+		tin = new Item("tin"),
+		gravel = new Item("gravel"),
+		dirt = new Item("dirt");
 
 	public final int id;
 	public final String name;
