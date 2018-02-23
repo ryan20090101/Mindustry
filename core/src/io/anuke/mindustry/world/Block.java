@@ -97,6 +97,10 @@ public class Block{
 	public boolean instantTransfer = false;
 	/**is the block radioactive.*/
 	public boolean radioactive = false;
+	/**is the block radioactive.*/
+	public boolean radioactiveSource = false; //TODO: make blocks source radioactivity to nearby blocks
+	/**radioactivity.*/
+	public int radioactivity = 1;
 
 	public Block(String name) {
 		this.name = name;

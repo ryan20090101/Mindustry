@@ -26,7 +26,6 @@ import static io.anuke.mindustry.Vars.*;
 public class Player extends SyncEntity{
 	static final float speed = 1.1f;
 	static final float dashSpeed = 1.8f;
-    public int radiation = 0;
 	static final int timerDash = 0;
 	static final int timerShootLeft = 1;
 	static final int timerShootRight = 2;
@@ -35,6 +34,7 @@ public class Player extends SyncEntity{
 	public String name = "name";
 	public boolean isAndroid;
 	public Color color = new Color();
+	public int radiation = 0;
     public int radiationDeath = 200;
 	public Weapon weaponLeft = Weapon.blaster;
 	public Weapon weaponRight = Weapon.blaster;
@@ -88,7 +88,7 @@ public class Player extends SyncEntity{
 		if(Net.active()){
 			NetEvents.handlePlayerDeath();
 		}
-        radiation=-99999;
+        radiation=0;
 		Effects.effect(Fx.explosion, this);
 		Effects.shake(4f, 5f, this);
 		Effects.sound("die", this);
@@ -156,13 +156,15 @@ public class Player extends SyncEntity{
 			if(!isLocal) interpolate();
 			return;
 		}
-		Tile tile = world.tileWorld(x, y);
-        if(radiation>0&&cx>3&&!tile.floor().radioactive){radiation=radiation-1;cx=0;}
 
-		if (tile.floor().radioactive && cx>3) {radiation += 1;cx=0;}
+		Tile tile = world.tileWorld(x, y);
+
+        if(radiation>0&&cx>3&&!tile.floor().radioactive){radiation-=1;cx=0;}
+
+		if (tile.floor().radioactive && cx>3) {radiation+=tile.floor().radioactivity;cx=0;}
 		
         if(radiation>=100){
-            damage(radiation-100);
+            damage((radiation-100)/25);
             if(radiation>=radiationDeath){
                 onDeath();
             }
