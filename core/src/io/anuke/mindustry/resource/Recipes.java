@@ -25,9 +25,9 @@ public class Recipes {
 			new Recipe(defense, DefenseBlocks.titaniumshieldwall, stack(Item.titanium, 16)),
 
 			new Recipe(distribution, DistributionBlocks.conveyor, stack(Item.stone, 1)),
-			new Recipe(distribution, DistributionBlocks.combiner, stack(Item.stone, 1)),
 			new Recipe(distribution, DistributionBlocks.steelconveyor, stack(Item.steel, 1)),
 			new Recipe(distribution, DistributionBlocks.pulseconveyor, stack(Item.dirium, 1)),
+			new Recipe(distribution, DistributionBlocks.combiner, stack(Item.stone, 1)),
 			new Recipe(distribution, DistributionBlocks.router, stack(Item.stone, 2)),
 			new Recipe(distribution, DistributionBlocks.buffer, stack(Item.steel, 2)),
 			new Recipe(distribution, DistributionBlocks.junction, stack(Item.iron, 2)),

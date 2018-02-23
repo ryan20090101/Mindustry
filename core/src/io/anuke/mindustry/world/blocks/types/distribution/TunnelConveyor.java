@@ -9,7 +9,7 @@ import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Bits;
 
 public class TunnelConveyor extends Block{
-	protected int maxdist = 3;
+	protected int maxdist = 5;
 	protected float speed = 53; //frames taken to go through this tunnel
 	protected int capacity = 32;
 

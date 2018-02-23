@@ -159,15 +159,15 @@ public class WeaponBlocks{
 		{
 			shootsound = "blast";
 			range = 600f;
-			reload = 123f;
+			reload = 1234f;
 			bullet = BulletType.artilleryshell;
 			ammo = Item.dirium;
-			health = 1800;
+			health = 2800;
 			width = height = 3;
-			rotatespeed = 0.007f;
+			rotatespeed = 0.001f;
 			shootCone = 9f;
 			shootEffect = Fx.artilleryshot;
-			shootShake = 6f;
+			shootShake = 9f;
             artilleryTurretBase = true;
 		}
 	},
