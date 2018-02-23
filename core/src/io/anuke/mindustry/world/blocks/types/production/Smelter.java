@@ -61,7 +61,7 @@ public class Smelter extends Block{
 	
 	@Override
 	public void update(Tile tile){
-		CrafterEntity entity = tile.entity();
+		SmelterEntity entity = tile.entity();
 		
 		if(entity.timer.get(timerDump, 5) && entity.hasItem(result)){
 			tryDump(tile, -1, result);
@@ -118,7 +118,7 @@ public class Smelter extends Block{
 	public void draw(Tile tile){
 		super.draw(tile);
 
-        CrafterEntity entity = tile.entity();
+		SmelterEntity entity = tile.entity();
 
         //draw glowing center
         if(entity.burnTime > 0){
@@ -130,10 +130,10 @@ public class Smelter extends Block{
 
 	@Override
 	public TileEntity getEntity() {
-		return new CrafterEntity();
+		return new SmelterEntity();
 	}
 
-	public class CrafterEntity extends TileEntity{
+	public class SmelterEntity extends TileEntity{
 		public float burnTime;
 	}
 }

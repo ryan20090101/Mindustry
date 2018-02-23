@@ -7,6 +7,8 @@ import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.blocks.types.defense.CoreBlock;
 import io.anuke.mindustry.world.blocks.types.production.*;
 
+import java.util.HashMap;
+
 public class ProductionBlocks{
 	public static final Block
 	
@@ -37,6 +39,14 @@ public class ProductionBlocks{
 			result = Item.dirium;
 			burnDuration = 40f;
 			craftTime = 20f;
+		}
+	},
+
+	crafter = new Crafter("crafter"){
+		{
+			health = 90;
+			recipe = new HashMap<>();
+			recipe.put(Item.steel,new Item[]{Item.coal,Item.iron});
 		}
 	},
 	
