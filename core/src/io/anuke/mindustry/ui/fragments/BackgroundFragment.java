@@ -24,13 +24,22 @@ public class BackgroundFragment implements Fragment {
             Core.batch.draw(back, w/2 - back.getRegionWidth()*backscl/2 +240f, h/2 - back.getRegionHeight()*backscl/2 + 250f,
                     back.getRegionWidth()*backscl, back.getRegionHeight()*backscl);
 
-            float logoscl = (int)Unit.dp.scl(7);
+            /**float logoscl = (int)Unit.dp.scl(7);
             TextureRegion logo = Core.skin.getRegion("logotext");
             float logow = logo.getRegionWidth()*logoscl;
             float logoh = logo.getRegionHeight()*logoscl;
 
             Draw.color();
-            Core.batch.draw(logo, w/2 - logow/2, h - logoh + 15, logow, logoh);
+            Core.batch.draw(logo, w/2 - logow/2, h - logoh + 15, logow, logoh);**/
+            
+            float adlogoscl = (int)Unit.dp.scl(6.5f);
+            TextureRegion adlogo = Core.skin.getRegion("altdimlogotext");
+            float adlogow = adlogo.getRegionWidth()*adlogoscl;
+            float adlogoh = adlogo.getRegionHeight()*adlogoscl;
+
+            Draw.color();
+            Core.batch.draw(adlogo, w/2 - adlogow/2, h - adlogoh-10, adlogow, adlogoh);
         }).visible(() -> state.is(State.menu)).grow();
+        
     }
 }

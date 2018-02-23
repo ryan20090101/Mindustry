@@ -19,13 +19,13 @@ public class MenuFragment implements Fragment{
 		if(!android){
 			//menu table
 			new table(){{
-				
+				get().setTranslation(0, -60);
 				new table(){{
+                    
 					PressGroup group = new PressGroup();
 					
 					float scale = 4f;
 					defaults().size(140*scale, 21*scale).pad(-10f);
-
 					add(new MenuButton("$text.play", group, ui.levels::show));
 					row();
 
@@ -58,6 +58,7 @@ public class MenuFragment implements Fragment{
 			}}.end();
 		}else{
 			new table(){{
+                get().setTranslation(0, -60);
 				new table(){{
 					defaults().size(120f).pad(5);
 					float isize = 14f*4;
