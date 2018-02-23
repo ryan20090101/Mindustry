@@ -24,7 +24,7 @@ import java.io.IOException;
 import static io.anuke.mindustry.Vars.syncBlockState;
 
 public class Teleporter extends PowerBlock{
-	public static final int channels = 255; //maximum limit for Byte
+	public static final int channels = 256; //maximum limit for Byte
 	private static byte lastChannel = 0;
 
 	private static ObjectSet<Tile>[] teleporters = new ObjectSet[channels];
