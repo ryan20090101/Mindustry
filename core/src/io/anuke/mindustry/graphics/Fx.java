@@ -34,6 +34,19 @@ public class Fx{
 			Draw.reset();
 		});
 	}),
+    artilleryshot = new Effect (28, 40f, e -> {
+		Angles.randLenVectors(e.id, 116, 110f + e.ifract()*80f, (x, y)->{
+            float len = 5f+e.fract()*16f;
+			Draw.color(Color.ORANGE, Color.RED, e.ifract());
+            Lines.stroke(e.fract()*17f);
+            Lines.lineAngle(e.x, e.y, e.rotation+0.1f, e.fract()*12f);
+            Lines.stroke(e.fract()*14f);
+            Lines.lineAngle(e.x, e.y, e.rotation, e.fract()*16f);
+            Lines.stroke(e.fract()*12f);
+            Lines.lineAngle(e.x, e.y, e.rotation-0.1f, e.fract()*18f);
+            Draw.reset();
+        });
+    }),
 	
 	reactorsmoke = new Effect(17, e -> {
 		Angles.randLenVectors(e.id, 4, e.ifract()*8f, (x, y)->{

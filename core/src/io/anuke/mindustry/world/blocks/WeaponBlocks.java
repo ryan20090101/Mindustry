@@ -166,7 +166,7 @@ public class WeaponBlocks{
 			width = height = 3;
 			rotatespeed = 0.007f;
 			shootCone = 9f;
-			shootEffect = Fx.titanshot;
+			shootEffect = Fx.artilleryshot;
 			shootShake = 6f;
             artilleryTurretBase = true;
 		}

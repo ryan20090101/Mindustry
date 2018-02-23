@@ -89,8 +89,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			hitsize = 80f;
 		}
 		public void draw(Bullet b) {
-			Draw.color(whiteOrange);
-			Draw.rect("chainbullet", b.x, b.y, b.angle());
+			Draw.rect("artilleryshell", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 
