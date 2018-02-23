@@ -273,6 +273,7 @@ public class Player extends SyncEntity{
 		buffer.put(weaponRight.id);
 		buffer.put(isAndroid ? 1 : (byte)0);
 		buffer.put(isFlying ? 1 : (byte)0);
+		buffer.putInt(radiation);
 		buffer.putInt(Color.rgba8888(color));
 		buffer.putFloat(x);
 		buffer.putFloat(y);
@@ -288,6 +289,7 @@ public class Player extends SyncEntity{
 		weaponRight = (Weapon) Upgrade.getByID(buffer.get());
 		isAndroid = buffer.get() == 1;
 		isFlying = buffer.get() == 1;
+		radiation = buffer.getInt();
 		color.set(buffer.getInt());
 		x = buffer.getFloat();
 		y = buffer.getFloat();
@@ -304,8 +306,10 @@ public class Player extends SyncEntity{
 			data.putFloat(interpolator.target.y);
 		}
 		data.putFloat(angle);
+		data.putInt(radiation);
 		data.putShort((short)health);
 		data.put((byte)(dashing ? 1 : 0));
+		data.put((byte)(isFlying ? 1 : 0));
 	}
 
 	@Override
@@ -313,11 +317,15 @@ public class Player extends SyncEntity{
 		float x = data.getFloat();
 		float y = data.getFloat();
 		float angle = data.getFloat();
+		int radiation = data.getInt();
 		short health = data.getShort();
 		byte dashing = data.get();
+		byte isFlying = data.get();
 
+		this.radiation = radiation;
 		this.health = health;
 		this.dashing = dashing == 1;
+		this.isFlying = isFlying == 1;
 
 		interpolator.read(this.x, this.y, x, y, angle, time);
 	}
