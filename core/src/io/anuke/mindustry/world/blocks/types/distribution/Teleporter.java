@@ -25,6 +25,7 @@ import static io.anuke.mindustry.Vars.syncBlockState;
 
 public class Teleporter extends PowerBlock{
 	public static final int channels = 255; //maximum limit for Byte
+	private static byte lastChannel = 0;
 
 	private static ObjectSet<Tile>[] teleporters = new ObjectSet[channels];
 
@@ -49,6 +50,12 @@ public class Teleporter extends PowerBlock{
 	}
 
 	@Override
+	public void placed(Tile tile){
+		tile.<TeleporterEntity>entity().channel = lastChannel;
+		Timers.run(1f, () -> setConfigure(tile, lastChannel));
+	}
+
+	@Override
 	public void configure(Tile tile, byte data) {
 		TeleporterEntity entity = tile.entity();
 		if(entity != null){
@@ -64,9 +71,11 @@ public class Teleporter extends PowerBlock{
 	
 	@Override
 	public void draw(Tile tile){
-		
+		TeleporterEntity ent = tile.entity();
+
 		super.draw(tile);
 
+		Draw.color(new Color(ent.channel));
 		Draw.rect("blank", tile.worldx(), tile.worldy(), 2, 2);
 		Draw.color(Color.WHITE);
 		Draw.alpha(0.45f + Mathf.absin(Timers.time(), 7f, 0.26f));
@@ -104,10 +113,12 @@ public class Teleporter extends PowerBlock{
 
 		TextFieldFilter.DigitsOnlyFilter filter = new TextFieldFilter.DigitsOnlyFilter();
 
-		cont.addField(Integer.toString(entity.channel), filter, text -> {
+		cont.addField(Integer.toString(entity.channel&0xFF), filter, text -> {
 			if(text.isEmpty()) return;
 			int chan = Integer.parseInt(text);
 			if (chan > channels-1) return;
+			if (chan < 0) return;
+			lastChannel = (byte) chan;
 			entity.channel = (byte) chan;
 		}).grow().pad(8);
 
