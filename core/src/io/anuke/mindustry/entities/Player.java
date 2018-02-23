@@ -115,7 +115,7 @@ public class Player extends SyncEntity{
 	
 	@Override
 	public void drawSmooth(){
-		if((debug && (!showPlayer || !showUI)) || (isFlying && isLocal) || (dead && !isLocal)) return;
+		if((debug && (!showPlayer || !showUI)) || (isAndroid && isLocal) || (dead && !isLocal)) return;
         boolean snap = snapCamera && Settings.getBool("smoothcam") && Settings.getBool("pixelate") && isLocal;
 
 		String part = isFlying ? "ship" : "mech";
@@ -247,7 +247,7 @@ public class Player extends SyncEntity{
 
     @Override
     public String toString() {
-        return "Player{" + id + ", android=" + isFlying + ", local=" + isLocal + ", " + x + ", " + y + "}\n";
+        return "Player{" + id + ", android=" + android + ", local=" + isLocal + ", " + x + ", " + y + "}\n";
     }
 
 	@Override
@@ -256,6 +256,7 @@ public class Player extends SyncEntity{
 		buffer.put(name.getBytes());
 		buffer.put(weaponLeft.id);
 		buffer.put(weaponRight.id);
+		buffer.put(isAndroid ? 1 : (byte)0);
 		buffer.put(isFlying ? 1 : (byte)0);
 		buffer.putInt(Color.rgba8888(color));
 		buffer.putFloat(x);
@@ -270,6 +271,7 @@ public class Player extends SyncEntity{
 		name = new String(n);
 		weaponLeft = (Weapon) Upgrade.getByID(buffer.get());
 		weaponRight = (Weapon) Upgrade.getByID(buffer.get());
+		isAndroid = buffer.get() == 1;
 		isFlying = buffer.get() == 1;
 		color.set(buffer.getInt());
 		x = buffer.getFloat();
