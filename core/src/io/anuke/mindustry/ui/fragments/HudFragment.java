@@ -240,7 +240,7 @@ public class HudFragment implements Fragment{
 		respawntable.addAction(Actions.color(in ? new Color(0, 0, 0, 0.3f) : Color.CLEAR, 0.3f));
 	}
 
-    
-    
-    
+	public void setFade(float a){
+		respawntable.setColor(new Color(0, 0, 0, a));
+	}
 }
