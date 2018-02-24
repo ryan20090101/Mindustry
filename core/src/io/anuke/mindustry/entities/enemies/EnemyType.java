@@ -55,10 +55,14 @@ public class EnemyType {
     protected boolean stopNearCore = true;
     protected boolean targetClient = false;
     protected float mass = 1f;
+    protected boolean isImmuneRadioactivity = false;
+    protected int radiation;
+    protected int radiationDeath = 200;
 
     protected final int timerTarget = timeid ++;
     protected final int timerReload = timeid ++;
     protected final int timerReset = timeid ++;
+    protected final int timerOther = timeid ++;
 
     protected final Vector2 shift = new Vector2();
     protected final Vector2 move = new Vector2();
@@ -143,6 +147,25 @@ public class EnemyType {
 
         enemy.x = Mathf.clamp(enemy.x, 0, world.width() * tilesize);
         enemy.y = Mathf.clamp(enemy.y, 0, world.height() * tilesize);
+
+        if(!isImmuneRadioactivity){
+            boolean timerRad = enemy.timer.get(timerOther,5);
+
+            if (radiation > 0 && timerRad && !tile.floor().radioactive) {
+                radiation -= 1;
+            }
+
+            if (tile.floor().radioactive && timerRad) {
+                radiation += tile.floor().radioactivity;
+            }
+
+            if (radiation >= 100 && timerRad) {
+                enemy.damage((radiation - 100) / 25);
+                if (radiation >= radiationDeath) {
+                    enemy.damage(enemy.health+1);
+                }
+            }
+        }
     }
 
     public void move(Enemy enemy){

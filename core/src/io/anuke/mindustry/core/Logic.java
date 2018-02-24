@@ -154,6 +154,9 @@ public class Logic extends Module {
 
                 Entities.collideGroups(enemyGroup, bulletGroup);
                 Entities.collideGroups(playerGroup, bulletGroup);
+
+                if (world.time >= maxTime) world.time = 0;
+                world.time += 1;
             }
         }
     }

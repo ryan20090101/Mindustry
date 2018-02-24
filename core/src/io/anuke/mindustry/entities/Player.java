@@ -169,12 +169,10 @@ public class Player extends SyncEntity{
 
 			if (radiation > 0 && timerRad && !tile.floor().radioactive) {
 				radiation -= 1;
-				cx = 0;
 			}
 
 			if (tile.floor().radioactive && timerRad) {
 				radiation += tile.floor().radioactivity;
-				cx = 0;
 			}
 
 			if (radiation >= 100 && timerRad) {
@@ -183,8 +181,6 @@ public class Player extends SyncEntity{
 					onDeath();
 				}
 			}
-
-			cx = cx + 1;
 		}
         
 		//if player is in solid block

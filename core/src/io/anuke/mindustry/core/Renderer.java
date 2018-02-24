@@ -160,6 +160,7 @@ public class Renderer extends RendererModule {
 
 	@Override
 	public void draw() {
+
 		camera.update();
 
 		clearScreen(clearColor);

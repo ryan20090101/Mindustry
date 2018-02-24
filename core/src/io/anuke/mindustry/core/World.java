@@ -33,6 +33,7 @@ public class World extends Module{
 	private Maps maps = new Maps();
 	private Tile core;
 	private Array<SpawnPoint> spawns = new Array<>();
+	public int time;
 
 	private Tile[] temptiles = new Tile[4];
 	
