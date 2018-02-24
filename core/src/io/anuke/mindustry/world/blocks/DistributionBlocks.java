@@ -22,14 +22,17 @@ public class DistributionBlocks{
 	}},
 	
 	conveyor = new Conveyor("conveyor"){{
+		movementSpeedMultiplier = 1.5f;
 	}},
 	
 	steelconveyor = new Conveyor("steelconveyor"){{
+		movementSpeedMultiplier = 2f;
 		health = 55;
 		speed = 0.04f;
 	}},
 	
 	pulseconveyor = new Conveyor("poweredconveyor"){{
+		movementSpeedMultiplier = 4f;
 		health = 75;
 		speed = 0.09f;
 	}},

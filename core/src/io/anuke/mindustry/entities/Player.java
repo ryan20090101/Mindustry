@@ -196,11 +196,13 @@ public class Player extends SyncEntity{
 
 		if(ui.chatfrag.chatOpen()) return;
 
-		float speed = Player.speed;
+		float speedModifier = tile.block().movementSpeedMultiplier;
+		float speed = 0f;
 		dashing = Inputs.keyDown("dash");
 
 		if (!isFlying) {
 			speed = dashing ? (debug ? Player.dashSpeed * 5f : Player.dashSpeed) : Player.speed;
+			speed *= speedModifier;
 		}
 		else
 		{

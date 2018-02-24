@@ -101,6 +101,8 @@ public class Block{
 	public boolean radioactiveSource = false; //TODO: make blocks source radioactivity to nearby blocks
 	/**radioactivity.*/
 	public int radioactivity = 1;
+	/**movement speed multiplier.*/
+	public float movementSpeedMultiplier = 1f;
 
 	public Block(String name) {
 		this.name = name;
