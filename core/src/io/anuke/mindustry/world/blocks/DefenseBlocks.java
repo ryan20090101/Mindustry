@@ -28,6 +28,9 @@ public class DefenseBlocks{
 	diriumwall = new Wall("duriumwall"){{
 		health = 190*wallHealthMultiplier;
 	}},
+	diriumalloywall = new Wall("diriumalloywall"){{
+		health = 190*2*wallHealthMultiplier;
+	}},
 	compositewall = new Wall("compositewall"){{
 		health = 270*wallHealthMultiplier;
 	}},
@@ -43,8 +46,15 @@ public class DefenseBlocks{
 		health = 190*4*wallHealthMultiplier;
 		width = height = 2;
 	}},
+	diriumalloywalllarge = new Wall("diriumalloywall-large"){{
+		health = 190*4*2*wallHealthMultiplier;
+		width = height = 2;
+	}},
 	titaniumshieldwall = new ShieldedWallBlock("titaniumshieldwall"){{
 		health = 150*wallHealthMultiplier;
+	}},
+	diriumshieldwall = new ShieldedWallBlock("diriumshieldwall"){{
+		health = 190*wallHealthMultiplier;
 	}},
 
 	repairturret = new RepairTurret("repairturret"){
@@ -65,14 +75,37 @@ public class DefenseBlocks{
 		}
 	},
 
+	ultrarepairturret = new RepairTurret("ultrarepairturret"){
+		{
+			height = width = 2;
+			range = 120;
+			reload = 5f;
+			health = 160;
+			powerUsed = 0.30f;
+		}
+	},
+
 	shieldgenerator = new ShieldBlock("shieldgenerator"){
 		{
 			health = 100*wallHealthMultiplier;
 		}
 	},
+
+	megaShield = new ShieldBlock("megaShield") {
+		{
+			health = 100 * wallHealthMultiplier;
+			powerPerDamage = 0.001f;
+			powerDrain = 0.01f;
+			shieldRadius = 80f;
+			maxRadius = 100f;
+			height = width = 2;
+		}
+	},
+
 	door = new Door("door"){{
 		health = 90*wallHealthMultiplier;
 	}},
+
 	largedoor = new Door("door-large"){{
 		openfx = Fx.dooropenlarge;
 		closefx = Fx.doorcloselarge;

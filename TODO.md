@@ -15,7 +15,7 @@ _Keep in mind that this is just a basic outline of planned features, and will be
 - Movable turrets
 - Batteries or storage for anything
 - Customizable world ore generation + seed
-- Research system, tech tree, persistent upgrades, upgrades at all
+- Research system, tech tree, upgrades at all
 - Missile enemies/turrets/weapons (both homing and non-homing)
 - Enemies dropping resources
 - Final objectives/non-endless mode

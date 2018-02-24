@@ -23,6 +23,9 @@ public class Recipes {
 			new Recipe(defense, DefenseBlocks.door, stack(Item.steel, 3), stack(Item.iron, 3*4)).setDesktop(),
 			new Recipe(defense, DefenseBlocks.largedoor, stack(Item.steel, 3*4), stack(Item.iron, 3*4*4)).setDesktop(),
 			new Recipe(defense, DefenseBlocks.titaniumshieldwall, stack(Item.titanium, 16)),
+			new Recipe(defense, DefenseBlocks.diriumshieldwall, stack(Item.titanium, 16), stack(Item.dirium, 12)),
+			new Recipe(defense, DefenseBlocks.diriumalloywalllarge, stack(Item.titanium, 12*4), stack(Item.dirium, 12*4), stack(Item.steel,12*4)),
+			new Recipe(defense, DefenseBlocks.diriumalloywall, stack(Item.titanium, 12), stack(Item.dirium, 12), stack(Item.steel,12)),
 
 			new Recipe(distribution, DistributionBlocks.conveyor, stack(Item.stone, 1)),
 			new Recipe(distribution, DistributionBlocks.steelconveyor, stack(Item.steel, 1)),
@@ -80,11 +83,13 @@ public class Recipes {
 			new Recipe(power, DistributionBlocks.powerlaserrouter, stack(Item.steel, 5), stack(Item.iron, 5)),
 
 			new Recipe(power, DefenseBlocks.shieldgenerator, stack(Item.titanium, 30), stack(Item.dirium, 30)),
+			new Recipe(power, DefenseBlocks.megaShield, stack(Item.titanium, 30*4), stack(Item.dirium, 30*4*2)),
 
 			new Recipe(distribution, DistributionBlocks.teleporter, stack(Item.steel, 30), stack(Item.dirium, 40)),
 
 			new Recipe(power, DefenseBlocks.repairturret, stack(Item.iron, 30)),
 			new Recipe(power, DefenseBlocks.megarepairturret, stack(Item.iron, 20), stack(Item.steel, 30)),
+			new Recipe(power, DefenseBlocks.ultrarepairturret, stack(Item.iron, 20), stack(Item.steel, 30), stack(Item.titanium, 40)),
 
 			new Recipe(production, ProductionBlocks.pump, stack(Item.steel, 10)),
 			new Recipe(production, ProductionBlocks.fluxpump, stack(Item.steel, 10), stack(Item.dirium, 5))

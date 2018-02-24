@@ -231,6 +231,10 @@ public class Control extends Module{
 		Timers.runTask(18, () -> ui.loadfrag.hide());
 	}
 
+	public void resetMap() {
+		playMap(world.getMap());
+	}
+
 	public boolean isHighScore(){
 		return hiscore;
 	}

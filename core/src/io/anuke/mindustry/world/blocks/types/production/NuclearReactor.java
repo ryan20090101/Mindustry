@@ -24,6 +24,7 @@ import java.io.IOException;
 import static io.anuke.mindustry.Vars.tilesize;
 
 public class NuclearReactor extends LiquidPowerGenerator{
+
 	protected final int timerFuel = timers++;
 
 	protected final Translator tr = new Translator();
