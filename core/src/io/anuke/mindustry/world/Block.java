@@ -204,7 +204,7 @@ public class Block{
 		Block blck = tile.block();
 		
 		for(int j = 0; j < 4; j ++){
-			Tile other = tile.getNearby(i,blck.height,blck.width);
+			Tile other = tile.getNearby(i);
 			System.out.println(other.block().name);
 			System.out.println(other.floor().name);
 			if(other != null && other.block().acceptItem(item, other, tile)){

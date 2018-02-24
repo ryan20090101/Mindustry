@@ -243,31 +243,45 @@ public class Tile{
 		return null;
 	}
 
-	/**WARNING: will get only the first block nearby.*/
+	/**WARNING: THIS IS EXTREMELY LAGGY
 	public Tile getNearby(int rotation, int height, int width){
-		return getNearbyArray(rotation, height, width).first();
+		Array<Tile> til = getNearbyArray(rotation, height, width);
+		if (til == null)
+			return null;
+		return til.first();
 	}
 	public Array<Tile> getNearbyArray(int rotation, int height, int width){
-		if(rotation >= 4) return null;
+		if(rotation >= 4 || height != width || height % 2 == 0) return null;
 		Array<Tile> returnMe = new Array<>();
-		for (int dy = 0; dy < height+2; dy++) {
-			for (int dx = 0; dx < width+2 ; dx++) {
+		if(height != 1) {
+			height = (height + 2) / 2;
+			width = (width + 2) / 2;
+		}
+		for (int dy = -height; dy < height+1; dy++) {
+			for (int dx = -height; dx < width+1; dx++) {
+				System.out.println(dx);
+				System.out.println(dy);
+				//corners
 				if((dy == height && dx == width)
-					|| (dy == height && dx == 0)
-					|| (dy == 0 && dx == width)
-					|| (dy == 0 && dx == 0)
-					|| (dx < width && dx > 0)
-					|| (dy < height && dy > 0)) continue;
-				if ((rotation == 0 && dx != width)
-					|| (rotation == 1 && dy != 0)
-					|| (rotation == 2 && dx != 0)
+					|| (dy == height && dx == -width)
+					|| (dy == -height && dx == width)
+					|| (dy == -height && dx == -width)) continue;
+				System.out.println("cor");
+				//inside
+				if((dx < width && dx > -width)
+					&& (dy < height && dy > -height)) continue;
+				System.out.println("ins");
+				//check rotation
+				if((rotation == 0 && dx != width)
+					|| (rotation == 1 && dy != -height)
+					|| (rotation == 2 && dx != -width)
 					|| (rotation == 3 && dy != height)) continue;
+				System.out.println("rot");
 				returnMe.add(world.tile(x+dx,y+dy));
 			}
 		}
 		return returnMe;
-	}
-
+	}*/
 	public Tile[] getNearby(Tile[] temptiles){
 		temptiles[0] = world.tile(x+1, y);
 		temptiles[1] = world.tile(x, y+1);
