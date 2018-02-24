@@ -30,6 +30,7 @@ public class Player extends SyncEntity{
 	static final int timerShootLeft = 1;
 	static final int timerShootRight = 2;
 	static final int timerRegen = 3;
+	static final int timerRadiation = 4;
     private int cx = 0;
 	public String name = "name";
 	public boolean isFlying;
@@ -165,17 +166,19 @@ public class Player extends SyncEntity{
 
 		if(!isFlying) {
 
-			if (radiation > 0 && cx > 3 && !tile.floor().radioactive) {
+			boolean timerRad = timer.get(timerRadiation,3);
+
+			if (radiation > 0 && timerRad && !tile.floor().radioactive) {
 				radiation -= 1;
 				cx = 0;
 			}
 
-			if (tile.floor().radioactive && cx > 3) {
+			if (tile.floor().radioactive && timerRad) {
 				radiation += tile.floor().radioactivity;
 				cx = 0;
 			}
 
-			if (radiation >= 100) {
+			if (radiation >= 100 && timerRad) {
 				damage((radiation - 100) / 25);
 				if (radiation >= radiationDeath) {
 					onDeath();
