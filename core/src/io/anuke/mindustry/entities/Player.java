@@ -199,7 +199,11 @@ public class Player extends SyncEntity{
 
 
 		ui.hudfrag.setFade(world.time/15000);
-
+        float radFloat = radiation/225;
+        if(radiation>0){
+            ui.hudfrag.setRadTint(radFloat);
+        }
+    
 		float speedModifier = tile.block().movementSpeedMultiplier;
 		float speed;
 		dashing = Inputs.keyDown("dash");

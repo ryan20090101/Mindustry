@@ -243,4 +243,7 @@ public class HudFragment implements Fragment{
 	public void setFade(float a){
 		respawntable.setColor(new Color(0, 0, 0, a));
 	}
+	public void setRadTint(float a){
+		respawntable.setColor(new Color(0, 255, 0, a));
+	}
 }
