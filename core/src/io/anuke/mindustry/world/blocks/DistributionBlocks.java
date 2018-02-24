@@ -32,7 +32,7 @@ public class DistributionBlocks{
 	}},
 	
 	pulseconveyor = new Conveyor("poweredconveyor"){{
-		movementSpeedMultiplier = 4f;
+		movementSpeedMultiplier = 3f;
 		health = 75;
 		speed = 0.09f;
 	}},
@@ -55,6 +55,7 @@ public class DistributionBlocks{
         capacity = 5;
         bufferUpdate = true;
         rotate = true;
+		selfAccept = false;
 	}},
 	
 	junction = new Junction("junction"){{

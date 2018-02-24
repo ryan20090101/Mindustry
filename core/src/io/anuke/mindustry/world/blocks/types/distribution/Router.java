@@ -14,6 +14,7 @@ public class Router extends Block{
 	
 	public int capacity = 20;
     public boolean bufferUpdate = false;
+    public boolean selfAccept = true;
 
 	public Router(String name) {
 		super(name);
@@ -72,6 +73,7 @@ public class Router extends Block{
 	@Override
 	public boolean acceptItem(Item item, Tile tile, Tile source){
 		int items = tile.entity.totalItems();
+		if (selfAccept && tile.block()=source.block()) return false;
 		return items < capacity;
 	}
 
