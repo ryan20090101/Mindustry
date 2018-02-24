@@ -44,6 +44,7 @@ public class Player extends SyncEntity{
 	public float targetAngle = 0f;
 	public float stucktime = 0f;
 	public boolean dashing = false;
+	public int flyCooldown = 0;
 
 	public int clientid;
 	public boolean isLocal = false;
@@ -158,6 +159,8 @@ public class Player extends SyncEntity{
 			return;
 		}
 
+		if(flyCooldown>0) flyCooldown-=1;
+
 		Tile tile = world.tileWorld(x, y);
 
 		if(!isFlying) {
@@ -197,7 +200,7 @@ public class Player extends SyncEntity{
 		if(ui.chatfrag.chatOpen()) return;
 
 		float speedModifier = tile.block().movementSpeedMultiplier;
-		float speed = 0f;
+		float speed;
 		dashing = Inputs.keyDown("dash");
 
 		if (!isFlying) {

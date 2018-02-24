@@ -404,7 +404,7 @@ public class Control extends Module{
 			}
 		}
 
-		if (Inputs.keyRelease("ship_mode")&&!player.isFlying) player.isFlying = true;
-		else if (Inputs.keyRelease("ship_mode")&&player.isFlying) player.isFlying = false;
+		if (Inputs.keyRelease("ship_mode")&&!player.isFlying&&player.flyCooldown<=0){ player.flyCooldown = 100;  player.isFlying = true;}
+		else if (Inputs.keyRelease("ship_mode")&&player.isFlying&&player.flyCooldown<=0){ player.flyCooldown = 100; player.isFlying = false;}
 	}
 }
