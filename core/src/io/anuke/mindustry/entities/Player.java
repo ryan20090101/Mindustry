@@ -197,10 +197,9 @@ public class Player extends SyncEntity{
 
 		if(ui.chatfrag.chatOpen()) return;
 
-		/*
-		ui.hudfrag.setFade(1);
-		TODO: world.time/2 other half goes backwards (9,8,7,6 etc) instead of (1,2,3,4,5,6) get a float between 0 and 1 according to time
-		*/
+
+		ui.hudfrag.setFade(world.time/15000);
+
 		float speedModifier = tile.block().movementSpeedMultiplier;
 		float speed;
 		dashing = Inputs.keyDown("dash");
