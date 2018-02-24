@@ -201,9 +201,10 @@ public class Block{
 
 		byte i = tile.getDump();
 		byte pdump = (byte)(i % 4);
+		Block blck = tile.block();
 		
 		for(int j = 0; j < 4; j ++){
-			Tile other = tile.getNearby(i);
+			Tile other = tile.getNearby(i,blck.height,blck.width);
 			if(other != null && other.block().acceptItem(item, other, tile)){
 				other.block().handleItem(item, other, tile);
 				tile.setDump((byte)((i+1)%4));

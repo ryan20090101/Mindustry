@@ -243,6 +243,32 @@ public class Tile{
 		return null;
 	}
 
+	/**WARNING: will get only the first block nearby.*/
+	public Tile getNearby(int rotation, int height, int width){
+		return getNearbyArray(rotation, height, width).first();
+	}
+	public Array<Tile> getNearbyArray(int rotation, int height, int width){
+		Array<Tile> returnMe = new Array<>();
+		for (int dy = 0; dy < height+2; dy++) {
+			if(dy < height && dy > 0) continue;
+			for (int dx = 0; dx < width+2 ; dx++) {
+				if(dx < width && dx > 0) continue;
+				if((dy == height && dx == width)
+					|| (dy == height && dx == 0)
+					|| (dy == 0 && dx == width)
+					|| (dy == 0 && dx == 0)
+					|| (dx < width && dx > 0)) continue;
+				if ((rotation == 0 && dx != width)
+					|| (rotation == 1 && dy != 0)
+					|| (rotation == 2 && dx != 0)
+					|| (rotation == 3 && dy != height)) continue;
+				returnMe.add(world.tile(x+dx,y+dy));
+			}
+		}
+		if (returnMe.size > 0) return returnMe;
+		return null;
+	}
+
 	public Tile[] getNearby(Tile[] temptiles){
 		temptiles[0] = world.tile(x+1, y);
 		temptiles[1] = world.tile(x, y+1);
