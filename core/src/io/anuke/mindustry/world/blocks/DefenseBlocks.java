@@ -95,7 +95,7 @@ public class DefenseBlocks{
 		{
 			health = 100 * wallHealthMultiplier;
 			powerPerDamage = 0.001f;
-			powerDrain = 0.01f;
+			powerDrain = 0.1f;
 			shieldRadius = 80f;
 			maxRadius = 100f;
 			height = width = 3;
