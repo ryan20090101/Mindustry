@@ -98,7 +98,7 @@ public class DefenseBlocks{
 			powerDrain = 0.01f;
 			shieldRadius = 80f;
 			maxRadius = 100f;
-			height = width = 2;
+			height = width = 3;
 		}
 	},
 
