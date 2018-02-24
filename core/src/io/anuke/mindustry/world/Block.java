@@ -205,6 +205,8 @@ public class Block{
 		
 		for(int j = 0; j < 4; j ++){
 			Tile other = tile.getNearby(i,blck.height,blck.width);
+			System.out.println(other.block().name);
+			System.out.println(other.floor().name);
 			if(other != null && other.block().acceptItem(item, other, tile)){
 				other.block().handleItem(item, other, tile);
 				tile.setDump((byte)((i+1)%4));

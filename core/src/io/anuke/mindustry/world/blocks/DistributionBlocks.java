@@ -48,6 +48,7 @@ public class DistributionBlocks{
 	}},
 
 	coreOut = new CorePuller("coreOut"){{
+		height = width = 3;
 	}},
     coreIn = new CorePusher("coreIn"){{}},
 

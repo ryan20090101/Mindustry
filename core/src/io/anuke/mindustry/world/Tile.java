@@ -248,16 +248,16 @@ public class Tile{
 		return getNearbyArray(rotation, height, width).first();
 	}
 	public Array<Tile> getNearbyArray(int rotation, int height, int width){
+		if(rotation >= 4) return null;
 		Array<Tile> returnMe = new Array<>();
 		for (int dy = 0; dy < height+2; dy++) {
-			if(dy < height && dy > 0) continue;
 			for (int dx = 0; dx < width+2 ; dx++) {
-				if(dx < width && dx > 0) continue;
 				if((dy == height && dx == width)
 					|| (dy == height && dx == 0)
 					|| (dy == 0 && dx == width)
 					|| (dy == 0 && dx == 0)
-					|| (dx < width && dx > 0)) continue;
+					|| (dx < width && dx > 0)
+					|| (dy < height && dy > 0)) continue;
 				if ((rotation == 0 && dx != width)
 					|| (rotation == 1 && dy != 0)
 					|| (rotation == 2 && dx != 0)
@@ -265,8 +265,7 @@ public class Tile{
 				returnMe.add(world.tile(x+dx,y+dy));
 			}
 		}
-		if (returnMe.size > 0) return returnMe;
-		return null;
+		return returnMe;
 	}
 
 	public Tile[] getNearby(Tile[] temptiles){
