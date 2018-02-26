@@ -197,13 +197,14 @@ public class Player extends SyncEntity{
 
 		if(ui.chatfrag.chatOpen()) return;
 
-
-		ui.hudfrag.setFade(world.time/15000);
+		/*
+		ui.hudfrag.setFade(Mathf.clamp(world.time/15000,0,1));
         float radFloat = radiation/225;
         if(radiation>0){
             ui.hudfrag.setRadTint(radFloat);
         }
-    
+    	*/
+		
 		float speedModifier = tile.block().movementSpeedMultiplier;
 		float speed;
 		dashing = Inputs.keyDown("dash");

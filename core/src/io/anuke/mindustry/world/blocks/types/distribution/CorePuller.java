@@ -16,6 +16,7 @@ import io.anuke.ucore.scene.ui.TextField;
 import io.anuke.ucore.scene.ui.layout.Table;
 
 import static io.anuke.mindustry.Vars.state;
+import static io.anuke.mindustry.Vars.world;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -79,6 +80,7 @@ public class CorePuller extends PowerBlock{
 		cont.row();
 
 		for(int i = 0; i < items.size; i ++){
+			if(!items.get(i).material) continue;
 			final int f = i;
 			ImageButton button = cont.addImageButton("white", "toggle", 24, () -> {
 				entity.sortItem = items.get(f);

@@ -19,9 +19,11 @@ import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.ProductionBlocks;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Graphics;
+import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Sounds;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.SolidEntity;
+import io.anuke.ucore.util.Input;
 import io.anuke.ucore.util.Mathf;
 
 import static io.anuke.mindustry.Vars.*;
@@ -68,7 +70,6 @@ public abstract class InputHandler extends InputAdapter{
 			for(ItemStack stack : recipe.requirements){
 				state.inventory.removeItem(stack);
 			}
-
 			return true;
 		}
 		return false;
