@@ -16,6 +16,16 @@ public class DistributionBlocks{
 		flowfactor = 4.9f;
 		health = 65;
 	}},
+
+	steeltank = new Tank("steeltank"){{
+		liquidCapacity = 50f;
+		flowfactor = 10f;
+	}},
+
+	diriumtank = new Tank("diriumtank"){{
+		liquidCapacity = 50f;
+		flowfactor = 10f;
+	}},
 	
 	liquidrouter = new LiquidRouter("liquidrouter"){{
 
