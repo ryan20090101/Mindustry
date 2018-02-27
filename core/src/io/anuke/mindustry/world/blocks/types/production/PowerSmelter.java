@@ -43,7 +43,6 @@ public class PowerSmelter extends PowerBlock{
 		for(Item item : inputs){
 			bars.add(new BlockBar(Color.GREEN, true, tile -> (float)ent.getItem(item)/capacity));
 		}
-		bars.add(new BlockBar(Color.YELLOW, true, tile -> (float)ent.power));
 	}
 	
 	@Override
