@@ -284,12 +284,9 @@ public class Player extends SyncEntity{
 		buffer.put(weaponLeft.id);
 		buffer.put(weaponRight.id);
 		buffer.put(isAndroid ? 1 : (byte)0);
-<<<<<<< HEAD
 		buffer.put(isFlying ? 1 : (byte)0);
 		buffer.putInt(radiation);
-=======
 		buffer.put(isAdmin ? 1 : (byte)0);
->>>>>>> upstream/master
 		buffer.putInt(Color.rgba8888(color));
 		buffer.putFloat(x);
 		buffer.putFloat(y);
@@ -304,12 +301,9 @@ public class Player extends SyncEntity{
 		weaponLeft = (Weapon) Upgrade.getByID(buffer.get());
 		weaponRight = (Weapon) Upgrade.getByID(buffer.get());
 		isAndroid = buffer.get() == 1;
-<<<<<<< HEAD
 		isFlying = buffer.get() == 1;
 		radiation = buffer.getInt();
-=======
 		isAdmin = buffer.get() == 1;
->>>>>>> upstream/master
 		color.set(buffer.getInt());
 		x = buffer.getFloat();
 		y = buffer.getFloat();

@@ -12,14 +12,6 @@ import io.anuke.mindustry.world.Placement;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.ucore.core.Graphics;
-<<<<<<< HEAD
-import io.anuke.ucore.core.Inputs;
-import io.anuke.ucore.core.Sounds;
-import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.SolidEntity;
-import io.anuke.ucore.util.Input;
-=======
->>>>>>> upstream/master
 import io.anuke.ucore.util.Mathf;
 
 import static io.anuke.mindustry.Vars.*;
@@ -82,43 +74,6 @@ public abstract class InputHandler extends InputAdapter{
 	}
 	
 	public boolean validPlace(int x, int y, Block type){
-<<<<<<< HEAD
-
-		for(int i = 0; i < world.getSpawns().size; i ++){
-			SpawnPoint spawn = world.getSpawns().get(i);
-			if(Vector2.dst(x * tilesize, y * tilesize, spawn.start.worldx(), spawn.start.worldy()) < enemyspawnspace){
-				return false;
-			}
-		}
-		
-		rect.setSize(type.width * tilesize, type.height * tilesize);
-		Vector2 offset = type.getPlaceOffset();
-		rect.setCenter(offset.x + x * tilesize, offset.y + y * tilesize);
-
-		synchronized (Entities.entityLock) {
-			for (SolidEntity e : Entities.getNearby(enemyGroup, x * tilesize, y * tilesize, tilesize * 2f)) {
-				if (e == null) continue; //not sure why this happens?
-				Rectangle rect = e.hitbox.getRect(e.x, e.y);
-
-				if (this.rect.overlaps(rect)) {
-					return false;
-				}
-			}
-		}
-
-		if(type.solid || type.solidifes) {
-			for (Player player : playerGroup.all()) {
-				if (!player.isAndroid && rect.overlaps(player.hitbox.getRect(player.x, player.y))) {
-					return false;
-				}
-			}
-		}
-		
-		Tile tile = world.tile(x, y);
-		
-		if(tile == null || (isSpawnPoint(tile) && (type.solidifes || type.solid))) return false;
-=======
->>>>>>> upstream/master
 		
 		if(!type.isMultiblock() && control.tutorial().active() &&
 				control.tutorial().showBlock()){
