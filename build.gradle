@@ -20,12 +20,20 @@ allprojects {
     version = 'release'
 
     ext {
+<<<<<<< HEAD
         versionNumber = '0.5 Alternate Dimension'
+=======
+        versionNumber = '3.4'
+>>>>>>> upstream/master
         versionType = 'release'
         appName = 'Mindustry'
         gdxVersion = '1.9.8'
         aiVersion = '1.8.1'
+<<<<<<< HEAD
         uCoreVersion = 'f484468'
+=======
+        uCoreVersion = '1b29d6c'
+>>>>>>> upstream/master
 
         getVersionString = {
             String buildVersion = getBuildVersion()

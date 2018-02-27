@@ -16,10 +16,17 @@ import static io.anuke.mindustry.Vars.*;
 public class MenuFragment implements Fragment{
 	
 	public void build(){
+<<<<<<< HEAD
 		if(!android){
 			//menu table
 			new table(){{
 				get().setTranslation(0, -60);
+=======
+		new table(){{
+			visible(() -> state.is(State.menu));
+
+			if(!android){
+>>>>>>> upstream/master
 				new table(){{
                     
 					PressGroup group = new PressGroup();
@@ -53,6 +60,7 @@ public class MenuFragment implements Fragment{
 					}
 					get().margin(16);
 				}}.end();
+<<<<<<< HEAD
 	
 				visible(() -> state.is(State.menu));
 			}}.end();
@@ -60,31 +68,34 @@ public class MenuFragment implements Fragment{
 			new table(){{
                 get().setTranslation(0, -60);
 				new table(){{
+=======
+
+			}else {
+				new table() {{
+>>>>>>> upstream/master
 					defaults().size(120f).pad(5);
-					float isize = 14f*4;
-					
+					float isize = 14f * 4;
+
 					new imagebutton("icon-play-2", isize, ui.levels::show).text("$text.play").padTop(4f);
-					
+
 					new imagebutton("icon-tutorial", isize, () -> control.playMap(world.maps().getMap("tutorial"))).text("$text.tutorial").padTop(4f);
-					
+
 					new imagebutton("icon-load", isize, ui.load::show).text("$text.load").padTop(4f);
 
 					new imagebutton("icon-add", isize, ui.join::show).text("$text.joingame").padTop(4f);
-					
+
 					row();
 
 					new imagebutton("icon-editor", isize, ui.editor::show).text("$text.editor").padTop(4f);
-	
+
 					new imagebutton("icon-tools", isize, ui.settings::show).text("$text.settings").padTop(4f);
 
 					new imagebutton("icon-info", isize, ui.about::show).text("$text.about.button").padTop(4f);
 
 					new imagebutton("icon-donate", isize, Platform.instance::openDonations).text("$text.donate").padTop(4f);
-
-					visible(() -> state.is(State.menu));
 				}}.end();
-			}}.end();
-		}
+			}
+		}}.end();
 		
 		//extra icons in top right
 		new table(){{

@@ -34,6 +34,7 @@ public class Player extends SyncEntity{
 	public String name = "name";
 	public boolean isFlying;
 	public boolean isAndroid;
+	public boolean isAdmin;
 	public Color color = new Color();
 	public int radiation = 0;
     public int radiationDeath = 200;
@@ -46,7 +47,7 @@ public class Player extends SyncEntity{
 	public boolean dashing = false;
 	public int flyCooldown = 0;
 
-	public int clientid;
+	public int clientid = -1;
 	public boolean isLocal = false;
 	public Timer timer = new Timer(4);
 
@@ -86,7 +87,7 @@ public class Player extends SyncEntity{
 	
 	@Override
 	public void onDeath(){
-		remove();
+		dead = true;
 		if(Net.active()){
 			NetEvents.handlePlayerDeath();
 		}
@@ -116,7 +117,7 @@ public class Player extends SyncEntity{
 	
 	@Override
 	public void drawSmooth(){
-		if((debug && (!showPlayer || !showUI)) || (isAndroid && isLocal) || (dead && !isLocal)) return;
+		if((debug && (!showPlayer || !showUI)) || (isAndroid && isLocal) || dead) return;
         boolean snap = snapCamera && Settings.getBool("smoothcam") && Settings.getBool("pixelate") && isLocal;
 
 		String part = isFlying ? "ship" : "mech";
@@ -283,8 +284,12 @@ public class Player extends SyncEntity{
 		buffer.put(weaponLeft.id);
 		buffer.put(weaponRight.id);
 		buffer.put(isAndroid ? 1 : (byte)0);
+<<<<<<< HEAD
 		buffer.put(isFlying ? 1 : (byte)0);
 		buffer.putInt(radiation);
+=======
+		buffer.put(isAdmin ? 1 : (byte)0);
+>>>>>>> upstream/master
 		buffer.putInt(Color.rgba8888(color));
 		buffer.putFloat(x);
 		buffer.putFloat(y);
@@ -299,8 +304,12 @@ public class Player extends SyncEntity{
 		weaponLeft = (Weapon) Upgrade.getByID(buffer.get());
 		weaponRight = (Weapon) Upgrade.getByID(buffer.get());
 		isAndroid = buffer.get() == 1;
+<<<<<<< HEAD
 		isFlying = buffer.get() == 1;
 		radiation = buffer.getInt();
+=======
+		isAdmin = buffer.get() == 1;
+>>>>>>> upstream/master
 		color.set(buffer.getInt());
 		x = buffer.getFloat();
 		y = buffer.getFloat();

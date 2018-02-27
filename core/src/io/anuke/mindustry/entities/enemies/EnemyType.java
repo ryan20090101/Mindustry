@@ -17,6 +17,7 @@ import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.graphics.Draw;
+import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Strings;
 
@@ -86,6 +87,13 @@ public class EnemyType {
 
         Graphics.flush();
 
+        if(isCalculating(enemy)){
+            Draw.color(Color.SKY);
+            Lines.polySeg(20, 0, 4, enemy.x, enemy.y, 11f, Timers.time() * 2f + enemy.id*52f);
+            Lines.polySeg(20, 0, 4, enemy.x, enemy.y, 11f, Timers.time() * 2f + enemy.id*52f + 180f);
+            Draw.color();
+        }
+
         if(showPaths){
             Draw.tscl(0.25f);
             Draw.text((int)enemy.idletime + " " + enemy.node + " " + enemy.id + "\n" + Strings.toFixed(enemy.totalMove.x, 2) + ", "
@@ -107,7 +115,11 @@ public class EnemyType {
         if(enemy.lane >= world.getSpawns().size || enemy.lane < 0) enemy.lane = 0;
 
         boolean waiting = enemy.lane >= world.getSpawns().size || enemy.lane < 0
+<<<<<<< HEAD
             || world.getSpawns().get(enemy.lane).pathTiles == null || enemy.node <= 0;
+=======
+                || world.getSpawns().get(enemy.lane).pathTiles == null || enemy.node <= 0;
+>>>>>>> upstream/master
 
         move(enemy);
 
@@ -180,6 +192,8 @@ public class EnemyType {
 
         Tile core = world.getCore();
 
+        if(core == null) return;
+
         if(enemy.idletime > maxIdleLife && enemy.node > 0){
             enemy.onDeath();
             return;
@@ -213,7 +227,7 @@ public class EnemyType {
             }else if(dst < avoidRange){
                 calc.set((enemy.x - other.x), (enemy.y - other.y)).setLength(avoidSpeed);
                 shift.add(calc.scl(1.1f));
-            }else if(dst < attractRange && !nearCore){
+            }else if(dst < attractRange && !nearCore && !isCalculating(enemy)){
                 calc.set((enemy.x - other.x), (enemy.y - other.y)).setLength(avoidSpeed);
                 shift.add(calc.scl(-1));
             }
@@ -289,6 +303,10 @@ public class EnemyType {
                 state.enemies --;
             }
         }
+    }
+
+    public boolean isCalculating(Enemy enemy){
+        return enemy.node < 0 && !Net.client();
     }
 
     public static EnemyType getByID(byte id){

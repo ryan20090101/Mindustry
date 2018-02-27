@@ -32,17 +32,27 @@ public class SettingsMenuDialog extends SettingsDialog{
 	public SettingsMenuDialog(){
 		setStyle(Core.skin.get("dialog", WindowStyle.class));
 
-		hidden(()->{
+		hidden(() -> {
 			if(!state.is(State.menu)){
 				if(!wasPaused || Net.active())
 					state.set(State.playing);
 			}
 		});
 
+<<<<<<< HEAD
 		shown(()-> {
 			if (!state.is(State.menu)) {
 				wasPaused = state.is(State.paused);
 				if (!Net.active()) state.set(State.paused);
+=======
+		shown(() -> {
+			if(!state.is(State.menu)){
+				wasPaused = state.is(State.paused);
+				if(ui.paused.getScene() != null){
+					wasPaused = ui.paused.wasPaused;
+				}
+				if(!Net.active()) state.set(State.paused);
+>>>>>>> upstream/master
 				ui.paused.hide();
 			}
 		});
