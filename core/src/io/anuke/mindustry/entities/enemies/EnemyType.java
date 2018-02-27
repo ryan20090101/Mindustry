@@ -115,11 +115,7 @@ public class EnemyType {
         if(enemy.lane >= world.getSpawns().size || enemy.lane < 0) enemy.lane = 0;
 
         boolean waiting = enemy.lane >= world.getSpawns().size || enemy.lane < 0
-<<<<<<< HEAD
-            || world.getSpawns().get(enemy.lane).pathTiles == null || enemy.node <= 0;
-=======
                 || world.getSpawns().get(enemy.lane).pathTiles == null || enemy.node <= 0;
->>>>>>> upstream/master
 
         move(enemy);
 

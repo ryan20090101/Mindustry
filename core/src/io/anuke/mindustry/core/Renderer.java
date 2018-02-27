@@ -264,14 +264,7 @@ public class Renderer extends RendererModule {
 				Draw.rect("blank", player.x, player.y + 8 - layout.height / 2, layout.width + 2, layout.height + 2);
 				Draw.color();
 				Draw.tcolor(player.getColor());
-<<<<<<< HEAD
-				Draw.text(player.name, player.x, player.y + 8);
-				Draw.tcolor();
-			}
-		}
-=======
 	            Draw.text(player.name, player.x, player.y + 8);
-
 	            if(player.isAdmin){
 	            	Draw.color(player.getColor());
 	            	float s = 3f;
@@ -280,7 +273,6 @@ public class Renderer extends RendererModule {
 				Draw.reset();
            }
         }
->>>>>>> upstream/master
 		Pools.free(layout);
 		Draw.tscl(fontscale);
 	}
@@ -288,12 +280,8 @@ public class Renderer extends RendererModule {
 	void drawEnemyMarkers() {
 		Graphics.surface(indicatorSurface);
 		Draw.color(Color.RED);
-<<<<<<< HEAD
-		for (Enemy enemy : enemyGroup.all()) {
-=======
 
 		for(Enemy enemy : enemyGroup.all()) {
->>>>>>> upstream/master
 
 			if (rect.setSize(camera.viewportWidth, camera.viewportHeight).setCenter(camera.position.x, camera.position.y)
 					.overlaps(enemy.hitbox.getRect(enemy.x, enemy.y))) {
@@ -428,21 +416,12 @@ public class Renderer extends RendererModule {
 				Lines.dashCircle(spawn.start.worldx(), spawn.start.worldy(), enemyspawnspace);
 			}
 
-<<<<<<< HEAD
-			if (world.getCore() != null) {
-				Draw.color(Color.LIME);
-				Lines.poly(world.getSpawnX(), world.getSpawnY(), 4, 6f, Timers.time() * 2f);
-			}
-
-			if (input.breakMode == PlaceMode.holdDelete)
-=======
 			if(world.getCore() != null) {
 				Draw.color(Color.LIME);
 				Lines.poly(world.getSpawnX(), world.getSpawnY(), 4, 6f, Timers.time() * 2f);
 			}
 			
 			if(input.breakMode == PlaceMode.holdDelete)
->>>>>>> upstream/master
 				input.breakMode.draw(tilex, tiley, 0, 0);
 
 		} else if (input.breakMode.delete && control.input().drawPlace() && input.recipe == null) {

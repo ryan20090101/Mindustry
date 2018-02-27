@@ -38,13 +38,6 @@ public class SettingsMenuDialog extends SettingsDialog{
 					state.set(State.playing);
 			}
 		});
-
-<<<<<<< HEAD
-		shown(()-> {
-			if (!state.is(State.menu)) {
-				wasPaused = state.is(State.paused);
-				if (!Net.active()) state.set(State.paused);
-=======
 		shown(() -> {
 			if(!state.is(State.menu)){
 				wasPaused = state.is(State.paused);
@@ -52,7 +45,6 @@ public class SettingsMenuDialog extends SettingsDialog{
 					wasPaused = ui.paused.wasPaused;
 				}
 				if(!Net.active()) state.set(State.paused);
->>>>>>> upstream/master
 				ui.paused.hide();
 			}
 		});

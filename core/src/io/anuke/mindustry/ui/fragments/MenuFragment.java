@@ -16,17 +16,10 @@ import static io.anuke.mindustry.Vars.*;
 public class MenuFragment implements Fragment{
 	
 	public void build(){
-<<<<<<< HEAD
-		if(!android){
-			//menu table
-			new table(){{
-				get().setTranslation(0, -60);
-=======
 		new table(){{
 			visible(() -> state.is(State.menu));
 
 			if(!android){
->>>>>>> upstream/master
 				new table(){{
                     
 					PressGroup group = new PressGroup();
@@ -60,19 +53,10 @@ public class MenuFragment implements Fragment{
 					}
 					get().margin(16);
 				}}.end();
-<<<<<<< HEAD
 	
 				visible(() -> state.is(State.menu));
-			}}.end();
-		}else{
-			new table(){{
-                get().setTranslation(0, -60);
-				new table(){{
-=======
-
 			}else {
 				new table() {{
->>>>>>> upstream/master
 					defaults().size(120f).pad(5);
 					float isize = 14f * 4;
 
