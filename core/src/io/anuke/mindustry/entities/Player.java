@@ -208,7 +208,11 @@ public class Player extends SyncEntity{
 		if(timer.get(timerOther,tile.block().damageTime))
 			damage(tile.block().damageOnTop);
 
-		float speedModifier = tile.block().movementSpeedMultiplier;
+		float speedModifier;
+		if (tile.block() == null)
+			speedModifier = tile.floor().movementSpeedMultiplier;
+		else
+			speedModifier = tile.block().movementSpeedMultiplier;
 		float speed;
 		dashing = Inputs.keyDown("dash");
 

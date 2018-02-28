@@ -49,7 +49,6 @@ public class Blocks{
 	lava = new Floor("lava"){
 		{
 			variants = 0;
-			solid = true;
 			liquidDrop = Liquid.lava;
 			movementSpeedMultiplier = 0.25f;
 			damageOnTop = 1;
