@@ -23,7 +23,7 @@ public class Item{
 		copper = new Item("copper"),
 		tin = new Item("tin"),
 		gravel = new Item("gravel"),
-		plutonium = new Item("plutonium"),
+		plutonium = new Item("plutonium"){{material=false;}},
 		dirt = new Item("dirt");
 
 	public final int id;
