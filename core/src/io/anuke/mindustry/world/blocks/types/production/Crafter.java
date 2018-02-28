@@ -68,7 +68,7 @@ public class Crafter extends Block{
                         || !ent.timer.get(timerCraft, craftTime)){ //not yet time
                     return;
                 }
-                
+
                 for (Item item : recipe.get(result)) {
                     tile.entity.removeItem(item, 1);
                 }
