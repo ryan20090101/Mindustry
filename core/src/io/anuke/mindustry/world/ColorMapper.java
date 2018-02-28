@@ -122,7 +122,7 @@ public class ColorMapper{
         "edb600", pair(Blocks.blackstone, ), **/
 
         /* Gatherers */
-        "665b62", pair(Blocks.stone, ProductionBlocks.stonedrill),
+        "665b62", pair(Blocks.stone, ProductionBlocks.grounddrill),
         "a38d9a", pair(Blocks.iron, ProductionBlocks.irondrill),
         "260016", pair(Blocks.coal, ProductionBlocks.coaldrill),
         "e0e5e4", pair(Blocks.titanium, ProductionBlocks.titaniumdrill),
