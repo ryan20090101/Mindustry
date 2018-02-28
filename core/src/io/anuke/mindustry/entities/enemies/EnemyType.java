@@ -10,6 +10,7 @@ import io.anuke.mindustry.graphics.Fx;
 import io.anuke.mindustry.graphics.Shaders;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
+import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.ucore.core.Effects;
@@ -57,8 +58,10 @@ public class EnemyType {
     protected boolean targetClient = false;
     protected float mass = 1f;
     protected boolean isImmuneRadioactivity = false;
+    protected boolean isImmuneEnviromentalDamage = false;
     protected int radiation;
     protected int radiationDeath = 200;
+    protected int radiationTime = 5;
 
     protected final int timerTarget = timeid ++;
     protected final int timerReload = timeid ++;
@@ -157,7 +160,7 @@ public class EnemyType {
         enemy.y = Mathf.clamp(enemy.y, 0, world.height() * tilesize);
 
         if(!isImmuneRadioactivity){
-            boolean timerRad = enemy.timer.get(timerOther,5);
+            boolean timerRad = enemy.timer.get(timerOther,radiationTime);
 
             if (radiation > 0 && timerRad && !tile.floor().radioactive) {
                 radiation -= 1;
@@ -173,6 +176,15 @@ public class EnemyType {
                     enemy.damage(enemy.health+1);
                 }
             }
+        }
+
+        if(!isImmuneEnviromentalDamage && (tile.floor().damageOnTop > 0 || tile.block().damageOnTop > 0))
+        {
+            Block blck = tile.floor().damageOnTop > 0 ? tile.floor() : tile.block();
+            boolean timerDamage = enemy.timer.get(timerOther,blck.damageTime);
+
+            if(timerDamage)
+                enemy.damage(blck.damageOnTop);
         }
     }
 

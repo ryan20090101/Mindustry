@@ -39,6 +39,7 @@ public class Blocks{
 		liquidDrop = Liquid.water;
 		liquid = true;
 	}},
+
     nucleargunk = new Floor("nucleargunk"){{
         variants = 8;
         solid = false;
@@ -50,6 +51,9 @@ public class Blocks{
 			variants = 0;
 			solid = true;
 			liquidDrop = Liquid.lava;
+			movementSpeedMultiplier = 0.25f;
+			damageOnTop = 1;
+			damageTime = 10;
 			liquid = true;
 		}
 		
@@ -68,7 +72,8 @@ public class Blocks{
 	oil = new Floor("oil"){
 		{
 			variants = 0;
-			solid = true;
+			solid = false;
+			movementSpeedMultiplier = 0.15f;
 			liquidDrop = Liquid.oil;
 			liquid = true;
 		}

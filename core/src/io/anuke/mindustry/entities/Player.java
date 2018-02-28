@@ -205,7 +205,9 @@ public class Player extends SyncEntity{
             ui.hudfrag.setRadTint(radFloat);
         }
     	*/
-		
+		if(timer.get(timerOther,tile.block().damageTime))
+			damage(tile.block().damageOnTop);
+
 		float speedModifier = tile.block().movementSpeedMultiplier;
 		float speed;
 		dashing = Inputs.keyDown("dash");

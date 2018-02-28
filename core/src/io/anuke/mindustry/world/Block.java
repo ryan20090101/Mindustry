@@ -103,6 +103,10 @@ public class Block{
 	public int radioactivity = 1;
 	/**movement speed multiplier.*/
 	public float movementSpeedMultiplier = 1f;
+	/**how much damage entities on top take.*/
+	public int damageOnTop = 0;
+	/**The time it takes for a block to cause damage.*/
+	public int damageTime = 0;
 
 	public Block(String name) {
 		this.name = name;
