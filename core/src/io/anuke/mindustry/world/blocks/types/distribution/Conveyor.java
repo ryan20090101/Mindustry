@@ -33,6 +33,8 @@ public class Conveyor extends Block{
 	private final Translator tr2 = new Translator();
 
 	public float speed = 0.02f;
+	public boolean drawItems = true;
+	public int lanes = 1; //TODO: ADD LANES!
 
 	protected Conveyor(String name) {
 		super(name);
@@ -68,6 +70,7 @@ public class Conveyor extends Block{
 
 	@Override
 	public void drawLayer(Tile tile){
+		if (!drawItems) return;
 		ConveyorEntity entity = tile.entity();
 
 		byte rotation = tile.getRotation();
