@@ -40,7 +40,7 @@ public class CorePuller extends PowerBlock{
 
 		if(ent.timer.get(timerPull,ent.pullTime) && ent.power >= powerPerItem) {
 			for (int j = 0; j < 4; j++) {
-				Tile other = tile.getNearby(j);
+				Tile other = tile.getNearby(j,height);
 				if (other != null && other.block().acceptItem(ent.sortItem, other, tile)) {
 					if (state.inventory.hasItem(new ItemStack(ent.sortItem, 1))) {
 						state.inventory.removeItem(new ItemStack(ent.sortItem, 1));

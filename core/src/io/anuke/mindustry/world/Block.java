@@ -190,10 +190,15 @@ public class Block{
 		return true;
 	}
 
+
+	public void offloadNear(Tile tile, Item item){
+		offloadNear(tile,item,1);
+	}
+
 	/**
 	 * Tries to put this item into a nearby container, if there are no available
 	 * containers, it gets added to the block's inventory.*/
-	public void offloadNear(Tile tile, Item item){
+	public void offloadNear(Tile tile, Item item, int addition){
 		if(Net.client() && syncBlockState){
 			handleItem(item, tile, tile);
 			return;
@@ -204,9 +209,7 @@ public class Block{
 		Block blck = tile.block();
 		
 		for(int j = 0; j < 4; j ++){
-			Tile other = tile.getNearby(i);
-			System.out.println(other.block().name);
-			System.out.println(other.floor().name);
+			Tile other = tile.getNearby(i,addition);
 			if(other != null && other.block().acceptItem(item, other, tile)){
 				other.block().handleItem(item, other, tile);
 				tile.setDump((byte)((i+1)%4));
@@ -225,16 +228,24 @@ public class Block{
 		return tryDump(tile, -1, null);
 	}
 
+	protected boolean tryDump(Tile tile, int addition){
+		return tryDump(tile, -1, null, addition);
+	}
+
+	protected boolean tryDump(Tile tile, int direction, Item todump) {
+		return tryDump(tile,direction,todump,1);
+	}
+
 	/**
 	 * Try dumping any item near the tile. -1 = any direction
 	 */
-	protected boolean tryDump(Tile tile, int direction, Item todump){
+	protected boolean tryDump(Tile tile, int direction, Item todump, int addition){
 		if(Net.client() && syncBlockState) return false;
 
 		int i = tile.getDump()%4;
 		
 		for(int j = 0; j < 4; j ++){
-			Tile other = tile.getNearby(i);
+			Tile other = tile.getNearby(i,addition);
 			
 			if(i == direction || direction == -1){
 				for(Item item : Item.getAllItems()){
@@ -260,13 +271,17 @@ public class Block{
 	/**
 	 * Try offloading an item to a nearby container in its facing direction. Returns true if success.
 	 */
-	protected boolean offloadDir(Tile tile, Item item){
-		Tile other = tile.getNearby(tile.getRotation());
+	protected boolean offloadDir(Tile tile, Item item, int addition){
+		Tile other = tile.getNearby(tile.getRotation(),addition);
 		if(other != null && other.block().acceptItem(item, other, tile)){
 			other.block().handleItem(item, other, tile);
 			return true;
 		}
 		return false;
+	}
+
+	protected boolean offloadDir(Tile tile, Item item){
+		return offloadDir(tile,item,1);
 	}
 	
 	public void draw(Tile tile){

@@ -210,6 +210,15 @@ public class ProductionBlocks{
 			breaktime *= 2.3f;
 		}
 	},
+	breederReactor = new NuclearReactor("breederReactor") {
+		{
+			width = 3;
+			height = 3;
+			health = 600;
+			breaktime *= 2.3f;
+			outputTime = 260;
+		}
+	},
 	weaponFactory = new WeaponFactory("weaponfactory"){
 		{
 			width = height = 2;
