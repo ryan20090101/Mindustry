@@ -235,6 +235,10 @@ public class Tile{
 		}
 	}
 
+	public Tile getNearby(int rotation){
+		return getNearby(rotation,1);
+	}
+
 	public Tile getNearby(int rotation, int addition){
 		if(rotation == 0) return world.tile(x + addition, y);
 		if(rotation == 1) return world.tile(x, y + addition);
