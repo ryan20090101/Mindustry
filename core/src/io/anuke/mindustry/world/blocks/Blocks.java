@@ -34,8 +34,8 @@ public class Blocks{
 	}},
 	
 	water = new Floor("water"){{
+		movementSpeedMultiplier = 0.5f;
 		variants = 0;
-		solid = true;
 		liquidDrop = Liquid.water;
 		liquid = true;
 	}},

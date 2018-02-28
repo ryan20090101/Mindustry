@@ -147,7 +147,7 @@ public class ChatFragment extends Table implements Fragment{
         chatfield.clearText();
 
         if(message.replaceAll(" ", "").isEmpty()) return;
-
+        //TODO: BEFORE SEND CHECK IF COMMAND, IF YES SEND COMMAND PACKET NOT CHAT PACKET
         NetEvents.handleSendMessage(message);
     }
 
