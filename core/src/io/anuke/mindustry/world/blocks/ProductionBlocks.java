@@ -1,5 +1,6 @@
 package io.anuke.mindustry.world.blocks;
 
+import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.graphics.Fx;
 import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.resource.Liquid;
@@ -208,6 +209,32 @@ public class ProductionBlocks{
 			height = 3;
 			health = 600;
 			breaktime *= 2.3f;
+		}
+	},
+	breederReactor = new NuclearReactor("breederReactor") {
+		{
+			width = 3;
+			height = 3;
+			health = 600;
+			breaktime *= 2.3f;
+			outputTime = 260;
+			powerMultiplier = 0.0004f;
+			heating = 0.0007f;
+		}
+	},
+	sieve = new RandomCrafter("sieve") {
+		{
+			input = Item.dirt;
+			output = Array.with(
+					Item.iron,
+					Item.stone,
+					Item.gravel,
+					Item.coal,
+					Item.sand,
+					Item.titanium,
+					Item.tin,
+					Item.copper
+			);
 		}
 	},
 	weaponFactory = new WeaponFactory("weaponfactory"){

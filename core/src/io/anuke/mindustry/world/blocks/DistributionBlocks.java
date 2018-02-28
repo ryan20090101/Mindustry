@@ -16,6 +16,16 @@ public class DistributionBlocks{
 		flowfactor = 4.9f;
 		health = 65;
 	}},
+
+	steeltank = new Tank("steeltank"){{
+		liquidCapacity = 50f;
+		flowfactor = 10f;
+	}},
+
+	diriumtank = new Tank("diriumtank"){{
+		liquidCapacity = 50f;
+		flowfactor = 10f;
+	}},
 	
 	liquidrouter = new LiquidRouter("liquidrouter"){{
 
@@ -36,6 +46,12 @@ public class DistributionBlocks{
 		health = 75;
 		speed = 0.09f;
 	}},
+
+	ultraconveyor = new Conveyor("ultraconveyor"){{
+		health = 75;
+		speed = 0.14f;
+		drawItems = false;
+	}},
 	
 	router = new Router("router"){{
 
@@ -50,6 +66,7 @@ public class DistributionBlocks{
 	coreOut = new CorePuller("coreOut"){{
 		height = width = 3;
 	}},
+
     coreIn = new CorePusher("coreIn"){{}},
 
 	combiner = new Router("combiner"){{

@@ -26,14 +26,17 @@ import static io.anuke.mindustry.Vars.tilesize;
 public class NuclearReactor extends LiquidPowerGenerator{
 
 	protected final int timerFuel = timers++;
+	protected final int timerDump = timers++;
 
 	protected final Translator tr = new Translator();
 
 	protected Item generateItem;
+	protected Item outputItem;
 	protected int itemCapacity = 30;
 	protected Color coolColor = new Color(1, 1, 1, 0f);
 	protected Color hotColor = Color.valueOf("ff9575a3");
 	protected int fuelUseTime = 130; //time to consume 1 fuel
+	protected int outputTime = 1260;
 	protected float powerMultiplier = 0.45f; //power per frame, depends on full capacity
 	protected float heating = 0.007f; //heating per frame
 	protected float coolantPower = 0.007f; //how much heat decreases per coolant unit
@@ -45,6 +48,7 @@ public class NuclearReactor extends LiquidPowerGenerator{
 	public NuclearReactor(String name) {
 		super(name);
 		generateItem = Item.uranium;
+		outputItem = Item.plutonium;
 		generateLiquid = Liquid.water;
 		itemCapacity = 30;
 		liquidCapacity = 50;
@@ -80,6 +84,9 @@ public class NuclearReactor extends LiquidPowerGenerator{
 			if(entity.timer.get(timerFuel, fuelUseTime)){
 				entity.removeItem(generateItem, 1);
 			}
+			if(entity.timer.get(timerFuel, outputTime)){
+				offloadNear(tile,outputItem,2);
+			}
 		}
 		
 		if(entity.liquidAmount > 0){
@@ -100,6 +107,10 @@ public class NuclearReactor extends LiquidPowerGenerator{
 			entity.damage((int)entity.health);
 		}else{
 			distributeLaserPower(tile);
+		}
+
+		if(entity.timer.get(timerDump, 30)){
+			tryDump(tile);
 		}
 	}
 	

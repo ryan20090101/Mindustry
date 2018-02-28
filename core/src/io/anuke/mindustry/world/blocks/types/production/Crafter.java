@@ -25,7 +25,6 @@ public class Crafter extends Block{
     protected float craftTime = 20f; //time to craft one item, so max 3 items per second by default
     protected Effect craftEffect = Fx.smelt;
 
-
     protected Map<Item,Item[]> recipe;
 
     public Crafter(String name) {
