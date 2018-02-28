@@ -64,12 +64,13 @@ public class Crafter extends Block{
                 }
             }
             if(recipeFilled) {
-                for (Item item : recipe.get(result)) {
-                    tile.entity.removeItem(item, 1);
-                }
                 if(ent.getItem(result) >= capacity //output full
                         || !ent.timer.get(timerCraft, craftTime)){ //not yet time
                     return;
+                }
+                
+                for (Item item : recipe.get(result)) {
+                    tile.entity.removeItem(item, 1);
                 }
 
                 offloadNear(tile, result);
