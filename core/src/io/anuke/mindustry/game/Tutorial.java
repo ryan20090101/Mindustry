@@ -241,7 +241,7 @@ public class Tutorial{
 				canForward = false;
 				blockPlaceX = 0;
 				blockPlaceY = -3;
-				targetBlock = ProductionBlocks.stonedrill;
+				targetBlock = ProductionBlocks.grounddrill;
 			}
 			
 			void onSwitch(){
@@ -294,7 +294,7 @@ public class Tutorial{
 					world.tile(world.getCore().x + flip*2, world.getCore().y - 3).setBlock(DistributionBlocks.conveyor, 2 * flip);
 					world.tile(world.getCore().x + flip*2, world.getCore().y - 3).setBlock(DistributionBlocks.conveyor, 1);
 					world.tile(world.getCore().x + flip*2, world.getCore().y - 4).setFloor(Blocks.stone);
-					world.tile(world.getCore().x + flip*2, world.getCore().y - 4).setBlock(ProductionBlocks.stonedrill);
+					world.tile(world.getCore().x + flip*2, world.getCore().y - 4).setBlock(ProductionBlocks.grounddrill);
 					
 				}
 			}

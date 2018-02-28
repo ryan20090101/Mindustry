@@ -203,7 +203,7 @@ public class World extends Module{
 		for(int i = 0; i < 2; i ++){
 			int d = Mathf.sign(i-0.5f);
 			
-			set(x+2*d, y-2*flip, ProductionBlocks.stonedrill, d);
+			set(x+2*d, y-2*flip, ProductionBlocks.grounddrill, d);
 			set(x+2*d, y-1*flip, DistributionBlocks.conveyor, 1 + fr);
 			set(x+2*d, y, DistributionBlocks.conveyor, 1 + fr);
 			set(x+2*d, y+1*flip, WeaponBlocks.doubleturret, 0 + fr);
@@ -213,9 +213,9 @@ public class World extends Module{
 			set(x+2*d, y-4*flip, DistributionBlocks.conveyor, 1 + fr);
 			set(x+2*d, y-5*flip, DistributionBlocks.conveyor, 1 + fr);
 			
-			set(x+3*d, y-5*flip, ProductionBlocks.stonedrill, 0 + fr);
-			set(x+3*d, y-4*flip, ProductionBlocks.stonedrill, 0 + fr);
-			set(x+3*d, y-3*flip, ProductionBlocks.stonedrill, 0 + fr);
+			set(x+3*d, y-5*flip, ProductionBlocks.grounddrill, 0 + fr);
+			set(x+3*d, y-4*flip, ProductionBlocks.grounddrill, 0 + fr);
+			set(x+3*d, y-3*flip, ProductionBlocks.grounddrill, 0 + fr);
 		}
 	}
 	
@@ -223,7 +223,7 @@ public class World extends Module{
 		if(!Mathf.inBounds(x, y, tiles)){
 			return;
 		}
-		if(type == ProductionBlocks.stonedrill){
+		if(type == ProductionBlocks.grounddrill){
 			tiles[x][y].setFloor(Blocks.stone);
 		}
 		tiles[x][y].setBlock(type, rot);

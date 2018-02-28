@@ -127,7 +127,7 @@ public class ProductionBlocks{
 		}
 	},
 	
-	stonedrill = new Arraydrill("stonedrill"){
+	grounddrill = new Arraydrill("grounddrill"){
 		{
 			mineable = Array.with(
 					Blocks.blackstone,
