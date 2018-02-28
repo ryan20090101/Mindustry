@@ -155,12 +155,12 @@ public class WeaponBlocks{
 		}
 	},
 
-	coilgun = new Turret("coilgun"){
+	railgun = new Turret("railgun"){
 		{
 			shootsound = "blast";
 			range = 1600f;
 			reload = 2000f;
-			bullet = BulletType.artilleryshell; //coilgun shell
+			bullet = BulletType.artilleryshell; //railgun shell
 			ammo = Item.dirium;
 			health = 2800;
 			width = height = 5;
@@ -168,7 +168,7 @@ public class WeaponBlocks{
 			shootCone = 1f;
 			shootEffect = Fx.artilleryshot;
 			shootShake = 19f;
-			turretBase = "coilgunbase";
+			turretBase = "railgunbase";
 		}
 	},
 
