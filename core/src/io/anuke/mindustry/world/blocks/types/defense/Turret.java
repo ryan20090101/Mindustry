@@ -53,7 +53,8 @@ public class Turret extends Block{
 	protected float shootShake = 0f;
 	protected int soundReload = 0;
 	protected Translator tr = new Translator();
-    protected boolean artilleryTurretBase = false;
+    protected String turretBase = "";
+
 	public Turret(String name) {
 		super(name);
 		update = true;
@@ -61,6 +62,7 @@ public class Turret extends Block{
 		layer = Layer.turret;
 
 		bars.add(new BlockBar(Color.GREEN, true, tile -> (float)tile.<TurretEntity>entity().ammo / maxammo));
+		bars.add(new BlockBar(Color.YELLOW, true, tile -> (float)tile.<TurretEntity>entity().reloadBar/reload));
 	}
 	
 	@Override
@@ -83,14 +85,18 @@ public class Turret extends Block{
 	
 	@Override
 	public void draw(Tile tile){
-        if(!artilleryTurretBase){
+        if(turretBase.isEmpty()){
             if(isMultiblock()){
                 Draw.rect("block-" + width + "x" + height, tile.drawx(), tile.drawy());
             }else{
                 Draw.rect("block", tile.drawx(), tile.drawy());
             }
         }else{
-            Draw.rect("artilleryturretbase", tile.drawx(), tile.drawy());
+			if(isMultiblock()){
+				Draw.rect(turretBase+"-" + width + "x" + height, tile.drawx(), tile.drawy());
+			}else{
+				Draw.rect(turretBase, tile.drawx(), tile.drawy());
+			}
         }
 	}
 	
@@ -127,6 +133,9 @@ public class Turret extends Block{
 	@Override
 	public void update(Tile tile){
 		TurretEntity entity = tile.entity();
+
+		if(entity.timer.get(timerReload,1))
+			entity.reloadBar += 1;
 		
 		if(ammo != null && entity.hasItem(ammo)){
 			entity.ammo += ammoMultiplier;
@@ -159,6 +168,7 @@ public class Turret extends Block{
 					shoot(tile);
 					consumeAmmo(tile);
 					entity.ammo --;
+					entity.reloadBar = 0f;
 				}
 			}
 		}
@@ -249,6 +259,7 @@ public class Turret extends Block{
 		public int ammo;
 		public float rotation = 90;
 		public Enemy target;
+		public float reloadBar = 0f;
 		
 		@Override
 		public void write(DataOutputStream stream) throws IOException{
