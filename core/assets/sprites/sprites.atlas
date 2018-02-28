@@ -1782,49 +1782,56 @@ icon-lead
   orig: 8, 8
   offset: 0, 0
   index: -1
-icon-sand
+icon-plutonium
   rotate: false
   xy: 145, 2
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-icon-silicon
+icon-uranium
+  rotate: false
+  xy: 145, 2
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+icon-sand
   rotate: false
   xy: 155, 10
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-icon-steel
+icon-silicon
   rotate: false
-  xy: 618, 239
+  xy: 189, 20
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-icon-stone
+icon-steel
   rotate: false
   xy: 628, 239
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-icon-tin
+icon-stone
   rotate: false
   xy: 616, 229
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-icon-titanium
+icon-tin
   rotate: false
   xy: 626, 229
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-icon-uranium
+icon-titanium
   rotate: false
   xy: 638, 239
   size: 8, 8
@@ -2485,7 +2492,7 @@ ui/icons/icon-settings
   index: -1
 ui/icons/icon-space
   rotate: false
-  xy: 189, 20
+  xy: 618, 239
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
