@@ -185,7 +185,7 @@ public class Player extends SyncEntity{
 		}
         
 		//if player is in solid block
-		if(tile != null && ((tile.floor().liquid && tile.block() == Blocks.air) || tile.solid())){
+		if(tile != null && ((tile.floor().liquid && tile.block() == Blocks.air) && tile.solid())){
 			stucktime += Timers.delta();
 		}else{
 			stucktime = 0f;
