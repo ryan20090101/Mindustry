@@ -127,10 +127,15 @@ public class ProductionBlocks{
 		}
 	},
 	
-	stonedrill = new Drill("stonedrill"){
+	stonedrill = new Arraydrill("stonedrill"){
 		{
-			resource = Blocks.stone;
-			result = Item.stone;
+			mineable = Array.with(
+					Blocks.blackstone,
+					Blocks.stone,
+					Blocks.sand,
+					Blocks.dirt,
+					Blocks.grass
+			);
 			time = 4;
 		}
 	},
