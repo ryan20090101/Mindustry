@@ -16,12 +16,11 @@ import io.anuke.ucore.util.Mathf;
 public class RandomCrafter extends Block {
 
     protected final int timerDump = timers++;
-    protected final int timerUse = timers++;
 
     protected int capacity = 20;
+    protected double craftChance = 0.10;
 
-    protected float craftTime = 20f; //time to craft one item, so max 3 items per second by default
-    protected Effect craftEffect = Fx.smelt;
+    protected Effect createEffect = Fx.generate;
 
     protected Item input;
     protected Array<Item> output;
@@ -56,14 +55,14 @@ public class RandomCrafter extends Block {
         Item product = output.random();
 
         if (ent.getItem(product) >= capacity //output full
-                || Mathf.chance(0.10)) {
+                || Mathf.chance(craftChance)) {
             return;
         }
         else
             ent.removeItem(input,1);
 
         offloadNear(tile, product);
-        Effects.effect(craftEffect, tile.entity);
+        Effects.effect(createEffect, tile.entity);
 
     }
 
