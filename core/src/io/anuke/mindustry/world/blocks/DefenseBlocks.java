@@ -28,7 +28,7 @@ public class DefenseBlocks{
 	diriumwall = new Wall("duriumwall"){{
 		health = 190*wallHealthMultiplier;
 	}},
-	diriumalloywall = new Wall("diriumalloywall"){{
+	diriumalloywall = new Wall("alloywall"){{
 		health = 190*2*wallHealthMultiplier;
 	}},
 	compositewall = new Wall("compositewall"){{
@@ -46,7 +46,7 @@ public class DefenseBlocks{
 		health = 190*4*wallHealthMultiplier;
 		width = height = 2;
 	}},
-	diriumalloywalllarge = new Wall("diriumalloywall-large"){{
+	diriumalloywalllarge = new Wall("alloywall-large"){{
 		health = 190*4*2*wallHealthMultiplier;
 		width = height = 2;
 	}},
