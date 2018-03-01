@@ -240,6 +240,7 @@ public class ProductionBlocks{
 					Item.tin,
 					Item.copper
 			);
+			createEffect = Fx.purifystone;
 		}
 	},
 	weaponFactory = new WeaponFactory("weaponfactory"){

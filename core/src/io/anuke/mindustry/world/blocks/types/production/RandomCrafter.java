@@ -17,9 +17,11 @@ import io.anuke.ucore.util.Mathf;
 public class RandomCrafter extends Block {
 
     protected final int timerDump = timers++;
+    protected final int timerCraft = timers++;
 
     protected int capacity = 20;
     protected double craftChance = 0.10;
+    protected int craftTime = 5;
 
     protected Effect createEffect = Fx.generate;
 
@@ -71,7 +73,10 @@ public class RandomCrafter extends Block {
         Item product = output.random();
 
         if (ent.getItem(product) >= capacity //output full
-                || Mathf.chance(craftChance)) {
+                || !Mathf.chance(craftChance) //successful?
+                || !ent.hasItem(input) //has input item?
+                || !ent.timer.get(timerCraft,craftTime)) //time yet?
+        {
             return;
         }
         else
@@ -84,6 +89,6 @@ public class RandomCrafter extends Block {
 
     @Override
     public boolean acceptItem(Item item, Tile tile, Tile source){
-        return item == input && tile.entity.getItem(input) < capacity;
+        return item == input && tile.entity.totalItems() < capacity;
     }
 }
