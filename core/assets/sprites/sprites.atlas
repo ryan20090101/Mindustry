@@ -1103,16 +1103,30 @@ blocks/shrubshadow
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/smelter
+blocks/sieve
   rotate: false
   xy: 479, 73
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/smelter-middle
+blocks/sieve-center
   rotate: false
   xy: 618, 240
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+blocks/smelter
+  rotate: false
+  xy: 701, 227
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+blocks/smelter-middle
+  rotate: false
+  xy: 701, 217
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1126,42 +1140,66 @@ blocks/sniperturret
   index: -1
 blocks/snow1
   rotate: false
+<<<<<<< HEAD
   xy: 628, 240
+=======
+  xy: 711, 217
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/snow2
   rotate: false
+<<<<<<< HEAD
   xy: 616, 230
+=======
+  xy: 721, 217
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/snow3
   rotate: false
+<<<<<<< HEAD
   xy: 626, 230
+=======
+  xy: 731, 217
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/snowblock1
   rotate: false
+<<<<<<< HEAD
   xy: 619, 220
+=======
+  xy: 671, 206
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/snowblock2
   rotate: false
+<<<<<<< HEAD
   xy: 619, 210
+=======
+  xy: 681, 206
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/snowblock3
   rotate: false
+<<<<<<< HEAD
   xy: 619, 200
+=======
+  xy: 691, 206
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1175,28 +1213,44 @@ blocks/snowedge
   index: -1
 blocks/sorter
   rotate: false
+<<<<<<< HEAD
   xy: 629, 220
+=======
+  xy: 701, 207
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/steelconveyor
   rotate: false
+<<<<<<< HEAD
   xy: 629, 210
+=======
+  xy: 711, 207
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/steelconveyormove
   rotate: false
+<<<<<<< HEAD
   xy: 629, 200
+=======
+  xy: 721, 207
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/steelwall
   rotate: false
+<<<<<<< HEAD
   xy: 638, 240
+=======
+  xy: 731, 207
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1210,56 +1264,88 @@ blocks/steelwall-large
   index: -1
 blocks/steelwall-large-icon
   rotate: false
+<<<<<<< HEAD
   xy: 636, 230
+=======
+  xy: 742, 382
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/stone1
   rotate: false
+<<<<<<< HEAD
   xy: 648, 242
+=======
+  xy: 743, 303
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/stone2
   rotate: false
+<<<<<<< HEAD
   xy: 658, 242
+=======
+  xy: 743, 293
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/stone3
   rotate: false
+<<<<<<< HEAD
   xy: 668, 242
+=======
+  xy: 461, 93
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/stoneblock1
   rotate: false
+<<<<<<< HEAD
   xy: 639, 220
+=======
+  xy: 471, 93
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/stoneblock2
   rotate: false
+<<<<<<< HEAD
   xy: 639, 210
+=======
+  xy: 481, 93
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/stoneblock3
   rotate: false
+<<<<<<< HEAD
   xy: 639, 200
+=======
+  xy: 459, 83
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/stonedrill
   rotate: false
+<<<<<<< HEAD
   xy: 742, 418
+=======
+  xy: 469, 83
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1273,49 +1359,77 @@ blocks/stoneedge
   index: -1
 blocks/stoneformer
   rotate: false
+<<<<<<< HEAD
   xy: 742, 408
+=======
+  xy: 479, 83
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/stonewall
   rotate: false
+<<<<<<< HEAD
   xy: 742, 398
+=======
+  xy: 558, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/teleporter
   rotate: false
+<<<<<<< HEAD
   xy: 742, 388
+=======
+  xy: 568, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/teleporter-top
   rotate: false
+<<<<<<< HEAD
   xy: 752, 420
+=======
+  xy: 578, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/thermalgenerator
   rotate: false
+<<<<<<< HEAD
   xy: 752, 410
+=======
+  xy: 588, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/tin1
   rotate: false
+<<<<<<< HEAD
   xy: 762, 420
+=======
+  xy: 598, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/tin2
   rotate: false
+<<<<<<< HEAD
   xy: 752, 400
+=======
+  xy: 608, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1336,49 +1450,77 @@ blocks/titancannon-icon
   index: -1
 blocks/titanium1
   rotate: false
+<<<<<<< HEAD
   xy: 762, 410
+=======
+  xy: 618, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/titanium2
   rotate: false
+<<<<<<< HEAD
   xy: 772, 420
+=======
+  xy: 628, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/titanium3
   rotate: false
+<<<<<<< HEAD
   xy: 752, 390
+=======
+  xy: 638, 113
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/titaniumdrill
   rotate: false
+<<<<<<< HEAD
   xy: 762, 400
+=======
+  xy: 638, 103
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/titaniumpurifier
   rotate: false
+<<<<<<< HEAD
   xy: 772, 410
+=======
+  xy: 741, 217
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/titaniumshieldwall
   rotate: false
+<<<<<<< HEAD
   xy: 782, 420
+=======
+  xy: 741, 207
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/titaniumwall
   rotate: false
+<<<<<<< HEAD
   xy: 762, 390
+=======
+  xy: 651, 202
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1392,7 +1534,11 @@ blocks/titaniumwall-large
   index: -1
 blocks/titaniumwall-large-icon
   rotate: false
+<<<<<<< HEAD
   xy: 772, 400
+=======
+  xy: 661, 202
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1406,21 +1552,33 @@ blocks/turret
   index: -1
 blocks/ultraconveyor1
   rotate: false
+<<<<<<< HEAD
   xy: 782, 400
+=======
+  xy: 681, 196
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/ultraconveyor2
   rotate: false
+<<<<<<< HEAD
   xy: 792, 410
+=======
+  xy: 691, 196
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/ultraconveyor3
   rotate: false
+<<<<<<< HEAD
   xy: 802, 420
+=======
+  xy: 701, 197
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1434,35 +1592,55 @@ blocks/ultrarepairturret
   index: -1
 blocks/uranium1
   rotate: false
+<<<<<<< HEAD
   xy: 782, 390
+=======
+  xy: 711, 197
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/uranium2
   rotate: false
+<<<<<<< HEAD
   xy: 792, 400
+=======
+  xy: 721, 197
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/uranium3
   rotate: false
+<<<<<<< HEAD
   xy: 802, 410
+=======
+  xy: 731, 197
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/uraniumdrill
   rotate: false
+<<<<<<< HEAD
   xy: 792, 390
+=======
+  xy: 741, 197
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 blocks/water
   rotate: false
+<<<<<<< HEAD
   xy: 812, 420
+=======
+  xy: 657, 192
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1490,7 +1668,11 @@ blocks/weaponfactory
   index: -1
 blocks/weaponfactory-icon
   rotate: false
+<<<<<<< HEAD
   xy: 812, 410
+=======
+  xy: 641, 179
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -1945,7 +2127,11 @@ shot-long
   index: -1
 titanshell
   rotate: false
+<<<<<<< HEAD
   xy: 782, 410
+=======
+  xy: 641, 199
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
@@ -2840,28 +3026,44 @@ weapons/shockgun-equip
   index: -1
 weapons/triblaster
   rotate: false
+<<<<<<< HEAD
   xy: 792, 420
+=======
+  xy: 631, 199
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 weapons/triblaster-equip
   rotate: false
+<<<<<<< HEAD
   xy: 772, 390
+=======
+  xy: 671, 196
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 weapons/vulcan
   rotate: false
+<<<<<<< HEAD
   xy: 802, 400
+=======
+  xy: 637, 189
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 weapons/vulcan-equip
   rotate: false
+<<<<<<< HEAD
   xy: 802, 390
+=======
+  xy: 647, 189
+>>>>>>> 2ee5cea7473c7aae20b7f514dbc10ec52432b4d8
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
