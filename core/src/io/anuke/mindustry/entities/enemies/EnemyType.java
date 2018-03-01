@@ -195,7 +195,14 @@ public class EnemyType {
             return;
         }
 
-        float speed = this.speed + 0.04f * enemy.tier * world.tileWorld(enemy.x,enemy.y).block().movementSpeedMultiplier;
+        float speedModifier;
+        Tile tile = world.tileWorld(enemy.x,enemy.y);
+        if (tile.block() == Blocks.air)
+            speedModifier = tile.floor().movementSpeedMultiplier;
+        else
+            speedModifier = tile.block().movementSpeedMultiplier;
+
+        float speed = this.speed + 0.04f * enemy.tier * speedModifier;
         float range = this.range + enemy.tier * 5;
 
         Tile core = world.getCore();
