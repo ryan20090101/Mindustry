@@ -69,7 +69,7 @@ public class Weapon extends Upgrade{
 	},
 	pulser = new Weapon("pulser", 10, BulletType.pulseshot){
 		{
-			effect = Fx.beamShoot;
+			effect = Fx.pulserShoot;
 			inaccuracy = 10;
 			roundrobin = true;
 			shake = 1f;

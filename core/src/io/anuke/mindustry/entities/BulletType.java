@@ -548,6 +548,10 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
                 break;
 			}
 		}
+		public void removed(Bullet b){
+			Effects.effect(Fx.pulserExplosion, b);
+            DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
+		}
 	};
 	private BulletType(float speed, int damage){
 		this.speed = speed;

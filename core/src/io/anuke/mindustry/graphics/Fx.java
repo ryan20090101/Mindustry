@@ -407,7 +407,25 @@ public class Fx{
 		Shapes.lineShot(e.x, e.y, e.rotation + 70, 3, e.fract(), 12f, 1f, 0.5f);
 		Draw.reset();
 	}),
-
+	pulserShoot = new Effect(8, e -> {
+		Draw.color(Color.PURPLE, Color.VIOLET, e.ifract());
+		Shapes.lineShot(e.x, e.y, e.rotation - 70, 3, e.fract(), 10f, 1f, 0.75f);
+		Shapes.lineShot(e.x, e.y, e.rotation + 70, 3, e.fract(), 10f, 1f, 0.75f);
+		Draw.reset();
+	}),
+	pulserExplosion = new Effect(11, e -> {
+		Lines.stroke(2f*e.fract()+0.5f);
+		Draw.color(Color.PURPLE, Color.MAGENTA, e.powfract());
+		Lines.circle(e.x, e.y, 5f + e.powfract() * 6f);
+		
+		Draw.color(e.ifract() < 0.5f ? Color.MAGENTA : Color.PURPLE);
+		float rad = e.fract()*10f + 5f;
+		Angles.randLenVectors(e.id, 5, 8f, (x, y)->{
+			Draw.rect("circle2", e.x + x, e.y + y, rad, rad);
+		});
+		
+		Draw.reset();
+	}),
     beamhit = new Effect(8, e -> {
         Draw.color(beamLight, beam, e.ifract());
         Lines.stroke(e.fract()*3f+0.5f);
