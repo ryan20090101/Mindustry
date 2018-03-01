@@ -67,7 +67,9 @@ public class DistributionBlocks{
 		height = width = 3;
 	}},
 
-    coreIn = new CorePusher("coreIn"){{}},
+    coreIn = new CorePusher("coreIn"){{
+    	height = width = 3;
+	}},
 
 	combiner = new Router("combiner"){{
         capacity = 5;

@@ -206,11 +206,21 @@ public class Player extends SyncEntity{
             ui.hudfrag.setRadTint(radFloat);
         }
     	*/
-		if(timer.get(timerOther,tile.block().damageTime))
-			damage(tile.block().damageOnTop);
+		int damageTimeOnTop;
+		int damageOnTop;
+		if (tile.block() == Blocks.air) {
+			damageTimeOnTop = tile.floor().damageTime;
+			damageOnTop = tile.floor().damageOnTop;
+		}else{
+			damageTimeOnTop = tile.floor().damageTime;
+			damageOnTop = tile.floor().damageOnTop;
+		}
+
+		if(damageOnTop > 0 && timer.get(timerOther,damageTimeOnTop))
+			damage(damageOnTop);
 
 		float speedModifier;
-		if (tile.block() == null)
+		if (tile.block() == Blocks.air)
 			speedModifier = tile.floor().movementSpeedMultiplier;
 		else
 			speedModifier = tile.block().movementSpeedMultiplier;
