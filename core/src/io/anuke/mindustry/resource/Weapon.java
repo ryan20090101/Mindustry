@@ -99,9 +99,9 @@ public class Weapon extends Upgrade{
 	public void update(Player p, boolean left){
 		int t = left ? 1 : 2;
 		int t2 = !left ? 1 : 2;
-		if(p.timer.get(t, reload)){
+		if(p.shootTimer.get(t, reload)){
 			if(roundrobin){
-				p.timer.reset(t2, reload/2f);
+				p.shootTimer.reset(t2, reload/2f);
 			}
 			float ang = Angles.mouseAngle(p.x, p.y);
 			tr.trns(ang - 90, 3f * Mathf.sign(left), length);

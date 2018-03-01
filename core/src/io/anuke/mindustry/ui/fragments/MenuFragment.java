@@ -21,7 +21,7 @@ public class MenuFragment implements Fragment{
 
 			if(!android){
 				new table(){{
-                    
+                    get().setTranslation(0, -60);
 					PressGroup group = new PressGroup();
 					
 					float scale = 4f;

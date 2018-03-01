@@ -50,6 +50,7 @@ public class Player extends SyncEntity{
 	public int clientid = -1;
 	public boolean isLocal = false;
 	public Timer timer = new Timer(4);
+    public Timer shootTimer = new Timer(4);
 
 	private Vector2 movement = new Vector2();
 	private Translator tr = new Translator();

@@ -25,13 +25,13 @@ public class BackgroundFragment implements Fragment {
                     back.getRegionWidth()*backscl, back.getRegionHeight()*backscl);
 
             boolean portrait = Gdx.graphics.getWidth() < Gdx.graphics.getHeight();
-            float logoscl = (int)Unit.dp.scl(7) * (portrait ? 5f/7f : 1f);
+            /**float logoscl = (int)Unit.dp.scl(7) * (portrait ? 5f/7f : 1f);
             TextureRegion logo = Core.skin.getRegion("logotext");
             float logow = logo.getRegionWidth()*logoscl;
             float logoh = logo.getRegionHeight()*logoscl;
 
             Draw.color();
-            Core.batch.draw(logo, w/2 - logow/2, h - logoh + 15, logow, logoh);
+            Core.batch.draw(logo, w/2 - logow/2, h - logoh + 15, logow, logoh);**/
             
             float adlogoscl = (int)Unit.dp.scl(6.5f);
             TextureRegion adlogo = Core.skin.getRegion("altdimlogotext");
@@ -39,8 +39,8 @@ public class BackgroundFragment implements Fragment {
             float adlogoh = adlogo.getRegionHeight()*adlogoscl;
 
             Draw.color();
-            Core.batch.draw(adlogo, w/2 - adlogow/2, h - adlogoh-10, adlogow, adlogoh);
-            Core.batch.draw(logo, w/2 - logow/2, h - logoh + 15 + (portrait ? -Unit.dp.scl(30f) : 0f), logow, logoh);
+            Core.batch.draw(adlogo, w/2 - adlogow/2, h - adlogoh-10 + (portrait ? -Unit.dp.scl(30f) : 0f), adlogow, adlogoh);
+            /**Core.batch.draw(logo, w/2 - logow/2, h - logoh + 15 + (portrait ? -Unit.dp.scl(30f) : 0f), logow, logoh);**/
         }).visible(() -> state.is(State.menu)).grow();
         
     }
