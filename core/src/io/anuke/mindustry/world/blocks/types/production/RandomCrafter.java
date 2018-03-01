@@ -72,19 +72,23 @@ public class RandomCrafter extends Block {
 
         Item product = output.random();
 
-        if (ent.getItem(product) >= capacity //output full
-                || !Mathf.chance(craftChance) //successful?
+        if (ent.getItem(product) >= capacity //output full //successful?
                 || !ent.hasItem(input) //has input item?
                 || !ent.timer.get(timerCraft,craftTime)) //time yet?
         {
             return;
         }
-        else
+
+        if (!Mathf.chance(craftChance)) {
             ent.removeItem(input,1);
+            return;
+        }
+        else {
+            ent.removeItem(input,1);
+        }
 
         offloadNear(tile, product);
         Effects.effect(createEffect, tile.entity);
-
     }
 
     @Override
