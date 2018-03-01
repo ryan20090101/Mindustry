@@ -66,6 +66,15 @@ public class Weapon extends Upgrade{
 			inaccuracy = 15f;
 			length = 3.5f;
 		}
+	},
+	pulser = new Weapon("pulser", 10, BulletType.pulseshot){
+		{
+			effect = Fx.beamShoot;
+			inaccuracy = 10;
+			roundrobin = true;
+			shake = 1f;
+			inaccuracy = 8f;
+		}
 	};
 	/**weapon reload in frames*/
 	float reload;

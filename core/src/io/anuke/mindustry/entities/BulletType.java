@@ -18,7 +18,7 @@ import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
 import com.badlogic.gdx.utils.Array;
-
+import io.anuke.ucore.util.Angles;
 import static io.anuke.mindustry.graphics.Fx.*;
 
 public abstract class BulletType extends BaseBulletType<Bullet>{
@@ -77,8 +77,10 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		public void update(Bullet b) {
 			Array<SolidEntity> enemies = Entities.getNearby(Vars.enemyGroup, b.x, b.y, 15);
 			for (SolidEntity entity : enemies) {
-				b.velocity = new Vector2(Math.max(0, Math.min(1, entity.x - b.x)), Math.max(0, Math.min(1, entity.y - b.y)));
-				break;
+				Vector2 vektor = new Vector2(Math.max(0, Math.min(1, entity.x - b.x)), Math.max(0, Math.min(1, entity.y - b.y)));
+				b.setVelocity(5f, Angles.predictAngle(b.x, b.y, 
+						entity.x, entity.y, /*entity.velocity.x*/1f, /*entity.velocity.y*/1f, 5f));
+                break;
 			}
 		}
 	},
@@ -527,8 +529,26 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.rect("circle", b.x, b.y, 3f*f, 3f*f);
 			Lines.lineAngle(b.x, b.y, b.angle(), length);
 		}
+	},
+    pulseshot = new BulletType(2f, 18) {
+		{
+			lifetime = 600f;
+		}
+		public void draw(Bullet b) {
+			Draw.rect("pulseshot", b.x, b.y, b.angle());
+			Draw.reset();
+		}
+
+		public void update(Bullet b) {
+			Array<SolidEntity> enemies = Entities.getNearby(Vars.enemyGroup, b.x, b.y, 15);
+			for (SolidEntity entity : enemies) {
+				Vector2 vektor = new Vector2(Math.max(0, Math.min(1, entity.x - b.x)), Math.max(0, Math.min(1, entity.y - b.y)));
+				b.setVelocity(5f, Angles.predictAngle(b.x, b.y, 
+						entity.x, entity.y, /*entity.velocity.x*/1f, /*entity.velocity.y*/1f, 5f));
+                break;
+			}
+		}
 	};
-	
 	private BulletType(float speed, int damage){
 		this.speed = speed;
 		this.damage = damage;
