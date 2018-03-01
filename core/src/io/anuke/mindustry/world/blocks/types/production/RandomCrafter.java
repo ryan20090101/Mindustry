@@ -11,6 +11,7 @@ import io.anuke.mindustry.world.BlockBar;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Effects.Effect;
+import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Mathf;
 
 public class RandomCrafter extends Block {
@@ -30,6 +31,21 @@ public class RandomCrafter extends Block {
         update = true;
         solid = true;
         bars.add(new BlockBar(Color.GREEN, true, tile -> (float) tile.entity.totalItems() / capacity));
+    }
+
+
+    @Override
+    public void draw(Tile tile){
+        Draw.rect(name(), tile.worldx(), tile.worldy());
+
+        TileEntity entity = tile.entity();
+
+        if(!entity.hasItem(input)) return;
+
+        Draw.color(Color.YELLOW);
+        Draw.alpha(entity.getItem(input) / capacity);
+        Draw.rect(name+"-center", tile.worldx(), tile.worldy(), 2, 2);
+        Draw.color();
     }
 
     @Override
