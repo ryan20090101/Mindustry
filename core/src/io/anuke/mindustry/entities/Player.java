@@ -36,7 +36,7 @@ public class Player extends SyncEntity{
 	public boolean isAndroid;
 	public boolean isAdmin;
 	public Color color = new Color();
-	public int radiation = 0;
+	public int radiation;
     public int radiationDeath = 200;
 	public Weapon weaponLeft = Weapon.blaster;
 	public Weapon weaponRight = Weapon.blaster;
@@ -264,8 +264,14 @@ public class Player extends SyncEntity{
 		}
 		
 		movement.limit(speed);
-		
-		if( isFlying || noclip ){
+
+
+		if(isFlying) {
+			//TODO: Make flying smoother
+			x += movement.x*Timers.delta();
+			y += movement.y*Timers.delta();
+		}
+		else if(noclip){
 			x += movement.x*Timers.delta();
 			y += movement.y*Timers.delta();
 		}else{
