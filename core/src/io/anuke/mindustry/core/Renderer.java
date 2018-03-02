@@ -204,6 +204,7 @@ public class Renderer extends RendererModule {
 
 		if (Settings.getBool("indicators") && showUI) {
 			drawEnemyMarkers();
+			drawPlayerMarkers();
 		}
 
 		if (pixelate)
@@ -289,6 +290,31 @@ public class Renderer extends RendererModule {
 			}
 
 			float angle = Angles.angle(camera.position.x, camera.position.y, enemy.x, enemy.y);
+			float tx = Angles.trnsx(angle, Unit.dp.scl(20f));
+			float ty = Angles.trnsy(angle, Unit.dp.scl(20f));
+			Draw.rect("enemyarrow", camera.position.x + tx, camera.position.y + ty, angle);
+		}
+
+		Draw.color();
+		Draw.alpha(0.4f);
+		Graphics.flushSurface();
+		Draw.color();
+	}
+
+	void drawPlayerMarkers() {
+		Graphics.surface(indicatorSurface);
+		Draw.color(Color.GREEN);
+
+		for(Player playr : playerGroup.all()) {
+
+			if (!player.isLocal && !player.isDead())
+				continue;
+
+			if (rect.setSize(camera.viewportWidth, camera.viewportHeight).setCenter(camera.position.x, camera.position.y)
+					.overlaps(playr.hitbox.getRect(playr.x, playr.y)))
+				continue;
+
+			float angle = Angles.angle(camera.position.x, camera.position.y, playr.x, playr.y);
 			float tx = Angles.trnsx(angle, Unit.dp.scl(20f));
 			float ty = Angles.trnsy(angle, Unit.dp.scl(20f));
 			Draw.rect("enemyarrow", camera.position.x + tx, camera.position.y + ty, angle);
