@@ -11,7 +11,8 @@ public class UpgradeRecipes {
             Weapon.vulcan, list(stack(Item.iron, 100), stack(Item.steel, 150), stack(Item.titanium, 80)),
             Weapon.beam, list(stack(Item.steel, 260), stack(Item.titanium, 160), stack(Item.dirium, 120)),
             Weapon.shockgun, list(stack(Item.steel, 240), stack(Item.titanium, 160), stack(Item.dirium, 160)),
-            Weapon.pulser, list(stack(Item.dirium, 1000000))
+            Weapon.pulser, list(stack(Item.dirium, 1000000)),
+            Weapon.handrail, list(stack(Item.titanium, 1000000))
     );
 
     private static final ItemStack[] empty = {};

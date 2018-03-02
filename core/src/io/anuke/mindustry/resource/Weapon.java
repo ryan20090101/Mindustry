@@ -75,6 +75,13 @@ public class Weapon extends Upgrade{
 			shake = 1f;
 			inaccuracy = 8f;
 		}
+	},
+	handrail = new Weapon("handrail", 200, BulletType.railbolt){
+		{
+			effect = Fx.vulcanShoot;
+			roundrobin = true;
+			shake = 10f;
+		}
 	};
 	/**weapon reload in frames*/
 	float reload;

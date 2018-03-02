@@ -132,12 +132,26 @@ public class Player extends SyncEntity{
 		if(!isFlying) {
 			for (int i : Mathf.signs) {
 				Weapon weapon = i < 0 ? weaponLeft : weaponRight;
-				tr.trns(angle - 90, 3*i, 2);
+                if(weapon==weapon.handrail){
+                    tr.trns(angle - 90, 5*i, 8);
+                    
+                }else{
+                    tr.trns(angle - 90, 3*i, 2);
+                }
 				float w = i > 0 ? -8 : 8;
 				if(snap){
-					Draw.rect(weapon.name + "-equip", (int)x + tr.x, (int)y + tr.y, w, 8, angle - 90);
-				}else{
-					Draw.rect(weapon.name + "-equip", x + tr.x, y + tr.y, w, 8, angle - 90);
+					if(weapon==weapon.handrail){
+                        Draw.rect(weapon.name + "-equip", (int)x + tr.x, (int)y + tr.y, w, 24, angle - 90);
+                    }else{
+                        Draw.rect(weapon.name + "-equip", (int)x + tr.x, (int)y + tr.y, w, 8, angle - 90);
+                    }
+                }else{
+					if(weapon==weapon.handrail){
+                        Draw.rect(weapon.name + "-equip", x + tr.x, y + tr.y, w, 24, angle - 90);
+                    }else{
+                        Draw.rect(weapon.name + "-equip", x + tr.x, y + tr.y, w, 8, angle - 90);
+                    }
+					
 				}
 			}
 		}

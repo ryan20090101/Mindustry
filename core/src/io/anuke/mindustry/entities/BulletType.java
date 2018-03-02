@@ -530,6 +530,18 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Lines.lineAngle(b.x, b.y, b.angle(), length);
 		}
 	},
+    railbolt = new BulletType(1f, 125){
+		public void draw(Bullet b){
+            Draw.rect("railbolt", b.x, b.y, b.angle());
+			Draw.reset();
+		}
+		
+		public void update(Bullet b){
+			if(b.timer.get(0, 4)){
+				Effects.effect(Fx.railsmoke, b.x, b.y);
+			}
+		}
+	},
     pulseshot = new BulletType(2f, 18) {
 		{
 			lifetime = 600f;
