@@ -530,7 +530,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Lines.lineAngle(b.x, b.y, b.angle(), length);
 		}
 	},
-    railbolt = new BulletType(1f, 125){
+    railbolt = new BulletType(20f, 90000){
 		public void draw(Bullet b){
             Draw.rect("railbolt", b.x, b.y, b.angle());
 			Draw.reset();
