@@ -19,6 +19,7 @@ import io.anuke.ucore.scene.ui.Label.LabelStyle;
 import io.anuke.ucore.scene.ui.TextField;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.scene.ui.layout.Unit;
+import io.anuke.ucore.util.CommandHandler;
 import io.anuke.ucore.util.Log;
 
 import static io.anuke.mindustry.Vars.state;
