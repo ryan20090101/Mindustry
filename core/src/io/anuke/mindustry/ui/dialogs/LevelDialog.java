@@ -108,6 +108,7 @@ public class LevelDialog extends FloatingDialog{
 				}
 			}))
 			.pad(3f);
+			inset.add("[red]"+Bundles.get("text.level.by")+map.creator==null?"":map.creator).pad(3f);
 			inset.pack();
 			
 			float images = 154f;

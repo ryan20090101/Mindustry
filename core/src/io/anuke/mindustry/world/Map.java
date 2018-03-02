@@ -8,6 +8,7 @@ import io.anuke.ucore.util.Bundles;
 public class Map{
 	public int id = -1;
 	public String name;
+	public String creator="";
 	public boolean visible = true;
 	public boolean flipBase = false;
 	public boolean custom = false;
