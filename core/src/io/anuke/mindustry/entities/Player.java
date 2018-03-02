@@ -305,7 +305,7 @@ public class Player extends SyncEntity{
 		buffer.put((byte)name.getBytes().length);
 		buffer.put(name.getBytes());
 		buffer.put(weaponLeft.id);
-		buffer.put(weaponRight.id);
+		buffer.put(weaponRight.id); am doia
 		buffer.put(isAndroid ? 1 : (byte)0);
 		buffer.put(isFlying ? 1 : (byte)0);
 		buffer.putInt(radiation);
