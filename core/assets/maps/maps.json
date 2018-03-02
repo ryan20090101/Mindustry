@@ -2,7 +2,8 @@
   "maps": [
     {
       "id": 0,
-      "name": "maze",
+      "name": "Deep_lands",
+      "creator": "𝕸𝖎𝖓𝖐𝖊𝖗𝖘#8202",
       "visible": true,
       "flipBase": false,
       "backgroundColor": "646464"
@@ -16,7 +17,8 @@
     },
     {
       "id": 2,
-      "name": "sinkhole",
+      "name": "cavein",
+      "creator": "[S.o.T.M. Ldr] Blade Mayhem#6545",
       "visible": true,
       "flipBase": false,
       "backgroundColor": "646464"
@@ -72,7 +74,8 @@
     },
     {
       "id": 10,
-      "name": "tundra",
+      "name": "Super_icy",
+      "creator": "DigitalGwapo#9604",
       "visible": true,
       "flipBase": false,
       "backgroundColor": "646464"

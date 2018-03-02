@@ -125,6 +125,8 @@ public class Maps implements Disposable{
 		if(!Settings.has("hiscore" + map.name)){
 			Settings.defaults("hiscore" + map.name, 0);
 		}
+
+		map.creator = player.name;
 		
 		saveCustomMap(map);
 		ui.levels.reload();
