@@ -81,6 +81,9 @@ public class Weapon extends Upgrade{
 			effect = Fx.vulcanShoot;
 			roundrobin = true;
 			shake = 10f;
+			dx = 5;
+			dy = 8;
+			dh = 24;
 		}
 	};
 	/**weapon reload in frames*/
@@ -103,9 +106,15 @@ public class Weapon extends Upgrade{
 	float length = 3f;
 	/**whether to shoot the weapons in different arms one after another, rather an all at once*/
 	boolean roundrobin = false;
-	/**translator for vector calulations*/
+	/**translator for vector calculations*/
 	Translator tr = new Translator();
-	
+	/**x for calculations*/
+	public int dx = 3;
+	/**y for calculations*/
+	public int dy = 2;
+	/**h for calculations*/
+	public int dh = 8;
+
 	private Weapon(String name, float reload, BulletType type){
 		super(name);
 		this.reload = reload;
