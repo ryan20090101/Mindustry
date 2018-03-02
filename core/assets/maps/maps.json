@@ -2,7 +2,7 @@
   "maps": [
     {
       "id": 0,
-      "name": "maze",
+      "name": "Deep_lands",
       "visible": true,
       "flipBase": false,
       "backgroundColor": "646464"
@@ -72,7 +72,7 @@
     },
     {
       "id": 10,
-      "name": "tundra",
+      "name": "Super_icy",
       "visible": true,
       "flipBase": false,
       "backgroundColor": "646464"
