@@ -10,6 +10,7 @@ import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.scene.style.TextureRegionDrawable;
 import io.anuke.ucore.scene.ui.ButtonGroup;
 import io.anuke.ucore.scene.ui.ImageButton;
+import io.anuke.ucore.scene.ui.TextButton;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Tmp;
@@ -65,9 +66,11 @@ public class Sorter extends Block{
 		if(dir == -1) return null;
 		Tile to;
 		
-		if(item == entity.sortItem){
+		if((item == entity.sortItem && !entity.inverted)
+			||(item != entity.sortItem && entity.inverted))
 			to = dest.getNearby(dir);
-		}else{
+		else
+		{
 			Tile a = dest.getNearby(Mathf.mod(dir - 1, 4));
 			Tile b = dest.getNearby(Mathf.mod(dir + 1, 4));
 			boolean ac = !(a.block().instantTransfer && source.block().instantTransfer) &&
@@ -138,6 +141,13 @@ public class Sorter extends Block{
 			}
 		}
 
+		cont.row();
+
+		TextButton invBut = cont.addButton("Invert","toggle", () -> {
+			entity.inverted = entity.inverted ? false : true;
+		}).padBottom(-5.1f).get();
+		invBut.setChecked(entity.inverted);
+
 		table.add(cont);
 	}
 	
@@ -148,15 +158,18 @@ public class Sorter extends Block{
 
 	public static class SorterEntity extends TileEntity{
 		public Item sortItem = Item.iron;
-		
+		public boolean inverted = false;
+
 		@Override
 		public void write(DataOutputStream stream) throws IOException{
 			stream.writeByte(sortItem.id);
+			stream.writeByte((byte)(inverted ? 1 : 0));
 		}
 		
 		@Override
 		public void read(DataInputStream stream) throws IOException{
 			sortItem = Item.getAllItems().get(stream.readByte());
+			inverted = stream.readByte() == 1;
 		}
 	}
 }
