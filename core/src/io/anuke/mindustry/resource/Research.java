@@ -35,4 +35,13 @@ public class Research {
     public String toString() {
         return localizedName();
     }
+
+    public static class ResearchContainer {
+        public ResearchContainer() {
+            this.researches = Research.researches;
+        }
+        //TODO: this class is added to world and synced somehow (new packet maybe?)
+        public Array<Research> researched;
+        public Array<Research> researches;
+    }
 }

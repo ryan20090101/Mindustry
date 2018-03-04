@@ -8,6 +8,7 @@ import io.anuke.mindustry.ai.Pathfind;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.game.SpawnPoint;
 import io.anuke.mindustry.io.Maps;
+import io.anuke.mindustry.resource.Research;
 import io.anuke.mindustry.world.*;
 import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.DistributionBlocks;
@@ -35,7 +36,7 @@ public class World extends Module{
 	private Tile[] temptiles = new Tile[4];
 
 	public int time;
-	public ResearchContainer rContainer;
+	private Research.ResearchContainer rContainer;
 	
 	public World(){
 		maps.loadMaps();
@@ -321,5 +322,37 @@ public class World extends Module{
 			}
 		}
 		return null;
+	}
+
+	public Research.ResearchContainer getResearchContainer()
+	{
+		return rContainer;
+	}
+
+	public void setResearchContainer(Research.ResearchContainer newRContainer)
+	{
+		rContainer = newRContainer;
+	}
+
+	public boolean research(Research res) {
+		if (rContainer.researches.contains(res, true)
+			&& !rContainer.researched.contains(res, true))
+		{
+			rContainer.researched.add(res);
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public boolean unresearch(Research res) {
+		if (rContainer.researches.contains(res, true)
+				&& rContainer.researched.contains(res, true))
+		{
+			rContainer.researched.removeValue(res,true);
+			return true;
+		}
+		else
+			return false;
 	}
 }
