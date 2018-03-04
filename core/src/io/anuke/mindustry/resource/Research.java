@@ -29,7 +29,7 @@ public class Research {
     }
 
     public void init(){
-        this.region = Draw.region("icon-" + name);
+        this.region = Draw.region(name);
     }
 
     public String localizedName(){
