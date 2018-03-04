@@ -7,7 +7,7 @@ import io.anuke.mindustry.world.blocks.DefenseBlocks;
 import io.anuke.mindustry.world.blocks.DistributionBlocks;
 import io.anuke.mindustry.world.blocks.ProductionBlocks;
 import io.anuke.mindustry.world.blocks.WeaponBlocks;
-
+import io.anuke.mindustry.world.blocks.OtherBlocks;
 import static io.anuke.mindustry.resource.Section.*;
 
 public class Recipes {
@@ -96,7 +96,9 @@ public class Recipes {
 			new Recipe(power, null,DefenseBlocks.ultrarepairturret, stack(Item.iron, 20), stack(Item.steel, 30), stack(Item.titanium, 40)),
 
 			new Recipe(production, null,ProductionBlocks.pump, stack(Item.steel, 10)),
-			new Recipe(production, Research.unlockFluxpump,ProductionBlocks.fluxpump, stack(Item.steel, 10), stack(Item.dirium, 5))
+			new Recipe(production, Research.unlockFluxpump,ProductionBlocks.fluxpump, stack(Item.steel, 10), stack(Item.dirium, 5)),
+            
+            new Recipe(crafting, Research.unlockFluxpump,OtherBlocks.structurecore, stack(Item.steel, 10))
 	);
 	
 	private static ItemStack stack(Item item, int amount){
