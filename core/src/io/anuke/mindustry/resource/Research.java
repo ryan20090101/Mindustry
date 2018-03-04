@@ -6,7 +6,7 @@ import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Bundles;
 
 public class Research {
-    private static final Array<Research> researches = new Array<>();
+    public static final Array<Research> researches = new Array<>();
 
     public static final Research
             unlockOmnidrill = new Research("unlockOmnidrill"),

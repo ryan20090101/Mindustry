@@ -41,6 +41,7 @@ public class World extends Module{
 	public World(){
 		maps.loadMaps();
 		currentMap = maps.getMap(0);
+		rContainer = Research.researches;
 	}
 	
 	@Override
