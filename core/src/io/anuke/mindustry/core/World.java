@@ -36,7 +36,7 @@ public class World extends Module{
 	private Tile[] temptiles = new Tile[4];
 
 	public int time;
-	private Research.ResearchContainer rContainer;
+	private Array<Research> rContainer;
 	
 	public World(){
 		maps.loadMaps();
@@ -324,48 +324,18 @@ public class World extends Module{
 		return null;
 	}
 
-	public Research.ResearchContainer getResearchContainer()
-	{
-		return rContainer;
+	public void research(Research res) {
+		rContainer.get(res.id).researched = true;
 	}
 
-	public void setResearchContainer(Research.ResearchContainer newRContainer)
-	{
-		rContainer = newRContainer;
-	}
-
-	public boolean research(Research res) {
-		if (rContainer.researches.contains(res, true)
-			&& !rContainer.researched.contains(res, true))
-		{
-			rContainer.researched.add(res);
-			return true;
-		}
-		else
-			return false;
-	}
-
-	public boolean unresearch(Research res) {
-		if (rContainer.researches.contains(res, true)
-				&& rContainer.researched.contains(res, true))
-		{
-			rContainer.researched.removeValue(res,true);
-			return true;
-		}
-		else
-			return false;
+	public void unresearch(Research res) {
+		rContainer.get(res.id).researched = false;
 	}
 
 	public boolean getResearchStatus(Research res) {
 		if (res == null)
 			return true;
 
-		if (rContainer.researches.contains(res, true)
-				&& rContainer.researched.contains(res, true))
-		{
-			return true;
-		}
-		else
-			return false;
+		return rContainer.get(res.id).researched;
 	}
 }

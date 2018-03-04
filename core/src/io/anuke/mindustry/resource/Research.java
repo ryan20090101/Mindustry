@@ -15,6 +15,7 @@ public class Research {
     public final int id;
     public final String name;
     public TextureRegion region;
+    public boolean researched;
 
     public Research(String name) {
         this.id = researches.size;
@@ -34,14 +35,5 @@ public class Research {
     @Override
     public String toString() {
         return localizedName();
-    }
-
-    public static class ResearchContainer {
-        public ResearchContainer() {
-            this.researches = Research.researches;
-        }
-        //TODO: this class is added to world and synced somehow (new packet maybe?)
-        public Array<Research> researched;
-        public Array<Research> researches;
     }
 }
