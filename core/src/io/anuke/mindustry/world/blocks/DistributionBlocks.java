@@ -33,24 +33,32 @@ public class DistributionBlocks{
 	
 	conveyor = new Conveyor("conveyor"){{
 		movementSpeedMultiplier = 1.5f;
+        animated = true;
+        animationFrames = 2;
 	}},
 	
 	steelconveyor = new Conveyor("steelconveyor"){{
 		movementSpeedMultiplier = 2f;
 		health = 55;
 		speed = 0.04f;
+        animated = true;
+        animationFrames = 2;
 	}},
 	
 	pulseconveyor = new Conveyor("poweredconveyor"){{
 		movementSpeedMultiplier = 3f;
 		health = 75;
 		speed = 0.09f;
+        animated = true;
+        animationFrames = 2;
 	}},
 
 	ultraconveyor = new Conveyor("ultraconveyor"){{
 		health = 75;
 		speed = 0.14f;
 		drawItems = false;
+        animated = true;
+        animationFrames = 3;
 	}},
 	
 	router = new Router("router"){{

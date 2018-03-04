@@ -107,6 +107,9 @@ public class Block{
 	public int damageOnTop = 0;
 	/**The time it takes for a block to cause damage.*/
 	public int damageTime = 0;
+    
+    public boolean animated = false;
+    public int animationFrames = 1;
 
 	public Block(String name) {
 		this.name = name;
