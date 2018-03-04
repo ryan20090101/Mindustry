@@ -26,7 +26,7 @@ public abstract class SyncEntity extends DestructibleEntity{
 
     static{
         setWriteSize(Enemy.class, 4 + 4 + 2 + 2);
-        setWriteSize(Player.class, 4 + 4 + 4 + 2 + 1);
+        setWriteSize(Player.class, 4 + 4 + 4 + 2 + 1 + 4 + 1);
     }
 
     public static boolean isSmoothing(){
