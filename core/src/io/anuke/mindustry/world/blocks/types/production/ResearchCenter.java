@@ -8,21 +8,54 @@ import io.anuke.mindustry.resource.*;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.Effects;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.function.Listenable;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.scene.style.TextureRegionDrawable;
 import io.anuke.ucore.scene.ui.ImageButton;
 import io.anuke.ucore.scene.ui.Tooltip;
 import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.util.Timer;
 
 import static io.anuke.mindustry.Vars.*;
 
 public class ResearchCenter extends Block{
 
+    protected final int timerProgress = timers++;
+
+    /**Time it takes to progress++*/
+    protected int researchTime;
+
     public ResearchCenter(String name){
         super(name);
         solid = true;
         destructible = true;
+    }
+
+    @Override
+    public void update(Tile tile){
+        ResearchCenterEntity ent = tile.entity();
+
+        if(!ent.researching)
+            return;
+
+        boolean hasItems;
+        Research res = world.getResearchById(ent.resID);
+
+        for(ItemStack stack : res.requirements) {
+            if (!(ent.items[stack.item.id] >= stack.amount))
+                return;
+        }
+        
+        if(ent.researching && ent.progress < 100 && Timers.get(timerProgress,researchTime)) {
+            ent.progress++;
+        }
+        else if (ent.researching && ent.progress >= 100) {
+            ent.researching = false;
+            Research res = world.getResearchById(ent.resID);
+            world.research(res);
+            state.inventory.removeItems(res.requirements);
+        }
     }
 
     @Override
@@ -32,6 +65,8 @@ public class ResearchCenter extends Block{
 
     @Override
     public void buildTable(Tile tile, Table table) {
+        ResearchCenterEntity ent = tile.entity();
+
         int i = 0;
 
         Table content = new Table();
@@ -85,17 +120,11 @@ public class ResearchCenter extends Block{
             tip.setInstant(true);
 
             ImageButton button = content.addImageButton("white", 8*4, () -> {
-                state.inventory.removeItems(requirements);
+                ent.resID = (byte) res.id;
+                ent.researching = true;
                 world.research(res);
-                ui.hudfrag.buildRecipe();//Recipes.getByResearch(res));
                 run.listen();
                 Effects.sound("purchase");
-
-                /** TODO: ADD OWN NETEVENT FOR UPGRADING
-                *if(Net.client()){
-                *    NetEvents.handleUpgrade(res);
-                *}
-                */
             }).size(49f, 54f).padBottom(-5).get();
 
             button.setDisabled(() -> world.getResearchStatus(res) || !state.inventory.hasItems(requirements));
@@ -118,8 +147,9 @@ public class ResearchCenter extends Block{
     }
 
     public class ResearchCenterEntity extends TileEntity{
-        public int resID;     //research id
+        public byte resID;     //research id, byte until more required
         public byte progress; //this only needs to be from 0 to 100
+        public boolean researching;
         //extra vars maybe?
     }
 }
