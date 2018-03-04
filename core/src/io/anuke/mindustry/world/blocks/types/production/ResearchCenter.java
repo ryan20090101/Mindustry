@@ -54,7 +54,7 @@ public class ResearchCenter extends Block{
                 tiptable.row();
                 tiptable.add(reqtable).left();
 
-                if(!world.getResearchStatus(res){
+                if(!world.getResearchStatus(res)){
                     for(ItemStack s : requirements){
 
                         int amount = Math.min(state.inventory.getAmount(s.item), s.amount);
