@@ -23,13 +23,13 @@ public class Research {
         this.id = researches.size;
         this.name = name;
         this.requirements = requirements;
-        this.description = Bundles.getNotNull("research."+name+".description");
+        this.description = Bundles.get("research."+name+".description");
 
         researches.add(this);
     }
 
     public void init(){
-        this.region = Draw.region(name);
+        this.region = Draw.region("research/"+name);
     }
 
     public String localizedName(){
