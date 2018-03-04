@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.sun.istack.internal.Nullable;
 import io.anuke.mindustry.ai.Pathfind;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.game.SpawnPoint;
@@ -350,6 +351,19 @@ public class World extends Module{
 				&& rContainer.researched.contains(res, true))
 		{
 			rContainer.researched.removeValue(res,true);
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public boolean getResearchStatus(@Nullable Research res) {
+		if (res == null)
+			return true;
+
+		if (rContainer.researches.contains(res, true)
+				&& rContainer.researched.contains(res, true))
+		{
 			return true;
 		}
 		else

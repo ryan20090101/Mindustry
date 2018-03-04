@@ -156,6 +156,7 @@ public class BlocksFragment implements Fragment{
 
 							image.update(() -> {
 								boolean canPlace = !control.tutorial().active() || control.tutorial().canPlace();
+								boolean researched = world.getResearchStatus(r.research);
 								boolean has = (state.inventory.hasItems(r.requirements)) && canPlace;
 								image.setChecked(input.recipe == r);
 								image.setTouchable(canPlace ? Touchable.enabled : Touchable.disabled);
