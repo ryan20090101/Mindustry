@@ -235,7 +235,9 @@ public class HudFragment implements Fragment{
 	public void updateWeapons(){
 		blockfrag.updateWeapons();
 	}
-	
+	public void buildRecipe(){
+		blockfrag.build();
+	}	
 	public void fadeRespawn(boolean in){
 		respawntable.addAction(Actions.color(in ? new Color(0, 0, 0, 0.3f) : Color.CLEAR, 0.3f));
 	}

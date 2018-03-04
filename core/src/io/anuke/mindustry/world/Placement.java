@@ -101,6 +101,11 @@ public class Placement {
         if(recipe == null || !state.inventory.hasItems(recipe.requirements)){
             return false;
         }
+        try{
+            if(!Recipes.getResearchByResult(recipe).researched){
+                return false;
+            }
+        }catch(NullPointerException ex){}
 
         rect.setSize(type.width * tilesize, type.height * tilesize);
         Vector2 offset = type.getPlaceOffset();

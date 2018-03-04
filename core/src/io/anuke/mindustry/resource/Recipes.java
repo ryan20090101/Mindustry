@@ -115,7 +115,22 @@ public class Recipes {
 		}
 		return null;
 	}
-	
+	public static Research getResearchByResult(Recipe targetRecipe){
+		for(Recipe recipe : list){
+			if(recipe == targetRecipe){
+				return targetRecipe.research;
+			}
+		}
+		return null;
+	}	
+	public static Recipe getByResearch(Research research){
+		for(Recipe recipe : list){
+			if(recipe.research == research){
+				return recipe;
+			}
+		}
+		return null;
+	}
 	public static Array<Recipe> getBy(Section section, Array<Recipe> r){
 		for(Recipe recipe : list){
 			if(recipe.section == section && !(Vars.android && recipe.desktopOnly))

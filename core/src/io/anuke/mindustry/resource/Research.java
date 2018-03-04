@@ -44,4 +44,5 @@ public class Research {
     private static ItemStack stack(Item item, int amount){
         return new ItemStack(item, amount);
     }
+
 }

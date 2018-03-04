@@ -86,7 +86,7 @@ public class ResearchCenter extends Block{
             ImageButton button = content.addImageButton("white", 8*4, () -> {
                 state.inventory.removeItems(requirements);
                 world.research(res);
-                ui.hudfrag.updateWeapons();
+                ui.hudfrag.buildRecipe();//Recipes.getByResearch(res));
                 run.listen();
                 Effects.sound("purchase");
 
@@ -98,7 +98,8 @@ public class ResearchCenter extends Block{
             }).size(49f, 54f).padBottom(-5).get();
 
             button.setDisabled(() -> world.getResearchStatus(res) || !state.inventory.hasItems(requirements));
-            button.getStyle().imageUp = new TextureRegionDrawable(res.region);
+            //button.getStyle().imageUp = new TextureRegionDrawable(res.region);
+            button.getStyle().imageUp = new TextureRegionDrawable(Draw.region(res.name));
             button.addListener(tip);
 
             if(++i % 3 == 0){

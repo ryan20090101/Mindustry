@@ -33,7 +33,7 @@ public class BlocksFragment implements Fragment{
 	private Array<String> statlist = new Array<>();
 	private boolean shown = true;
 	private Recipe hoveredDescriptionRecipe;
-	
+	private boolean shouldDraw = true;
 	public void build(){
 		InputHandler input = control.input();
 
@@ -110,65 +110,70 @@ public class BlocksFragment implements Fragment{
 						table.top().left();
 
 						int i = 0;
-
+                        
 						for (Recipe r : recipes) {
-							TextureRegion region = Draw.hasRegion(r.result.name() + "-icon") ?
-									Draw.region(r.result.name() + "-icon") : Draw.region(r.result.name());
-							ImageButton image = new ImageButton(region, "select");
+							shouldDraw = true;
+                            try{if(!Recipes.getResearchByResult(r).researched){
+                                    shouldDraw = false;
+                            }}catch(NullPointerException ex){}
+                            if(shouldDraw){
+                                TextureRegion region = Draw.hasRegion(r.result.name() + "-icon") ?
+                                        Draw.region(r.result.name() + "-icon") : Draw.region(r.result.name());
+                                ImageButton image = new ImageButton(region, "select");
 
-							image.addListener(new ClickListener(){
-								@Override
-								public void enter(InputEvent event, float x, float y, int pointer, Element fromActor) {
-									super.enter(event, x, y, pointer, fromActor);
-									if (hoveredDescriptionRecipe != r) {
-										hoveredDescriptionRecipe = r;
-										updateRecipe(r);
-									}
-								}
+                                image.addListener(new ClickListener(){
+                                    @Override
+                                    public void enter(InputEvent event, float x, float y, int pointer, Element fromActor) {
+                                        super.enter(event, x, y, pointer, fromActor);
+                                        if (hoveredDescriptionRecipe != r) {
+                                            hoveredDescriptionRecipe = r;
+                                            updateRecipe(r);
+                                        }
+                                    }
 
-								@Override
-								public void exit(InputEvent event, float x, float y, int pointer, Element toActor) {
-									super.exit(event, x, y, pointer, toActor);
-									hoveredDescriptionRecipe = null;
-									updateRecipe(input.recipe);
-								}
-							});
+                                    @Override
+                                    public void exit(InputEvent event, float x, float y, int pointer, Element toActor) {
+                                        super.exit(event, x, y, pointer, toActor);
+                                        hoveredDescriptionRecipe = null;
+                                        updateRecipe(input.recipe);
+                                    }
+                                });
 
-							image.clicked(() -> {
-								// note: input.recipe only gets set here during a click.
-								// during a hover only the visual description will be updated.
-								boolean nothingSelectedYet = input.recipe == null;
-								boolean selectedSomethingElse = !nothingSelectedYet && input.recipe != r;
-								boolean shouldMakeSelection = nothingSelectedYet || selectedSomethingElse;
-								if (shouldMakeSelection) {
-									input.recipe = r;
-									hoveredDescriptionRecipe = r;
-									updateRecipe(r);
-								} else {
-									input.recipe = null;
-									hoveredDescriptionRecipe = null;
-									updateRecipe(null);
-								}
-							});
+                                image.clicked(() -> {
+                                    // note: input.recipe only gets set here during a click.
+                                    // during a hover only the visual description will be updated.
+                                    boolean nothingSelectedYet = input.recipe == null;
+                                    boolean selectedSomethingElse = !nothingSelectedYet && input.recipe != r;
+                                    boolean shouldMakeSelection = nothingSelectedYet || selectedSomethingElse;
+                                    if (shouldMakeSelection) {
+                                        input.recipe = r;
+                                        hoveredDescriptionRecipe = r;
+                                        updateRecipe(r);
+                                    } else {
+                                        input.recipe = null;
+                                        hoveredDescriptionRecipe = null;
+                                        updateRecipe(null);
+                                    }
+                                });
 
-							table.add(image).size(size + 8);
-							image.getImageCell().size(size);
+                                table.add(image).size(size + 8);
+                                image.getImageCell().size(size);
 
-							image.update(() -> {
-								boolean canPlace = !control.tutorial().active() || control.tutorial().canPlace();
-								boolean researched = r.research==null ? true : world.getResearchStatus(r.research);
-								boolean has = (state.inventory.hasItems(r.requirements)) && canPlace && researched;
-								image.setChecked(input.recipe == r);
-								image.setTouchable(canPlace ? Touchable.enabled : Touchable.disabled);
-								image.getImage().setColor(has ? Color.WHITE : Hue.lightness(0.33f));
-							});
+                                image.update(() -> {
+                                    boolean canPlace = !control.tutorial().active() || control.tutorial().canPlace();
+                                    boolean researched = r.research==null ? true : world.getResearchStatus(r.research);
+                                    boolean has = (state.inventory.hasItems(r.requirements)) && canPlace && researched;
+                                    image.setChecked(input.recipe == r);
+                                    image.setTouchable(canPlace ? Touchable.enabled : Touchable.disabled);
+                                    image.getImage().setColor(has ? Color.WHITE : Hue.lightness(0.33f));
+                                });
 
-							if (i % rows == rows - 1)
-								table.row();
+                                if (i % rows == rows - 1)
+                                    table.row();
 
-							i++;
-						}
-
+                                i++;
+                            }
+                        }
 						table.setVisible(button::isChecked);
 
 						stack.add(table);
@@ -231,7 +236,7 @@ public class BlocksFragment implements Fragment{
         }
     }
 
-	void updateRecipe(Recipe recipe){
+	public void updateRecipe(Recipe recipe){
 		if (recipe == null) {
 			desctable.clear();
 			return;
