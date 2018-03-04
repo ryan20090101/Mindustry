@@ -248,5 +248,11 @@ public class ProductionBlocks{
 			width = height = 2;
 			health = 250;
 		}
+	},
+	researchCenter = new ResearchCenter("researchCenter"){
+		{
+			width = height = 3;
+			health = 250;
+		}
 	};
 }
