@@ -1,6 +1,7 @@
 package io.anuke.mindustry.world.blocks.types.production;
 
 import io.anuke.mindustry.Vars;
+import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.resource.*;
@@ -108,5 +109,16 @@ public class ResearchCenter extends Block{
         }
 
         table.add(content).padTop(140f);
+    }
+
+
+    @Override
+    public TileEntity getEntity() {
+        return new ResearchCenterEntity();
+    }
+
+    public class ResearchCenterEntity extends TileEntity{
+        public int resID;     //research id
+        public byte progress; //this only needs to be from 0 to 100
     }
 }
