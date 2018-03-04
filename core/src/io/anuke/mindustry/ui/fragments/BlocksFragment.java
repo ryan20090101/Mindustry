@@ -156,8 +156,8 @@ public class BlocksFragment implements Fragment{
 
 							image.update(() -> {
 								boolean canPlace = !control.tutorial().active() || control.tutorial().canPlace();
-								boolean researched = r!=null ? world.getResearchStatus(r.research) : true;
-								boolean has = (state.inventory.hasItems(r.requirements)) && canPlace;
+								boolean researched = r.research!=null ? world.getResearchStatus(r.research) : true;
+								boolean has = (state.inventory.hasItems(r.requirements)) && canPlace && researched;
 								image.setChecked(input.recipe == r);
 								image.setTouchable(canPlace ? Touchable.enabled : Touchable.disabled);
 								image.getImage().setColor(has ? Color.WHITE : Hue.lightness(0.33f));

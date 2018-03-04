@@ -333,9 +333,6 @@ public class World extends Module{
 	}
 
 	public boolean getResearchStatus(Research res) {
-		if (res == null)
-			return true;
-
 		return rContainer.get(res.id).researched;
 	}
 }
