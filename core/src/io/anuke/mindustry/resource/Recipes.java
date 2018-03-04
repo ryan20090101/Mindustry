@@ -30,7 +30,7 @@ public class Recipes {
 			new Recipe(distribution, null,DistributionBlocks.conveyor, stack(Item.stone, 1)),
 			new Recipe(distribution, null,DistributionBlocks.steelconveyor, stack(Item.steel, 1)),
 			new Recipe(distribution, null,DistributionBlocks.pulseconveyor, stack(Item.titanium, 1)),
-			new Recipe(distribution, null,DistributionBlocks.ultraconveyor, stack(Item.dirium, 1)),
+			//new Recipe(distribution, null,DistributionBlocks.ultraconveyor, stack(Item.dirium, 1)),
 			new Recipe(distribution, null,DistributionBlocks.combiner, stack(Item.stone, 1)),
 			new Recipe(distribution, null,DistributionBlocks.router, stack(Item.stone, 2)),
 			new Recipe(distribution, null,DistributionBlocks.buffer, stack(Item.steel, 2)),
