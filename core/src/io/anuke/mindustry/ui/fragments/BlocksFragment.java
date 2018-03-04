@@ -33,7 +33,7 @@ public class BlocksFragment implements Fragment{
 	private Array<String> statlist = new Array<>();
 	private boolean shown = true;
 	private Recipe hoveredDescriptionRecipe;
-	private boolean shouldDraw = true;
+
 	public void build(){
 		InputHandler input = control.input();
 
@@ -112,10 +112,9 @@ public class BlocksFragment implements Fragment{
 						int i = 0;
                         
 						for (Recipe r : recipes) {
-							shouldDraw = true;
-                            try{if(!Recipes.getResearchByResult(r).researched){
+							boolean shouldDraw = true;
+                            if(!world.getResearchStatus(Recipes.getResearchByResult(r)))
                                     shouldDraw = false;
-                            }}catch(NullPointerException ex){}
                             if(shouldDraw){
                                 TextureRegion region = Draw.hasRegion(r.result.name() + "-icon") ?
                                         Draw.region(r.result.name() + "-icon") : Draw.region(r.result.name());
