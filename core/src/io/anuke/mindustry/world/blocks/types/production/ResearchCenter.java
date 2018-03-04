@@ -120,5 +120,6 @@ public class ResearchCenter extends Block{
     public class ResearchCenterEntity extends TileEntity{
         public int resID;     //research id
         public byte progress; //this only needs to be from 0 to 100
+        //extra vars maybe?
     }
 }
