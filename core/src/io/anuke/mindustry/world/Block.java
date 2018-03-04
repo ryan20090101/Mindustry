@@ -111,6 +111,9 @@ public class Block{
     public boolean animated = false;
     public int animationFrames = 1;
 
+	/**calculated based on recipe, will be used in the enemy pathfinding to determine most destructible route*/
+	public int worth;
+
 	public Block(String name) {
 		this.name = name;
 		this.formalName = Bundles.get("block." + name + ".name", name);
