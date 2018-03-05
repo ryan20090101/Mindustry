@@ -39,20 +39,17 @@ public class ResearchCenter extends Block{
         if(!ent.researching)
             return;
 
-        boolean hasItems;
         Research res = world.getResearchById(ent.resID);
 
         for(ItemStack stack : res.requirements) {
             if (!(ent.items[stack.item.id] >= stack.amount))
                 return;
         }
-        
         if(ent.researching && ent.progress < 100 && Timers.get(timerProgress,researchTime)) {
             ent.progress++;
         }
         else if (ent.researching && ent.progress >= 100) {
             ent.researching = false;
-            Research res = world.getResearchById(ent.resID);
             world.research(res);
             state.inventory.removeItems(res.requirements);
         }
