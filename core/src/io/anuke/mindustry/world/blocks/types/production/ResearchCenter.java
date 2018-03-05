@@ -14,20 +14,31 @@ import io.anuke.ucore.scene.style.TextureRegionDrawable;
 import io.anuke.ucore.scene.ui.ImageButton;
 import io.anuke.ucore.scene.ui.Tooltip;
 import io.anuke.ucore.scene.ui.layout.Table;
-
+import io.anuke.ucore.core.Timers;
 import static io.anuke.mindustry.Vars.*;
 
 public class ResearchCenter extends Block{
-
+    private int animationSpeed = 2;
     public ResearchCenter(String name){
         super(name);
         solid = true;
         destructible = true;
+        animated = true;
+        animationFrames = 3;
+        
     }
 
     @Override
     public boolean isConfigurable(Tile tile){
         return !Vars.android;
+    }
+	@Override
+	public void draw(Tile tile){
+        try{
+            Draw.rect(name() + (int)Math.round(Math.round(Timers.time()/animationSpeed % animationFrames)*animationFrames),tile.worldx(), tile.worldy());
+        }catch(Exception ex){
+            Draw.rect(name(),tile.worldx(), tile.worldy());
+        }
     }
 
     @Override
