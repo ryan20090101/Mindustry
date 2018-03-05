@@ -564,6 +564,27 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Effects.effect(Fx.pulserExplosion, b);
             DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
+	},
+    demonring = new BulletType(2f, 18) {
+		{
+			lifetime = 1200f;
+		}
+		public void draw(Bullet b) {
+			Draw.rect("pulseshot", b.x, b.y, b.angle());
+			Draw.reset();
+		}
+        public void init(Bullet b) {
+			b.x = b.x + 40;
+            b.setVelocity(5f, 0.75f);
+		}
+
+		public void update(Bullet b) {
+            b.setVelocity(5f, b.angle()-5f);
+        }
+		public void removed(Bullet b){
+			Effects.effect(Fx.pulserExplosion, b);
+            DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
+		}
 	};
 	private BulletType(float speed, int damage){
 		this.speed = speed;
