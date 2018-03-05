@@ -32,8 +32,6 @@ public class ResearchCenter extends Block{
         super(name);
         solid = true;
         destructible = true;
-        animated = true;
-        animationFrames = 3;
     }
 
     @Override

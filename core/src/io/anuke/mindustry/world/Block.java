@@ -302,7 +302,7 @@ public class Block{
 
             if(animated){
                 Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants) + "-") : name()
-                        + (int)Math.round(Math.round(Timers.time()/animationSpeed % animationFrames)*animationFrames),
+                        + (Math.round((Timers.time()/animationSpeed) % animationFrames+0.5f)),//*animationFrames),
                         tile.worldx(), tile.worldy(), rotate ? tile.getRotation() * 90 : 0);
             }else{
                 Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants))  : name(),
@@ -311,9 +311,9 @@ public class Block{
 		}else{
 			//if multiblock, make sure to draw even block sizes offset, since the core block is at the BOTTOM LEFT
             if(animated){
-                try {
-                    Draw.rect(name() + (int) Math.round(Math.round(Timers.time() / animationSpeed % animationFrames) * animationFrames), tile.worldx(), tile.worldy());
-                }catch (Exception e) {}
+
+                Draw.rect(name() + (Math.round((Timers.time()/animationSpeed) % animationFrames+0.5f)), tile.worldx(), tile.worldy());
+
             }else{
                 Draw.rect(name(),tile.worldx(), tile.worldy());
             }

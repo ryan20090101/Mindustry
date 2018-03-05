@@ -253,6 +253,9 @@ public class ProductionBlocks{
 		{
 			width = height = 3;
 			health = 250;
+            animated = true;
+            animationFrames = 3;
+            
 		}
 	};
 }
