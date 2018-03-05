@@ -337,4 +337,8 @@ public class World extends Module{
 		if (res == null) return true;
 		return rContainer.get(res.id).researched;
 	}
+
+	public Research getResearchById(int id) {
+		return rContainer.get(id);
+	}
 }
