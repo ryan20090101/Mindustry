@@ -311,7 +311,9 @@ public class Block{
 		}else{
 			//if multiblock, make sure to draw even block sizes offset, since the core block is at the BOTTOM LEFT
             if(animated){
-                Draw.rect(name() + (int)Math.round(Math.round(Timers.time()/animationSpeed % animationFrames)*animationFrames),tile.worldx(), tile.worldy());
+                try {
+                    Draw.rect(name() + (int) Math.round(Math.round(Timers.time() / animationSpeed % animationFrames) * animationFrames), tile.worldx(), tile.worldy());
+                }catch (Exception e) {}
             }else{
                 Draw.rect(name(),tile.worldx(), tile.worldy());
             }
