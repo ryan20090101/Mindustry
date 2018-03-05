@@ -1,21 +1,28 @@
 package io.anuke.mindustry.world.blocks.types.production;
 
+import com.badlogic.gdx.graphics.Color;
 import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.resource.*;
 import io.anuke.mindustry.world.Block;
+import io.anuke.mindustry.world.BlockBar;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.function.Listenable;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.scene.style.TextureRegionDrawable;
+import io.anuke.ucore.scene.ui.ButtonGroup;
+import io.anuke.ucore.scene.ui.Image;
 import io.anuke.ucore.scene.ui.ImageButton;
 import io.anuke.ucore.scene.ui.Tooltip;
 import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timer;
+
+import java.util.Arrays;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -24,12 +31,17 @@ public class ResearchCenter extends Block{
     protected final int timerProgress = timers++;
 
     /**Time it takes to progress++*/
-    protected int researchTime;
+    protected int researchTime = 5;
 
     public ResearchCenter(String name){
         super(name);
         solid = true;
         destructible = true;
+    }
+
+    @Override
+    public void init() {
+        bars.add(new BlockBar(Color.ORANGE, true, tile -> (float)tile.<ResearchCenterEntity>entity().progress/100));
     }
 
     @Override
@@ -47,11 +59,15 @@ public class ResearchCenter extends Block{
         }
         if(ent.researching && ent.progress < 100 && Timers.get(timerProgress,researchTime)) {
             ent.progress++;
+            ItemStack itemS = res.requirements[Mathf.random(res.requirements.length-1)];
+            ent.items[itemS.item.id] -= Mathf.random(itemS.amount);
         }
         else if (ent.researching && ent.progress >= 100) {
             ent.researching = false;
             world.research(res);
-            state.inventory.removeItems(res.requirements);
+            for(ItemStack stack : res.requirements) {
+                ent.removeItem(stack.item,stack.amount);
+            }
         }
     }
 
@@ -116,15 +132,19 @@ public class ResearchCenter extends Block{
 
             tip.setInstant(true);
 
-            ImageButton button = content.addImageButton("white", 8*4, () -> {
+            ButtonGroup<ImageButton> group = new ButtonGroup<>();
+
+            ImageButton button = content.addImageButton("white", "toggle", 8*4, () -> {
                 ent.resID = (byte) res.id;
                 ent.researching = true;
-                world.research(res);
+                //world.research(res);
                 run.listen();
                 Effects.sound("purchase");
-            }).size(49f, 54f).padBottom(-5).get();
+            }).size(49f, 54f).padBottom(-5).group(group).get();
 
-            button.setDisabled(() -> world.getResearchStatus(res) || !state.inventory.hasItems(requirements));
+            button.setChecked(ent.resID == res.id);
+
+            button.setDisabled(() -> world.getResearchStatus(res));
             //button.getStyle().imageUp = new TextureRegionDrawable(res.region);
             button.getStyle().imageUp = new TextureRegionDrawable(Draw.region(res.name));
             button.addListener(tip);
@@ -137,6 +157,15 @@ public class ResearchCenter extends Block{
         table.add(content).padTop(140f);
     }
 
+    @Override
+    public boolean acceptItem(Item item, Tile tile, Tile source){
+        ResearchCenterEntity ent = tile.entity();
+        for(ItemStack stack : world.getResearchById(ent.resID).requirements) {
+            if (stack.item.id == item.id)
+                return true;
+        }
+        return false;
+    }
 
     @Override
     public TileEntity getEntity() {
