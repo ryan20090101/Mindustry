@@ -16,6 +16,7 @@ import io.anuke.mindustry.resource.ItemStack;
 import io.anuke.mindustry.resource.Liquid;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Effects.Effect;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Bundles;
@@ -110,6 +111,7 @@ public class Block{
     
     public boolean animated = false;
     public int animationFrames = 1;
+    public int animationSpeed = 3;
 
 	/**calculated based on recipe, will be used in the enemy pathfinding to determine most destructible route*/
 	public int worth;
@@ -297,11 +299,22 @@ public class Block{
 	public void draw(Tile tile){
 		//note: multiblocks do not support rotation
 		if(!isMultiblock()){
-			Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants))  : name(), 
-					tile.worldx(), tile.worldy(), rotate ? tile.getRotation() * 90 : 0);
+
+            if(animated){
+                Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants) + "-") : name()
+                        + (int)Math.round(Math.round(Timers.time()/animationSpeed % animationFrames)*animationFrames),
+                        tile.worldx(), tile.worldy(), rotate ? tile.getRotation() * 90 : 0);
+            }else{
+                Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants))  : name(),
+                        tile.worldx(), tile.worldy(), rotate ? tile.getRotation() * 90 : 0);
+            }
 		}else{
 			//if multiblock, make sure to draw even block sizes offset, since the core block is at the BOTTOM LEFT
-			Draw.rect(name(), tile.drawx(), tile.drawy());
+            if(animated){
+                Draw.rect(name() + (int)Math.round(Math.round(Timers.time()/animationSpeed % animationFrames)*animationFrames),tile.worldx(), tile.worldy());
+            }else{
+                Draw.rect(name(),tile.worldx(), tile.worldy());
+            }
 		}
 		
 		//update the tile entity through the draw method, only if it's an entity without updating

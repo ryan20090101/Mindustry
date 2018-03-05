@@ -26,7 +26,6 @@ import static io.anuke.mindustry.Vars.*;
 
 public class ResearchCenter extends Block{
     protected final int timerProgress = timers++;
-    private int animationSpeed = 2;
     /**Time it takes to progress++*/
     protected int researchTime = 5;
     public ResearchCenter(String name){
@@ -41,14 +40,7 @@ public class ResearchCenter extends Block{
     public void init() {
         bars.add(new BlockBar(Color.ORANGE, true, tile -> (float)tile.<ResearchCenterEntity>entity().progress/100));
     }
-	@Override
-	public void draw(Tile tile){
-        try{
-            Draw.rect(name() + (int)Math.round(Math.round(Timers.time()/animationSpeed % animationFrames)*animationFrames),tile.worldx(), tile.worldy());
-        }catch(Exception ex){
-            Draw.rect(name(),tile.worldx(), tile.worldy());
-        }
-    }
+
     @Override
     public void update(Tile tile){
         ResearchCenterEntity ent = tile.entity();
