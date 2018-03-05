@@ -64,10 +64,9 @@ public class ResearchCenter extends Block{
         }
         else if (ent.researching && ent.progress >= 100) {
             ent.researching = false;
+            ent.progress = 0;
             world.research(res);
-            for(ItemStack stack : res.requirements) {
-                ent.removeItem(stack.item,stack.amount);
-            }
+            ui.hudfrag.buildRecipe();
         }
     }
 
@@ -160,6 +159,9 @@ public class ResearchCenter extends Block{
     @Override
     public boolean acceptItem(Item item, Tile tile, Tile source){
         ResearchCenterEntity ent = tile.entity();
+
+        if(!ent.researching)
+            return false;
         for(ItemStack stack : world.getResearchById(ent.resID).requirements) {
             if (stack.item.id == item.id)
                 return true;
