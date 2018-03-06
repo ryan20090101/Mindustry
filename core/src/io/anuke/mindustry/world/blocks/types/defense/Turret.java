@@ -134,12 +134,18 @@ public class Turret extends Block{
 	@Override
 	public void update(Tile tile){
 		TurretEntity entity = tile.entity();
+<<<<<<< HEAD
 
+=======
+>>>>>>> d485c3260b35545d7a1fb78562b770b602edfd69
 
 		if(entity.timer.get(timerReloadBar,1)) //TEMPORARY WORKAROUND
 			entity.reloadBar += 1;
 
+<<<<<<< HEAD
 		
+=======
+>>>>>>> d485c3260b35545d7a1fb78562b770b602edfd69
 		if(ammo != null && entity.hasItem(ammo)){
 			entity.ammo += ammoMultiplier;
 			entity.removeItem(ammo, 1);
