@@ -133,9 +133,10 @@ public class Turret extends Block{
 	@Override
 	public void update(Tile tile){
 		TurretEntity entity = tile.entity();
-
-		if(entity.timer.get(timerReload,1))
-			entity.reloadBar += 1;
+        //if(entity.timer.get(timerReload,1)){
+        entity.reloadBar += 1f;
+            
+        
 		
 		if(ammo != null && entity.hasItem(ammo)){
 			entity.ammo += ammoMultiplier;
@@ -172,6 +173,7 @@ public class Turret extends Block{
 				}
 			}
 		}
+
 	}
 	
 	public boolean hasAmmo(Tile tile){
