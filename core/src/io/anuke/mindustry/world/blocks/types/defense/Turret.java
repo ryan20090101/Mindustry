@@ -36,6 +36,7 @@ public class Turret extends Block{
 	protected final int timerTarget = timers++;
 	protected final int timerReload = timers++;
 	protected final int timerSound = timers++;
+	protected final int timerReloadBar = timers++;
 	
 	protected float range = 50f;
 	protected float reload = 10f;
@@ -133,10 +134,16 @@ public class Turret extends Block{
 	@Override
 	public void update(Tile tile){
 		TurretEntity entity = tile.entity();
+<<<<<<< HEAD
         //if(entity.timer.get(timerReload,1)){
         entity.reloadBar += 1f;
             
         
+=======
+
+		if(entity.timer.get(timerReloadBar,1)) //TEMPORARY WORKAROUND
+			entity.reloadBar += 1;
+>>>>>>> c8af26ca7e28d97660a8ed45068cd4eb9606f2f8
 		
 		if(ammo != null && entity.hasItem(ammo)){
 			entity.ammo += ammoMultiplier;
