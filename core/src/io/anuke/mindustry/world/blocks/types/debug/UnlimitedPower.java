@@ -21,15 +21,13 @@ public class UnlimitedPower extends Generator { //star wars reference
             int rot = (tile.getRotation() + i) - laserDirections / 2;
             Tile target = laserTarget(tile, rot);
 
-            if(target == null || isInterfering(target, rot))
+            if(target == null)
                 continue;
 
             PowerAcceptor p = (PowerAcceptor) target.block();
             if(p.acceptsPower(target)){
-                float accepted = p.addPower(target, 9999);
-                entity.power -= accepted;
+                p.addPower(target, 9999);
             }
-
         }
     }
 }
