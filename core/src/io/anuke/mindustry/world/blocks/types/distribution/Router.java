@@ -73,7 +73,7 @@ public class Router extends Block{
 	@Override
 	public boolean acceptItem(Item item, Tile tile, Tile source){
 		int items = tile.entity.totalItems();
-		if (selfAccept && tile.block()==source.block()) return false;
+		if (!selfAccept && tile.block()==source.block()) return false;
 		return items < capacity;
 	}
 
