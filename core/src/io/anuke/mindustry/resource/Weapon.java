@@ -16,8 +16,14 @@ import io.anuke.ucore.util.Translator;
 
 public class Weapon extends Upgrade{
 	public static final Weapon
-
-	blaster = new Weapon("blaster", 12, BulletType.demonring){
+    
+    testgun = new Weapon("blaster", 1, BulletType.demonring){
+		{
+			effect =  Fx.laserShoot;
+			length = 2f;
+		}
+	},
+	blaster = new Weapon("blaster", 12, BulletType.shot){
 		{
 			effect =  Fx.laserShoot;
 			length = 2f;

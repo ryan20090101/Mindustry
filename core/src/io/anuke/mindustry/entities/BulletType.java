@@ -579,7 +579,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 
 		public void update(Bullet b) {
-            b.setVelocity(5f, b.angle()-5f);
+            b.setVelocity(5f, b.angle()-360f/2f/60f);
         }
 		public void removed(Bullet b){
 			Effects.effect(Fx.pulserExplosion, b);
