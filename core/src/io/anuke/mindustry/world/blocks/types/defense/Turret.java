@@ -134,7 +134,7 @@ public class Turret extends Block{
 	@Override
 	public void update(Tile tile){
 		TurretEntity entity = tile.entity();
-		
+
 		if(entity.timer.get(timerReloadBar,1)) //TEMPORARY WORKAROUND
 			entity.reloadBar += 1;
 
