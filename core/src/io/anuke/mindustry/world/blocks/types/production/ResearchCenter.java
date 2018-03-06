@@ -67,7 +67,7 @@ public class ResearchCenter extends Block{
 
     @Override
     public boolean isConfigurable(Tile tile){
-        return !Vars.android;
+        return true;
     }
 
     @Override
