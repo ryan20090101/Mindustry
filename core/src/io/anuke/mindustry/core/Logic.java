@@ -150,17 +150,12 @@ public class Logic extends Module {
                 Entities.update(tileGroup);
                 Entities.update(shieldGroup);
                 Entities.update(playerGroup);
-
-<<<<<<< HEAD
-                Entities.collideGroups(enemyGroup, bulletGroup);
-                Entities.collideGroups(playerGroup, bulletGroup);
+                
+                Entities.collideGroups(bulletGroup, enemyGroup);
+                Entities.collideGroups(bulletGroup, playerGroup);
 
                 if (world.time >= maxTime) world.time = 0;
                 world.time += 1;
-=======
-                Entities.collideGroups(bulletGroup, enemyGroup);
-                Entities.collideGroups(bulletGroup, playerGroup);
->>>>>>> upstream/master
             }
         }
     }

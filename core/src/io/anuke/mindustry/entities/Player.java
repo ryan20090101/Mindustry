@@ -154,23 +154,16 @@ public class Player extends SyncEntity{
 	@Override
 	public void update(){
 		if(!isLocal || isAndroid){
-<<<<<<< HEAD
-			if(isFlying && isLocal){
-				angle = Mathf.lerpAngDelta(angle, targetAngle, 0.2f);
-=======
 			if(isAndroid && isLocal){
 				angle = Mathf.slerpDelta(angle, targetAngle, 0.2f);
->>>>>>> upstream/master
 			}
 			if(!isLocal) interpolate();
 			return;
 		}
 
-<<<<<<< HEAD
-		if(flyCooldown>0) flyCooldown-=1;
-=======
 		if(isDead()) return;
->>>>>>> upstream/master
+
+		if(flyCooldown>0) flyCooldown-=1;
 
 		Tile tile = world.tileWorld(x, y);
 
