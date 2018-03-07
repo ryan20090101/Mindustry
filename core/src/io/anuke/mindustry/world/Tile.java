@@ -235,6 +235,12 @@ public class Tile{
 		}
 	}
 
+	public Tile target(){
+	    Tile link = getLinked();
+	    return link == null ? this : link;
+    }
+
+
 	public Tile getNearby(int rotation){
 		return getNearby(rotation,1);
 	}

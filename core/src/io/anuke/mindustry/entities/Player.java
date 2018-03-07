@@ -154,14 +154,23 @@ public class Player extends SyncEntity{
 	@Override
 	public void update(){
 		if(!isLocal || isAndroid){
+<<<<<<< HEAD
 			if(isFlying && isLocal){
 				angle = Mathf.lerpAngDelta(angle, targetAngle, 0.2f);
+=======
+			if(isAndroid && isLocal){
+				angle = Mathf.slerpDelta(angle, targetAngle, 0.2f);
+>>>>>>> upstream/master
 			}
 			if(!isLocal) interpolate();
 			return;
 		}
 
+<<<<<<< HEAD
 		if(flyCooldown>0) flyCooldown-=1;
+=======
+		if(isDead()) return;
+>>>>>>> upstream/master
 
 		Tile tile = world.tileWorld(x, y);
 
@@ -280,10 +289,10 @@ public class Player extends SyncEntity{
 		
 		if(!shooting){
 			if(!movement.isZero())
-				angle = Mathf.lerpAngDelta(angle, movement.angle(), 0.13f);
+				angle = Mathf.slerpDelta(angle, movement.angle(), 0.13f);
 		}else{
 			float angle = Angles.mouseAngle(x, y);
-			this.angle = Mathf.lerpAngDelta(this.angle, angle, 0.1f);
+			this.angle = Mathf.slerpDelta(this.angle, angle, 0.1f);
 		}
 
 		x = Mathf.clamp(x, 0, world.width() * tilesize);

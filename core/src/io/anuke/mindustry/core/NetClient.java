@@ -1,6 +1,5 @@
 package io.anuke.mindustry.core;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.IntSet;
@@ -31,8 +30,6 @@ import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Log;
 import io.anuke.ucore.util.Timer;
 
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static io.anuke.mindustry.Vars.*;
@@ -70,11 +67,20 @@ public class NetClient extends Module {
             c.name = player.name;
             c.android = android;
             c.color = Color.rgba8888(player.color);
+            c.uuid = Platform.instance.getUUID();
+
+            if(c.uuid == null){
+                ui.showError("$text.invalidid");
+                ui.loadfrag.hide();
+                disconnectQuietly();
+                return;
+            }
+
             Net.send(c, SendMode.tcp);
 
             Timers.runTask(dataTimeout, () -> {
                 if (!gotData) {
-                    Gdx.app.error("Mindustry", "Failed to load data!");
+                    Log.err("Failed to load data!");
                     ui.loadfrag.hide();
                     Net.disconnect();
                 }
@@ -166,7 +172,7 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(PlacePacket.class, (packet) -> {
-            Placement.placeBlock(packet.x, packet.y, Block.getByID(packet.block), packet.rotation, true, false);
+            Placement.placeBlock(packet.x, packet.y, Block.getByID(packet.block), packet.rotation, true, Timers.get("placeblocksound", 10));
 
             if(packet.playerid == player.id){
                 Tile tile = world.tile(packet.x, packet.y);
@@ -175,7 +181,7 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(BreakPacket.class, (packet) -> {
-            Placement.breakBlock(packet.x, packet.y, true, false);
+            Placement.breakBlock(packet.x, packet.y, true, Timers.get("breakblocksound", 10));
         });
 
         Net.handleClient(EntitySpawnPacket.class, packet -> {
@@ -226,36 +232,6 @@ public class NetClient extends Module {
             }
         });
 
-        Net.handleClient(BlockSyncPacket.class, packet -> {
-            if (!gotData) return;
-
-            DataInputStream stream = new DataInputStream(packet.stream);
-
-            try {
-
-                float time = stream.readFloat();
-                float elapsed = Timers.time() - time;
-
-                while (stream.available() > 0) {
-                    int pos = stream.readInt();
-
-                    Tile tile = world.tile(pos);
-
-                    short data = stream.readShort();
-                    tile.setPackedData(data);
-
-                    tile.entity.readNetwork(stream, elapsed);
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (Exception e) {
-                Log.err(e);
-                //do nothing else...
-                //TODO fix
-            }
-
-        });
-
         Net.handleClient(DisconnectPacket.class, packet -> {
             Player player = playerGroup.getByID(packet.playerid);
 
@@ -294,11 +270,7 @@ public class NetClient extends Module {
                 next.block().handleItem(Item.getByID(packet.itemid), next, tile);
             };
 
-            if(threads.isEnabled()){
-                threads.run(r);
-            }else{
-                r.run();
-            }
+            threads.run(r);
         });
 
         Net.handleClient(ItemSetPacket.class, packet -> {
@@ -308,11 +280,7 @@ public class NetClient extends Module {
                 tile.entity.items[packet.itemid] = packet.amount;
             };
 
-            if(threads.isEnabled()){
-                threads.run(r);
-            }else{
-                r.run();
-            }
+            threads.run(r);
         });
 
         Net.handleClient(ItemOffloadPacket.class, packet -> {
@@ -323,11 +291,7 @@ public class NetClient extends Module {
                 next.block().handleItem(Item.getByID(packet.itemid), next, tile);
             };
 
-            if(threads.isEnabled()){
-                threads.run(r);
-            }else{
-                r.run();
-            }
+            threads.run(r);
         });
 
         Net.handleClient(NetErrorPacket.class, packet -> {

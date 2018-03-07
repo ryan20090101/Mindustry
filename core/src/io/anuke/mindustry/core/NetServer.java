@@ -10,37 +10,30 @@ import io.anuke.mindustry.io.Version;
 import io.anuke.mindustry.net.Administration;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.Net.SendMode;
-import io.anuke.mindustry.net.NetConnection;
 import io.anuke.mindustry.net.NetworkIO;
 import io.anuke.mindustry.net.Packets.*;
 import io.anuke.mindustry.resource.*;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Placement;
-import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.Events;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.EntityGroup;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Log;
-import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static io.anuke.mindustry.Vars.*;
 
 public class NetServer extends Module{
-    private final static float serverSyncTime = 4, itemSyncTime = 10, blockSyncTime = 120;
-    private final static boolean sendBlockSync = false;
+    private final static float serverSyncTime = 4, itemSyncTime = 10;
 
     private final static int timerEntitySync = 0;
     private final static int timerStateSync = 1;
-    private final static int timerBlockSync = 2;
 
     public final Administration admins = new Administration();
 
@@ -55,18 +48,27 @@ public class NetServer extends Module{
         Events.on(GameOverEvent.class, () -> weapons.clear());
 
         Net.handleServer(Connect.class, (id, connect) -> {
-            if(admins.isBanned(connect.addressTCP)){
+            if(admins.isIPBanned(connect.addressTCP)){
                 Net.kickConnection(id, KickReason.banned);
             }
         });
 
         Net.handleServer(ConnectPacket.class, (id, packet) -> {
+            String uuid = new String(Base64Coder.encode(packet.uuid));
             if(Net.getConnection(id) == null ||
-                    admins.isBanned(Net.getConnection(id).address)) return;
+                    admins.isIPBanned(Net.getConnection(id).address)) return;
+
+            if(admins.isIDBanned(uuid)){
+                Net.kickConnection(id, KickReason.banned);
+                return;
+            }
 
             String ip = Net.getConnection(id).address;
 
             admins.setKnownName(ip, packet.name);
+            admins.setKnownIP(uuid, ip);
+            admins.getTrace(ip).uuid = uuid;
+            admins.getTrace(ip).android = packet.android;
 
             if(packet.version != Version.build && Version.build != -1 && packet.version != -1){
                 Net.kickConnection(id, packet.version > Version.build ? KickReason.serverOutdated : KickReason.clientOutdated);
@@ -279,7 +281,7 @@ public class NetServer extends Module{
             String ip = Net.getConnection(other.clientid).address;
 
             if(packet.action == AdminAction.ban){
-                admins.banPlayer(ip);
+                admins.banPlayerIP(ip);
                 Net.kickConnection(other.clientid, KickReason.banned);
                 Log.info("&lc{0} has banned {1}.", player.name, other.name);
             }else if(packet.action == AdminAction.kick){
@@ -394,55 +396,5 @@ public class NetServer extends Module{
 
             Net.send(packet, SendMode.udp);
         }
-
-
-        if(sendBlockSync && timer.get(timerBlockSync, blockSyncTime)){
-
-            Array<NetConnection> connections = Net.getConnections();
-
-            for(int i = 0; i < connections.size; i ++){
-                int id = connections.get(i).id;
-                Player player = this.connections.get(id);
-                if(player == null) continue;
-                int x = Mathf.scl2(player.x, tilesize);
-                int y = Mathf.scl2(player.y, tilesize);
-                int w = 22;
-                int h = 16;
-                sendBlockSync(id, x, y, w, h);
-            }
-        }
-    }
-
-    public void sendBlockSync(int client, int x, int y, int viewx, int viewy){
-        BlockSyncPacket packet = new BlockSyncPacket();
-        ByteArrayOutputStream bs = new ByteArrayOutputStream();
-
-        //TODO compress stream
-
-        try {
-            DataOutputStream stream = new DataOutputStream(bs);
-
-            stream.writeFloat(Timers.time());
-
-            for (int rx = -viewx / 2; rx <= viewx / 2; rx++) {
-                for (int ry = -viewy / 2; ry <= viewy / 2; ry++) {
-                    Tile tile = world.tile(x + rx, y + ry);
-
-                    if (tile == null || tile.entity == null || !tile.block().syncEntity()) continue;
-
-                    stream.writeInt(tile.packedPosition());
-                    stream.writeShort(tile.getPackedData());
-
-                    tile.entity.write(stream);
-                }
-            }
-
-        }catch (IOException e){
-            throw new RuntimeException(e);
-        }
-
-        packet.stream = new ByteArrayInputStream(bs.toByteArray());
-
-        Net.sendStream(client, packet);
     }
 }

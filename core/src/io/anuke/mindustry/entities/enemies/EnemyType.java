@@ -152,9 +152,9 @@ public class EnemyType {
         }
 
         if(enemy.target == null || alwaysRotate){
-            enemy.angle = Mathf.slerp(enemy.angle, enemy.velocity.angle(), rotatespeed * Timers.delta());
+            enemy.angle = Mathf.slerpDelta(enemy.angle, enemy.velocity.angle(), rotatespeed);
         }else{
-            enemy.angle = Mathf.slerp(enemy.angle, enemy.angleTo(enemy.target), turretrotatespeed * Timers.delta());
+            enemy.angle = Mathf.slerpDelta(enemy.angle, enemy.angleTo(enemy.target), turretrotatespeed);
         }
 
         enemy.x = Mathf.clamp(enemy.x, 0, world.width() * tilesize);
@@ -271,7 +271,12 @@ public class EnemyType {
 
             //no tile found
             if(enemy.target == null){
+<<<<<<< HEAD
                 enemy.target = Entities.getClosest(playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying);
+=======
+                enemy.target = Entities.getClosest(playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isAndroid &&
+                    !((Player)e).isDead());
+>>>>>>> upstream/master
             }
         }else if(nearCore){
             enemy.target = world.getCore().entity;
