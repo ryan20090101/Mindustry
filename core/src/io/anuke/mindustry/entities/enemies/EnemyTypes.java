@@ -27,6 +27,6 @@ public class EnemyTypes {
     titan = new TitanType(),
     emp = new EmpType(),
     fortress = new FortressType(),
-    target = new TargetType();
-
+    target = new TargetType(),
+    demoneye = new DemoneyeType();
 }

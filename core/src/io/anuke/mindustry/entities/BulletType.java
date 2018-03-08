@@ -570,16 +570,16 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 1200f;
 		}
 		public void draw(Bullet b) {
-			Draw.rect("pulseshot", b.x, b.y, b.angle());
+			Draw.rect("demonring", b.x, b.y, b.angle());
 			Draw.reset();
 		}
         public void init(Bullet b) {
-			b.x = b.x + 40;
+			b.y = b.y + 100;
             b.setVelocity(5f, 0.75f);
 		}
 
 		public void update(Bullet b) {
-            b.setVelocity(5f, b.angle()-360f/20f/60f);
+            b.setVelocity(5f, b.angle()-360f/20f/6f);
         }
 		public void removed(Bullet b){
 			Effects.effect(Fx.pulserExplosion, b);
