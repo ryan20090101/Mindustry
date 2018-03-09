@@ -150,7 +150,7 @@ public class Logic extends Module {
                 Entities.update(tileGroup);
                 Entities.update(shieldGroup);
                 Entities.update(playerGroup);
-                
+
                 Entities.collideGroups(bulletGroup, enemyGroup);
                 Entities.collideGroups(bulletGroup, playerGroup);
 

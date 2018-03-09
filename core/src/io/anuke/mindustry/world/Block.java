@@ -303,19 +303,20 @@ public class Block{
             if(animated){
                 Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants) + "-") : name()
                         + (Math.round((Timers.time()/animationSpeed) % animationFrames+0.5f)),//*animationFrames),
-                        tile.worldx(), tile.worldy(), rotate ? tile.getRotation() * 90 : 0);
+                        tile.drawx(), tile.drawy(), rotate ? tile.getRotation() * 90 : 0);
             }else{
                 Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants))  : name(),
-                        tile.worldx(), tile.worldy(), rotate ? tile.getRotation() * 90 : 0);
+                        tile.drawx(), tile.drawy(), rotate ? tile.getRotation() * 90 : 0);
             }
 		}else{
 			//if multiblock, make sure to draw even block sizes offset, since the core block is at the BOTTOM LEFT
             if(animated){
 
-                Draw.rect(name() + (Math.round((Timers.time()/animationSpeed) % animationFrames+0.5f)), tile.worldx(), tile.worldy());
+                Draw.rect(name() + (Math.round((Timers.time()/animationSpeed) % animationFrames+0.5f)),
+						tile.drawx(), tile.drawy());
 
             }else{
-                Draw.rect(name(),tile.worldx(), tile.worldy());
+                Draw.rect(name(),tile.drawx(), tile.drawy());
             }
 		}
 		
