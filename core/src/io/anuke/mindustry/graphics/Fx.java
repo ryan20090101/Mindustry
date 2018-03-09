@@ -23,7 +23,8 @@ public class Fx{
 	public static Color glowy = Color.valueOf("fdc056");
 	public static Color beam = Color.valueOf("9bffbe");
 	public static Color beamLight = Color.valueOf("ddffe9");
-	
+    public static Color lightBlue = Hue.mix(Color.BLUE, Color.WHITE, 0.5f);	
+    public static Color redLightRed = Hue.mix(Color.RED, lightRed, 0.5f);
 	public static final Effect
 	
 	generatorexplosion = new Effect(28, 40f, e -> {
@@ -513,7 +514,12 @@ public class Fx{
 		Draw.rect("circle", e.x, e.y, size, size);
 		Draw.reset();
 	}),
-
+	blueTrail = new Effect(30, e -> {
+		Draw.color(lightBlue, Color.BLUE, e.ifract());
+		float size = e.fract()*4f;
+		Draw.rect("circle", e.x, e.y, size, size);
+		Draw.reset();
+	}),
 	chainsmoke = new Effect(30, e -> {
 		Draw.color(lightGray);
 		float size = e.fract()*4f;

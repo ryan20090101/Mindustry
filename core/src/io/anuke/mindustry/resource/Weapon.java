@@ -17,10 +17,11 @@ import io.anuke.ucore.util.Translator;
 public class Weapon extends Upgrade{
 	public static final Weapon
     
-    testgun = new Weapon("blaster", 1, BulletType.demonring){
+    testgun = new Weapon("blaster", 0.5f, BulletType.redlaser){
 		{
 			effect =  Fx.laserShoot;
 			length = 2f;
+            roundrobin = true;
 		}
 	},
 	blaster = new Weapon("blaster", 12, BulletType.shot){

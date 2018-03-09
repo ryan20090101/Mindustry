@@ -500,6 +500,36 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
+    redlaser = new BulletType(0.001f, 55) {
+		float length = 330f;
+		{
+			drawSize = length*2f+20f;
+			lifetime = 2f;
+		}
+
+		public void init(Bullet b) {
+			DamageArea.damageLine(b.owner, Fx.beamhit, b.x, b.y, b.angle(), length, damage);
+		}
+        
+		public void draw(Bullet b) {
+			float f = b.fract()*11.5f;
+            
+			Draw.color(Color.RED);
+			Lines.stroke(3f * f);
+			Lines.lineAngle(b.x, b.y, b.angle(), length);
+			Lines.stroke(2f * f);
+            Lines.lineAngle(b.x, b.y, b.angle(), length + 6f);
+			Lines.stroke(1f * f);
+			Lines.lineAngle(b.x, b.y, b.angle(), length + 12f);
+            Draw.color(redLightRed);
+			Lines.stroke(2f * f);
+			Lines.lineAngle(b.x, b.y, b.angle(), length);
+			Draw.color(lightRed);
+			Lines.stroke(1f * f);
+			Lines.lineAngle(b.x, b.y, b.angle(), length);
+		}
+	},
+    
 	beamlaser = new BulletType(0.001f, 38) {
 		float length = 230f;
 		{
@@ -540,6 +570,43 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			if(b.timer.get(0, 4)){
 				Effects.effect(Fx.railsmoke, b.x, b.y);
 			}
+		}
+	},
+    blueBolt = new BulletType(1.5f, 80){
+        {
+			lifetime = 35f;
+		}
+		public void draw(Bullet b){
+            Draw.rect("blueBolt", b.x, b.y, b.angle());
+			Draw.reset();
+		}
+		public void despawned(Bullet b){
+			hit(b);
+		}
+		public void update(Bullet b){
+			if(b.timer.get(0, 4)){
+				Effects.effect(Fx.blueTrail, b.x, b.y);
+			}
+		}
+        public void hit(Bullet b, float hitx, float hity) {
+			for(int i = 0; i < 8; i ++){
+				Bullet bullet = new Bullet(blueShard, b.owner, b.x, b.y, 360/8*i);
+				bullet.add();
+			}
+		}
+	},
+    blueShard = new BulletType(2.7f, 20){
+		{
+			lifetime = 30;
+		}
+		public void update(Bullet b){
+			if(b.timer.get(0, 4)){
+				Effects.effect(Fx.blueTrail, b.x, b.y);
+			}
+		}
+		public void draw(Bullet b){
+            Draw.rect("blueShard", b.x, b.y, b.angle());
+			Draw.reset();
 		}
 	},
     pulseshot = new BulletType(2f, 18) {
