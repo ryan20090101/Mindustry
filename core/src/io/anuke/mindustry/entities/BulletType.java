@@ -3,11 +3,11 @@ package io.anuke.mindustry.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import io.anuke.mindustry.Vars;
+import io.anuke.mindustry.entities.bullets.*;
 import io.anuke.mindustry.entities.effect.DamageArea;
 import io.anuke.mindustry.entities.effect.EMP;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.graphics.Fx;
-import io.anuke.mindustry.world.blocks.types.defense.Turret;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
@@ -18,12 +18,11 @@ import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
 import com.badlogic.gdx.utils.Array;
-import io.anuke.ucore.util.Angles;
 import static io.anuke.mindustry.graphics.Fx.*;
 
 public abstract class BulletType extends BaseBulletType<Bullet>{
 	
-	public static final BulletType 
+	public static final BulletType
 	
 	none = new BulletType(0f, 0){
 		public void draw(Bullet b){}
@@ -64,24 +63,10 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 	},
 
-	missile = new BulletType(2f, 2) {
+	missile = new HomingBullet(2f, 2) {
 		{
 			lifetime = 600f;
-		}
-		public void draw(Bullet b) {
-			Draw.color(Color.GRAY);
-			Draw.rect("bullet", b.x, b.y, b.angle());
-			Draw.reset();
-		}
-
-		public void update(Bullet b) {
-			Array<SolidEntity> enemies = Entities.getNearby(Vars.enemyGroup, b.x, b.y, 15);
-			for (SolidEntity entity : enemies) {
-				Vector2 vektor = new Vector2(Math.max(0, Math.min(1, entity.x - b.x)), Math.max(0, Math.min(1, entity.y - b.y)));
-				b.setVelocity(5f, Angles.predictAngle(b.x, b.y, 
-						entity.x, entity.y, /*entity.velocity.x*/1f, /*entity.velocity.y*/1f, 5f));
-                break;
-			}
+			homingSpeed = 5f;
 		}
 	},
 
@@ -609,24 +594,12 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-    pulseshot = new BulletType(2f, 18) {
+    pulseshot = new HomingBullet(2f, 18) {
 		{
 			lifetime = 600f;
-		}
-		public void draw(Bullet b) {
-			Draw.rect("pulseshot", b.x, b.y, b.angle());
-			Draw.reset();
+			homingSpeed = 5f;
 		}
 
-		public void update(Bullet b) {
-			Array<SolidEntity> enemies = Entities.getNearby(Vars.enemyGroup, b.x, b.y, 15);
-			for (SolidEntity entity : enemies) {
-				Vector2 vektor = new Vector2(Math.max(0, Math.min(1, entity.x - b.x)), Math.max(0, Math.min(1, entity.y - b.y)));
-				b.setVelocity(5f, Angles.predictAngle(b.x, b.y, 
-						entity.x, entity.y, /*entity.velocity.x*/1f, /*entity.velocity.y*/1f, 5f));
-                break;
-			}
-		}
 		public void removed(Bullet b){
 			Effects.effect(Fx.pulserExplosion, b);
             DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
@@ -653,11 +626,12 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
             DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
 	};
-	private BulletType(float speed, int damage){
+
+	public BulletType(float speed, int damage){
 		this.speed = speed;
 		this.damage = damage;
 	}
-	
+
 	@Override
 	public void hit(Bullet b, float hitx, float hity){
 		Effects.effect(Fx.hit, hitx, hity);
