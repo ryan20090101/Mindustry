@@ -11,11 +11,14 @@ import static io.anuke.mindustry.Vars.*;
 
 public class Bullet extends BulletEntity{
 	public Timer timer = new Timer(3);
-	
+
+	public String name;
+
 	public Bullet(BulletType type, Entity owner, float x, float y, float angle){
 		super(type, owner, angle);
 		set(x, y);
 		this.type = type;
+		this.name = type.name;
 	}
 	
 	public void draw(){

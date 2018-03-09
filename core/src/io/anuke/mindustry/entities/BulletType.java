@@ -24,31 +24,31 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 	
 	public static final BulletType
 	
-	none = new BulletType(0f, 0){
+	none = new BulletType(0f, 0,"none"){
 		public void draw(Bullet b){}
 	},
-	stone = new BulletType(1.5f, 2){
+	stone = new BulletType(1.5f, 2,"stone"){
 		public void draw(Bullet b){
 			Draw.colorl(0.64f);
 			Draw.rect("blank", b.x, b.y, 2f, 2f);
 			Draw.reset();
 		}
 	},
-	iron = new BulletType(1.7f, 2){
+	iron = new BulletType(1.7f, 2,"iron"){
 		public void draw(Bullet b){
 			Draw.color(Color.GRAY);
 			Draw.rect("bullet", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 	},
-	chain = new BulletType(2f, 8){
+	chain = new BulletType(2f, 8,"chain"){
 		public void draw(Bullet b){
 			Draw.color(whiteOrange);
 			Draw.rect("chainbullet", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 	},
-	sniper = new BulletType(3f, 25){
+	sniper = new BulletType(3f, 25,"sniper"){
 		public void draw(Bullet b){
 			Draw.color(Color.LIGHT_GRAY);
 			Lines.stroke(1f);
@@ -63,14 +63,14 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 	},
 
-	missile = new HomingBullet(2f, 2) {
+	missile = new HomingBullet(2f, 2,"missile") {
 		{
 			lifetime = 600f;
 			homingSpeed = 5f;
 		}
 	},
 
-	artilleryshell = new BulletType(2f, 600) {
+	artilleryshell = new BulletType(2f, 600,"artilleryshell") {
 		{
 			lifetime = 270f;
 			hitsize = 80f;
@@ -100,7 +100,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 	},
 
-	emp = new BulletType(1.6f, 8){
+	emp = new BulletType(1.6f, 8,"emp"){
 		{
 			lifetime = 50f;
 			hitsize = 6f;
@@ -132,7 +132,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 	},
 	//TODO better visuals for shell
-	shell = new BulletType(1.1f, 60){
+	shell = new BulletType(1.1f, 60,"shell"){
 		{
 			lifetime = 110f;
 			hitsize = 11f;
@@ -168,7 +168,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
 	},
-	flak = new BulletType(2.9f, 8) {
+	flak = new BulletType(2.9f, 8,"flak") {
 
 		public void init(Bullet b) {
 			b.velocity.scl(Mathf.random(0.6f, 1f));
@@ -201,7 +201,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			hit(b, b.x, b.y);
 		}
 	},
-	flakspark = new BulletType(2f, 2) {
+	flakspark = new BulletType(2f, 2,"flakspark") {
 		{
 			drag = 0.05f;
 		}
@@ -217,7 +217,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-	titanshell = new BulletType(1.8f, 38){
+	titanshell = new BulletType(1.8f, 38,"titanshell"){
 		{
 			lifetime = 70f;
 			hitsize = 15f;
@@ -248,7 +248,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 50f, (int)(damage * 2f/3f));
 		}
 	},
-	yellowshell = new BulletType(1.2f, 20){
+	yellowshell = new BulletType(1.2f, 20,"yellowshell"){
 		{
 			lifetime = 60f;
 			hitsize = 11f;
@@ -279,7 +279,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
 	},
-	blast = new BulletType(1.1f, 90){
+	blast = new BulletType(1.1f, 90,"blast"){
 		{
 			lifetime = 0f;
 			hitsize = 8f;
@@ -306,27 +306,27 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 
 		public void draw(Bullet b){}
 	},
-	blastshot = new BulletType(1.6f, 6){
+	blastshot = new BulletType(1.6f, 6,"blastshot"){
 		{
 			lifetime = 7f;
 		}
 		public void draw(Bullet b){}
 	},
-	small = new BulletType(1.5f, 2){
+	small = new BulletType(1.5f, 2,"small"){
 		public void draw(Bullet b){
 			Draw.color(glowy);
 			Draw.rect("shot", b.x, b.y, b.angle() - 45);
 			Draw.reset();
 		}
 	},
-	smallSlow = new BulletType(1.2f, 2){
+	smallSlow = new BulletType(1.2f, 2,"smallSlow"){
 		public void draw(Bullet b){
 			Draw.color(Color.ORANGE);
 			Draw.rect("shot", b.x, b.y, b.angle() - 45);
 			Draw.reset();
 		}
 	},
-	purple = new BulletType(1.6f, 2){
+	purple = new BulletType(1.6f, 2,"purple"){
 		Color color = new Color(0x8b5ec9ff);
 		
 		public void draw(Bullet b){
@@ -335,7 +335,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-	flame = new BulletType(0.7f, 5){ //for turrets
+	flame = new BulletType(0.7f, 5,"flame"){ //for turrets
 		public void draw(Bullet b){
 			Draw.color(Color.YELLOW, Color.SCARLET, b.time/lifetime);
 			float size = 6f-b.time/lifetime*5f;
@@ -343,7 +343,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-	plasmaflame = new BulletType(0.8f, 17){
+	plasmaflame = new BulletType(0.8f, 17,"plasmaflame"){
 		{
 			lifetime = 65f;
 		}
@@ -354,7 +354,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-	flameshot = new BulletType(0.5f, 3){ //for enemies
+	flameshot = new BulletType(0.5f, 3,"flameshot"){ //for enemies
 		public void draw(Bullet b){
 			Draw.color(Color.ORANGE, Color.SCARLET, b.time/lifetime);
 			float size = 6f-b.time/lifetime*5f;
@@ -362,7 +362,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-	shot = new BulletType(2.7f, 5){
+	shot = new BulletType(2.7f, 5,"shot"){
 		{
 			lifetime = 40;
 		}
@@ -374,7 +374,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-	spread = new BulletType(2.4f, 9) {
+	spread = new BulletType(2.4f, 9,"spread") {
 		{
 			lifetime = 70;
 		}
@@ -388,7 +388,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-	cluster = new BulletType(4.5f, 12){
+	cluster = new BulletType(4.5f, 12,"cluster"){
 		{
 			lifetime = 60;
 			drag = 0.05f;
@@ -417,7 +417,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 35f, damage);
 		}
 	},
-    vulcan = new BulletType(4.5f, 12) {
+    vulcan = new BulletType(4.5f, 12,"vulcan") {
 		{
 			lifetime = 50;
 		}
@@ -439,7 +439,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
             }
         }
     },
-	shockshell = new BulletType(5.5f, 11) {
+	shockshell = new BulletType(5.5f, 11,"shockshell") {
 
 		{
 			drag = 0.03f;
@@ -468,7 +468,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			}
 		}
 	},
-	scrap = new BulletType(2f, 3) {
+	scrap = new BulletType(2f, 3,"scrap") {
 		{
 			drag = 0.06f;
 			lifetime = 30f;
@@ -485,7 +485,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-    redlaser = new BulletType(0.001f, 55) {
+    redlaser = new BulletType(0.001f, 55,"redlaser") {
 		float length = 330f;
 		{
 			drawSize = length*2f+20f;
@@ -515,7 +515,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 	},
     
-	beamlaser = new BulletType(0.001f, 38) {
+	beamlaser = new BulletType(0.001f, 38,"beamlaser") {
 		float length = 230f;
 		{
 			drawSize = length*2f+20f;
@@ -545,7 +545,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Lines.lineAngle(b.x, b.y, b.angle(), length);
 		}
 	},
-    railbolt = new BulletType(20f, 90000){
+    railbolt = new BulletType(20f, 90000,"railbolt"){
 		public void draw(Bullet b){
             Draw.rect("railbolt", b.x, b.y, b.angle());
 			Draw.reset();
@@ -557,13 +557,9 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			}
 		}
 	},
-    blueBolt = new BulletType(1.5f, 80){
+    blueBolt = new SharpnelBullet(1.5f, 80,"blueBolt"){
         {
 			lifetime = 35f;
-		}
-		public void draw(Bullet b){
-            Draw.rect("blueBolt", b.x, b.y, b.angle());
-			Draw.reset();
 		}
 		public void despawned(Bullet b){
 			hit(b);
@@ -573,14 +569,8 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 				Effects.effect(Fx.blueTrail, b.x, b.y);
 			}
 		}
-        public void hit(Bullet b, float hitx, float hity) {
-			for(int i = 0; i < 8; i ++){
-				Bullet bullet = new Bullet(blueShard, b.owner, b.x, b.y, 360/8*i);
-				bullet.add();
-			}
-		}
 	},
-    blueShard = new BulletType(2.7f, 20){
+    blueShard = new BulletType(2.7f, 20,"blueShard"){
 		{
 			lifetime = 30;
 		}
@@ -594,7 +584,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 	},
-    pulseshot = new HomingBullet(2f, 18) {
+    pulseshot = new HomingBullet(2f, 18,"pulseshot") {
 		{
 			lifetime = 600f;
 			homingSpeed = 5f;
@@ -605,7 +595,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
             DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
 	},
-    demonring = new BulletType(2f, 18) {
+    demonring = new BulletType(2f, 18,"demonring") {
 		{
 			lifetime = 1200f;
 		}
@@ -627,9 +617,12 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 	};
 
-	public BulletType(float speed, int damage){
+	public String name;
+
+	public BulletType(float speed, int damage, String name){
 		this.speed = speed;
 		this.damage = damage;
+		this.name = name;
 	}
 
 	@Override
