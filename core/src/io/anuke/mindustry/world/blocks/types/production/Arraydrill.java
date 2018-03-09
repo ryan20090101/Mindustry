@@ -17,6 +17,8 @@ import io.anuke.ucore.util.Tmp;
 public class Arraydrill extends Drill {
 
     protected Array<Block> mineable;
+    /**1 = normal, 2 = liquid, 3 = power */
+    protected int mode = 1;
 
     public Arraydrill(String name){
         super(name);
