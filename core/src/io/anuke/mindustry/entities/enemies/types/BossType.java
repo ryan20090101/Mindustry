@@ -5,8 +5,8 @@ import io.anuke.mindustry.entities.enemies.EnemyType;
 
 public class BossType extends EnemyType {
 
-    public int bossTier;
-    protected int phaseTotal = 1;
+    public int bossTier = 1;
+    protected int phaseTotal;
     protected boolean doPhases = false;
 
     public BossType(String name) {
@@ -16,7 +16,8 @@ public class BossType extends EnemyType {
     @Override
     public void update(Enemy enemy) {
         super.update(enemy);
-        if(doPhases&&enemy.health<=enemy.maxhealth/phaseTotal)
+        if(doPhases&&enemy.health<=Math.round(enemy.health/(enemy.maxhealth/phaseTotal)))
             enemy.phase=Math.round(enemy.health/(enemy.maxhealth/phaseTotal));
+        enemy.idletime = 0f;
     }
 }
