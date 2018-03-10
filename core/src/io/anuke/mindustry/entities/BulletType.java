@@ -547,7 +547,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 	},
     railbolt = new BulletType(20f, 90000,"railbolt"){
 		public void draw(Bullet b){
-            Draw.rect("railbolt", b.x, b.y, b.angle());
+            Draw.rect(b.name, b.x, b.y, b.angle());
 			Draw.reset();
 		}
 		
@@ -561,9 +561,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
         {
 			lifetime = 35f;
 		}
-		public void despawned(Bullet b){
-			hit(b);
-		}
+
 		public void update(Bullet b){
 			if(b.timer.get(0, 4)){
 				Effects.effect(Fx.blueTrail, b.x, b.y);
@@ -580,7 +578,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			}
 		}
 		public void draw(Bullet b){
-            Draw.rect("blueShard", b.x, b.y, b.angle());
+            Draw.rect(b.name, b.x, b.y, b.angle());
 			Draw.reset();
 		}
 	},
@@ -600,7 +598,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 1200f;
 		}
 		public void draw(Bullet b) {
-			Draw.rect("demonring", b.x, b.y, b.angle());
+			Draw.rect(b.name, b.x, b.y, b.angle());
 			Draw.reset();
 		}
         public void init(Bullet b) {

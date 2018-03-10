@@ -17,6 +17,10 @@ public class SharpnelBullet extends BulletType {
         Draw.reset();
     }
 
+    public void despawned(Bullet b){
+        hit(b);
+    }
+
     public void hit(Bullet b, float hitx, float hity) {
         for(int i = 0; i < sharpnels; i ++){
             Bullet bullet = new Bullet(blueShard, b.owner, b.x, b.y, 360/sharpnels*i);
