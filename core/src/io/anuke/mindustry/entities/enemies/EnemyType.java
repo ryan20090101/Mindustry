@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.TileEntity;
+import io.anuke.mindustry.entities.enemies.types.BossType;
 import io.anuke.mindustry.graphics.Fx;
 import io.anuke.mindustry.graphics.Shaders;
 import io.anuke.mindustry.net.Net;
@@ -83,7 +84,7 @@ public class EnemyType {
     }
 
     public void draw(Enemy enemy){
-        if(enemy.type == EnemyTypes.demoneye){enemy.tier = 1;}
+        if(enemy.type instanceof BossType){enemy.tier = 1;}
         Shaders.outline.color.set(tierColors[enemy.tier - 1]);
         Shaders.outline.lighten = Mathf.clamp(enemy.hitTime/hitDuration);
         Shaders.outline.region = enemy.region;
