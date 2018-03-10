@@ -16,8 +16,8 @@ public class BossType extends EnemyType {
     @Override
     public void update(Enemy enemy) {
         super.update(enemy);
-        if(doPhases&&enemy.health<=Math.round(enemy.health/(enemy.maxhealth/phaseTotal)))
-            enemy.phase=Math.round(enemy.health/(enemy.maxhealth/phaseTotal));
+        int currentPhase = Math.round(enemy.health/(enemy.maxhealth/phaseTotal));
+        enemy.phase = doPhases && enemy.phase != currentPhase ? currentPhase : enemy.phase;
         enemy.idletime = 0f;
     }
 }
