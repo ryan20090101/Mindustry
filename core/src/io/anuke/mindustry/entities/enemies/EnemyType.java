@@ -81,7 +81,7 @@ public class EnemyType {
     }
 
     public void draw(Enemy enemy){
-        if(enemy.type instanceof BossType){enemy.tier = 1;}
+        if(enemy.type instanceof BossType){enemy.tier = enemy;}
         Shaders.outline.color.set(tierColors[enemy.tier - 1]);
         Shaders.outline.lighten = Mathf.clamp(enemy.hitTime/hitDuration);
         Shaders.outline.region = enemy.region;
