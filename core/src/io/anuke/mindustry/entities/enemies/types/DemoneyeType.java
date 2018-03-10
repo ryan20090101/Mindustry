@@ -11,7 +11,8 @@ public class DemoneyeType extends BossType {
 
 	public DemoneyeType() {
 		super("demoneye");
-		
+		phaseTotal = 3;
+        doPhases = true;
 		speed = 0f;
 		reload = 30;
 		health = 430;
@@ -42,9 +43,13 @@ public class DemoneyeType extends BossType {
 				enemy.shoot(BulletType.smallSlow, f);
 			});
 		}**/
-        
-        enemy.shoot(BulletType.demonring, 0f);
-        
+        if(enemy.phase == 2){
+            enemy.shoot(BulletType.demonring, 0f);
+        }else if(enemy.phase == 3){
+            enemy.shoot(BulletType.redlaser, 0f);
+        }else{
+            enemy.shoot(BulletType.blueBolt, 5f);
+        }
         
 	}
 

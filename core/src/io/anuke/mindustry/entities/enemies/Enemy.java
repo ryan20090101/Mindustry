@@ -21,6 +21,7 @@ import static io.anuke.mindustry.Vars.enemyGroup;
 public class Enemy extends SyncEntity {
 	public EnemyType type;
 
+    public int phase = 1;
 	public Timer timer = new Timer(5);
 	public float idletime = 0f;
 	public int lane;

@@ -64,7 +64,10 @@ public class EnemyType {
     protected int radiation;
     protected int radiationDeath = 200;
     protected int radiationTime = 5;
-
+    protected int phaseTotal = 1;
+    protected int phase = 1;
+    protected boolean doPhases = false;
+    
     protected final int timerTarget = timeid ++;
     protected final int timerReload = timeid ++;
     protected final int timerReset = timeid ++;
@@ -117,7 +120,9 @@ public class EnemyType {
         if(enemy.hitTime > 0){
             enemy.hitTime -= Timers.delta();
         }
-
+        if(doPhases&&enemy.health<=enemy.maxhealth/phaseTotal)
+            enemy.phase=Math.round(enemy.health/(enemy.maxhealth/phaseTotal));
+        
         if(enemy.lane >= world.getSpawns().size || enemy.lane < 0) enemy.lane = 0;
 
         boolean waiting = enemy.lane >= world.getSpawns().size || enemy.lane < 0
@@ -189,6 +194,8 @@ public class EnemyType {
             if(timerDamage)
                 enemy.damage(blck.damageOnTop);
         }
+
+            
     }
 
     public void move(Enemy enemy){
