@@ -16,9 +16,9 @@ public class DemoneyeType extends BossType {
 		speed = 0f;
 		reload = 30;
 		health = 430;
-		range = 6000f;
+		range = 100f;
 		bullet = BulletType.small;
-		hitsize = 55f;
+		hitsize = 10f;
 		mass = 4f;
 	}
 
