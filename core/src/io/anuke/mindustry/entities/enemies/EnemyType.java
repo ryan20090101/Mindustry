@@ -64,9 +64,6 @@ public class EnemyType {
     protected int radiation;
     protected int radiationDeath = 200;
     protected int radiationTime = 5;
-    protected int phaseTotal = 1;
-    protected int phase = 1;
-    protected boolean doPhases = false;
     
     protected final int timerTarget = timeid ++;
     protected final int timerReload = timeid ++;
@@ -84,7 +81,7 @@ public class EnemyType {
     }
 
     public void draw(Enemy enemy){
-        if(enemy.type instanceof BossType){enemy.tier = enemy;}
+        if(enemy.type instanceof BossType){enemy.tier = ((BossType) enemy.type).bossTier;}
         Shaders.outline.color.set(tierColors[enemy.tier - 1]);
         Shaders.outline.lighten = Mathf.clamp(enemy.hitTime/hitDuration);
         Shaders.outline.region = enemy.region;
@@ -120,8 +117,6 @@ public class EnemyType {
         if(enemy.hitTime > 0){
             enemy.hitTime -= Timers.delta();
         }
-        if(doPhases&&enemy.health<=enemy.maxhealth/phaseTotal)
-            enemy.phase=Math.round(enemy.health/(enemy.maxhealth/phaseTotal));
         
         if(enemy.lane >= world.getSpawns().size || enemy.lane < 0) enemy.lane = 0;
 
