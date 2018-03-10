@@ -80,6 +80,7 @@ public class EnemyType {
     }
 
     public void draw(Enemy enemy){
+        if(enemy.type == EnemyTypes.demoneye){enemy.tier = 1;}
         Shaders.outline.color.set(tierColors[enemy.tier - 1]);
         Shaders.outline.lighten = Mathf.clamp(enemy.hitTime/hitDuration);
         Shaders.outline.region = enemy.region;
