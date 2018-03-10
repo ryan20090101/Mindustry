@@ -7,7 +7,7 @@ import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
 
-public class DemoneyeType extends EnemyType {
+public class DemoneyeType extends BossType {
 
 	public DemoneyeType() {
 		super("demoneye");
