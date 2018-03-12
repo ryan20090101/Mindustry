@@ -9,8 +9,8 @@ public class Research {
     public static final Array<Research> researches = new Array<>();
 
     public static final Research
-            unlockOmnidrill = new Research("unlockOmnidrill", stack(Item.dirium,2)),
-            unlockFluxpump = new Research("unlockFluxpump", stack(Item.titanium, 2));
+            unlockOmnidrill = new Research("unlockOmnidrill", null, stack(Item.dirium,2)),
+            unlockFluxpump = new Research("unlockFluxpump", null, stack(Item.titanium, 2));
 
     public final int id;
     public final String name;
@@ -18,11 +18,13 @@ public class Research {
     public String description;
     public TextureRegion region;
     public boolean researched;
+    public Research unlock;
 
-    public Research(String name,ItemStack... requirements) {
+    public Research(String name, Research unlock, ItemStack... requirements) {
         this.id = researches.size;
         this.name = name;
         this.requirements = requirements;
+        this.unlock = unlock;
         this.description = Bundles.get("research."+name+".description");
 
         researches.add(this);
