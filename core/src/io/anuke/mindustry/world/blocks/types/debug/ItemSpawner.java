@@ -39,9 +39,9 @@ public class ItemSpawner extends Block{
 
         if (ent.timer.get(timerSpawn,ent.spawnTime)) {
         for (int j = 0; j < 4; j++) {
-            Tile other = tile.getNearby(j, height - 1);
-            if (other != null) {
-                offloadNear(tile, ent.spawnItem, height - 1);
+            Tile other = tile.getNearby(j);
+            if (other.block().acceptItem(ent.spawnItem,other,tile)) {
+                offloadNear(tile, ent.spawnItem);
             }
         }}
 
