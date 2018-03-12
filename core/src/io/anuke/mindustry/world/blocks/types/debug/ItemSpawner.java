@@ -22,7 +22,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ItemSpawner extends PowerBlock{
+public class ItemSpawner extends Block{
 
     protected final int timerDump = timers++;
     protected final int timerSpawn = timers++;
