@@ -20,6 +20,10 @@ import io.anuke.ucore.scene.ui.ImageButton;
 import io.anuke.ucore.scene.ui.Tooltip;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Mathf;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
 import static io.anuke.mindustry.Vars.*;
@@ -174,5 +178,19 @@ public class ResearchCenter extends Block{
         public byte progress; //this only needs to be from 0 to 100
         public boolean researching;
         //extra vars maybe?
+
+        @Override
+        public void write(DataOutputStream stream) throws IOException {
+            stream.writeByte(resID);
+            stream.writeByte(progress);
+            stream.writeByte((byte)(researching ? 1 : 0));
+        }
+
+        @Override
+        public void read(DataInputStream stream) throws IOException{
+            resID = stream.readByte();
+            progress = stream.readByte();
+            researching = stream.readByte() == 1;
+        }
     }
 }

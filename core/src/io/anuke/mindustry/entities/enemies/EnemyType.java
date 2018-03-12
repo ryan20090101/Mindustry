@@ -145,7 +145,7 @@ public class EnemyType {
         }
 
         Tile tile = world.tileWorld(enemy.x, enemy.y);
-        if(tile != null && tile.floor().liquid && tile.block() == Blocks.air){
+        if(tile != null && tile.floor().solid && tile.floor().liquid && tile.block() == Blocks.air){
             enemy.damage(enemy.health+1); //drown
         }
 

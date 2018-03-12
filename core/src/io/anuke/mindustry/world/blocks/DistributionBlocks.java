@@ -17,13 +17,25 @@ public class DistributionBlocks{
 		health = 65;
 	}},
 
+	pressurisedconduit = new PressurisedConduit("pressurisedconduit"){{
+		liquidCapacity = 10f;
+		flowfactor = 20f;
+		health = 165;
+	}},
+
+	pressureLoader = new PressurisedLoader("pressureLoader"){{
+				liquidCapacity = 36f;
+				flowfactor = 20f;
+				health = 165;
+	}},
+
 	steeltank = new Tank("steeltank"){{
 		liquidCapacity = 50f;
 		flowfactor = 10f;
 	}},
 
 	diriumtank = new Tank("diriumtank"){{
-		liquidCapacity = 50f;
+		liquidCapacity = 150f;
 		flowfactor = 10f;
 	}},
 	
