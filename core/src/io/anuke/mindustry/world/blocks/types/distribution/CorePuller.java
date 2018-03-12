@@ -39,16 +39,14 @@ public class CorePuller extends PowerBlock{
 		CorePullerEntity ent = tile.entity();
 
 		if(ent.timer.get(timerPull,ent.pullTime) && ent.power >= powerPerItem) {
-			for (int j = 0; j < 4; j++) {
-				Tile other = tile.getNearby(j,height-1);
-				System.out.println(other.block().name);
-				if (other != null && other.block().acceptItem(ent.sortItem, other, tile)) {
-					if (state.inventory.hasItem(new ItemStack(ent.sortItem, 1))) {
+			if (state.inventory.hasItem(new ItemStack(ent.sortItem, 1))) {
+				for (int j = 0; j < 4; j++) {
+					Tile other = tile.getNearby(j, height - 1);
+					if (other != null && other.block().acceptItem(ent.sortItem, other, tile)) {
 						state.inventory.removeItem(new ItemStack(ent.sortItem, 1));
-						offloadNear(tile, ent.sortItem,height-1);
+						offloadNear(tile, ent.sortItem, height - 1);
 						ent.power -= powerPerItem;
 					}
-
 				}
 			}
 		}
