@@ -144,9 +144,13 @@ public class Block{
 	public void tapped(Tile tile){}
 	public void buildTable(Tile tile, Table table) {}
 	public void configure(Tile tile, byte data){}
+    public void invertConfigure(Tile tile, byte data, boolean invert){}
 
 	public void setConfigure(Tile tile, byte data){
 		if(Net.active()) NetEvents.handleBlockConfig(tile, data);
+	}
+    public void setInvertConfigure(Tile tile, byte data, boolean invert){
+		if(Net.active()) NetEvents.handleInvertBlockConfig(tile, data, invert);
 	}
 
 	public boolean isConfigurable(Tile tile){

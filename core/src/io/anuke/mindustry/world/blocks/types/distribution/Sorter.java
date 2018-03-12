@@ -20,6 +20,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Sorter extends Block{
+
 	
 	public Sorter(String name) {
 		super(name);
@@ -100,11 +101,12 @@ public class Sorter extends Block{
 		return to;
 	}
 
-	@Override
-	public void configure(Tile tile, byte data) {
+	
+	public void invertConfigure(Tile tile, byte data, boolean invert) {
 		SorterEntity entity = tile.entity();
 		if(entity != null){
 			entity.sortItem = Item.getByID(data);
+            entity.inverted = invert;
 		}
 	}
 
@@ -131,7 +133,7 @@ public class Sorter extends Block{
 			final int f = i;
 			ImageButton button = cont.addImageButton("white", "toggle", 24, () -> {
 				entity.sortItem = items.get(f);
-				setConfigure(tile, (byte)f);
+				setInvertConfigure(tile, (byte)f, entity.inverted);
 			}).size(38, 42).padBottom(-5.1f).group(group).get();
 			button.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(items.get(i).region));
 			button.setChecked(entity.sortItem.id == f);
@@ -145,8 +147,10 @@ public class Sorter extends Block{
 
 		TextButton invBut = cont.addButton("Invert","toggle", () -> {
 			entity.inverted = entity.inverted ? false : true;
+            setInvertConfigure(tile, (byte)entity.sortItem.id, entity.inverted);
 		}).padBottom(-5.1f).get();
 		invBut.setChecked(entity.inverted);
+
 
 		table.add(cont);
 	}

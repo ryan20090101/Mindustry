@@ -72,7 +72,13 @@ public class NetEvents {
         packet.position = tile.packedPosition();
         Net.send(packet, SendMode.tcp);
     }
-
+    public static void handleInvertBlockConfig(Tile tile, byte data, boolean invert){
+        InvertBlockConfigPacket packet = new InvertBlockConfigPacket();
+        packet.data = data;
+        packet.position = tile.packedPosition();
+        packet.invert = invert;
+        Net.send(packet, SendMode.tcp);
+    }
     public static void handleBlockTap(Tile tile){
         BlockTapPacket packet = new BlockTapPacket();
         packet.position = tile.packedPosition();
