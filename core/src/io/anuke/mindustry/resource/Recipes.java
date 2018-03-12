@@ -98,7 +98,10 @@ public class Recipes {
 			new Recipe(production, null,ProductionBlocks.pump, stack(Item.steel, 10)),
 			new Recipe(production, Research.unlockFluxpump,ProductionBlocks.fluxpump, stack(Item.steel, 10), stack(Item.dirium, 5)),
             
-            new Recipe(crafting, Research.unlockFluxpump,OtherBlocks.structurecore, stack(Item.steel, 10))
+            new Recipe(crafting, Research.unlockFluxpump,OtherBlocks.structurecore, stack(Item.steel, 10)),
+            new Recipe(power, null,OtherBlocks.powervoid, stack(Item.stone, 1)),
+			new Recipe(power, null,OtherBlocks.powersource, stack(Item.stone, 1)),
+            new Recipe(distribution, null,OtherBlocks.itemspawner, stack(Item.stone, 1))
 	);
 	
 	private static ItemStack stack(Item item, int amount){
