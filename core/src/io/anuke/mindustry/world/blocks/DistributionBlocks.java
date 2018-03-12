@@ -1,5 +1,6 @@
 package io.anuke.mindustry.world.blocks;
 
+import io.anuke.mindustry.resource.Liquid;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.blocks.types.distribution.*;
 
@@ -108,6 +109,13 @@ public class DistributionBlocks{
 	}},
 	powerbooster = new PowerBooster("powerbooster"){{
 		powerRange = 4;
+	}},
+	cooledPowerBooster = new PowerBooster("cooledPowerBooster"){{
+		powerRange = 6;
+		powerSpeed = 2f;
+		width = height = 2;
+		coolantUsage = 0.1f;
+		generateLiquid = Liquid.water;
 	}},
 	powerlaser = new PowerLaser("powerlaser"){{
 	}},

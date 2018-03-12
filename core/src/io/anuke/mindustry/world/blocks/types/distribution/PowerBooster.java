@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.types.PowerAcceptor;
 import io.anuke.mindustry.world.blocks.types.production.Generator;
+import io.anuke.mindustry.world.blocks.types.production.LiquidPowerGenerator;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
@@ -14,10 +15,11 @@ import io.anuke.ucore.util.Mathf;
 import static io.anuke.mindustry.Vars.tilesize;
 import static io.anuke.mindustry.Vars.world;
 
-public class PowerBooster extends Generator{
+public class PowerBooster extends LiquidPowerGenerator{
 	protected final int timerGenerate = timers++;
 	
 	public int powerRange = 4;
+	public float coolantUsage = 0f;
 
 	public PowerBooster(String name) {
 		super(name);
@@ -66,11 +68,13 @@ public class PowerBooster extends Generator{
 
 	//TODO better distribution
 	protected void distributePower(Tile tile){
-		PowerEntity p = tile.entity();
+		LiquidPowerEntity p = tile.entity();
 		
-		if(!p.timer.get(timerGenerate, powerTime)){
+		if(!p.timer.get(timerGenerate, powerTime) && p.liquidAmount >= coolantUsage){
 			return;
 		}
+
+		p.liquidAmount -= coolantUsage;
 
 		int acceptors = 0;
 		float flow = 0f;
