@@ -18,6 +18,8 @@ import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timer;
 import io.anuke.ucore.util.Translator;
+import io.anuke.mindustry.Vars;
+import io.anuke.mindustry.Vars.*;
 
 import java.nio.ByteBuffer;
 
@@ -224,8 +226,10 @@ public class Player extends SyncEntity{
 		float speedModifier;
 		if (tile.block() == Blocks.air)
 			speedModifier = tile.floor().movementSpeedMultiplier;
-		else
+        else if(!tile.block().movePlayer)
 			speedModifier = tile.block().movementSpeedMultiplier;
+        else
+            speedModifier = 1;
 		float speed;
 		dashing = Inputs.keyDown("dash");
 
@@ -279,6 +283,14 @@ public class Player extends SyncEntity{
 		}else{
 			move(movement.x*Timers.delta(), movement.y*Timers.delta());
 		}
+        if(tile.block().movePlayer){
+            try{
+            if(Vars.world.tile((int)x/8, (int)y/8).getRotation() == 0) move(movement.x+0.5f*tile.block().movePlayerMultiplier, movement.y);
+            if(Vars.world.tile((int)x/8, (int)y/8).getRotation() == 1) move(movement.x, movement.y+0.5f*tile.block().movePlayerMultiplier);
+            if(Vars.world.tile((int)x/8, (int)y/8).getRotation() == 2) move(movement.x-0.5f*tile.block().movePlayerMultiplier, movement.y);
+            if(Vars.world.tile((int)x/8, (int)y/8).getRotation() == 3) move(movement.x, movement.y-0.5f*tile.block().movePlayerMultiplier);
+            }catch(Exception e){}
+        }
 		
 		if(!shooting){
 			if(!movement.isZero())
