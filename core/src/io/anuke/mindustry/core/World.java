@@ -337,6 +337,10 @@ public class World extends Module {
 		rContainer.get(res.id).researched = true;
 	}
 
+	public void research(int id) {
+		rContainer.get(id).researched = true;
+	}
+
 	public void unresearch(Research res) {
 		rContainer.get(res.id).researched = false;
 	}

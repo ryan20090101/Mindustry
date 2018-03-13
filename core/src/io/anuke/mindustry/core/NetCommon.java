@@ -1,5 +1,6 @@
 package io.anuke.mindustry.core;
 
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.Net.SendMode;
@@ -13,7 +14,7 @@ import static io.anuke.mindustry.Vars.*;
 
 public class NetCommon extends Module {
 
-    public NetCommon(){
+    public NetCommon() {
 
         Net.handle(ShootPacket.class, (packet) -> {
             Player player = playerGroup.getByID(packet.playerid);
@@ -46,9 +47,13 @@ public class NetCommon extends Module {
         });
         Net.handle(PlayerDeathPacket.class, (packet) -> {
             Player player = playerGroup.getByID(packet.id);
-            if(player == null) return;
+            if (player == null) return;
 
             player.doRespawn();
+        });
+
+        Net.handle(ResearchPacket.class, packet -> {
+            Vars.world.research(packet.id);
         });
     }
 

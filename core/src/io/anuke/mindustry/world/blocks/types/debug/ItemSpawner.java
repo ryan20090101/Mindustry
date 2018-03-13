@@ -93,7 +93,7 @@ public class ItemSpawner extends Block{
         cont.addField(Integer.toString(entity.spawnTime), filter ,text -> {
             if(text.isEmpty()) return;
             int pullTime = Integer.parseInt(text);
-            if (pullTime < 0) return;
+            if (pullTime < 0 && pullTime > 999) return;
             entity.spawnTime = pullTime;
         }).size(152,42).padBottom(-5.1f).bottom().colspan(4);
 

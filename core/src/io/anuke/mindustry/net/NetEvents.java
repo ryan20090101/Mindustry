@@ -8,6 +8,7 @@ import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.net.Net.SendMode;
 import io.anuke.mindustry.net.Packets.*;
 import io.anuke.mindustry.resource.Item;
+import io.anuke.mindustry.resource.Research;
 import io.anuke.mindustry.resource.Weapon;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
@@ -92,6 +93,13 @@ public class NetEvents {
         packet.id = weapon.id;
         Net.send(packet, SendMode.tcp);
     }
+
+    public static void handleResearch(Research res){
+        ResearchPacket packet = new ResearchPacket();
+        packet.id = (byte) res.id;
+        Net.send(packet, SendMode.tcp);
+    }
+
 
     public static void handleSendMessage(String message){
         ChatPacket packet = new ChatPacket();

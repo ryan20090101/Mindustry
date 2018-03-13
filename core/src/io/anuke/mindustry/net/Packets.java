@@ -397,6 +397,20 @@ public class Packets {
         }
     }
 
+    public static class ResearchPacket implements Packet{
+        public byte id; //Research ID
+
+        @Override
+        public void write(ByteBuffer buffer) {
+            buffer.put(id);
+        }
+
+        @Override
+        public void read(ByteBuffer buffer) {
+            id = buffer.get();
+        }
+    }
+
     public static class WeaponSwitchPacket implements Packet{
         public int playerid;
         public byte left, right;

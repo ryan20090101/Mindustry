@@ -64,7 +64,11 @@ public class ResearchCenter extends Block{
         else if (ent.researching && ent.progress >= 100) {
             ent.researching = false;
             ent.progress = 0;
+            if(Net.client()){
+                NetEvents.handleResearch(res);
+            }
             world.research(res);
+            setConfigure(tile,ent.resID,(byte) 0,ent.progress);
             ui.hudfrag.buildRecipe();
         }
     }
@@ -72,6 +76,15 @@ public class ResearchCenter extends Block{
     @Override
     public boolean isConfigurable(Tile tile){
         return true;
+    }
+
+    public void configure(Tile tile, byte... data) {
+        ResearchCenterEntity entity = tile.entity();
+        if(entity != null){
+            entity.resID = data[0];
+            entity.researching = data[1] == 1;
+            entity.progress = data[2];
+        }
     }
 
     @Override
@@ -137,7 +150,7 @@ public class ResearchCenter extends Block{
             ImageButton button = content.addImageButton("white", "toggle", 8*4, () -> {
                 ent.resID = (byte) res.id;
                 ent.researching = true;
-                //world.research(res);
+                setConfigure(tile,ent.resID,(byte) 1,ent.progress);
                 run.listen();
                 Effects.sound("purchase");
             }).size(49f, 54f).padBottom(-5).group(group).get();
