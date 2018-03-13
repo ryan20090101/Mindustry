@@ -448,29 +448,6 @@ public class Packets {
             buffer.get(data, 0, data.length);
         }
     }
-    public static class InvertBlockConfigPacket implements Packet{
-        public int position;
-        public byte data;
-        public boolean invert;
-
-        @Override
-        public void write(ByteBuffer buffer) {
-            buffer.putInt(position);
-            buffer.put(data);
-            buffer.putInt((invert) ? 1 : 0);
-        }
-
-        @Override
-        public void read(ByteBuffer buffer) {
-            position = buffer.getInt();
-            data = buffer.get();
-            if(buffer.getInt()==1){
-                invert = true;
-            }else{
-                invert = false;
-            }
-        }
-    }
     public static class EntityRequestPacket implements Packet{
         public int id;
         public byte group;

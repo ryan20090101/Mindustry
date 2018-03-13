@@ -44,8 +44,7 @@ public class Registrator {
             NetErrorPacket.class,
             PlayerAdminPacket.class,
             AdministerRequestPacket.class,
-            TracePacket.class,
-            InvertBlockConfigPacket.class,
+            TracePacket.class
     };
     private static ObjectIntMap<Class<?>> ids = new ObjectIntMap<>();
 
