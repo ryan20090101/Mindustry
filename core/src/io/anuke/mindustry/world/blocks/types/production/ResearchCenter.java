@@ -83,7 +83,9 @@ public class ResearchCenter extends Block{
         Table content = new Table();
 
         for(Research res : Research.researches){
-
+            
+            if(!world.getResearchStatus(res.unlock)){continue;}
+            
             ItemStack[] requirements = res.requirements;
 
             Table tiptable = new Table();
