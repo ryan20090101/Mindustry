@@ -588,8 +588,8 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			homingSpeed = 5f;
 		}
 
-		public void removed(Bullet b){
-			Effects.effect(Fx.pulserExplosion, b);
+		public void hit(Bullet b, float hitx, float hity) {
+			Effects.effect(Fx.pulserExplosion, b.x, b.y);
             DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
 	},
@@ -609,10 +609,6 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		public void update(Bullet b) {
             b.setVelocity(5f, b.angle()-360f/20f/6f);
         }
-		public void removed(Bullet b){
-			Effects.effect(Fx.pulserExplosion, b);
-            DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
-		}
 	};
 
 	public String name;
