@@ -440,7 +440,7 @@ public class Packets {
             buffer.putInt(position);
             buffer.put(length);
             System.out.println(length);
-            for(int i=0; i<length-1; i++){
+            for(int i=0; i<length; i++){
                 System.out.println(i);
                 buffer.put(data[length]);
             }
@@ -449,8 +449,11 @@ public class Packets {
         @Override
         public void read(ByteBuffer buffer) {
             position = buffer.getInt();
-            length =buffer.get();
-            for(int i=0; i<length-1; i++){
+            length = buffer.get();
+            data = new byte[length];
+            System.out.println(length);
+            for(int i=0; i<length; i++){
+                System.out.println(i);
                 data[i] = buffer.get();
             }
         }
