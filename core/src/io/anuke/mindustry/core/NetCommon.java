@@ -44,10 +44,6 @@ public class NetCommon extends Module {
             Tile tile = world.tile(packet.position);
             if (tile != null) tile.block().configure(tile, packet.data);
         });
-        Net.handle(InvertBlockConfigPacket.class, (packet) -> {
-            Tile tile = world.tile(packet.position);
-            if (tile != null) tile.block().invertConfigure(tile, packet.data, packet.invert);
-        });
         Net.handle(PlayerDeathPacket.class, (packet) -> {
             Player player = playerGroup.getByID(packet.id);
             if(player == null) return;

@@ -438,24 +438,14 @@ public class Packets {
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(position);
-            buffer.put(length);
-            System.out.println(length);
-            for(int i=0; i<length; i++){
-                System.out.println(i);
-                buffer.put(data[length]);
-            }
+            buffer.put(data);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             position = buffer.getInt();
-            length = buffer.get();
-            data = new byte[length];
-            System.out.println(length);
-            for(int i=0; i<length; i++){
-                System.out.println(i);
-                data[i] = buffer.get();
-            }
+            data = new byte[buffer.remaining()];
+            buffer.get(data, 0, data.length);
         }
     }
     public static class InvertBlockConfigPacket implements Packet{
