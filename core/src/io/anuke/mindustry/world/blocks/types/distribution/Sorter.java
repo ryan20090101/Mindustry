@@ -150,8 +150,6 @@ public class Sorter extends Block{
             setInvertConfigure(tile, (byte)entity.sortItem.id, entity.inverted);
 		}).padBottom(-5.1f).get();
 		invBut.setChecked(entity.inverted);
-
-
 		table.add(cont);
 	}
 	

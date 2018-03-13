@@ -432,18 +432,23 @@ public class Packets {
 
     public static class BlockConfigPacket implements Packet{
         public int position;
-        public byte data;
+        public byte length;
+        public byte[] data;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(position);
+            buffer.put(length);
             buffer.put(data);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             position = buffer.getInt();
-            data = buffer.get();
+            length = buffer.get();
+            for(int i=0; i<length; i++){
+                data[i] = buffer.get();
+            }
         }
     }
     public static class InvertBlockConfigPacket implements Packet{
