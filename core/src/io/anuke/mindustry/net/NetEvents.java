@@ -68,8 +68,8 @@ public class NetEvents {
 
     public static void handleBlockConfig(Tile tile, byte... data){
         BlockConfigPacket packet = new BlockConfigPacket();
+        packet.length =(byte) data.length;
         packet.data = data;
-        packet.length = (byte) data.length;
         packet.position = tile.packedPosition();
         Net.send(packet, SendMode.tcp);
     }

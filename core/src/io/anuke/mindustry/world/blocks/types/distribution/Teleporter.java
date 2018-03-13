@@ -56,10 +56,10 @@ public class Teleporter extends PowerBlock{
 	}
 
 	@Override
-	public void configure(Tile tile, byte data) {
+	public void configure(Tile tile, byte... data) {
 		TeleporterEntity entity = tile.entity();
 		if(entity != null){
-			entity.channel = data;
+			entity.channel = data[0];
 		}
 	}
 

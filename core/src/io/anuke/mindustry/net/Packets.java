@@ -439,14 +439,18 @@ public class Packets {
         public void write(ByteBuffer buffer) {
             buffer.putInt(position);
             buffer.put(length);
-            buffer.put(data);
+            System.out.println(length);
+            for(int i=0; i<length-1; i++){
+                System.out.println(i);
+                buffer.put(data[length]);
+            }
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             position = buffer.getInt();
-            length = buffer.get();
-            for(int i=0; i<length; i++){
+            length =buffer.get();
+            for(int i=0; i<length-1; i++){
                 data[i] = buffer.get();
             }
         }

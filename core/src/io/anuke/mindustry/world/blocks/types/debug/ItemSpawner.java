@@ -51,10 +51,10 @@ public class ItemSpawner extends Block{
     }
 
     @Override
-    public void configure(Tile tile, byte data) {
+    public void configure(Tile tile, byte... data) {
         ItemSpawnerEntity entity = tile.entity();
         if(entity != null){
-            entity.spawnItem = Item.getByID(data);
+            entity.spawnItem = Item.getByID(data[0]);
         }
     }
 

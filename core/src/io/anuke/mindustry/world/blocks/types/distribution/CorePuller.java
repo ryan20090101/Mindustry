@@ -57,10 +57,10 @@ public class CorePuller extends PowerBlock{
 	}
 
 	@Override
-	public void configure(Tile tile, byte data) {
+	public void configure(Tile tile, byte... data) {
 		CorePullerEntity entity = tile.entity();
 		if(entity != null){
-			entity.sortItem = Item.getByID(data);
+			entity.sortItem = Item.getByID(data[0]);
 		}
 	}
 

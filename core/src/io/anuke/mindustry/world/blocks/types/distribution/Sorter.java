@@ -102,11 +102,11 @@ public class Sorter extends Block{
 	}
 
 	
-	public void invertConfigure(Tile tile, byte data, boolean invert) {
+	public void configure(Tile tile, byte... data) {
 		SorterEntity entity = tile.entity();
 		if(entity != null){
-			entity.sortItem = Item.getByID(data);
-            entity.inverted = invert;
+			entity.sortItem = Item.getByID(data[0]);
+            entity.inverted = data[1] == 1;
 		}
 	}
 
@@ -133,7 +133,7 @@ public class Sorter extends Block{
 			final int f = i;
 			ImageButton button = cont.addImageButton("white", "toggle", 24, () -> {
 				entity.sortItem = items.get(f);
-				setInvertConfigure(tile, (byte)f, entity.inverted);
+				setConfigure(tile, (byte)f, (byte)(entity.inverted ? 1 : 0));
 			}).size(38, 42).padBottom(-5.1f).group(group).get();
 			button.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(items.get(i).region));
 			button.setChecked(entity.sortItem.id == f);
@@ -147,7 +147,7 @@ public class Sorter extends Block{
 
 		TextButton invBut = cont.addButton("Invert","toggle", () -> {
 			entity.inverted = entity.inverted ? false : true;
-            setInvertConfigure(tile, (byte)entity.sortItem.id, entity.inverted);
+			setConfigure(tile, (byte)entity.sortItem.id, (byte)(entity.inverted ? 1 : 0));
 		}).padBottom(-5.1f).get();
 		invBut.setChecked(entity.inverted);
 		table.add(cont);
