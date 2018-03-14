@@ -15,8 +15,6 @@ public class CorePusher extends Block {
         health = 800;
         solid = true;
         destructible = true;
-        width = 1;
-        height = 1;
     }
 
     @Override

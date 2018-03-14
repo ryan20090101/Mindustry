@@ -46,7 +46,7 @@ public class ItemSpawner extends Block{
         }}
 
         if (ent.timer.get(timerDump, 30)) {
-            tryDump(tile, height - 1);
+            tryDump(tile, size - 1);
         }
     }
 

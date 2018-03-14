@@ -33,7 +33,7 @@ public class World extends Module {
 	private Tile core;
 	private Array<SpawnPoint> spawns = new Array<>();
 
-	private Tile[] temptiles = new Tile[4];
+	private Array<Tile> temptiles = new Array<>();
 
 	public int time;
 	private Array<Research> rContainer;
@@ -246,7 +246,7 @@ public class World extends Module {
 			tile.setBlock(Blocks.air);
 		} else {
 			Tile target = tile.target();
-			Array<Tile> removals = target.getLinkedTiles();
+			Array<Tile> removals = target.getLinkedTiles(temptiles);
 			for (Tile toremove : removals) {
 				//note that setting a new block automatically unlinks it
 				toremove.setBlock(Blocks.air);

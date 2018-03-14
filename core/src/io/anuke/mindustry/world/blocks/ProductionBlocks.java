@@ -210,16 +210,14 @@ public class ProductionBlocks{
 	},
 	nuclearReactor = new NuclearReactor("nuclearreactor"){
 		{
-			width = 3;
-			height = 3;
+			size = 3;
 			health = 600;
 			breaktime *= 2.3f;
 		}
 	},
 	breederReactor = new NuclearReactor("breederReactor") {
 		{
-			width = 3;
-			height = 3;
+			size = 3;
 			health = 600;
 			breaktime *= 2.3f;
 			outputTime = 260;
@@ -245,13 +243,13 @@ public class ProductionBlocks{
 	},
 	weaponFactory = new WeaponFactory("weaponfactory"){
 		{
-			width = height = 2;
+			size = 2;
 			health = 250;
 		}
 	},
 	researchCenter = new ResearchCenter("researchCenter"){
 		{
-			width = height = 3;
+			size = 3;
 			health = 250;
             animated = true;
             animationFrames = 3;

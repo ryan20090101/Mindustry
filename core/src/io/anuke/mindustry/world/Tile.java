@@ -68,6 +68,14 @@ public class Tile{
 		if(x == cx + 1 && y == cy) return 2;
 		return -1;
 	}
+
+	public byte sizedRelativeTo(int cx, int cy) {
+		if (x == cx && y == cy - 1 - block().size / 2) return 1;
+		if (x == cx && y == cy + 1 + block().size / 2) return 3;
+		if (x == cx - 1 - block().size / 2 && y == cy) return 0;
+		if (x == cx + 1 + block().size / 2 && y == cy) return 2;
+		return -1;
+	}
 	
 	public <T extends TileEntity> T entity(){
 		return (T)entity;
@@ -208,18 +216,20 @@ public class Tile{
 	
 	/**Returns the list of all tiles linked to this multiblock, or an empty array if it's not a multiblock.
 	 * This array contains all linked tiles, including this tile itself.*/
-	public synchronized Array<Tile> getLinkedTiles(){
+	public synchronized Array<Tile> getLinkedTiles(Array<Tile> tmpArray) {
 		Block block = block();
 		tmpArray.clear();
-		if(!(block.width == 1 && block.height == 1)){
-			int offsetx = -(block.width-1)/2;
-			int offsety = -(block.height-1)/2;
-			for(int dx = 0; dx < block.width; dx ++){
-				for(int dy = 0; dy < block.height; dy ++){
+		if (block.isMultiblock()) {
+			int offsetx = -(block.size - 1) / 2;
+			int offsety = -(block.size - 1) / 2;
+			for (int dx = 0; dx < block.size; dx++) {
+				for (int dy = 0; dy < block.size; dy++) {
 					Tile other = world.tile(x + dx + offsetx, y + dy + offsety);
 					tmpArray.add(other);
 				}
 			}
+		} else {
+			tmpArray.add(this);
 		}
 		return tmpArray;
 	}

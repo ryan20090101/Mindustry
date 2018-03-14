@@ -163,7 +163,7 @@ public class WeaponBlocks{
 			bullet = BulletType.artilleryshell; //railgun shell
 			ammo = Item.dirium;
 			health = 2800;
-			width = height = 5;
+			size = 5;
 			rotatespeed = 0.005f;
 			shootCone = 1f;
 			shootEffect = Fx.artilleryshot;
@@ -180,7 +180,7 @@ public class WeaponBlocks{
 			bullet = BulletType.artilleryshell;
 			ammo = Item.dirium;
 			health = 2800;
-			width = height = 3;
+			size = 3;
 			rotatespeed = 0.001f;
 			shootCone = 9f;
 			shootEffect = Fx.artilleryshot;
@@ -198,7 +198,7 @@ public class WeaponBlocks{
 			bullet = BulletType.chain;
 			ammo = Item.uranium;
 			health = 430;
-			width = height = 2;
+			size = 2;
 			shootCone = 9f;
 			ammoMultiplier = 8;
 			shots = 2;
@@ -232,7 +232,7 @@ public class WeaponBlocks{
 			ammo = Item.uranium;
 			health = 800;
 			ammoMultiplier = 4;
-			width = height = 3;
+			size = 3;
 			rotatespeed = 0.07f;
 			shootCone = 9f;
 			shootEffect = Fx.titanshot;

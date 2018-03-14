@@ -317,7 +317,7 @@ public class BlocksFragment implements Fragment{
 		pane.setFadeScrollBars(false);
 		Table top = new Table();
 		top.left();
-		top.add(new Image(Draw.region(block.name))).size(8*5 * block.width);
+		top.add(new Image(Draw.region(block.name))).size(8*5 * block.size);
 		top.add("[accent]"+block.formalName).padLeft(6f);
 		table.add(top).fill().left();
 		table.row();

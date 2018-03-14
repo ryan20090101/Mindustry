@@ -88,11 +88,11 @@ public class DistributionBlocks{
 	}},
 
 	coreOut = new CorePuller("coreOut"){{
-		height = width = 3;
+		size = 3;
 	}},
 
     coreIn = new CorePusher("coreIn"){{
-    	height = width = 3;
+    	size = 3;
 	}},
 
 	combiner = new Router("combiner"){{
@@ -116,7 +116,7 @@ public class DistributionBlocks{
 	cooledPowerBooster = new PowerBooster("cooledPowerBooster"){{
 		powerRange = 6;
 		powerSpeed = 2f;
-		width = height = 2;
+		size = 2;
 		coolantUsage = 0.1f;
 		generateLiquid = Liquid.water;
 	}},

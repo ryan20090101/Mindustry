@@ -29,8 +29,8 @@ public class Block{
 	private static Array<Block> blocks = new Array<>();
 	private static ObjectMap<String, Block> map = new ObjectMap<>();
 	
-	protected static TextureRegion temp = new TextureRegion();
-	protected Vector2 offset = new Vector2();
+    protected Array<Tile> tempTiles = new Array<>();
+    protected Vector2 offset = new Vector2();
 
 	/**internal name*/
 	public final String name;
@@ -76,8 +76,8 @@ public class Block{
 	public ItemStack drops = null;
 	/**liquids that drop from this block, used for pumps*/
 	public Liquid liquidDrop = null;
-	/**multiblock width/height*/
-	public int width = 1, height = 1;
+	/**multiblock size*/
+	public int size = 1;
 	/**Brief block description. Should be short enough fit in the place menu.*/
 	public final String description;
 	/**Detailed description of the block. Can be as long as necesary.*/
@@ -162,7 +162,7 @@ public class Block{
 	}
 	
 	public void getStats(Array<String> list){
-		list.add("[gray]size: " + width + "x" + height);
+		list.add("[gray]size: " + size);
 		list.add("[healthstats]health: " + health);
 	}
 	
@@ -345,11 +345,11 @@ public class Block{
 	
 	/**Offset for placing and drawing multiblocks.*/
 	public Vector2 getPlaceOffset(){
-		return offset.set(((width + 1) % 2) * tilesize/2, ((height + 1) % 2) * tilesize/2);
+		return offset.set(((size + 1) % 2) * tilesize/2, ((size + 1) % 2) * tilesize/2);
 	}
 	
 	public boolean isMultiblock(){
-		return width != 1 || height != 1;
+		return size > 1;
 	}
 	
 	public static Array<Block> getAllBlocks(){

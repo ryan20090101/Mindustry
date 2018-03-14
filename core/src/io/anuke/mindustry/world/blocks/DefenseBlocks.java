@@ -36,19 +36,19 @@ public class DefenseBlocks{
 	}},
 	steelwalllarge = new Wall("steelwall-large"){{
 		health = 110*4*wallHealthMultiplier;
-		width = height = 2;
+		size = 2;
 	}},
 	titaniumwalllarge = new Wall("titaniumwall-large"){{
 		health = 150*4*wallHealthMultiplier;
-		width = height = 2;
+		size = 2;
 	}},
 	diriumwalllarge = new Wall("duriumwall-large"){{
 		health = 190*4*wallHealthMultiplier;
-		width = height = 2;
+		size = 2;
 	}},
 	diriumalloywalllarge = new Wall("alloywall-large"){{
 		health = 190*4*2*wallHealthMultiplier;
-		width = height = 2;
+		size = 2;
 	}},
 	titaniumshieldwall = new ShieldedWallBlock("titaniumshieldwall"){{
 		health = 150*wallHealthMultiplier;
@@ -77,7 +77,7 @@ public class DefenseBlocks{
 
 	ultrarepairturret = new RepairTurret("ultrarepairturret"){
 		{
-			height = width = 2;
+			size = 2;
 			range = 120;
 			reload = 5f;
 			health = 160;
@@ -98,7 +98,7 @@ public class DefenseBlocks{
 			powerDrain = 0.1f;
 			shieldRadius = 80f;
 			maxRadius = 100f;
-			height = width = 3;
+			size = 3;
 		}
 	},
 
@@ -110,6 +110,6 @@ public class DefenseBlocks{
 		openfx = Fx.dooropenlarge;
 		closefx = Fx.doorcloselarge;
 		health = 90*4*wallHealthMultiplier;
-		width = height = 2;
+		size = 2;
 	}};
 }
