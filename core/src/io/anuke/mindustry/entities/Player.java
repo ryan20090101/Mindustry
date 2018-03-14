@@ -246,10 +246,12 @@ public class Player extends SyncEntity{
         
 
 		health = Mathf.clamp(health, -1, maxhealth);
-		
-		movement.set(0, 0);
-
-		float xa = Inputs.getAxis("move_x");
+        if(tile.floor()==Blocks.ice)
+            movement.set(movement.x*0.99f, movement.y*0.99f);
+		else
+            movement.set(0, 0);
+        
+        float xa = Inputs.getAxis("move_x");
 		float ya = Inputs.getAxis("move_y");
 		if(Math.abs(xa) < 0.3) xa = 0;
 		if(Math.abs(ya) < 0.3) ya = 0;
