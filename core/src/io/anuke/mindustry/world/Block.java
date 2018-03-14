@@ -104,6 +104,10 @@ public class Block{
 	public int radioactivity = 1;
 	/**movement speed multiplier.*/
 	public float movementSpeedMultiplier = 1f;
+	/**active movement speed multiplier.*/
+	public float activeMovementSpeedMultiplier = 1f;
+	/**Move the entity actively (ex. conveyors move entities).*/
+	public boolean activeMovement = false;
 	/**how much damage entities on top take.*/
 	public int damageOnTop = 0;
 	/**The time it takes for a block to cause damage.*/
@@ -112,9 +116,6 @@ public class Block{
     public boolean animated = false;
     public int animationFrames = 1;
     public int animationSpeed = 3;
-    
-    public boolean movePlayer = false;
-    public int movePlayerMultiplier = 0;
 
 	/**calculated based on recipe, will be used in the enemy pathfinding to determine most destructible route*/
 	public int worth;

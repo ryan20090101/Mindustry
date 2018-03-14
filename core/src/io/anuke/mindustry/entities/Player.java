@@ -226,10 +226,9 @@ public class Player extends SyncEntity{
 		float speedModifier;
 		if (tile.block() == Blocks.air)
 			speedModifier = tile.floor().movementSpeedMultiplier;
-        else if(!tile.block().movePlayer)
-			speedModifier = tile.block().movementSpeedMultiplier;
         else
-            speedModifier = 1;
+			speedModifier = tile.block().movementSpeedMultiplier;
+
 		float speed;
 		dashing = Inputs.keyDown("dash");
 
@@ -271,6 +270,14 @@ public class Player extends SyncEntity{
 		
 		movement.limit(speed);
 
+		if(tile.block().activeMovement){
+			try{
+				if(tile.getRotation() == 0) movement.x+=0.5f*tile.block().activeMovementSpeedMultiplier;
+				if(tile.getRotation() == 1) movement.y+=0.5f*tile.block().activeMovementSpeedMultiplier;
+				if(tile.getRotation() == 2) movement.x-=0.5f*tile.block().activeMovementSpeedMultiplier;
+				if(tile.getRotation() == 3) movement.y-=0.5f*tile.block().activeMovementSpeedMultiplier;
+			}catch(Exception e){}
+		}
 
 		if(isFlying) {
 			//TODO: Make flying smoother
@@ -283,14 +290,6 @@ public class Player extends SyncEntity{
 		}else{
 			move(movement.x*Timers.delta(), movement.y*Timers.delta());
 		}
-        if(tile.block().movePlayer){
-            try{
-            if(Vars.world.tile((int)x/8, (int)y/8).getRotation() == 0) move(movement.x+0.5f*tile.block().movePlayerMultiplier, movement.y);
-            if(Vars.world.tile((int)x/8, (int)y/8).getRotation() == 1) move(movement.x, movement.y+0.5f*tile.block().movePlayerMultiplier);
-            if(Vars.world.tile((int)x/8, (int)y/8).getRotation() == 2) move(movement.x-0.5f*tile.block().movePlayerMultiplier, movement.y);
-            if(Vars.world.tile((int)x/8, (int)y/8).getRotation() == 3) move(movement.x, movement.y-0.5f*tile.block().movePlayerMultiplier);
-            }catch(Exception e){}
-        }
 		
 		if(!shooting){
 			if(!movement.isZero())

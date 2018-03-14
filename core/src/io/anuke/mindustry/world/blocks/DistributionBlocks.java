@@ -45,28 +45,28 @@ public class DistributionBlocks{
 	}},
 	
 	conveyor = new Conveyor("conveyor"){{
-        movePlayerMultiplier = 1;
+		activeMovementSpeedMultiplier = 1;
         animated = true;
         animationFrames = 2;
-        movePlayer = true;
+        activeMovement = true;
 	}},
 	
 	steelconveyor = new Conveyor("steelconveyor"){{
-		movePlayerMultiplier = 2;
+		activeMovementSpeedMultiplier = 2;
 		health = 55;
 		speed = 0.04f;
         animated = true;
         animationFrames = 2;
-        movePlayer = true;
+		activeMovement = true;
 	}},
 	
 	pulseconveyor = new Conveyor("poweredconveyor"){{
-		movePlayerMultiplier = 3;
+		activeMovementSpeedMultiplier = 3;
 		health = 75;
 		speed = 0.09f;
         animated = true;
         animationFrames = 2;
-        movePlayer = true;
+		activeMovement = true;
 	}},
 
 	ultraconveyor = new Conveyor("ultraconveyor"){{

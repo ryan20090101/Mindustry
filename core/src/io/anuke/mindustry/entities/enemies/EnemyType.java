@@ -256,6 +256,15 @@ public class EnemyType {
         shift.limit(1f);
         vec.add(shift.scl(0.5f));
 
+        if(tile.block().activeMovement){
+            try{
+                if(tile.getRotation() == 0) vec.x+=0.5f*tile.block().activeMovementSpeedMultiplier;
+                if(tile.getRotation() == 1) vec.y+=0.5f*tile.block().activeMovementSpeedMultiplier;
+                if(tile.getRotation() == 2) vec.x-=0.5f*tile.block().activeMovementSpeedMultiplier;
+                if(tile.getRotation() == 3) vec.y-=0.5f*tile.block().activeMovementSpeedMultiplier;
+            }catch(Exception e){}
+        }
+
         enemy.move(vec.x * Timers.delta(), vec.y * Timers.delta());
 
         updateTargeting(enemy, nearCore);
