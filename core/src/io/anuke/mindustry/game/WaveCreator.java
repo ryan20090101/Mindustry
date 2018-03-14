@@ -8,7 +8,7 @@ public class WaveCreator{
 	public static Array<EnemySpawn> getSpawns(){
 
 		return Array.with(
-			new EnemySpawn(EnemyTypes.demoneye){{
+			new EnemySpawn(EnemyTypes.standard){{
 				scaling = 1;
 				before = 3;
 			}},

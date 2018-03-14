@@ -3,9 +3,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
-import com.badlogic.gdx.files.FileHandle;
-import java.io.File;
-import io.anuke.mindustry.world.Structure;
+import io.anuke.mindustry.Vars;
+import io.anuke.mindustry.Vars.*;
+import io.anuke.mindustry.world.blocks.Blocks;
+import io.anuke.mindustry.world.blocks.DistributionBlocks;
+import io.anuke.mindustry.entities.enemies.Enemy;
+import io.anuke.mindustry.entities.enemies.EnemyTypes;
+
 public class StructureCore extends Block{
 
 	public StructureCore(String name) {
@@ -16,28 +20,11 @@ public class StructureCore extends Block{
 	}
 	@Override
 	public void tapped(Tile tile){
-        /**File folder = new File("structures/");
-        File[] listOfFiles = folder.listFiles();
-        int listElement = 0;
-        for(FileHandle file : listOfFiles){
-            Structure structure = new Structure();
-            structure.pixmap = new Pixmap(file.sibling(listOfFiles[listElement] + ".png"));
-            listElement = listElement + 1;
-            for(int y : structure.getHeight()){
-                for(int x : structure.getWidth()){
-                    if(!(y==0&&x==0)){
-                        
-                        
-                        
-                    
-                    
-                    
-                    
-                    }
-            
-                }
-            }   
-                
-        }**/
+        if(Vars.world.tile(tile.x, tile.y+2).block()==DistributionBlocks.conveyor){
+            Vars.world.tile(tile.x, tile.y+2).setBlock(Blocks.air);
+            Enemy enemy = new Enemy(EnemyTypes.demoneye);
+            enemy.set(tile.x*8, tile.y*8);
+            enemy.add();
+        }
 	}
 }
