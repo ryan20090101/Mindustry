@@ -51,10 +51,11 @@ public class ItemSpawner extends Block{
     }
 
     @Override
-    public void configure(Tile tile, byte... data) {
+    public void configure(Tile tile,int intData, byte... byteData) {
         ItemSpawnerEntity entity = tile.entity();
         if(entity != null){
-            entity.spawnItem = Item.getByID(data[0]);
+            entity.spawnItem = Item.getByID(byteData[0]);
+            entity.spawnTime = intData;
         }
     }
 
@@ -76,7 +77,7 @@ public class ItemSpawner extends Block{
             final int f = i;
             ImageButton button = cont.addImageButton("white", "toggle", 24, () -> {
                 entity.spawnItem = items.get(f);
-                setConfigure(tile, (byte)f);
+                setConfigure(tile, entity.spawnTime,(byte)f);
             }).size(38, 42).padBottom(-5.1f).group(group).get();
             button.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(items.get(i).region));
             button.setChecked(entity.spawnItem.id == f);
@@ -95,6 +96,7 @@ public class ItemSpawner extends Block{
             int pullTime = Integer.parseInt(text);
             if (pullTime < 0 && pullTime > 999) return;
             entity.spawnTime = pullTime;
+            setConfigure(tile, pullTime,(byte) entity.spawnItem.id);
         }).size(152,42).padBottom(-5.1f).bottom().colspan(4);
 
         table.add(cont);

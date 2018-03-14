@@ -270,17 +270,15 @@ public class Player extends SyncEntity{
 		
 		movement.limit(speed);
 
-		if(tile.block().activeMovement){
-			try{
-				if(tile.getRotation() == 0) movement.x+=0.5f*tile.block().activeMovementSpeedMultiplier;
-				if(tile.getRotation() == 1) movement.y+=0.5f*tile.block().activeMovementSpeedMultiplier;
-				if(tile.getRotation() == 2) movement.x-=0.5f*tile.block().activeMovementSpeedMultiplier;
-				if(tile.getRotation() == 3) movement.y-=0.5f*tile.block().activeMovementSpeedMultiplier;
-			}catch(Exception e){}
+		if(tile.block().activeMovement) {
+			if (tile.getRotation() == 0) movement.x += 0.5f * tile.block().activeMovementSpeedMultiplier;
+			if (tile.getRotation() == 1) movement.y += 0.5f * tile.block().activeMovementSpeedMultiplier;
+			if (tile.getRotation() == 2) movement.x -= 0.5f * tile.block().activeMovementSpeedMultiplier;
+			if (tile.getRotation() == 3) movement.y -= 0.5f * tile.block().activeMovementSpeedMultiplier;
 		}
 
 		if(isFlying) {
-			//TODO: Make flying smoother
+			//TODO: Make flying smoother, less responsive but smooth?
 			x += movement.x*Timers.delta();
 			y += movement.y*Timers.delta();
 		}

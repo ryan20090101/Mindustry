@@ -67,10 +67,10 @@ public class NetEvents {
         Net.send(packet, SendMode.tcp);
     }
 
-    public static void handleBlockConfig(Tile tile, byte... data){
+    public static void handleBlockConfig(Tile tile, int intData, byte... byteData){
         BlockConfigPacket packet = new BlockConfigPacket();
-        packet.length =(byte) data.length;
-        packet.data = data;
+        packet.intData = intData;
+        packet.byteData = byteData;
         packet.position = tile.packedPosition();
         Net.send(packet, SendMode.tcp);
     }

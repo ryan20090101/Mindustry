@@ -143,8 +143,6 @@ public class Sorter extends Block{
 			}
 		}
 
-		cont.row();
-
 		TextButton invBut = cont.addButton("Invert","toggle", () -> {
 			entity.inverted = entity.inverted ? false : true;
 			setConfigure(tile, (byte)entity.sortItem.id, (byte)(entity.inverted ? 1 : 0));

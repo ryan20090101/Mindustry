@@ -43,7 +43,7 @@ public class NetCommon extends Module {
 
         Net.handle(BlockConfigPacket.class, (packet) -> {
             Tile tile = world.tile(packet.position);
-            if (tile != null) tile.block().configure(tile, packet.data);
+            if (tile != null) tile.block().configure(tile,packet.intData ,packet.byteData);
         });
         Net.handle(PlayerDeathPacket.class, (packet) -> {
             Player player = playerGroup.getByID(packet.id);

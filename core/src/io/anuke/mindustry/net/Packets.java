@@ -446,20 +446,22 @@ public class Packets {
 
     public static class BlockConfigPacket implements Packet{
         public int position;
-        public byte length;
-        public byte[] data;
+        public int intData;
+        public byte[] byteData;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(position);
-            buffer.put(data);
+            buffer.putInt(intData);
+            buffer.put(byteData);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             position = buffer.getInt();
-            data = new byte[buffer.remaining()];
-            buffer.get(data, 0, data.length);
+            intData = buffer.getInt();
+            byteData = new byte[buffer.remaining()];
+            buffer.get(byteData, 0, byteData.length);
         }
     }
     public static class EntityRequestPacket implements Packet{

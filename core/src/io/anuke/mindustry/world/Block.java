@@ -147,10 +147,14 @@ public class Block{
 
 	public void tapped(Tile tile){}
 	public void buildTable(Tile tile, Table table) {}
-	public void configure(Tile tile, byte... data){}
+	public void configure(Tile tile, byte... byteData){configure(tile,0,byteData);}
+	public void configure(Tile tile, int intData, byte... byteData){}
 
-	public void setConfigure(Tile tile, byte... data){
-		if(Net.active()) NetEvents.handleBlockConfig(tile, data);
+	public void setConfigure(Tile tile, byte... byteData){
+		setConfigure(tile,0,byteData);
+	}
+	public void setConfigure(Tile tile,int intData, byte... byteData){
+		if(Net.active()) NetEvents.handleBlockConfig(tile,intData, byteData);
 	}
 
 	public boolean isConfigurable(Tile tile){

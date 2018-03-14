@@ -57,10 +57,11 @@ public class CorePuller extends PowerBlock{
 	}
 
 	@Override
-	public void configure(Tile tile, byte... data) {
+	public void configure(Tile tile,int intData ,byte... byteData) {
 		CorePullerEntity entity = tile.entity();
 		if(entity != null){
-			entity.sortItem = Item.getByID(data[0]);
+			entity.sortItem = Item.getByID(byteData[0]);
+			entity.pullTime = intData;
 		}
 	}
 
@@ -83,7 +84,7 @@ public class CorePuller extends PowerBlock{
 			final int f = i;
 			ImageButton button = cont.addImageButton("white", "toggle", 24, () -> {
 				entity.sortItem = items.get(f);
-				setConfigure(tile, (byte)f);
+				setConfigure(tile, entity.pullTime, (byte)f);
 			}).size(38, 42).padBottom(-5.1f).group(group).get();
 			button.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(items.get(i).region));
 			button.setChecked(entity.sortItem.id == f);
@@ -102,6 +103,7 @@ public class CorePuller extends PowerBlock{
 			int pullTime = Integer.parseInt(text);
 			if (pullTime < 0) return;
 			entity.pullTime = pullTime;
+			setConfigure(tile, pullTime, (byte)entity.sortItem.id);
 		}).size(152,42).padBottom(-5.1f).bottom().colspan(4);
 
 		table.add(cont);
