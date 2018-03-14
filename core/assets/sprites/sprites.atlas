@@ -67,7 +67,7 @@ blocks/artilleryturret-icon
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/artilleryturretbase-3x3
+blocks/artilleryturretbase-3
   rotate: false
   xy: 495, 127
   size: 24, 24
@@ -144,14 +144,14 @@ blocks/block
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/block-2x2
+blocks/block-2
   rotate: false
   xy: 235, 71
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-blocks/block-3x3
+blocks/block-3
   rotate: false
   xy: 722, 392
   size: 24, 24

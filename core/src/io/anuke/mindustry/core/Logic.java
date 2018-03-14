@@ -118,9 +118,6 @@ public class Logic extends Module {
             if(!Net.client())
                 world.pathfinder().update();
 
-            System.out.println(world.getCore());
-            System.out.println(world.getCore().block());
-
             if(world.getCore() != null && world.getCore().block() != ProductionBlocks.core && !state.gameOver){
                 state.gameOver = true;
                 if(Net.server()) NetEvents.handleGameOver();
