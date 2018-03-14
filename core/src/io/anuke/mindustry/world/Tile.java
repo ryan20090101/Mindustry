@@ -130,6 +130,10 @@ public class Tile{
 	public Block ore(){
 		return Block.getByID(getOreID());
 	}
+
+	public Block floorOrBlock(){
+		return Block.getByID(getWallID()) == Blocks.air ? floor() : block();
+	}
 	
 	/**Returns the breaktime of the block, <i>or</i> the breaktime of the linked block, if this tile is linked.*/
 	public float getBreakTime(){

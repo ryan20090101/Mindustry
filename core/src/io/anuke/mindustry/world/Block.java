@@ -112,6 +112,10 @@ public class Block{
 	public int damageOnTop = 0;
 	/**The time it takes for a block to cause damage.*/
 	public int damageTime = 0;
+	/**how much damage entities on top take.*/
+	public boolean icePhysics = false;
+	/**The time it takes for a block to cause damage.*/
+	public float iceMovementModifier = 0;
     
     public boolean animated = false;
     public int animationFrames = 1;

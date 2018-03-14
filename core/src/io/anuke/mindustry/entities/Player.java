@@ -9,6 +9,7 @@ import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.resource.Mech;
 import io.anuke.mindustry.resource.Upgrade;
 import io.anuke.mindustry.resource.Weapon;
+import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.ucore.core.*;
@@ -168,6 +169,7 @@ public class Player extends SyncEntity{
 		if(flyCooldown>0) flyCooldown-=1;
 
 		Tile tile = world.tileWorld(x, y);
+		Block block = tile.floorOrBlock();
 
 		if(!isFlying) {
 
@@ -212,22 +214,15 @@ public class Player extends SyncEntity{
     	*/
 		int damageTimeOnTop;
 		int damageOnTop;
-		if (tile.block() == Blocks.air) {
-			damageTimeOnTop = tile.floor().damageTime;
-			damageOnTop = tile.floor().damageOnTop;
-		}else{
-			damageTimeOnTop = tile.floor().damageTime;
-			damageOnTop = tile.floor().damageOnTop;
-		}
+
+		damageTimeOnTop = block.damageTime;
+		damageOnTop = block.damageOnTop;
 
 		if(damageOnTop > 0 && timer.get(timerOther,damageTimeOnTop))
 			damage(damageOnTop);
 
 		float speedModifier;
-		if (tile.block() == Blocks.air)
-			speedModifier = tile.floor().movementSpeedMultiplier;
-        else
-			speedModifier = tile.block().movementSpeedMultiplier;
+		speedModifier = block.movementSpeedMultiplier;
 
 		float speed;
 		dashing = Inputs.keyDown("dash");
@@ -246,8 +241,8 @@ public class Player extends SyncEntity{
         
 
 		health = Mathf.clamp(health, -1, maxhealth);
-        if(tile.floor()==Blocks.ice)
-            movement.set(movement.x*0.99f, movement.y*0.99f);
+        if(block.icePhysics)
+            movement.set(movement.x*block.iceMovementModifier, movement.y*block.iceMovementModifier);
 		else
             movement.set(0, 0);
         
@@ -273,10 +268,10 @@ public class Player extends SyncEntity{
 		movement.limit(speed);
 
 		if(tile.block().activeMovement) {
-			if (tile.getRotation() == 0) movement.x += 0.5f * tile.block().activeMovementSpeedMultiplier;
-			if (tile.getRotation() == 1) movement.y += 0.5f * tile.block().activeMovementSpeedMultiplier;
-			if (tile.getRotation() == 2) movement.x -= 0.5f * tile.block().activeMovementSpeedMultiplier;
-			if (tile.getRotation() == 3) movement.y -= 0.5f * tile.block().activeMovementSpeedMultiplier;
+			if (tile.getRotation() == 0) movement.x += 0.5f * block.activeMovementSpeedMultiplier;
+			if (tile.getRotation() == 1) movement.y += 0.5f * block.activeMovementSpeedMultiplier;
+			if (tile.getRotation() == 2) movement.x -= 0.5f * block.activeMovementSpeedMultiplier;
+			if (tile.getRotation() == 3) movement.y -= 0.5f * block.activeMovementSpeedMultiplier;
 		}
 
 		if(isFlying) {

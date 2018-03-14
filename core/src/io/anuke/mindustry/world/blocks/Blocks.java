@@ -130,7 +130,10 @@ public class Blocks{
 		drops = new ItemStack(Item.sand,1);
 	}},
 	
-	ice = new Floor("ice"){},
+	ice = new Floor("ice"){{
+		icePhysics = true;
+		iceMovementModifier = 0.99f;
+	}},
 	
 	snow = new Floor("snow"){},
 	
