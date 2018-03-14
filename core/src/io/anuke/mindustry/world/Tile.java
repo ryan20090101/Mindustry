@@ -16,8 +16,8 @@ public class Tile{
 	public static final Object tileSetLock = new Object();
 	private static final Array<Tile> tmpArray = new Array<>();
 	
-	/**Packed block data. Left is floor, right is block.*/
-	private short blocks;
+	/**Packed block data. floor, block, ore.*/
+	private int blocks;
 	/**Packed data. Left is rotation, right is extra data, packed into two half-bytes: left is dump, right is extra.*/
 	private short data;
 	/**The coordinates of the core tile this is linked to, in the form of two bytes packed into one.
@@ -44,20 +44,24 @@ public class Tile{
 	
 	private void iSetFloor(Block floor){
 		byte id = (byte)floor.id;
-		blocks = Bits.packShort(id, getWallID());
+		blocks = Bits.packInt(id, getWallID(), getOreID(),(byte)0);
 	}
 	
 	private void iSetBlock(Block wall){
 		byte id = (byte)wall.id;
-		blocks = Bits.packShort(getFloorID(), id);
+		blocks = Bits.packInt(getFloorID(), id, getOreID(),(byte)0);
 	}
 	
 	public byte getWallID(){
-		return Bits.getRightByte(blocks);
+		return (byte) (blocks >> 0);
 	}
 	
 	public byte getFloorID(){
-		return Bits.getLeftByte(blocks);
+		return (byte) (blocks >> 8);
+	}
+
+	public byte getOreID(){
+		return (byte) (blocks >> 16);
 	}
 	
 	/**Return relative rotation to a coordinate. Returns -1 if the coordinate is not near this tile.*/
@@ -121,6 +125,10 @@ public class Tile{
 	
 	public Block block(){
 		return Block.getByID(getWallID());
+	}
+
+	public Block ore(){
+		return Block.getByID(getOreID());
 	}
 	
 	/**Returns the breaktime of the block, <i>or</i> the breaktime of the linked block, if this tile is linked.*/
