@@ -17,7 +17,7 @@ public class Tile{
 	private static final Array<Tile> tmpArray = new Array<>();
 	
 	/**Packed block data. floor, block, ore.*/
-	private int blocks;
+	private byte[] blocks = new byte[3];
 	/**Packed data. Left is rotation, right is extra data, packed into two half-bytes: left is dump, right is extra.*/
 	private short data;
 	/**The coordinates of the core tile this is linked to, in the form of two bytes packed into one.
@@ -44,24 +44,24 @@ public class Tile{
 	
 	private void iSetFloor(Block floor){
 		byte id = (byte)floor.id;
-		blocks = Bits.packInt(id, getWallID(), getOreID(),(byte)0);
+		blocks[0] = id;
 	}
 	
 	private void iSetBlock(Block wall){
 		byte id = (byte)wall.id;
-		blocks = Bits.packInt(getFloorID(), id, getOreID(),(byte)0);
+		blocks[1] = id;
+	}
+
+	public byte getFloorID(){
+		return blocks[0];
 	}
 	
 	public byte getWallID(){
-		return (byte) (blocks >> 0);
-	}
-	
-	public byte getFloorID(){
-		return (byte) (blocks >> 8);
+		return blocks[1];
 	}
 
 	public byte getOreID(){
-		return (byte) (blocks >> 16);
+		return blocks[2];
 	}
 	
 	/**Return relative rotation to a coordinate. Returns -1 if the coordinate is not near this tile.*/
