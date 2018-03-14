@@ -1502,6 +1502,13 @@ blocks/ultraconveyor2
   orig: 8, 8
   offset: 0, 0
   index: -1
+blocks/ultraconveyor-icon
+  rotate: false
+  xy: 784, 355
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 blocks/ultraconveyor3
   rotate: false
   xy: 784, 345
