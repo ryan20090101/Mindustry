@@ -6,7 +6,7 @@ import io.anuke.ucore.util.Mathf;
 
 public class UpgradeRecipes {
     private static final ObjectMap<Upgrade, ItemStack[]> recipes = Mathf.map(
-            Weapon.testgun, list(),
+            Weapon.testgun, list(stack(Item.stone, 1000000)),
             Weapon.triblaster, list(stack(Item.iron, 60), stack(Item.steel, 80)),
             Weapon.clustergun, list(stack(Item.iron, 300), stack(Item.steel, 80)),
             Weapon.vulcan, list(stack(Item.iron, 100), stack(Item.steel, 150), stack(Item.titanium, 80)),
