@@ -39,7 +39,7 @@ public class WeaponFactory extends Block{
         Table content = new Table();
 
         for(Upgrade upgrade : Upgrade.getAllUpgrades()){
-            if(!(upgrade instanceof Weapon)) continue;
+            if(!(upgrade instanceof Weapon) && !(upgrade.getFrom == name)) continue;
             Weapon weapon = (Weapon)upgrade;
 
             ItemStack[] requirements = UpgradeRecipes.get(weapon);

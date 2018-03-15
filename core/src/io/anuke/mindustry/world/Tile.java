@@ -16,7 +16,7 @@ public class Tile{
 	public static final Object tileSetLock = new Object();
 	private static final Array<Tile> tmpArray = new Array<>();
 	
-	/**Packed block data. floor, underlay, block, overlay.*/
+	/**block data. floor, underlay, block, overlay.*/
 	private short[] blocks = new short[4];
 	/**Packed data. Left is rotation, right is extra data, packed into two half-bytes: left is dump, right is extra.*/
 	private short data;
