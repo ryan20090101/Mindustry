@@ -25,6 +25,15 @@ public class StructureCore extends Block{
             Enemy enemy = new Enemy(EnemyTypes.demoneye);
             enemy.set(tile.x*8, tile.y*8);
             enemy.add();
+            setConfigure(tile, (byte)0, (byte)0);
         }
 	}
+    public void configure(Tile tile, byte... data) {
+        if(Vars.world.tile(tile.x, tile.y+2).block()==DistributionBlocks.conveyor){
+            Vars.world.tile(tile.x, tile.y+2).setBlock(Blocks.air);
+            Enemy enemy = new Enemy(EnemyTypes.demoneye);
+            enemy.set(tile.x*8, tile.y*8);
+            enemy.add();
+        }
+    }
 }

@@ -81,6 +81,7 @@ public class Weapon extends Upgrade{
 			roundrobin = true;
 			shake = 1f;
 			inaccuracy = 8f;
+            getFrom = "crate1";
 		}
 	},
 	handrail = new Weapon("handrail", 200, BulletType.railbolt){
