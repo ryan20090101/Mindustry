@@ -26,6 +26,7 @@ public class Registrator {
             DisconnectPacket.class,
             ChatPacket.class,
             KickPacket.class,
+            ResearchPacket.class,
             UpgradePacket.class,
             WeaponSwitchPacket.class,
             BlockTapPacket.class,
