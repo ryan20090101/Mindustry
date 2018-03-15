@@ -13,6 +13,9 @@ import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Bundles;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Translator;
+import io.anuke.mindustry.world.blocks.DistributionBlocks;
+import io.anuke.mindustry.Vars.*;
+import io.anuke.mindustry.Vars;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -360,7 +363,45 @@ public enum PlaceMode{
 			this.tilex = tilex;
 			this.tiley = tiley;
 		}
-	};
+	},
+	rotateTool{
+		{
+			shown = true;
+			lockCamera = true;
+			pan = true;
+		}
+		
+		public void draw(int tilex, int tiley, int endx, int endy){
+			float x = tilex * tilesize;
+			float y = tiley * tilesize;
+            boolean valid = false;
+			if(Vars.world.tile(tilex, tiley).block()==DistributionBlocks.conveyor||Vars.world.tile(tilex, tiley).block()==DistributionBlocks.steelconveyor){
+                valid = true;
+            }else{
+                valid = false;
+            }
+
+			float si = MathUtils.sin(Timers.time() / 6f) + 1.5f;
+            
+			Draw.color(valid ? Colors.get("place") : Colors.get("placeInvalid"));
+			Lines.stroke(2f);
+			Lines.crect(x, y, tilesize * control.input().recipe.result.size + si,
+					tilesize * control.input().recipe.result.size + si);
+
+			control.input().recipe.result.drawPlace(tilex, tiley, control.input().rotation, valid);
+			Lines.stroke(2f);
+
+			if(control.input().recipe.result.rotate){
+				Draw.color(Colors.get("placeRotate"));
+				tr.trns(control.input().rotation * 90, 7, 0);
+				Lines.line(x, y, x + tr.x, y + tr.y);
+			}
+		}
+		
+		public void tapped(int tilex, int tiley){
+			control.input().tryPlaceBlock(tilex, tiley, true);
+		}
+	};  
 	public boolean lockCamera;
 	public boolean pan = false;
 	public boolean shown = false;
