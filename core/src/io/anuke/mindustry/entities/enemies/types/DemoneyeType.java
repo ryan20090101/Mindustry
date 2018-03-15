@@ -6,6 +6,10 @@ import io.anuke.mindustry.entities.enemies.EnemyType;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
+import io.anuke.mindustry.entities.Player;
+import static io.anuke.mindustry.Vars.*;
+import io.anuke.ucore.entities.Entities;
+
 
 public class DemoneyeType extends BossType {
 
@@ -13,13 +17,12 @@ public class DemoneyeType extends BossType {
 		super("demoneye");
 		phaseTotal = 3;
         doPhases = true;
-		speed = 0f;
+		rotatespeed = 0.05f;
 		reload = 30;
 		health = 430;
 		range = 100f;
-		bullet = BulletType.small;
-		hitsize = 10f;
-		mass = 4f;
+		hitsize = 35f;
+		domoving = false;
 	}
 
 	@Override
@@ -52,5 +55,14 @@ public class DemoneyeType extends BossType {
         }
         
 	}
-
+    @Override
+    public void updateTargeting(Enemy enemy, boolean nearCore){
+        if(enemy.target == null){
+            enemy.target = Entities.getClosest(playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying &&
+                !((Player)e).isDead());
+        }        
+        if(enemy.target != null && bullet != null){
+            updateShooting(enemy);
+        }
+    }
 }

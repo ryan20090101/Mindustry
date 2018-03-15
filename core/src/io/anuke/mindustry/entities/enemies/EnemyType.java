@@ -64,6 +64,7 @@ public class EnemyType {
     protected int radiation;
     protected int radiationDeath = 200;
     protected int radiationTime = 5;
+    protected boolean domoving = true;
     
     protected final int timerTarget = timeid ++;
     protected final int timerReload = timeid ++;
@@ -127,7 +128,7 @@ public class EnemyType {
 
         enemy.velocity.set(enemy.x - lastx, enemy.y - lasty).scl(1f / Timers.delta());
         enemy.totalMove.add(enemy.velocity);
-
+        
         float minv = 0.07f;
 
         if(enemy.timer.get(timerReset, 80)){
@@ -145,7 +146,7 @@ public class EnemyType {
         }
 
         Tile tile = world.tileWorld(enemy.x, enemy.y);
-        if(tile != null && tile.floor().solid && tile.floor().liquid && tile.block() == Blocks.air){
+        if(/*tile != null && tile.floor().solid &&*/ tile.floor()==Blocks.deepwater && tile.block() == Blocks.air){
             enemy.damage(enemy.health+1); //drown
         }
 
@@ -264,8 +265,8 @@ public class EnemyType {
                 if(tile.getRotation() == 3) vec.y-=0.5f*tile.block().activeMovementSpeedMultiplier;
             }catch(Exception e){}
         }
-
-        enemy.move(vec.x * Timers.delta(), vec.y * Timers.delta());
+        if(domoving)
+            enemy.move(vec.x * Timers.delta(), vec.y * Timers.delta());
 
         updateTargeting(enemy, nearCore);
 
