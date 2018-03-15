@@ -10,7 +10,7 @@ public abstract class Upgrade {
     public final byte id;
     public final String name;
     public final String description;
-    
+
     public String getFrom = "weaponfactory";
 
     public Upgrade(String name){
