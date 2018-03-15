@@ -16,8 +16,8 @@ public class Tile{
 	public static final Object tileSetLock = new Object();
 	private static final Array<Tile> tmpArray = new Array<>();
 	
-	/**Packed block data. floor, block, ore.*/
-	private byte[] blocks = new byte[3];
+	/**Packed block data. floor, underlay, block, overlay.*/
+	private short[] blocks = new short[4];
 	/**Packed data. Left is rotation, right is extra data, packed into two half-bytes: left is dump, right is extra.*/
 	private short data;
 	/**The coordinates of the core tile this is linked to, in the form of two bytes packed into one.
@@ -43,27 +43,35 @@ public class Tile{
 	}
 	
 	private void iSetFloor(Block floor){
-		byte id = (byte)floor.id;
+		short id = (short) floor.id;
 		blocks[0] = id;
+	}
+
+	private void iSetUnderlay(Block underlay){
+		short id = (short) underlay.id;
+		blocks[1] = id;
 	}
 	
 	private void iSetBlock(Block wall){
-		byte id = (byte)wall.id;
-		blocks[1] = id;
+		short id = (short) wall.id;
+		blocks[2] = id;
 	}
 
-	public byte getFloorID(){
+	private void iSetOverlay(Block overlay){
+		short id = (short) overlay.id;
+		blocks[3] = id;
+	}
+
+	public short getFloorID(){
 		return blocks[0];
 	}
-	
-	public byte getWallID(){
-		return blocks[1];
-	}
 
-	public byte getOreID(){
-		return blocks[2];
-	}
-	
+	public short getUnderlayID() { return blocks[1]; }
+
+	public short getWallID(){ return blocks[2]; }
+
+	public short getOverlayID() { return blocks[3]; }
+
 	/**Return relative rotation to a coordinate. Returns -1 if the coordinate is not near this tile.*/
 	public byte relativeTo(int cx, int cy){
 		if(x == cx && y == cy - 1) return 1;
@@ -127,12 +135,27 @@ public class Tile{
 		return Block.getByID(getWallID());
 	}
 
-	public Block ore(){
-		return Block.getByID(getOreID());
+	public Block underlay(){
+		return Block.getByID(getUnderlayID());
+	}
+
+	public Block overlay(){
+		return Block.getByID(getOverlayID());
 	}
 
 	public Block floorOrBlock(){
 		return Block.getByID(getWallID()) == Blocks.air ? floor() : block();
+	}
+
+	public Block topBlock(){
+		if(Block.getByID(getOverlayID()) == Blocks.air) {
+			if (Block.getByID(getWallID()) == Blocks.air)
+				return Block.getByID(getUnderlayID()) == Blocks.air ? floor() : underlay();
+			else
+				return block();
+		}else
+			return overlay();
+
 	}
 	
 	/**Returns the breaktime of the block, <i>or</i> the breaktime of the linked block, if this tile is linked.*/
@@ -162,7 +185,13 @@ public class Tile{
 	public void setFloor(Block type){
 		iSetFloor(type);
 	}
-	
+	public void setOverlay(Block type){
+		iSetOverlay(type);
+	}
+	public void setUnderlay(Block type){
+		iSetUnderlay(type);
+	}
+
 	public void setRotation(byte rotation){
 		data = Bits.packShort(rotation, Bits.getRightByte(data));
 	}
