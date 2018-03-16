@@ -375,11 +375,8 @@ public enum PlaceMode{
 			float x = tilex * tilesize;
 			float y = tiley * tilesize;
             boolean valid = false;
-			if(Vars.world.tile(tilex, tiley).block()==DistributionBlocks.conveyor||Vars.world.tile(tilex, tiley).block()==DistributionBlocks.steelconveyor){
-                valid = true;
-            }else{
-                valid = false;
-            }
+			if(world.tile(tilex,tiley).block().rotate)
+				valid = true;
 
 			float si = MathUtils.sin(Timers.time() / 6f) + 1.5f;
             
@@ -399,7 +396,7 @@ public enum PlaceMode{
 		}
 		
 		public void tapped(int tilex, int tiley){
-			control.input().tryPlaceBlock(tilex, tiley, true);
+			world.tile(tilex,tiley).setRotation((byte)control.input().rotation);
 		}
 	};  
 	public boolean lockCamera;
