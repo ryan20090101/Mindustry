@@ -95,11 +95,8 @@ public class DistributionBlocks{
     	size = 3;
 	}},
 
-	combiner = new Router("combiner"){{
-        capacity = 5;
-        bufferUpdate = true;
+	combiner = new Combiner("combiner"){{
         rotate = true;
-		selfAccept = false;
 	}},
 	
 	junction = new Junction("junction"){{
