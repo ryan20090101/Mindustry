@@ -44,7 +44,7 @@ public class Vars{
     //team of the enemy in waves
     public static final Team waveTeam = Team.red;
     public static final float unlockResourceScaling = 1.5f;
-    public static final int maxTextLength = 150;
+    public static final int maxTextLength = 1500;
     public static final int maxNameLength = 40;
     public static final float itemSize = 5f;
     public static final int tilesize = 8;
@@ -73,6 +73,8 @@ public class Vars{
     //server port
     public static final int port = 6567;
     public static boolean testMobile;
+    public static boolean fakeMobile = false;
+    public static String fakeUUID = null;
     //shorthand for whether or not this is running on android or ios
     public static boolean mobile;
     public static boolean ios;

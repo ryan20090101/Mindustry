@@ -1,0 +1,131 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug (Launch)",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "",
+      "args": ""
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-DesktopLauncher<Mindustry-desktop>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.desktop.DesktopLauncher",
+      "args": "",
+      "projectName": "Mindustry-desktop"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-IOSLauncher<Mindustry-ios>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.IOSLauncher",
+      "args": "",
+      "projectName": "Mindustry-ios"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-BundleLauncher",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.BundleLauncher",
+      "args": ""
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-IOSLauncher",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.IOSLauncher",
+      "args": ""
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-PackerLauncher",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.PackerLauncher",
+      "args": ""
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-DesktopLauncher",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.desktop.DesktopLauncher",
+      "args": ""
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-ServerLauncher",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.server.ServerLauncher",
+      "args": ""
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-BundleLauncher<packer>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.BundleLauncher",
+      "args": "",
+      "projectName": "packer"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-PackerLauncher<packer>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.PackerLauncher",
+      "args": "",
+      "projectName": "packer"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-ServerLauncher<server>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "io.anuke.mindustry.server.ServerLauncher",
+      "args": "",
+      "projectName": "server"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Attach)",
+      "request": "attach",
+      "hostName": "localhost",
+      "projectName": "Mindustry-desktop",
+      "port": 1044
+    }
+  ]
+}

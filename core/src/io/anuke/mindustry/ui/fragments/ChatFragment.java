@@ -1,16 +1,24 @@
 package io.anuke.mindustry.ui.fragments;
 
+import static io.anuke.mindustry.Vars.state;
+import static io.anuke.ucore.core.Core.scene;
+import static io.anuke.ucore.core.Core.skin;
+
+import java.util.Arrays;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+
 import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.core.Platform;
 import io.anuke.mindustry.gen.Call;
 import io.anuke.mindustry.net.Net;
+import io.anuke.mindustry.ui.commands.CommandRegistry;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Timers;
@@ -23,9 +31,6 @@ import io.anuke.ucore.scene.ui.layout.Unit;
 import io.anuke.ucore.util.Mathf;
 
 import static io.anuke.mindustry.Vars.players;
-import static io.anuke.mindustry.Vars.state;
-import static io.anuke.ucore.core.Core.scene;
-import static io.anuke.ucore.core.Core.skin;
 
 public class ChatFragment extends Table{
     private final static int messagesShown = 10;
@@ -49,6 +54,7 @@ public class ChatFragment extends Table{
             scene.add(ChatFragment.this);
         }
     };
+    private CommandRegistry commandRegistry = new CommandRegistry();
 
     public ChatFragment(){
         super();
@@ -56,19 +62,11 @@ public class ChatFragment extends Table{
         setFillParent(true);
         font = Core.skin.getFont("default-font");
 
-        visible(() -> !state.is(State.menu) && Net.active());
+        visible(() -> !state.is(State.menu));
 
         update(() -> {
-            if(!Net.active()){
-                clearMessages();
 
-                if(chatOpen){
-                    hide();
-                }
-            }
-
-
-            if(Net.active() && Inputs.keyTap("chat")){
+            if(Inputs.keyTap("chat")){
                 toggle();
             }
 
@@ -179,6 +177,18 @@ public class ChatFragment extends Table{
         if(message.replaceAll(" ", "").isEmpty()) return;
 
         history.insert(1, message);
+
+        if (message.startsWith("/")) {
+            String[] split = message.split(" ");
+            String[] arguments = {};
+            if (split.length > 1) {
+                arguments = Arrays.copyOfRange(split, 1, split.length);
+            }
+            String command = split[0].substring(1);
+            if (commandRegistry.run(command, arguments)) {
+                return;
+            }
+        }
 
         Call.sendMessage(players[0], message);
     }

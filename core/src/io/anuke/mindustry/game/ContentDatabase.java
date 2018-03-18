@@ -21,15 +21,7 @@ public class ContentDatabase{
     
     /** Returns whether or not this piece of content is unlocked yet.*/
     public boolean isUnlocked(UnlockableContent content){
-        if(content.alwaysUnlocked()) return true;
-
-        if(!unlocked.containsKey(content.getContentType())){
-            unlocked.put(content.getContentType(), new ObjectSet<>());
-        }
-
-        ObjectSet<String> set = unlocked.get(content.getContentType());
-
-        return set.contains(content.getContentName());
+        return true;
     }
 
     /**

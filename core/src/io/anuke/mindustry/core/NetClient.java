@@ -95,10 +95,10 @@ public class NetClient extends Module{
 
             ConnectPacket c = new ConnectPacket();
             c.name = player.name;
-            c.mobile = mobile;
+            c.mobile = mobile || fakeMobile;
             c.color = Color.rgba8888(player.color);
             c.usid = getUsid(packet.addressTCP);
-            c.uuid = Platform.instance.getUUID();
+            c.uuid = fakeUUID == null ? Platform.instance.getUUID() : fakeUUID;
 
             if(c.uuid == null){
                 ui.showError("$text.invalidid");

@@ -120,6 +120,7 @@ public class DesktopPlatform extends Platform{
         return new DefaultThreadImpl();
     }
 
+    /* get uuid from settings so i can stay admin when mac address changes
     @Override
     public String getUUID(){
         try{
@@ -140,6 +141,7 @@ public class DesktopPlatform extends Platform{
             return super.getUUID();
         }
     }
+    */
 
     private boolean validAddress(byte[] bytes){
         if(bytes == null) return false;
