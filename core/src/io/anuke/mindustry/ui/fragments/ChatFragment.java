@@ -25,6 +25,7 @@ import io.anuke.ucore.util.CommandHandler;
 import io.anuke.ucore.util.Log;
 
 import static io.anuke.mindustry.Vars.commandPrefix;
+import static io.anuke.mindustry.Vars.player;
 import static io.anuke.mindustry.Vars.state;
 import static io.anuke.ucore.core.Core.scene;
 import static io.anuke.ucore.core.Core.skin;
@@ -155,7 +156,7 @@ public class ChatFragment extends Table implements Fragment{
         if (message.startsWith(commandPrefix)) {
             String command = message.replace(commandPrefix,"").split(" ")[0];
             if (Packets.adminCommands.contains(command,false)) {
-                addMessage("This command does exist :)","");
+                NetEvents.handleAdminCommand(player,(byte)Packets.adminCommands.indexOf(command,false));
             }else
                 addMessage("This command does not exist :(","");
         }else

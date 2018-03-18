@@ -174,10 +174,10 @@ public class NetEvents {
         Net.send(packet, SendMode.tcp);
     }
 
-    public static void handleAdminCommand(Player target, String command){
+    public static void handleAdminCommand(Player target, byte commandID){
         AdminCommandPacket packet = new AdminCommandPacket();
         packet.id = target.id;
-        packet.commandID = 1;
+        packet.commandID = commandID;
         Net.send(packet, SendMode.tcp);
     }
 
