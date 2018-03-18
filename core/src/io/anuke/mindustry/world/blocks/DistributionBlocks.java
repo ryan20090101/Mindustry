@@ -78,7 +78,7 @@ public class DistributionBlocks{
 	}},
 	
 	router = new Router("router"){{
-
+		selfAccept = false;
 	}},
 
 	buffer = new Router("buffer"){{

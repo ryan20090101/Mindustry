@@ -1,5 +1,6 @@
 package io.anuke.mindustry.net;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -14,6 +15,7 @@ import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.EntityGroup;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 /**Class for storing all packets.*/
 public class Packets {
@@ -684,4 +686,28 @@ public class Packets {
             info.uuid = new String(Base64Coder.encode(uuid));
         }
     }
+
+    //chat commands
+    public static class AdminCommandPacket implements Packet{
+        public int commandID;
+        public int id;
+
+        @Override
+        public void write(ByteBuffer buffer) {
+            buffer.put((byte)commandID);
+            buffer.putInt(id);
+        }
+
+        @Override
+        public void read(ByteBuffer buffer) {
+            commandID = buffer.get();
+            id = buffer.getInt();
+        }
+    }
+
+    public static Array<String> adminCommands = Array.with(
+            "tp",
+            "setwave",
+            "test"
+    );
 }

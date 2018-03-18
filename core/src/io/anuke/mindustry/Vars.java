@@ -45,6 +45,8 @@ public class Vars{
 	//discord group URL
 	public static final String discordURL = "https://discord.gg/BKADYds";
 
+	public static final String commandPrefix = "/";
+
 	public static final String serverURL = "http://localhost:3000";
 	//directory for user-created map data
 	public static final FileHandle customMapDirectory = gwt ? null : UCore.isAssets() ?

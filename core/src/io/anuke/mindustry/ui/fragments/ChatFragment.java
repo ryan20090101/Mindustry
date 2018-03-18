@@ -11,6 +11,8 @@ import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.io.Platform;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
+import io.anuke.mindustry.net.Packet;
+import io.anuke.mindustry.net.Packets;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Timers;
@@ -22,6 +24,7 @@ import io.anuke.ucore.scene.ui.layout.Unit;
 import io.anuke.ucore.util.CommandHandler;
 import io.anuke.ucore.util.Log;
 
+import static io.anuke.mindustry.Vars.commandPrefix;
 import static io.anuke.mindustry.Vars.state;
 import static io.anuke.ucore.core.Core.scene;
 import static io.anuke.ucore.core.Core.skin;
@@ -149,7 +152,14 @@ public class ChatFragment extends Table implements Fragment{
 
         if(message.replaceAll(" ", "").isEmpty()) return;
         //TODO: BEFORE SEND CHECK IF COMMAND, IF YES SEND COMMAND PACKET NOT CHAT PACKET
-        NetEvents.handleSendMessage(message);
+        if (message.startsWith(commandPrefix)) {
+            String command = message.replace(commandPrefix,"").split(" ")[0];
+            if (Packets.adminCommands.contains(command,false)) {
+                addMessage("This command does exist :)","");
+            }else
+                addMessage("This command does not exist :(","");
+        }else
+            NetEvents.handleSendMessage(message);
     }
 
     public void toggle(){

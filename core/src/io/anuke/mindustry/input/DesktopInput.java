@@ -30,130 +30,138 @@ public class DesktopInput extends InputHandler{
 	@Override public boolean drawPlace(){ return !beganBreak; }
 
 	@Override
-	public void update(){
-		if(player.isDead()) return;
+	public void update() {
+		if (player.isDead()) return;
 
-		if(Inputs.keyRelease("select")){
+		if (Inputs.keyRelease("select")) {
 			placeMode.released(getBlockX(), getBlockY(), getBlockEndX(), getBlockEndY());
 		}
 
-		if(Inputs.keyRelease("break") && !beganBreak){
+		if (Inputs.keyRelease("break") && !beganBreak) {
 			breakMode.released(getBlockX(), getBlockY(), getBlockEndX(), getBlockEndY());
 		}
 
-		if((Inputs.keyTap("select") && recipe != null) || Inputs.keyTap("break")){
+		if ((Inputs.keyTap("select") && recipe != null) || Inputs.keyTap("break")) {
 			Vector2 vec = Graphics.world(Gdx.input.getX(), Gdx.input.getY());
-			mousex = (int)vec.x;
-			mousey = (int)vec.y;
+			mousex = (int) vec.x;
+			mousey = (int) vec.y;
 		}
 
-		if(!Inputs.keyDown("select") && !Inputs.keyDown("break")){
-			mousex = (int)Graphics.mouseWorld().x;
-			mousey = (int)Graphics.mouseWorld().y;
+		if (!Inputs.keyDown("select") && !Inputs.keyDown("break")) {
+			mousex = (int) Graphics.mouseWorld().x;
+			mousey = (int) Graphics.mouseWorld().y;
 		}
-		
+
 		endx = Gdx.input.getX();
 		endy = Gdx.input.getY();
 
 		boolean controller = KeyBinds.getSection("default").device.type == DeviceType.controller;
-		
-		if(Inputs.getAxisActive("zoom") && (Inputs.keyDown("zoom_hold") || controller)
-				&& !state.is(State.menu) && !ui.hasDialog()){
-			if((!zoomed || !controller)) {
+
+		if (Inputs.getAxisActive("zoom") && (Inputs.keyDown("zoom_hold") || controller)
+				&& !state.is(State.menu) && !ui.hasDialog()) {
+			if ((!zoomed || !controller)) {
 				renderer.scaleCamera((int) Inputs.getAxis("zoom"));
 			}
 			zoomed = true;
-		}else{
+		} else {
 			zoomed = false;
 		}
 
-		if(!rotated) {
+		if (!rotated) {
 			rotation += Inputs.getAxis("rotate_alt");
 			rotated = true;
 		}
-		if(!Inputs.getAxisActive("rotate_alt")) rotated = false;
+		if (!Inputs.getAxisActive("rotate_alt")) rotated = false;
 
-		if(!rotatedAlt) {
+		if (!rotatedAlt) {
 			rotation += Inputs.getAxis("rotate");
 			rotatedAlt = true;
 		}
-		if(!Inputs.getAxisActive("rotate")) rotatedAlt = false;
+		if (!Inputs.getAxisActive("rotate")) rotatedAlt = false;
 
 		rotation = Mathf.mod(rotation, 4);
-		
-		if(Inputs.keyDown("break")){
+
+		if (Inputs.keyDown("break")) {
 			breakMode = PlaceMode.areaDelete;
-		}else{
+		} else {
 			breakMode = PlaceMode.hold;
 		}
-		
-		for(int i = 1; i <= 6 && i <= control.upgrades().getWeapons().size; i ++){
-			if(Inputs.keyTap("weapon_" + i)){
+
+		for (int i = 1; i <= 6 && i <= control.upgrades().getWeapons().size; i++) {
+			if (Inputs.keyTap("weapon_" + i)) {
 				player.weaponLeft = player.weaponRight = control.upgrades().getWeapons().get(i - 1);
-                if(Net.active()) NetEvents.handleWeaponSwitch();
+				if (Net.active()) NetEvents.handleWeaponSwitch();
 				ui.hudfrag.updateWeapons();
 			}
 		}
-		
+
 		Tile cursor = world.tile(tilex(), tiley());
 		Tile target = cursor == null ? null : cursor.isLinked() ? cursor.getLinked() : cursor;
 		boolean showCursor = false;
 
-		if(recipe == null && target != null && !ui.hasMouse() && Inputs.keyDown("block_info")
-				&& target.block().fullDescription != null){
+		if (recipe == null && target != null && !ui.hasMouse() && Inputs.keyDown("block_info")
+				&& target.block().fullDescription != null) {
 			showCursor = true;
-			if(Inputs.keyTap("select")){
-			    ui.hudfrag.blockfrag.showBlockInfo(target.block());
-                Cursors.restoreCursor();
-            }
+			if (Inputs.keyTap("select")) {
+				ui.hudfrag.blockfrag.showBlockInfo(target.block());
+				Cursors.restoreCursor();
+			}
 		}
-		
-		if(target != null && Inputs.keyTap("select") && !ui.hasMouse()){
-			if(target.block().isConfigurable(target)){
+
+		if (target != null && Inputs.keyTap("select") && !ui.hasMouse()) {
+			if (target.block().isConfigurable(target)) {
 				ui.configfrag.showConfig(target);
-			}else if(!ui.configfrag.hasConfigMouse()){
+			} else if (!ui.configfrag.hasConfigMouse()) {
 				ui.configfrag.hideConfig();
 			}
 
 			target.block().tapped(target);
-			if(Net.active()) NetEvents.handleBlockTap(target);
+			if (Net.active()) NetEvents.handleBlockTap(target);
 		}
-		
-		if(Inputs.keyTap("break")){
+
+		if (Inputs.keyTap("break")) {
 			ui.configfrag.hideConfig();
 		}
-		
-		if(Inputs.keyRelease("break")){
+
+		if (Inputs.keyRelease("break")) {
 			beganBreak = false;
 		}
 
-		if(recipe != null && Inputs.keyTap("break")){
+		if (recipe != null && Inputs.keyTap("break")) {
 			beganBreak = true;
 			recipe = null;
 		}
 
 		//block breaking
-		if(enableHold && Inputs.keyDown("break") && cursor != null && validBreak(tilex(), tiley())){
+		if (enableHold && Inputs.keyDown("break") && cursor != null && validBreak(tilex(), tiley())) {
 			breaktime += Timers.delta();
-			if(breaktime >= cursor.getBreakTime()){
+			if (breaktime >= cursor.getBreakTime()) {
 				breakBlock(cursor.x, cursor.y, true);
 				breaktime = 0f;
 			}
-		}else{
+		} else {
 			breaktime = 0f;
 		}
 
-		if(recipe != null){
+		if (recipe != null) {
 			showCursor = validPlace(tilex(), tiley(), control.input().recipe.result) && control.input().cursorNear();
 		}
 
-		if(!ui.hasMouse()) {
+		if (!ui.hasMouse()) {
 			if (showCursor)
 				Cursors.setHand();
 			else
 				Cursors.restoreCursor();
 		}
-
+		if (!ui.chatfrag.isVisible()) {
+			if (Inputs.keyRelease("ship_mode") && !player.isFlying && player.flyCooldown <= 0) {
+				player.flyCooldown = 100;
+				player.isFlying = true;
+			} else if (Inputs.keyRelease("ship_mode") && player.isFlying && player.flyCooldown <= 0) {
+				player.flyCooldown = 100;
+				player.isFlying = false;
+			}
+		}
 	}
 
 	public int tilex(){

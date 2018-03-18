@@ -294,6 +294,23 @@ public class NetServer extends Module{
                 Log.info("&lc{0} has requested trace info of {1}.", player.name, other.name);
             }
         });
+
+        Net.handleServer(AdminCommandPacket.class, (id, packet) -> {
+            Player player = connections.get(id);
+
+            if(!player.isAdmin){
+                Log.err("ACCESS DENIED: Player {0} / {1} attempted to perform admin action without proper security access.",
+                        player.name, Net.getConnection(player.clientid).address);
+                return;
+            }
+
+            Player other = playerGroup.getByID(packet.id);
+
+            if(other == null){
+                Log.err("{0} attempted to perform admin action on nonexistant or admin player.", player.name);
+                return;
+            }
+        });
     }
 
     public void update(){

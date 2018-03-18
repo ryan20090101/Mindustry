@@ -174,6 +174,13 @@ public class NetEvents {
         Net.send(packet, SendMode.tcp);
     }
 
+    public static void handleAdminCommand(Player target, String command){
+        AdminCommandPacket packet = new AdminCommandPacket();
+        packet.id = target.id;
+        packet.commandID = 1;
+        Net.send(packet, SendMode.tcp);
+    }
+
     public static void handleTraceRequest(Player target){
         if(Net.client()) {
             handleAdministerRequest(target, AdminAction.trace);
