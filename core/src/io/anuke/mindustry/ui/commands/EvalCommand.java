@@ -1,12 +1,10 @@
 package io.anuke.mindustry.ui.commands;
 
-import static io.anuke.mindustry.Vars.ui;
+import static io.anuke.mindustry.Vars.*;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
-import io.anuke.mindustry.Vars;
 
 class EvalCommand extends Command {
 	ScriptEngineManager manager = new ScriptEngineManager();
