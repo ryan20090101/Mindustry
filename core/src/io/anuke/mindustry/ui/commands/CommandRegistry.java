@@ -16,7 +16,7 @@ public class CommandRegistry extends HashMap<String, Command> {
 	}
 
 	public Boolean run(String name, String[] arguments) {
-		Command command = get(name);
+		Command command = get(name.toLowerCase());
 		if (command != null) {
 			command.action(arguments);
 			return true;
