@@ -202,7 +202,7 @@ public class JoinDialog extends FloatingDialog {
                 Vars.player.name = text;
                 Settings.put("name", text);
                 Settings.save();
-            }).grow().pad(8).get().setMaxLength(40);
+            }).grow().pad(8).get();
 
             ImageButton button = t.addImageButton("white", 40, () -> {
                 new ColorPickDialog().show(color -> {
