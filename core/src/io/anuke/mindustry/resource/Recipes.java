@@ -8,6 +8,7 @@ import io.anuke.mindustry.world.blocks.DistributionBlocks;
 import io.anuke.mindustry.world.blocks.ProductionBlocks;
 import io.anuke.mindustry.world.blocks.WeaponBlocks;
 import io.anuke.mindustry.world.blocks.OtherBlocks;
+import io.anuke.mindustry.world.blocks.LogicBlocks;
 import static io.anuke.mindustry.resource.Section.*;
 
 public class Recipes {
@@ -43,6 +44,7 @@ public class Recipes {
 			new Recipe(distribution, null,DistributionBlocks.sorter, stack(Item.steel, 2)),
 			new Recipe(distribution, null,DistributionBlocks.coreOut, stack(Item.stone, 2)),
 			new Recipe(distribution, null,DistributionBlocks.coreIn, stack(Item.stone, 2)),
+			new Recipe(distribution, null,LogicBlocks.toggleConveyor, stack(Item.stone, 0)),
 
 			new Recipe(weapon, null,WeaponBlocks.turret, stack(Item.stone, 4)),
 			new Recipe(weapon, null,WeaponBlocks.doubleturret, stack(Item.stone, 7)),
