@@ -31,14 +31,19 @@ public class LogicBlock extends Block{
     public static class LogicEntity extends TileEntity{
 
         public boolean active;
-        public int[] connectedBlocks;
+        public int[] inputBlocks;
+        public int[] outputBlocks;
 
         @Override
         public void write(DataOutputStream stream) throws IOException {
             stream.writeByte(active ? 1 : 0);
-            stream.writeByte(connectedBlocks.length);
-            for(int i = 0; i < connectedBlocks.length; i ++){
-                stream.writeInt(connectedBlocks[i]);
+            stream.writeByte(inputBlocks.length);
+            for(int i = 0; i < inputBlocks.length; i ++){
+                stream.writeInt(inputBlocks[i]);
+            }
+            stream.writeByte(outputBlocks.length);
+            for(int i = 0; i < outputBlocks.length; i ++){
+                stream.writeInt(outputBlocks[i]);
             }
         }
 
@@ -47,7 +52,11 @@ public class LogicBlock extends Block{
             active = stream.readByte() == 1;
             byte length = stream.readByte();
             for(int i = 0; i < length; i ++){
-                connectedBlocks[i] = stream.readInt();
+                inputBlocks[i] = stream.readInt();
+            }
+            length = stream.readByte();
+            for(int i = 0; i < length; i ++){
+                outputBlocks[i] = stream.readInt();
             }
         }
     }
