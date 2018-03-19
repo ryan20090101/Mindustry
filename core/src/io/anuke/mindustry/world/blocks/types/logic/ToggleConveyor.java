@@ -64,8 +64,7 @@ public class ToggleConveyor extends Block{
 	@Override
 	public void draw(Tile tile){
 		byte rotation = tile.getRotation();
-		
-		
+
         if(animated){
             if(animationFrames==2){
                 Draw.rect(name() +
@@ -82,8 +81,7 @@ public class ToggleConveyor extends Block{
 		}else{
 			Draw.rect("conveyorStopIcon", tile.worldx(), tile.worldy(), 0);
 		}
-		
-        
+
 	}
 	@Override
 	public void drawLayer2(Tile tile){
