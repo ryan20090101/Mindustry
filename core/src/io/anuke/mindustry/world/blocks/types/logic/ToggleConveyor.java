@@ -58,13 +58,21 @@ public class ToggleConveyor extends Block{
 	
 	@Override
 	public void tapped(Tile tile){
-		active = active ? false : true;
+		ToggleConveyorEntity entity = tile.entity();
+		entity.active = entity.active ? false : true;
+		setConfigure(tile, (byte)1, (byte)(entity.active ? 1 : 0));
+	}
+	public void configure(Tile tile, byte... data) {
+		ToggleConveyorEntity entity = tile.entity();
+		if(entity != null){
+            entity.active = data[1] == 1;
+		}
 	}
 		
 	@Override
 	public void draw(Tile tile){
 		byte rotation = tile.getRotation();
-
+		ToggleConveyorEntity entity = tile.entity();
         if(animated){
             if(animationFrames==2){
                 Draw.rect(name() +
@@ -76,27 +84,23 @@ public class ToggleConveyor extends Block{
         }else{
             Draw.rect(name(),tile.worldx(), tile.worldy(), rotation * 90);
 		}
-		if(active){
+		if(entity.active){
 			Draw.rect("conveyorMoveIcon", tile.worldx(), tile.worldy(), rotation * 90);
 		}else{
 			Draw.rect("conveyorStopIcon", tile.worldx(), tile.worldy(), 0);
 		}
 
 	}
-	@Override
-	public void drawLayer2(Tile tile){
-		byte rotation = tile.getRotation();
-		
-	}
+
 	@Override
 	public boolean isLayer(Tile tile){
-		return tile.<ConveyorEntity>entity().convey.size > 0;
+		return tile.<ToggleConveyorEntity>entity().convey.size > 0;
 	}
 
 	@Override
 	public void drawLayer(Tile tile){
 		if (!drawItems) return;
-		ConveyorEntity entity = tile.entity();
+		ToggleConveyorEntity entity = tile.entity();
 
 		byte rotation = tile.getRotation();
 
@@ -122,11 +126,11 @@ public class ToggleConveyor extends Block{
 
 	@Override
 	public void update(Tile tile){
-
-		if (logicDisabled||!active)
+		ToggleConveyorEntity entity = tile.entity();
+		if (logicDisabled||!entity.active)
 			return;
 
-		ConveyorEntity entity = tile.entity();
+		
 		entity.minitem = 1f;
 
 		int minremove = Integer.MAX_VALUE;
@@ -169,13 +173,15 @@ public class ToggleConveyor extends Block{
 
 	@Override
 	public TileEntity getEntity(){
-		return new ConveyorEntity();
+		return new ToggleConveyorEntity();
 	}
 
 	@Override
 	public boolean acceptItem(Item item, Tile tile, Tile source){
+		ToggleConveyorEntity entity = tile.entity();
+		if(!entity.active){return false;}
 		int direction = source == null ? 0 : Math.abs(source.relativeTo(tile.x, tile.y) - tile.getRotation());
-		float minitem = tile.<ConveyorEntity>entity().minitem;
+		float minitem = tile.<ToggleConveyorEntity>entity().minitem;
 		return (((direction == 0) && minitem > 0.05f) ||
 				((direction %2 == 1) && minitem > 0.52f)) && (source == null || !(source.block().rotate && (source.getRotation() + 2) % 4 == tile.getRotation()));
 	}
@@ -190,7 +196,7 @@ public class ToggleConveyor extends Block{
 		float pos = ch == 0 ? 0 : ch % 2 == 1 ? 0.5f : 1f;
 		float y = (ang == -1 || ang == 3) ? 1 : (ang == 1 || ang == -3) ? -1 : 0;
 
-		ConveyorEntity entity = tile.entity();
+		ToggleConveyorEntity entity = tile.entity();
 		long result = ItemPos.packItem(item, y*0.9f, pos, (byte)Mathf.random(255));
 		boolean inserted = false;
 
@@ -222,10 +228,11 @@ public class ToggleConveyor extends Block{
 	 * [3] seed: -128 to 127, unscaled
 	 * Size is 4 bytes, or one int.
 	 */
-	public static class ConveyorEntity extends TileEntity{
+	public static class ToggleConveyorEntity extends TileEntity{
 
 		LongArray convey = new LongArray();
 		float minitem = 1;
+		boolean active = false;
 
 		@Override
 		public void write(DataOutputStream stream) throws IOException{
