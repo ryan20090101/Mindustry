@@ -59,7 +59,6 @@ public class ToggleConveyor extends Block{
 	@Override
 	public void tapped(Tile tile){
 		active = active ? false : true;
-		draw(tile);
 	}
 		
 	@Override
@@ -81,7 +80,7 @@ public class ToggleConveyor extends Block{
 		if(active){
 			Draw.rect("conveyorMoveIcon", tile.worldx(), tile.worldy(), rotation * 90);
 		}else{
-			Draw.rect("conveyorStopIcon", tile.worldx(), tile.worldy(), rotation * 90);
+			Draw.rect("conveyorStopIcon", tile.worldx(), tile.worldy(), 0);
 		}
 		
         
