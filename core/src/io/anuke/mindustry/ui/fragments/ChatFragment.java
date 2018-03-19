@@ -156,7 +156,7 @@ public class ChatFragment extends Table implements Fragment{
         if (message.startsWith(commandPrefix)) {
             String command = message.replace(commandPrefix,"").split(" ")[0];
             if (Packets.adminCommands.contains(command,false)) {
-                NetEvents.handleAdminCommand(player,(byte)Packets.adminCommands.indexOf(command,false));
+                NetEvents.handleAdminCommand(message.replace(commandPrefix+command,""),(byte)Packets.adminCommands.indexOf(command,false));
             }else
                 addMessage("This command does not exist :(","");
         }else

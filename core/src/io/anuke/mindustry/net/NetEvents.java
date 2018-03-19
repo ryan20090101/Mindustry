@@ -174,9 +174,9 @@ public class NetEvents {
         Net.send(packet, SendMode.tcp);
     }
 
-    public static void handleAdminCommand(Player target, byte commandID){
+    public static void handleAdminCommand(String args, byte commandID){
         AdminCommandPacket packet = new AdminCommandPacket();
-        packet.id = target.id;
+        packet.arguments = args;
         packet.commandID = commandID;
         Net.send(packet, SendMode.tcp);
     }

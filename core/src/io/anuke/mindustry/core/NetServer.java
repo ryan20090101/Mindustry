@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 import static io.anuke.mindustry.Vars.*;
+import static io.anuke.mindustry.net.Packets.adminCommands;
 
 public class NetServer extends Module{
     private final static float serverSyncTime = 4, itemSyncTime = 10;
@@ -304,11 +305,11 @@ public class NetServer extends Module{
                 return;
             }
 
-            Player other = playerGroup.getByID(packet.id);
-
-            if(other == null){
-                Log.err("{0} attempted to perform admin action on nonexistant or admin player.", player.name);
-                return;
+            if(adminCommands.get(packet.commandID) == "setwave"){
+                state.wave++;
+            }
+            else if(adminCommands.get(packet.commandID) == "runwave") {
+                logic.runWave();
             }
         });
     }

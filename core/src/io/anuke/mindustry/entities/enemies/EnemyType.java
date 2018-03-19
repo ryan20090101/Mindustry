@@ -333,6 +333,8 @@ public class EnemyType {
         }
     }
 
+    public void added(Enemy enemy){ }
+
     public boolean isCalculating(Enemy enemy){
         return enemy.node < 0 && !Net.client();
     }

@@ -690,18 +690,23 @@ public class Packets {
     //chat commands
     public static class AdminCommandPacket implements Packet{
         public int commandID;
-        public int id;
+        public String arguments;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.put((byte)commandID);
-            buffer.putInt(id);
+            buffer.putShort((short) arguments.getBytes().length);
+            buffer.put(arguments.getBytes());
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             commandID = buffer.get();
-            id = buffer.getInt();
+            short tlength = buffer.getShort();
+            byte[] t = new byte[tlength];
+            buffer.get(t);
+
+            arguments = new String(t);
         }
     }
 

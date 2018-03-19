@@ -61,17 +61,9 @@ public class DemoneyeType extends BossType {
             enemy.target = Entities.getClosest(playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying &&
                 !((Player)e).isDead());
         }        
-        if((enemy.target != null && bullet != null)||enemy.target.isDead()){
+        if((enemy.target != null && bullet != null)||((Player) enemy.target).isDead()){
             updateShooting(enemy);
         }
     }
-	@Override
-	public void added(){
-		Vars.world.bossAmount = Vars.world.bossAmount+1;
-	}
-	@Override
-	public void removed(Enemy enemy){
-		Vars.world.bossAmount = Vars.world.bossAmount-1;
-	}
 		
 }

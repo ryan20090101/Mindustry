@@ -3,6 +3,8 @@ package io.anuke.mindustry.entities.enemies.types;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.entities.enemies.EnemyType;
 
+import static io.anuke.mindustry.Vars.world;
+
 public class BossType extends EnemyType {
 
     public int bossTier = 1;
@@ -19,5 +21,16 @@ public class BossType extends EnemyType {
         int currentPhase = Math.round(enemy.health/(enemy.maxhealth/phaseTotal));
         enemy.phase = doPhases && enemy.phase != currentPhase ? currentPhase : enemy.phase;
         enemy.idletime = 0f;
+    }
+
+    public void added(Enemy enemy){
+        world.bossAmount++;
+        super.added(enemy);
+    }
+
+    @Override
+    public void removed(Enemy enemy){
+        world.bossAmount--;
+        super.removed(enemy);
     }
 }
