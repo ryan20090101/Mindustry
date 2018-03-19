@@ -37,6 +37,7 @@ public class World extends Module {
 
 	public int time;
 	private Array<Research> rContainer;
+	public int bossAmount = 0;
 
 	public World() {
 		maps.loadMaps();

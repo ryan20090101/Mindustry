@@ -20,7 +20,7 @@ public class DemoneyeType extends BossType {
 		rotatespeed = 0.05f;
 		reload = 30;
 		health = 430;
-		range = 100f;
+		range = 300f;
 		hitsize = 35f;
 		domoving = false;
 	}
@@ -61,8 +61,17 @@ public class DemoneyeType extends BossType {
             enemy.target = Entities.getClosest(playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying &&
                 !((Player)e).isDead());
         }        
-        if(enemy.target != null && bullet != null){
+        if((enemy.target != null && bullet != null)||enemy.target.isDead()){
             updateShooting(enemy);
         }
     }
+	@Override
+	public void added(){
+		Vars.world.bossAmount = Vars.world.bossAmount+1;
+	}
+	@Override
+	public void removed(Enemy enemy){
+		Vars.world.bossAmount = Vars.world.bossAmount-1;
+	}
+		
 }
