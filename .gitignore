@@ -134,5 +134,7 @@ gradle-app.setting
 .DS_Store
 Thumbs.db
 android/libs/
-core/assets/version.properties
-core/assets/version.properties
+
+## Bad idea
+## core/assets/version.properties
+## core/assets/version.properties
