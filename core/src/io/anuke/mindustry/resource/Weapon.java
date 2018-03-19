@@ -30,7 +30,7 @@ public class Weapon extends Upgrade{
 			roundrobin = true;
 		}
 	},
-	clustergun = new Weapon("clustergun", 26f, BulletType.cluster){
+	clustergun = new Weapon("clustergun", 1f, BulletType.cluster){
 		{
 			effect = Fx.clusterShoot;
 			inaccuracy = 17f;
@@ -39,7 +39,7 @@ public class Weapon extends Upgrade{
 			spacing = 0;
 		}
 	},
-	beam = new Weapon("beam", 30f, BulletType.beamlaser){
+	beam = new Weapon("beam", 1f, BulletType.beamlaser){
 		{
 			effect = Fx.beamShoot;
 			inaccuracy = 0;
@@ -122,10 +122,12 @@ public class Weapon extends Upgrade{
 	}
 
 	public void shoot(Player p, float x, float y, float angle){
-		shootInternal(p, x, y, angle);
+		for (int i = 0; i < 3; i++) {
+			shootInternal(p, x, y, angle);
 
-		if(Net.active() && p == Vars.player){
-			NetEvents.handleShoot(this, x, y, angle);
+			if(Net.active() && p == Vars.player){
+				NetEvents.handleShoot(this, x, y, angle);
+			}
 		}
 	}
 	
