@@ -367,11 +367,12 @@ public enum PlaceMode{
 	},
 	rotateTool{
 		{
-			shown = true;
-			lockCamera = true;
-			pan = true;
+            shown = true;
+            lockCamera = false;
+            showRotate = true;
 		}
 		
+		/*
 		public void draw(int tilex, int tiley, int endx, int endy){
 			float x = tilex * tilesize;
 			float y = tiley * tilesize;
@@ -395,6 +396,7 @@ public enum PlaceMode{
 				Lines.line(x, y, x + tr.x, y + tr.y);
 			}
 		}
+		*/
 		
 		public void tapped(int tilex, int tiley){
 			world.tile(tilex,tiley).setRotation((byte)control.input().rotation);
@@ -406,16 +408,14 @@ public enum PlaceMode{
 
 		{
 			shown = true;
-			lockCamera = false;
+			lockCamera = true;
 			pan = true;
 		}
 
 		public void draw(int tilex, int tiley, int endx, int endy){
 			float x = tilex * tilesize;
 			float y = tiley * tilesize;
-			boolean valid = false;
-			if(world.tile(tilex,tiley).block() instanceof LogicAcceptor)
-				valid = true;
+			boolean valid = world.tile(tilex,tiley).block() instanceof LogicAcceptor;
 
 			float si = MathUtils.sin(Timers.time() / 6f) + 1.5f;
 
@@ -428,6 +428,7 @@ public enum PlaceMode{
 		}
 
 		public void tapped(int tilex, int tiley){
+		    System.out.println("test");
 			if (linking) {
 				Tile tile = world.tile(tilex,tiley);
 				((LogicAcceptor) tile.block()).logicLink(tile,world.tile(othertilex,othertiley));
@@ -439,6 +440,7 @@ public enum PlaceMode{
 			}
 		}
 	};
+
 	public boolean lockCamera;
 	public boolean pan = false;
 	public boolean shown = false;

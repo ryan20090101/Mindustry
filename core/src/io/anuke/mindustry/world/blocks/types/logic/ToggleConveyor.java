@@ -7,6 +7,7 @@ import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Layer;
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.types.LogicBlock;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.*;
@@ -19,13 +20,9 @@ import java.util.AbstractList;
 import java.util.Collections;
 import java.util.List;
 
-import io.anuke.ucore.graphics.Lines;
-import com.badlogic.gdx.graphics.Color;
-import io.anuke.ucore.util.Angles;
-
 import static io.anuke.mindustry.Vars.tilesize;
 
-public class ToggleConveyor extends LogicBlock{
+public class ToggleConveyor extends LogicBlock {
 	private static ItemPos drawpos = new ItemPos();
 	private static ItemPos pos1 = new ItemPos();
 	private static ItemPos pos2 = new ItemPos();

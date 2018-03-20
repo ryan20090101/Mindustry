@@ -1,4 +1,4 @@
-package io.anuke.mindustry.world.blocks.types.logic;
+package io.anuke.mindustry.world.blocks.types;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
