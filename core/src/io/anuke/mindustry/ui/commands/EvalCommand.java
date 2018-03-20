@@ -30,7 +30,8 @@ class EvalCommand extends Command {
 		Object evalResult;
 		try {
 			evalResult = engine.eval(String.join(" ", arguments));
-		} catch (ScriptException error) {
+		} catch (Throwable error) {
+			// something was thrown
 			evalResult = error;
 		}
 		if (evalResult == null) evalResult = "undefined or null";
