@@ -33,6 +33,12 @@ public class LogicBlock extends Block implements LogicAcceptor{
     }
 
     @Override
+    public void setLogic(Tile tile, Tile source, Boolean logicState) {
+        LogicEntity ent = tile.entity();
+        ent.active = logicState;
+    }
+
+    @Override
     public boolean logicLink(Tile tile, Tile source) {
         LogicEntity ent = tile.entity();
 
