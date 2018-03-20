@@ -17,13 +17,13 @@ import io.anuke.ucore.util.Translator;
 public class Weapon extends Upgrade{
 	public static final Weapon
 
-	blaster = new Weapon("blaster", 12, BulletType.shot){
+	blaster = new Weapon("blaster", 1f, BulletType.shot){
 		{
 			effect =  Fx.laserShoot;
 			length = 2f;
 		}
 	},
-	triblaster = new Weapon("triblaster", 16, BulletType.spread){
+	triblaster = new Weapon("triblaster", 1, BulletType.spread){
 		{
 			shots = 3;
 			effect = Fx.spreadShoot;
@@ -47,7 +47,7 @@ public class Weapon extends Upgrade{
 			shake = 2f;
 		}
 	},
-	vulcan = new Weapon("vulcan", 5, BulletType.vulcan){
+	vulcan = new Weapon("vulcan", 1, BulletType.vulcan){
 		{
 			effect = Fx.vulcanShoot;
 			inaccuracy = 5;
@@ -56,7 +56,7 @@ public class Weapon extends Upgrade{
 			inaccuracy = 4f;
 		}
 	},
-	shockgun = new Weapon("shockgun", 36, BulletType.shockshell){
+	shockgun = new Weapon("shockgun", 1, BulletType.shockshell){
 		{
 			shootsound = "bigshot";
 			effect = Fx.shockShoot;
