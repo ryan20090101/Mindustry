@@ -19,6 +19,10 @@ import java.util.AbstractList;
 import java.util.Collections;
 import java.util.List;
 
+import io.anuke.ucore.graphics.Lines;
+import com.badlogic.gdx.graphics.Color;
+import io.anuke.ucore.util.Angles;
+
 import static io.anuke.mindustry.Vars.tilesize;
 
 public class ToggleConveyor extends LogicBlock{
@@ -75,6 +79,11 @@ public class ToggleConveyor extends LogicBlock{
 	public void draw(Tile tile){
 		byte rotation = tile.getRotation();
 		ToggleConveyorEntity entity = tile.entity();
+		Draw.color(Color.GREEN);
+		Draw.alpha(0.3f);
+		Lines.stroke(4f);
+		Lines.line(tile.x*8, tile.y*8, /*target x*/ 8, /*target y*/ 8);
+		Draw.reset();
         if(animated){
             if(animationFrames==2){
                 Draw.rect(name() +
@@ -101,6 +110,7 @@ public class ToggleConveyor extends LogicBlock{
 
 	@Override
 	public void drawLayer(Tile tile){
+
 		if (!drawItems) return;
 		ToggleConveyorEntity entity = tile.entity();
 
