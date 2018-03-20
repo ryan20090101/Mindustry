@@ -160,9 +160,11 @@ public class Player extends SyncEntity{
 		Tile tile = world.tileWorld(x, y);
 
 		//if player is in solid block
+		/*
 		if(tile != null && ((tile.floor().liquid && tile.block() == Blocks.air) || tile.solid())) {
 			damage(health + 1); //die instantly
 		}
+		*/
 
 		if(ui.chatfrag.chatOpen()) return;
 
