@@ -6,6 +6,7 @@ import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.types.LogicAcceptor;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Inputs.DeviceType;
@@ -21,6 +22,8 @@ public class DesktopInput extends InputHandler{
 	int endx, endy;
 	private boolean enableHold = false;
 	private boolean beganBreak;
+	private boolean linking;
+	private Tile linkTile;
 	private boolean rotated = false, rotatedAlt, zoomed;
 	
 	@Override public float getCursorEndX(){ return endx; }
@@ -130,6 +133,19 @@ public class DesktopInput extends InputHandler{
 		if (recipe != null && Inputs.keyTap("break")) {
 			beganBreak = true;
 			recipe = null;
+		}
+
+		if (Inputs.keyTap("logic_link")) {
+			if(cursor.block() instanceof LogicAcceptor) {
+				if (linking = false) {
+					linking = true;
+					linkTile = cursor;
+				}
+				else {
+					linking = false;
+					((LogicAcceptor) cursor.block()).logicLink(cursor,linkTile);
+				}
+			}
 		}
 
 		//block breaking
