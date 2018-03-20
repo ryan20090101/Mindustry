@@ -79,11 +79,6 @@ public class ToggleConveyor extends LogicBlock{
 	public void draw(Tile tile){
 		byte rotation = tile.getRotation();
 		ToggleConveyorEntity entity = tile.entity();
-		Draw.color(Color.GREEN);
-		Draw.alpha(0.3f);
-		Lines.stroke(4f);
-		Lines.line(tile.x*8, tile.y*8, /*target x*/ 8, /*target y*/ 8);
-		Draw.reset();
         if(animated){
             if(animationFrames==2){
                 Draw.rect(name() +
@@ -100,7 +95,7 @@ public class ToggleConveyor extends LogicBlock{
 		}else{
 			Draw.rect("conveyorStopIcon", tile.worldx(), tile.worldy(), 0);
 		}
-
+        super.draw(tile);
 	}
 
 	@Override

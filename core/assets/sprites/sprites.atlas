@@ -2504,6 +2504,20 @@ ui/icons/icon-line
   orig: 16, 16
   offset: 0, 0
   index: -1
+ui/icons/icon-linkTool
+  rotate: false
+  xy: 381, 87
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+ui/icons/icon-resize
+  rotate: false
+  xy: 381, 87
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 ui/icons/icon-load
   rotate: false
   xy: 717, 270
@@ -2513,21 +2527,21 @@ ui/icons/icon-load
   index: -1
 ui/icons/icon-load-image
   rotate: false
-  xy: 381, 87
+  xy: 399, 87
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ui/icons/icon-load-map
   rotate: false
-  xy: 399, 87
+  xy: 417, 87
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ui/icons/icon-loading
   rotate: false
-  xy: 417, 87
+  xy: 435, 87
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -2555,7 +2569,7 @@ ui/icons/icon-pause
   index: -1
 ui/icons/icon-pencil
   rotate: false
-  xy: 435, 87
+  xy: 453, 87
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -2569,7 +2583,7 @@ ui/icons/icon-pencil-small
   index: -1
 ui/icons/icon-pick
   rotate: false
-  xy: 453, 87
+  xy: 471, 87
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -2618,7 +2632,7 @@ ui/icons/icon-quit
   index: -1
 ui/icons/icon-redo
   rotate: false
-  xy: 471, 87
+  xy: 253, 69
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -2637,14 +2651,14 @@ ui/icons/icon-rename
   orig: 14, 14
   offset: 0, 0
   index: -1
-ui/icons/icon-resize
+ui/icons/icon-rotate
   rotate: false
-  xy: 253, 69
-  size: 16, 16
-  orig: 16, 16
+  xy: 539, 127
+  size: 14, 14
+  orig: 14, 14
   offset: 0, 0
   index: -1
-ui/icons/icon-rotate
+ui/icons/icon-rotateTool
   rotate: false
   xy: 539, 127
   size: 14, 14

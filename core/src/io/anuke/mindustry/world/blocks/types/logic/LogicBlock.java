@@ -1,10 +1,14 @@
 package io.anuke.mindustry.world.blocks.types.logic;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.types.LogicAcceptor;
+import io.anuke.ucore.graphics.Draw;
+import io.anuke.ucore.graphics.Lines;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -19,6 +23,21 @@ public class LogicBlock extends Block implements LogicAcceptor{
 
     public LogicBlock(String name) {
         super(name);
+    }
+
+    @Override
+    public void draw(Tile tile) {
+        Draw.color(Color.GREEN);
+        Draw.alpha(0.3f);
+        Lines.stroke(4f);
+        LogicEntity ent = tile.entity();
+        Iterator<Integer> it = ent.outputBlocks.iterator();
+        int pos;
+        while(it.hasNext()) {
+            pos = it.next();
+            Lines.line(tile.x*8, tile.y*8, pos % world.width()*8, pos / world.width()*8);
+        }
+        Draw.reset();
     }
 
     @Override
@@ -47,8 +66,11 @@ public class LogicBlock extends Block implements LogicAcceptor{
         while(it.hasNext()) {
             pos = it.next();
             Tile logicTile = world.tile(pos % world.width(), pos / world.width());
+            if (logicTile.block()!=Blocks.air) {
             LogicAcceptor blck =((LogicAcceptor) tile.block());
-            blck.setLogic(logicTile,tile,ent.outputActive);
+                blck.setLogic(logicTile,tile,ent.outputActive);}
+            else
+                ent.outputBlocks.removeValue(pos,false);
         }
     }
 

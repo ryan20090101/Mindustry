@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.anuke.mindustry.ui.fragments.ToolFragment;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.types.LogicAcceptor;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
@@ -398,7 +399,46 @@ public enum PlaceMode{
 		public void tapped(int tilex, int tiley){
 			world.tile(tilex,tiley).setRotation((byte)control.input().rotation);
 		}
-	};  
+	},
+	linkTool{
+		int othertilex, othertiley;
+		boolean linking;
+
+		{
+			shown = true;
+			lockCamera = false;
+			pan = true;
+		}
+
+		public void draw(int tilex, int tiley, int endx, int endy){
+			float x = tilex * tilesize;
+			float y = tiley * tilesize;
+			boolean valid = false;
+			if(world.tile(tilex,tiley).block() instanceof LogicAcceptor)
+				valid = true;
+
+			float si = MathUtils.sin(Timers.time() / 6f) + 1.5f;
+
+			Draw.color(valid ? Colors.get("place") : Colors.get("placeInvalid"));
+			Lines.stroke(2f);
+			Lines.crect(x, y, tilesize * control.input().recipe.result.size + si,
+					tilesize * control.input().recipe.result.size + si);
+
+			control.input().recipe.result.drawPlace(tilex, tiley, control.input().rotation, valid);
+		}
+
+		public void tapped(int tilex, int tiley){
+			if (linking) {
+				Tile tile = world.tile(tilex,tiley);
+				((LogicAcceptor) tile.block()).logicLink(tile,world.tile(othertilex,othertiley));
+                linking = false;
+			}else{
+                linking = true;
+				othertilex = tilex;
+                othertiley = tiley;
+			}
+		}
+	};
 	public boolean lockCamera;
 	public boolean pan = false;
 	public boolean shown = false;
