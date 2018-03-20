@@ -21,7 +21,7 @@ import java.util.List;
 
 import static io.anuke.mindustry.Vars.tilesize;
 
-public class ToggleConveyor extends Block{
+public class ToggleConveyor extends LogicBlock{
 	private static ItemPos drawpos = new ItemPos();
 	private static ItemPos pos1 = new ItemPos();
 	private static ItemPos pos2 = new ItemPos();
@@ -59,13 +59,15 @@ public class ToggleConveyor extends Block{
 	@Override
 	public void tapped(Tile tile){
 		ToggleConveyorEntity entity = tile.entity();
-		entity.active = entity.active ? false : true;
-		setConfigure(tile, (byte)1, (byte)(entity.active ? 1 : 0));
+		entity.selfActive = entity.selfActive ? false : true;
+		entity.outputActive = entity.selfActive;
+		updateOutputLogic(tile);
+		setConfigure(tile, (byte)1, (byte)(entity.selfActive ? 1 : 0));
 	}
 	public void configure(Tile tile, byte... data) {
 		ToggleConveyorEntity entity = tile.entity();
 		if(entity != null){
-            entity.active = data[1] == 1;
+            entity.selfActive = data[1] == 1;
 		}
 	}
 		
@@ -84,7 +86,7 @@ public class ToggleConveyor extends Block{
         }else{
             Draw.rect(name(),tile.worldx(), tile.worldy(), rotation * 90);
 		}
-		if(entity.active){
+		if(entity.selfActive){
 			Draw.rect("conveyorMoveIcon", tile.worldx(), tile.worldy(), rotation * 90);
 		}else{
 			Draw.rect("conveyorStopIcon", tile.worldx(), tile.worldy(), 0);
@@ -127,13 +129,20 @@ public class ToggleConveyor extends Block{
 	@Override
 	public void update(Tile tile){
 		ToggleConveyorEntity entity = tile.entity();
-		if (logicDisabled||!entity.active)
+		if (logicDisabled||!entity.selfActive)
 			return;
-
 		
 		entity.minitem = 1f;
 
 		int minremove = Integer.MAX_VALUE;
+
+		if(entity.convey.size > 0) {
+			entity.outputActive = true;
+			updateOutputLogic(tile);
+		} else {
+			entity.outputActive = false;
+			updateOutputLogic(tile);
+		}
 
 		for(int i = entity.convey.size - 1; i >= 0; i --){
 			long value = entity.convey.get(i);
@@ -179,7 +188,7 @@ public class ToggleConveyor extends Block{
 	@Override
 	public boolean acceptItem(Item item, Tile tile, Tile source){
 		ToggleConveyorEntity entity = tile.entity();
-		if(!entity.active){return false;}
+		if(!entity.selfActive){return false;}
 		int direction = source == null ? 0 : Math.abs(source.relativeTo(tile.x, tile.y) - tile.getRotation());
 		float minitem = tile.<ToggleConveyorEntity>entity().minitem;
 		return (((direction == 0) && minitem > 0.05f) ||
@@ -228,11 +237,10 @@ public class ToggleConveyor extends Block{
 	 * [3] seed: -128 to 127, unscaled
 	 * Size is 4 bytes, or one int.
 	 */
-	public static class ToggleConveyorEntity extends TileEntity{
+	public static class ToggleConveyorEntity extends LogicEntity{
 
 		LongArray convey = new LongArray();
 		float minitem = 1;
-		boolean active = false;
 
 		@Override
 		public void write(DataOutputStream stream) throws IOException{
