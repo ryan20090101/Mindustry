@@ -54,15 +54,11 @@ public class ChatFragment extends Table implements Fragment{
         setFillParent(true);
         font = Core.skin.getFont("default-font");
 
-        setVisible(() -> !state.is(State.menu) && Net.active());
+        setVisible(() -> !state.is(State.menu));
 
         //TODO put it in input?
         update(() -> {
-            if(!Net.active() && chatOpen){
-                hide();
-            }
-
-            if(Net.active() && Inputs.keyTap("chat")){
+            if(Inputs.keyTap("chat")){
                 toggle();
             }
 
