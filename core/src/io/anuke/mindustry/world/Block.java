@@ -205,6 +205,8 @@ public class Block{
 		Effects.effect(explosionEffect, x, y);
 		Effects.sound(explosionSound, x, y);
 	}
+
+	public void onBreak(Tile tile){}
 	
 	public TileEntity getEntity(){
 		return new TileEntity();

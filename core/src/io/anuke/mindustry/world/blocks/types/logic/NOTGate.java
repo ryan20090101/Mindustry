@@ -16,4 +16,12 @@ public class NOTGate extends LogicBlock {
         updateOutputLogic(tile);
         return true;
     }
+
+    @Override
+    public void placed(Tile tile) {
+        super.placed(tile);
+        LogicEntity ent = tile.entity();
+        ent.selfActive = true;
+        ent.outputActive = true;
+    }
 }

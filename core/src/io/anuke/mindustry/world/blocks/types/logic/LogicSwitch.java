@@ -1,12 +1,14 @@
 package io.anuke.mindustry.world.blocks.types.logic;
 
+import io.anuke.mindustry.world.Layer;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.types.LogicBlock;
 import io.anuke.ucore.graphics.Draw;
 
-public class Switch extends LogicBlock {
-    public Switch(String name) {
+public class LogicSwitch extends LogicBlock {
+    public LogicSwitch(String name) {
         super(name);
+        layer2 = Layer.laser;
     }
 
     @Override
@@ -18,10 +20,11 @@ public class Switch extends LogicBlock {
     @Override
     public void tapped(Tile tile){
         LogicEntity entity = tile.entity();
-        entity.selfActive = entity.selfActive ? false : true;
+        entity.selfActive = !entity.selfActive;
         entity.outputActive = entity.selfActive;
         updateOutputLogic(tile);
-        setConfigure(tile, (byte)1, (byte)(entity.selfActive ? 1 : 0));
+        System.out.println(entity.selfActive);
+        setConfigure(tile, (byte)(entity.selfActive ? 1 : 0));
     }
 
     @Override

@@ -24,6 +24,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
     public LogicBlock(String name) {
         super(name);
         expanded = true;
+        update = true;
         layer2 = Layer.laser;
     }
 
@@ -45,6 +46,29 @@ public class LogicBlock extends Block implements LogicAcceptor{
     }
 
     @Override
+    public void onBreak(Tile tile) {
+        System.out.println("test");
+        int pos;
+        Iterator<Integer> it = tile.<LogicEntity>entity().inputBlocks.iterator();
+        while(it.hasNext()) {
+            pos = it.next();
+            Tile logicTile = world.tile(pos % world.width(), pos / world.width());
+            if (logicTile.block()!=Blocks.air) {
+                logicTile.<LogicEntity>entity().outputBlocks.removeValue(tile.packedPosition(),false);
+            }
+        }
+
+        it = tile.<LogicEntity>entity().outputBlocks.iterator();
+        while(it.hasNext()) {
+            pos = it.next();
+            Tile logicTile = world.tile(pos % world.width(), pos / world.width());
+            if (logicTile.block()!=Blocks.air) {
+                logicTile.<LogicEntity>entity().inputBlocks.removeValue(tile.packedPosition(),false);
+            }
+        }
+    }
+
+    @Override
     public void updateOutputLogic(Tile tile) {
         LogicEntity ent = tile.entity();
 
@@ -54,8 +78,10 @@ public class LogicBlock extends Block implements LogicAcceptor{
             pos = it.next();
             Tile logicTile = world.tile(pos % world.width(), pos / world.width());
             if (logicTile.block()!=Blocks.air) {
-            LogicAcceptor blck =((LogicAcceptor) tile.block());
-                blck.setLogic(logicTile,tile,ent.outputActive);}
+                LogicAcceptor blck = ((LogicAcceptor) logicTile.block());
+                blck.setLogic(logicTile, tile, ent.outputActive);
+                logicTile.<LogicEntity>entity().inputBlocks.add(tile.packedPosition());
+            }
             else
                 ent.outputBlocks.removeValue(pos,false);
         }
@@ -70,6 +96,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
                 return false;
             ent.outputBlocks.add(source.packedPosition());
             ((LogicAcceptor) source.block()).onLogicLink(source);
+            source.<LogicEntity>entity().inputBlocks.add(tile.packedPosition());
             ent.connectedBlocks++;
             return true;
         }
@@ -84,10 +111,12 @@ public class LogicBlock extends Block implements LogicAcceptor{
 
     @Override
     public void drawLayer2(Tile tile) {
+        LogicEntity ent = tile.entity();
+        if (ent==null)
+            return;
         Draw.color(Color.GREEN);
         Draw.alpha(0.3f);
         Lines.stroke(4f);
-        LogicEntity ent = tile.entity();
         Iterator<Integer> it = ent.outputBlocks.iterator();
         int pos;
         while(it.hasNext()) {
@@ -109,6 +138,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
         public boolean outputActive;
         public int connectedBlocks;
         public Array<Integer> outputBlocks = new Array<>();
+        public Array<Integer> inputBlocks = new Array<>();
 
         @Override
         public void write(DataOutputStream stream) throws IOException {

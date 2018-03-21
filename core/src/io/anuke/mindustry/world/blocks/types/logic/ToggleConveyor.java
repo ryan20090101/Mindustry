@@ -60,10 +60,10 @@ public class ToggleConveyor extends LogicBlock {
 	@Override
 	public void tapped(Tile tile){
 		ToggleConveyorEntity entity = tile.entity();
-		entity.selfActive = entity.selfActive ? false : true;
+		entity.selfActive = !entity.selfActive;
 		entity.outputActive = entity.selfActive;
 		updateOutputLogic(tile);
-		setConfigure(tile, (byte)1, (byte)(entity.selfActive ? 1 : 0));
+		setConfigure(tile, (byte)(entity.selfActive ? 1 : 0));
 	}
 
 	@Override

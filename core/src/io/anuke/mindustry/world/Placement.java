@@ -1,6 +1,5 @@
 package io.anuke.mindustry.world;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -29,6 +28,7 @@ public class Placement {
         if(tile == null) return null;
 
         Block block = tile.isLinked() ? tile.getLinked().block() : tile.block();
+        block.onBreak(tile);
         Recipe result = Recipes.getByResult(block);
 
         if(result != null){
