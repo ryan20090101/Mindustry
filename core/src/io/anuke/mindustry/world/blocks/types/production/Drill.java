@@ -8,13 +8,14 @@ import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Layer;
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.types.LogicBlock;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Effects.Effect;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Mathf;
 
-public class Drill extends Block{
+public class Drill extends LogicBlock {
 	protected final int timerDrill = timers++;
 	protected final int timerDump = timers++;
 	
@@ -40,9 +41,12 @@ public class Drill extends Block{
 	
 	@Override
 	public void update(Tile tile){
-		TileEntity entity = tile.entity;
+		LogicEntity entity = tile.entity();
+
+		if(entity.selfActive)
+			return;
 		
-		if((tile.floor() == resource || (resource.drops.equals(tile.floor().drops))) 
+		if((tile.floor() == resource || (resource.drops.equals(tile.floor().drops)))
 				&& entity.timer.get(timerDrill, 60 * time) && tile.entity.getItem(result) < capacity){
 			offloadNear(tile, result);
 			Effects.effect(drillEffect, tile.worldx(), tile.worldy());
@@ -51,6 +55,11 @@ public class Drill extends Block{
 		if(entity.timer.get(timerDump, 30)){
 			tryDump(tile);
 		}
+	}
+
+	@Override
+	public boolean canLogicOutput(Tile tile) {
+		return false;
 	}
 
 	@Override

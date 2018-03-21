@@ -46,7 +46,10 @@ public class Arraydrill extends Drill {
 
     @Override
     public void update(Tile tile){
-        TileEntity entity = tile.entity;
+        LogicEntity entity = tile.entity();
+
+        if(entity.selfActive)
+            return;
 
         if(tile.floor().drops != null && mineable.contains(tile.floor(),true) && entity.timer.get(timerDrill, 60 * time)){
             offloadNear(tile, tile.floor().drops.item);

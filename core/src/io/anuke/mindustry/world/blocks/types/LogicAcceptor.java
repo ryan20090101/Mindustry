@@ -4,8 +4,8 @@ import io.anuke.mindustry.world.Tile;
 
 public interface LogicAcceptor {
 
-    /** Returns whether can link or no.*/
-    boolean canLogicLink(Tile tile);
+    /** Returns if can source link.*/
+    boolean canLogicOutput(Tile tile);
 
     /** Call on successful logicLink.*/
     void onLogicLink(Tile tile);

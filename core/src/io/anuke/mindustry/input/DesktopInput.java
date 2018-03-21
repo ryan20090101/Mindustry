@@ -137,11 +137,12 @@ public class DesktopInput extends InputHandler{
 
 		if (Inputs.keyTap("logic_link")) {
 			if(cursor.block() instanceof LogicAcceptor) {
-				if (linking == false) {
+				LogicAcceptor block = (LogicAcceptor) cursor.block();
+				if (!linking && block.canLogicOutput(cursor)) {
 					linking = true;
 					linkTile = cursor;
 				}
-				else {
+				else if (linking) {
 					linking = false;
 					((LogicAcceptor) linkTile.block()).logicLink(linkTile,cursor);
 				}

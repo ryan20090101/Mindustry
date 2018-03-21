@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.world.Block;
+import io.anuke.mindustry.world.Layer;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Blocks;
-import io.anuke.mindustry.world.blocks.types.LogicAcceptor;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
 
@@ -23,26 +23,13 @@ public class LogicBlock extends Block implements LogicAcceptor{
 
     public LogicBlock(String name) {
         super(name);
+        expanded = true;
+        layer2 = Layer.laser;
     }
 
     @Override
-    public void draw(Tile tile) {
-        Draw.color(Color.GREEN);
-        Draw.alpha(0.3f);
-        Lines.stroke(4f);
-        LogicEntity ent = tile.entity();
-        Iterator<Integer> it = ent.outputBlocks.iterator();
-        int pos;
-        while(it.hasNext()) {
-            pos = it.next();
-            Lines.line(tile.x*8, tile.y*8, pos % world.width()*8, pos / world.width()*8);
-        }
-        Draw.reset();
-    }
-
-    @Override
-    public boolean canLogicLink(Tile tile) {
-        return (tile.block() instanceof LogicAcceptor);
+    public boolean canLogicOutput(Tile tile) {
+        return true;
     }
 
     @Override
@@ -88,6 +75,27 @@ public class LogicBlock extends Block implements LogicAcceptor{
         }
         else
             return false;
+    }
+
+    @Override
+    public boolean isLayer2(Tile tile) {
+        return true; //check if viewing logic links
+    }
+
+    @Override
+    public void drawLayer2(Tile tile) {
+        Draw.color(Color.GREEN);
+        Draw.alpha(0.3f);
+        Lines.stroke(4f);
+        LogicEntity ent = tile.entity();
+        Iterator<Integer> it = ent.outputBlocks.iterator();
+        int pos;
+        while(it.hasNext()) {
+            pos = it.next();
+            Lines.line(tile.x*8, tile.y*8, pos % world.width()*8, pos / world.width()*8);
+        }
+        Draw.reset();
+        super.drawLayer2(tile);
     }
 
     @Override

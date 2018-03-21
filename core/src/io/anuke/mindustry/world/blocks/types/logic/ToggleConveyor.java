@@ -92,7 +92,6 @@ public class ToggleConveyor extends LogicBlock {
 		}else{
 			Draw.rect("conveyorStopIcon", tile.worldx(), tile.worldy(), 0);
 		}
-        super.draw(tile);
 	}
 
 	@Override

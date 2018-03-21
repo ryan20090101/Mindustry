@@ -10,5 +10,5 @@ public enum Layer{
 	/**Power lasers.*/
 	power, 
 	/**Extra lasers, like healing turrets.*/
-	laser;
+	laser
 }
