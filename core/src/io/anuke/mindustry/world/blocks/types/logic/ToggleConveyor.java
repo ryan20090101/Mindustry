@@ -65,10 +65,12 @@ public class ToggleConveyor extends LogicBlock {
 		updateOutputLogic(tile);
 		setConfigure(tile, (byte)1, (byte)(entity.selfActive ? 1 : 0));
 	}
+
+	@Override
 	public void configure(Tile tile, byte... data) {
 		ToggleConveyorEntity entity = tile.entity();
 		if(entity != null){
-            entity.selfActive = data[1] == 1;
+            entity.selfActive = data[0] == 1;
 		}
 	}
 		
