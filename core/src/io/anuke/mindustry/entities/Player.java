@@ -187,7 +187,7 @@ public class Player extends SyncEntity{
 		movement.y += ya*speed;
 		movement.x += xa*speed;
 		
-		boolean shooting = !Inputs.keyDown("dash") && Inputs.keyDown("shoot") && control.input().recipe == null
+		boolean shooting = Inputs.keyDown("shoot") && control.input().recipe == null
 				&& !ui.hasMouse() && !control.input().onConfigurable();
 
 		if(shooting){
