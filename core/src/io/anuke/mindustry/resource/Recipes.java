@@ -44,10 +44,13 @@ public class Recipes {
 			new Recipe(distribution, null,DistributionBlocks.sorter, stack(Item.steel, 2)),
 			new Recipe(distribution, null,DistributionBlocks.coreOut, stack(Item.stone, 2)),
 			new Recipe(distribution, null,DistributionBlocks.coreIn, stack(Item.stone, 2)),
-			new Recipe(distribution, null,LogicBlocks.toggleConveyor, stack(Item.stone, 0)),
-			new Recipe(distribution, null,LogicBlocks.notgate, stack(Item.stone, 0)),
-			new Recipe(distribution, null,LogicBlocks.logicSwitch, stack(Item.stone, 0)),
-
+			new Recipe(logic, null,LogicBlocks.toggleConveyor, stack(Item.stone, 0)),
+			new Recipe(logic, null,LogicBlocks.notgate, stack(Item.stone, 0)),
+			new Recipe(logic, null,LogicBlocks.logicSwitch, stack(Item.stone, 0)),
+			new Recipe(logic, null,LogicBlocks.logicpylon, stack(Item.stone, 0)),
+			new Recipe(logic, null,LogicBlocks.andgate, stack(Item.stone, 0)),
+			
+			
 			new Recipe(weapon, null,WeaponBlocks.turret, stack(Item.stone, 4)),
 			new Recipe(weapon, null,WeaponBlocks.doubleturret, stack(Item.stone, 7)),
 			new Recipe(weapon, null,WeaponBlocks.machineturret, stack(Item.iron, 8), stack(Item.stone, 10)),

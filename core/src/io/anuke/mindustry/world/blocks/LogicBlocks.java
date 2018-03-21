@@ -6,5 +6,7 @@ public class LogicBlocks{
 	public static final Block
     toggleConveyor = new ToggleConveyor("toggleconveyor"){},
 	logicSwitch = new LogicSwitch("logicSwitch"){},
-	notgate = new NOTGate("notgate"){};
+	notgate = new NOTGate("notgate"){},
+	andgate = new ANDGate("andgate"){},
+	logicpylon = new LogicPylon("logicpylon"){};
 }

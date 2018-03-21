@@ -86,7 +86,8 @@ public class LogicBlock extends Block implements LogicAcceptor{
                 ent.outputBlocks.removeValue(pos,false);
         }
     }
-
+	@Override
+	public void update(Tile tile){}
     @Override
     public boolean logicLink(Tile tile, Tile source) {
         LogicEntity ent = tile.entity();
