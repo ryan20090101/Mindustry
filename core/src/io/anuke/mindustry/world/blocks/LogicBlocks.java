@@ -4,5 +4,7 @@ import io.anuke.mindustry.world.blocks.types.logic.*;
 
 public class LogicBlocks{
 	public static final Block
-    toggleConveyor = new ToggleConveyor("toggleconveyor"){};
+    toggleConveyor = new ToggleConveyor("toggleconveyor"){},
+	logicSwitch = new Switch("logicSwitch"){},
+	notgate = new NOTGate("notgate"){};
 }

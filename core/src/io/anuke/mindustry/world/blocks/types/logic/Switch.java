@@ -2,10 +2,17 @@ package io.anuke.mindustry.world.blocks.types.logic;
 
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.types.LogicBlock;
+import io.anuke.ucore.graphics.Draw;
 
 public class Switch extends LogicBlock {
     public Switch(String name) {
         super(name);
+    }
+
+    @Override
+    public void draw(Tile tile) {
+        LogicEntity ent = tile.entity();
+        Draw.rect(name()+(ent.selfActive ? "-on" : "-off"),tile.drawx(), tile.drawy());
     }
 
     @Override
