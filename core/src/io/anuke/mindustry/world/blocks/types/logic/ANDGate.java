@@ -1,12 +1,17 @@
 package io.anuke.mindustry.world.blocks.types.logic;
 
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.types.LogicBlock;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.Vars.*;
 import io.anuke.mindustry.world.blocks.LogicBlocks;
+
+import java.util.Iterator;
+
+import static io.anuke.mindustry.Vars.world;
 
 public class ANDGate extends LogicBlock {
     public ANDGate(String name) {
@@ -15,32 +20,25 @@ public class ANDGate extends LogicBlock {
 
     @Override
     public boolean setLogic(Tile tile, Tile source, Boolean logicState) {
-        LogicBlock.LogicEntity ent = tile.entity();
-        ent.selfActive = logicState;
-        ent.outputActive = !logicState;
-        updateOutputLogic(tile);
-        return true;
-    }
-
-    @Override
-    public void placed(Tile tile) {
-        super.placed(tile);
         LogicEntity ent = tile.entity();
-        ent.selfActive = false;
-        ent.outputActive = false;
+        int pos;
+        boolean active = true;
+        Iterator<Integer> it = tile.<LogicEntity>entity().inputBlocks.iterator();
+        while(it.hasNext()) {
+            pos = it.next();
+            LogicEntity logicEntity = world.tile(pos % world.width(), pos / world.width()).entity();
+            if (logicEntity == null)
+                continue;
+            active = active && logicEntity.outputActive;
+        }
+        if(active){
+            ent.outputActive = true;
+            updateOutputLogic(tile);
+            return true;
+        }
+        else
+            ent.outputActive = false;
+        updateOutputLogic(tile);
+        return false;
     }
-	
-	@Override
-	public void update(Tile tile){
-		LogicEntity ent = tile.entity();
-        if(Vars.world.tile((int)tile.entity().x, (int)tile.entity().y+1).block()==LogicBlocks.logicpylon&&Vars.world.tile((int)tile.entity().x, (int)tile.entity().y-1).block()==LogicBlocks.logicpylon){
-			if(Vars.world.tile((int)tile.entity().x, (int)tile.entity().y+1).selfActive && Vars.world.tile((int)tile.entity().x, (int)tile.entity().y-1).selfActive){
-				ent.outputActive = true;
-			}else{
-				ent.outputActive = false;
-			}
-		}else{
-			ent.outputActive = false;
-		}
-	}
 }
