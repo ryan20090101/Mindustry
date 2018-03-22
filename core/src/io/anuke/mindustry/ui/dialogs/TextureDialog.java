@@ -1,5 +1,6 @@
 package io.anuke.mindustry.ui.dialogs;
 
+import com.badlogic.gdx.Gdx;
 import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.io.Platform;
 import io.anuke.ucore.core.Core;
@@ -27,6 +28,8 @@ public class TextureDialog extends FloatingDialog{
         pane.setFadeScrollBars(false);
 
         ButtonGroup<TextButton> group = new ButtonGroup<>();
+
+        Gdx.files.external("");
 
         for(String texture : Vars.texturetypes){
             TextButton button = new TextButton(texture, "toggle");
