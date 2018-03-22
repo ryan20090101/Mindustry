@@ -46,6 +46,7 @@ public class UI extends SceneModule{
 	public ControlsDialog controls;
 	public MapEditorDialog editor;
 	public LanguageDialog language;
+	public TextureDialog texture;
 	public BansDialog bans;
 	public AdminsDialog admins;
 	public TraceDialog traces;
@@ -152,6 +153,7 @@ public class UI extends SceneModule{
 		load = new LoadDialog();
 		levels = new LevelDialog();
 		language = new LanguageDialog();
+		texture = new TextureDialog();
 		settings = new SettingsMenuDialog();
 		paused = new PausedDialog();
 		about = new AboutDialog();

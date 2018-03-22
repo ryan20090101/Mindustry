@@ -85,6 +85,11 @@ public class SettingsMenuDialog extends SettingsDialog{
 			menu.addButton("$text.settings.controls", ui.controls::show);
 		}
 		menu.row();
+
+		menu.addButton("$text.settings.sound", () -> visible(2));
+		menu.row();
+        menu.addButton("$text.settings.textures", ui.texture::show);
+        menu.row();
 		menu.addButton("$text.settings.language", ui.language::show);
 
 		prefs.clearChildren();
