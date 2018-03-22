@@ -47,7 +47,6 @@ public class LogicBlock extends Block implements LogicAcceptor{
 
     @Override
     public void onBreak(Tile tile) {
-        System.out.println("test");
         int pos;
         Iterator<Integer> it = tile.<LogicEntity>entity().inputBlocks.iterator();
         while(it.hasNext()) {

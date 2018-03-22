@@ -23,7 +23,6 @@ public class LogicSwitch extends LogicBlock {
         entity.selfActive = !entity.selfActive;
         entity.outputActive = entity.selfActive;
         updateOutputLogic(tile);
-        System.out.println(entity.selfActive);
         setConfigure(tile, (byte)(entity.selfActive ? 1 : 0));
     }
 
