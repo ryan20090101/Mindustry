@@ -10,6 +10,11 @@ task packSprites(){
 		TexturePacker.process("core/assets-raw/sprites/", "core/assets/sprites/", "sprites.atlas")
 	}
 }
+task packSprites1(){
+	doLast {
+		TexturePacker.process("core/assets-raw/sprites1/", "core/assets/sprites/", "gimp reincarnation.atlas")
+	}
+}
 
 task packUI(){
 	doLast {
