@@ -50,8 +50,11 @@ public class NetCommon extends Module {
         Net.handle(LogicLinkPacket.class, (packet) -> {
             Tile tile = world.tile(packet.tile);
             Tile tile2 = world.tile(packet.tile2);
-            if (tile != null && tile2 != null) ((LogicAcceptor)tile.block()).logicLink(tile,tile2);
+            if (tile != null && tile2 != null
+                && tile instanceof LogicAcceptor && tile2 instanceof LogicAcceptor)
+                ((LogicAcceptor)tile.block()).logicLink(tile,tile2);
         });
+
         Net.handle(PlayerDeathPacket.class, (packet) -> {
             Player player = playerGroup.getByID(packet.id);
             if (player == null) return;
