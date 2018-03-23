@@ -687,6 +687,24 @@ public class Packets {
         }
     }
 
+    public static class LogicLinkPacket implements Packet{
+
+        public int tile;
+        public int tile2;
+
+        @Override
+        public void read(ByteBuffer buffer) {
+            buffer.putInt(tile);
+            buffer.putInt(tile2);
+        }
+
+        @Override
+        public void write(ByteBuffer buffer) {
+            tile = buffer.getInt();
+            tile2 = buffer.getInt();
+        }
+    }
+
     //chat commands
     public static class AdminCommandPacket implements Packet{
         public int commandID;

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import static io.anuke.mindustry.Vars.world;
+import static io.anuke.mindustry.net.NetEvents.handleLogicLink;
 
 public class LogicBlock extends Block implements LogicAcceptor{
 
@@ -99,6 +100,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
             blck.setLogic(source,tile,ent.outputActive);
             source.<LogicEntity>entity().inputBlocks.add(tile.packedPosition());
             ent.connectedBlocks++;
+            handleLogicLink(tile,source);
             return true;
         }
         else
@@ -144,11 +146,31 @@ public class LogicBlock extends Block implements LogicAcceptor{
         @Override
         public void write(DataOutputStream stream) throws IOException {
             stream.writeByte(selfActive ? 1 : 0);
+            stream.writeByte(outputActive ? 1 : 0);
+            stream.writeByte((byte) connectedBlocks);
+            stream.writeByte(outputBlocks.size);
+            for (int i = 0; i < outputBlocks.size; i++) {
+                stream.writeInt(outputBlocks.get(i));
+            }
+            stream.writeByte(inputBlocks.size);
+            for (int i = 0; i < inputBlocks.size; i++) {
+                stream.writeInt(inputBlocks.get(i));
+            }
         }
 
         @Override
-        public void read(DataInputStream stream) throws IOException{
+        public void read(DataInputStream stream) throws IOException {
             selfActive = stream.readByte() == 1;
+            outputActive = stream.readByte() == 1;
+            connectedBlocks = stream.readByte();
+            byte length = stream.readByte();
+            for (int i = 0; i < length; i++) {
+                outputBlocks.insert(i,stream.readInt());
+            }
+            length = stream.readByte();
+            for (int i = 0; i < length; i++) {
+                inputBlocks.insert(i,stream.readInt());
+            }
         }
     }
 }

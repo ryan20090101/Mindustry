@@ -8,6 +8,7 @@ import io.anuke.mindustry.net.Packets.*;
 import io.anuke.mindustry.resource.Upgrade;
 import io.anuke.mindustry.resource.Weapon;
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.types.LogicAcceptor;
 import io.anuke.ucore.modules.Module;
 
 import static io.anuke.mindustry.Vars.*;
@@ -44,6 +45,12 @@ public class NetCommon extends Module {
         Net.handle(BlockConfigPacket.class, (packet) -> {
             Tile tile = world.tile(packet.position);
             if (tile != null) tile.block().configure(tile,packet.intData ,packet.byteData);
+        });
+
+        Net.handle(LogicLinkPacket.class, (packet) -> {
+            Tile tile = world.tile(packet.tile);
+            Tile tile2 = world.tile(packet.tile2);
+            if (tile != null && tile2 != null) ((LogicAcceptor)tile.block()).logicLink(tile,tile2);
         });
         Net.handle(PlayerDeathPacket.class, (packet) -> {
             Player player = playerGroup.getByID(packet.id);

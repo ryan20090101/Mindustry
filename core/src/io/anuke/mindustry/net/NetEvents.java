@@ -1,6 +1,7 @@
 package io.anuke.mindustry.net;
 
 import io.anuke.mindustry.Vars;
+import io.anuke.mindustry.core.Logic;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.TileEntity;
@@ -171,6 +172,13 @@ public class NetEvents {
         AdministerRequestPacket packet = new AdministerRequestPacket();
         packet.id = target.id;
         packet.action = action;
+        Net.send(packet, SendMode.tcp);
+    }
+
+    public static void handleLogicLink(Tile tile, Tile tile2){
+        LogicLinkPacket packet = new LogicLinkPacket();
+        packet.tile = tile.packedPosition();
+        packet.tile2 = tile2.packedPosition();
         Net.send(packet, SendMode.tcp);
     }
 
