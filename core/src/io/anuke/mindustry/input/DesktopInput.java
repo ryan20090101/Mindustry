@@ -171,7 +171,7 @@ public class DesktopInput extends InputHandler{
 				Cursors.restoreCursor();
 		}
 		if (!ui.chatfrag.isVisible()) {
-			if (Inputs.keyRelease("ship_mode") && !player.isFlying && player.flyCooldown <= 0 && Vars.world.bossAmount > 0) {
+			if (Inputs.keyRelease("ship_mode") && !player.isFlying && player.flyCooldown <= 0 && Vars.world.bossAmount <= 0) {
 				player.flyCooldown = 100;
 				player.isFlying = true;
 			} else if (Inputs.keyRelease("ship_mode") && player.isFlying && player.flyCooldown <= 0) {

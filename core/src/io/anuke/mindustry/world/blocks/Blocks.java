@@ -52,7 +52,6 @@ public class Blocks{
 			liquidDrop = Liquid.lava;
 			movementSpeedMultiplier = 0.25f;
 			damageOnTop = 1;
-			damageTime = 10;
 			liquid = true;
 		}
 		

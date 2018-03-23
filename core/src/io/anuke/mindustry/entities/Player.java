@@ -212,13 +212,11 @@ public class Player extends SyncEntity{
             ui.hudfrag.setRadTint(radFloat);
         }
     	*/
-		int damageTimeOnTop;
 		int damageOnTop;
 
-		damageTimeOnTop = block.damageTime;
 		damageOnTop = block.damageOnTop;
 
-		if(damageOnTop > 0 && timer.get(timerOther,damageTimeOnTop))
+		if(damageOnTop > 0)
 			damage(damageOnTop);
 
 		float speedModifier;

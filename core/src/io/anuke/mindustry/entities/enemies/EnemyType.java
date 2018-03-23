@@ -182,16 +182,8 @@ public class EnemyType {
             }
         }
 
-        if(!isImmuneEnviromentalDamage && (tile.floor().damageOnTop > 0 || tile.block().damageOnTop > 0))
-        {
-            Block blck = tile.floor().damageOnTop > 0 ? tile.floor() : tile.block();
-            boolean timerDamage = enemy.timer.get(timerOther,blck.damageTime);
-
-            if(timerDamage)
-                enemy.damage(blck.damageOnTop);
-        }
-
-            
+        if(!isImmuneEnviromentalDamage && (tile.floorOrBlock().damageOnTop > 0))
+            enemy.damage(tile.floorOrBlock().damageOnTop);
     }
 
     public void move(Enemy enemy){

@@ -110,8 +110,6 @@ public class Block{
 	public boolean activeMovement = false;
 	/**how much damage entities on top take.*/
 	public int damageOnTop = 0;
-	/**The time it takes for a block to cause damage.*/
-	public int damageTime = 0;
 	/**how much damage entities on top take.*/
 	public boolean icePhysics = false;
 	/**The time it takes for a block to cause damage.*/

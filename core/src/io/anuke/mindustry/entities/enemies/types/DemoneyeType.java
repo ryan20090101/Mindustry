@@ -57,9 +57,12 @@ public class DemoneyeType extends BossType {
 	}
     @Override
     public void updateTargeting(Enemy enemy, boolean nearCore){
+		if(enemy.timer.get(timerTarget, 15) && !nearCore)
+			enemy.target = null;
         if(enemy.target == null){
             enemy.target = Entities.getClosest(playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying &&
                 !((Player)e).isDead());
+            return;
         }        
         if((enemy.target != null && bullet != null)||((Player) enemy.target).isDead()){
             updateShooting(enemy);
