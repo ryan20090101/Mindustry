@@ -34,7 +34,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
     }
 
     @Override
-    public void onLogicLink(Tile tile) {
+    public void onLogicLink(Tile tile, Tile source) {
 
     }
 
@@ -85,8 +85,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
                 ent.outputBlocks.removeValue(pos,false);
         }
     }
-	@Override
-	public void update(Tile tile){}
+
     @Override
     public boolean logicLink(Tile tile, Tile source) {
         LogicEntity ent = tile.entity();
@@ -95,7 +94,9 @@ public class LogicBlock extends Block implements LogicAcceptor{
             if(ent.outputBlocks.contains(source.packedPosition(),true))
                 return false;
             ent.outputBlocks.add(source.packedPosition());
-            ((LogicAcceptor) source.block()).onLogicLink(source);
+            LogicAcceptor blck = (LogicAcceptor) source.block();
+            blck.onLogicLink(source,tile);
+            blck.setLogic(source,tile,ent.outputActive);
             source.<LogicEntity>entity().inputBlocks.add(tile.packedPosition());
             ent.connectedBlocks++;
             return true;

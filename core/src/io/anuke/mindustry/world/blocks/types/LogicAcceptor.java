@@ -8,7 +8,7 @@ public interface LogicAcceptor {
     boolean canLogicOutput(Tile tile);
 
     /** Call on successful logicLink.*/
-    void onLogicLink(Tile tile);
+    void onLogicLink(Tile tile, Tile source);
 
     /** Returns whether logic state change is successful or not, sets logic state on tile, source is setter.*/
     boolean setLogic(Tile tile, Tile source, Boolean logicState);
