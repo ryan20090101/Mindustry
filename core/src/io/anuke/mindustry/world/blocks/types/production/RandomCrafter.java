@@ -20,7 +20,7 @@ public class RandomCrafter extends Block {
     protected final int timerCraft = timers++;
 
     protected int capacity = 20;
-    protected double craftChance = 0.10;
+    protected int requiredItems = 10;
     protected int craftTime = 5;
 
     protected Effect createEffect = Fx.generate;
@@ -59,40 +59,64 @@ public class RandomCrafter extends Block {
         for (Item item : output.items) {
             list.add("[craftinfo]Output: " + item.name);
         }
+    }
 
+    @Override
+    public void configure(Tile tile, byte... byteData) {
+        RandomCrafterEntity ent = tile.entity();
+
+        if(ent != null){
+            ent.craftingItem = byteData[0];
+            ent.requiredItems = byteData[1];
+            ent.crafting = byteData[2] == 1;
+        }
     }
 
     @Override
     public void update(Tile tile) {
-        TileEntity ent = tile.entity();
+        RandomCrafterEntity ent = tile.entity();
 
         if (tile.entity.timer.get(timerDump, 20)) {
             tryDump(tile);
         }
 
-        Item product = output.random();
+        if (ent.crafting) {
 
-        if (ent.getItem(product) >= capacity //output full //successful?
-                || !ent.hasItem(input) //has input item?
-                || !ent.timer.get(timerCraft,craftTime)) //time yet?
-        {
-            return;
-        }
+            if (ent.getItem(Item.getByID(ent.craftingItem)) >= capacity //output full //successful?
+                    || !ent.hasItem(input) //has input item?
+                    || !ent.timer.get(timerCraft, craftTime)) //time yet?
+                return;
 
-        if (!Mathf.chance(craftChance)) {
-            ent.removeItem(input,1);
-            return;
-        }
-        else {
-            ent.removeItem(input,1);
-        }
+            if (ent.requiredItems > 0) {
+                ent.removeItem(input, 1);
+                ent.requiredItems--;
+                return;
+            } else
+                ent.removeItem(input, 1);
 
-        offloadNear(tile, product);
-        Effects.effect(createEffect, tile.entity);
+            offloadNear(tile, Item.getByID(ent.craftingItem));
+            Effects.effect(createEffect, tile.entity);
+        } else {
+            ent.craftingItem = (byte) output.random().id;
+            ent.crafting = true;
+            ent.requiredItems = (byte) requiredItems;
+            setConfigure(tile, ent.craftingItem, ent.requiredItems,(byte)(ent.crafting ? 1 : 0));
+        }
     }
 
     @Override
     public boolean acceptItem(Item item, Tile tile, Tile source){
         return item == input && tile.entity.totalItems() < capacity;
+    }
+
+    @Override
+    public TileEntity getEntity() {
+        return new RandomCrafterEntity();
+    }
+
+    public class RandomCrafterEntity extends TileEntity{
+        public byte craftingItem;
+        public byte requiredItems;
+        public boolean crafting;
     }
 }
