@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 import static io.anuke.mindustry.Vars.*;
 
 public class Player extends SyncEntity{
-	static final float speed = 1.1f;
-	static final float dashSpeed = 1.8f;
+	public static float speed = 1.1f;
+	public static float dashSpeed = 1.8f;
 
 	static final int timerDash = 0;
 	static final int timerShootLeft = 1;
@@ -43,6 +43,7 @@ public class Player extends SyncEntity{
 
 	public float targetAngle = 0f;
 	public boolean dashing = false;
+	public boolean invulnerable = false;
 
 	public int clientid = -1;
 	public boolean isLocal = false;
@@ -61,7 +62,7 @@ public class Player extends SyncEntity{
 
 	@Override
 	public void damage(int amount){
-		if(debug || isAndroid) return;
+		if(debug || isAndroid || invulnerable) return;
 
 		health -= amount;
 		if(health <= 0 && !dead && isLocal){ //remote players don't die normally
