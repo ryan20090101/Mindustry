@@ -26,7 +26,7 @@ import static io.anuke.mindustry.Vars.tilesize;
 public class World extends Module {
 	private int seed;
 
-	private Map currentMap;
+	public Map currentMap;
 	private Tile[][] tiles;
 	private Pathfind pathfind = new Pathfind();
 	private Maps maps = new Maps();

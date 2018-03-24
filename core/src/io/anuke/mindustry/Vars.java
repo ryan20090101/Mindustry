@@ -99,6 +99,7 @@ public class Vars{
 	public static final Locale[] locales = {new Locale("en"), new Locale("fr", "FR"), new Locale("ru"), new Locale("pl", "PL"),
 			new Locale("de"), new Locale("es", "LA"), new Locale("pt", "BR"), new Locale("ko"), new Locale("in", "ID"), new Locale("egg","EGG")};
 	public static final String[] texturetypes = {"default", "reee", "gimp reincarnation"};
+
 	public static final Color[] playerColors = {
 			Color.valueOf("82759a"),
 			Color.valueOf("c0c1c5"),
@@ -133,6 +134,7 @@ public class Vars{
 	public static Renderer renderer;
 	public static UI ui;
 	public static World world;
+	public static World world1;
 	public static NetCommon netCommon;
 	public static NetServer netServer;
 	public static NetClient netClient;

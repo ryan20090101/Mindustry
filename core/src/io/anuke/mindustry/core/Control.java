@@ -225,6 +225,7 @@ public class Control extends Module{
 		Timers.runTask(10, () -> {
 			logic.reset();
 			world.loadMap(map);
+			world1.loadMap(map);
 			logic.play();
 		});
 

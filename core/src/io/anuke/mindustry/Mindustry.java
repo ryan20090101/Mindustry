@@ -10,7 +10,7 @@ import io.anuke.ucore.util.Log;
 import static io.anuke.mindustry.Vars.*;
 
 public class Mindustry extends ModuleCore {
-
+	World world1;
 	@Override
 	public void init(){
 		debug = Platform.instance.isDebug();
@@ -21,6 +21,7 @@ public class Mindustry extends ModuleCore {
 
 		module(logic = new Logic());
 		module(world = new World());
+		module(world1 = new World());
 		module(control = new Control());
 		module(renderer = new Renderer());
 		module(ui = new UI());

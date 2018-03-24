@@ -19,8 +19,9 @@ import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Mathf;
 
-import java.util.Arrays;
+import io.anuke.mindustry.entities.Player;
 
+import java.util.Arrays;
 import static io.anuke.mindustry.Vars.*;
 import static io.anuke.ucore.core.Core.camera;
 
@@ -75,16 +76,23 @@ public class BlockRenderer{
 				int worldx = Mathf.scl(camera.position.x, tilesize) + x;
 				int worldy = Mathf.scl(camera.position.y, tilesize) + y;
 				boolean expanded = (x < -rangex || x > rangex || y < -rangey || y > rangey);
-				
+
 				Tile tile = world.tile(worldx, worldy);
+				if(player.dimension == 1) {
+					tile = world1.tile(worldx, worldy);
+				}
 				
 				if(tile != null){
 					Block block = tile.block();
-					
-					if(!expanded && block != Blocks.air && world.isAccessible(worldx, worldy)){
-						block.drawShadow(tile);
+					if(player.dimension == 1) {
+						if (!expanded && block != Blocks.air && world1.isAccessible(worldx, worldy)) {
+							block.drawShadow(tile);
+						}
+					}else {
+						if (!expanded && block != Blocks.air && world.isAccessible(worldx, worldy)) {
+							block.drawShadow(tile);
+						}
 					}
-					
 					if(!(block instanceof StaticBlock)){
 						if(block == Blocks.air){
 							if(!state.is(State.paused)) tile.floor().update(tile);
@@ -255,6 +263,9 @@ public class BlockRenderer{
 		for(int tilex = cx * chunksize; tilex < (cx + 1) * chunksize; tilex++){
 			for(int tiley = cy * chunksize; tiley < (cy + 1) * chunksize; tiley++){
 				Tile tile = world.tile(tilex, tiley);
+				if(player.dimension == 1) {
+					tile = world1.tile(tilex, tiley);
+				}
 				if(tile == null) continue;
 				if(floor){
 					if(!(tile.block() instanceof StaticBlock)){
