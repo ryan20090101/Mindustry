@@ -16,8 +16,9 @@ class EvalCommand extends Command {
 		super("eval");
 		try {
 			engine.put("game", engine.eval("Java.type('io.anuke.mindustry.Vars')"));
+			engine.put("mindustry", engine.eval("Packages.io.anuke.mindustry"));
 		} catch (ScriptException e) {
-			throw new RuntimeException("io.anuke.mindustry.Vars doesn't exist?");
+			throw new RuntimeException("Some internal thing that should have existed didn't");
 		}
 	}
 

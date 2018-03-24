@@ -31,7 +31,7 @@ import io.anuke.ucore.util.Mathf;
 
 public class ChatFragment extends Table implements Fragment{
     private final static int messagesShown = 10;
-    private final static int maxLength = 150;
+    private final static int maxLength = 500;
     private Array<ChatMessage> messages = new Array<>();
     private float fadetime;
     private boolean chatOpen = false;
