@@ -27,7 +27,7 @@ public class DemoneyeType extends BossType {
 
 	@Override
 	public void updateShooting(Enemy enemy){
-		/**Timers.get(enemy, "salvo", 240);
+		/**Timers.get(enemy, ggs"salvo", 240);
 		
 		if(Timers.getTime(enemy, "salvo") < 60){
 			if(Timers.get(enemy, "salvoShoot", 6)){
