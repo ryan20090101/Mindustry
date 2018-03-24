@@ -8,6 +8,7 @@ import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.graphics.Fx;
 import io.anuke.mindustry.world.Layer;
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.types.LogicPowerBlock;
 import io.anuke.mindustry.world.blocks.types.PowerAcceptor;
 import io.anuke.mindustry.world.blocks.types.PowerBlock;
 import io.anuke.ucore.core.Effects;
@@ -21,7 +22,7 @@ import io.anuke.ucore.util.*;
 
 import static io.anuke.mindustry.Vars.*;
 
-public class Generator extends PowerBlock{
+public class Generator extends LogicPowerBlock {
 	public static final int powerTime = 2;
 	public static boolean drawRangeOverlay = false;
 
@@ -134,7 +135,9 @@ public class Generator extends PowerBlock{
 	public void drawLayer(Tile tile){
 		if(!Settings.getBool("lasers")) return;
 
-		PowerEntity entity = tile.entity();
+		LogicPowerEntity entity = tile.entity();
+
+		if(entity.selfActive) return;
 
 		for(int i = 0; i < laserDirections; i++){
 			if(entity.power > powerSpeed){
@@ -154,7 +157,7 @@ public class Generator extends PowerBlock{
 	}
 
 	protected void distributeLaserPower(Tile tile){
-		PowerEntity entity = tile.entity();
+		LogicPowerEntity entity = tile.entity();
 
 		for(int i = 0; i < laserDirections; i++){
 			int rot = (tile.getRotation() + i) - laserDirections / 2;
@@ -165,7 +168,7 @@ public class Generator extends PowerBlock{
 
 			PowerAcceptor p = (PowerAcceptor) target.block();
 			if(isInterfering(target, rot)) {
-				if (((PowerEntity) target.block().getEntity()).power>=entity.power)
+				if (((LogicPowerEntity) target.block().getEntity()).power>=entity.power)
 					continue;
 			}
 			float transmit = Math.min(powerSpeed * Timers.delta(), entity.power);

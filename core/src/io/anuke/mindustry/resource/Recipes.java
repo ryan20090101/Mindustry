@@ -88,6 +88,7 @@ public class Recipes {
 			new Recipe(power, null,ProductionBlocks.combustiongenerator, stack(Item.iron, 30), stack(Item.stone, 20)),
 			new Recipe(power, null,ProductionBlocks.rtgenerator, stack(Item.titanium, 20), stack(Item.steel, 20)),
 			new Recipe(power, null,ProductionBlocks.nuclearReactor, stack(Item.titanium, 40), stack(Item.dirium, 40), stack(Item.steel, 50)),
+			new Recipe(power, null,ProductionBlocks.breederReactor, stack(Item.titanium, 20), stack(Item.dirium, 140), stack(Item.steel, 40)),
 			new Recipe(power, null,DistributionBlocks.powerbooster, stack(Item.steel, 8), stack(Item.iron, 8)),
 			new Recipe(power, null,DistributionBlocks.powerlaser, stack(Item.steel, 3), stack(Item.iron, 3)),
 			new Recipe(power, null,DistributionBlocks.powerlasercorner, stack(Item.steel, 4), stack(Item.iron, 4)),

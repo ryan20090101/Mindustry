@@ -61,7 +61,9 @@ public class LiquidPowerGenerator extends Generator implements LiquidAcceptor{
 	@Override
 	public void update(Tile tile){
 		LiquidPowerEntity entity = tile.entity();
-		
+
+		if(entity.selfActive) return;
+
 		if(entity.liquidAmount > 0){
 			float used = Math.min(entity.liquidAmount, maxLiquidGenerate * Timers.delta());
 			used = Math.min(used, (powerCapacity - entity.power)/powerPerLiquid);
@@ -109,7 +111,7 @@ public class LiquidPowerGenerator extends Generator implements LiquidAcceptor{
 		return liquidCapacity;
 	}
 	
-	public static class LiquidPowerEntity extends PowerEntity{
+	public static class LiquidPowerEntity extends LogicPowerEntity{
 		public Liquid liquid;
 		public float liquidAmount;
 		
