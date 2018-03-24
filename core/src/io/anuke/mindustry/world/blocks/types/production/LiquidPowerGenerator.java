@@ -17,7 +17,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class LiquidPowerGenerator extends Generator implements LiquidAcceptor{
+public class LiquidPowerGenerator extends LogicGenerator implements LiquidAcceptor{
 	public int generateTime = 15;
 	public Liquid generateLiquid;
 	public float powerPerLiquid = 0.13f;
