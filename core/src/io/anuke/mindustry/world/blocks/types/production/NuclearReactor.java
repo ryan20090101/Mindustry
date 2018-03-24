@@ -26,6 +26,7 @@ import static io.anuke.mindustry.Vars.tilesize;
 public class NuclearReactor extends LiquidPowerGenerator{
 
 	protected final int timerFuel = timers++;
+	protected final int timerOutput = timers++;
 	protected final int timerDump = timers++;
 
 	protected final Translator tr = new Translator();
@@ -77,14 +78,14 @@ public class NuclearReactor extends LiquidPowerGenerator{
 		int fuel = entity.getItem(generateItem);
 		float fullness = (float)fuel / itemCapacity;
 		
-		if(fuel > 0){
+		if(fuel > 0 && !entity.selfActive){
 			entity.heat += fullness * heating * Math.min(Timers.delta(), 4f);
 			entity.power += powerMultiplier * fullness * Timers.delta();
 			entity.power = Mathf.clamp(entity.power, 0f, powerCapacity);
 			if(entity.timer.get(timerFuel, fuelUseTime)){
 				entity.removeItem(generateItem, 1);
 			}
-			if(entity.timer.get(timerFuel, outputTime)){
+			if(entity.timer.get(timerOutput, outputTime)){
 				offloadNear(tile,outputItem,2);
 			}
 		}
@@ -118,7 +119,7 @@ public class NuclearReactor extends LiquidPowerGenerator{
 	
 	@Override
 	public void drawLiquidCenter(Tile tile){
-		Draw.rect(name + "-center", tile.drawx(), tile.drawy());
+		//Draw.rect(name + "-center", tile.drawx(), tile.drawy());
 	}
 	
 	@Override
@@ -186,7 +187,7 @@ public class NuclearReactor extends LiquidPowerGenerator{
 			entity.flash += flash * Timers.delta();
 			Draw.color(Color.RED, Color.YELLOW, Mathf.absin(entity.flash, 9f, 1f));
 			Draw.alpha(0.6f);
-			Draw.rect(name + "-lights", tile.drawx(), tile.drawy());
+			//Draw.rect(name + "-lights", tile.drawx(), tile.drawy());
 		}
 		
 		Draw.reset();

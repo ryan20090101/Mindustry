@@ -61,9 +61,9 @@ public class PowerBooster extends LiquidPowerGenerator{
 
 	@Override
 	public boolean acceptsPower(Tile tile){
-		PowerEntity entity = tile.entity();
+		LogicPowerEntity entity = tile.entity();
 
-		return entity.power + 0.001f <= powerCapacity;
+		return entity.power + 0.001f <= powerCapacity && entity.selfActive;
 	}
 
 	//TODO better distribution

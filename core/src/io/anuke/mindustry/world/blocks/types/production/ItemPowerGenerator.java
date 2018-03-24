@@ -13,7 +13,7 @@ import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Strings;
 
-public class ItemPowerGenerator extends Generator{
+public class ItemPowerGenerator extends LogicGenerator{
 	public int itemCapacity = 20;
 	public Item generateItem;
 	public float powerOutput;
@@ -41,7 +41,7 @@ public class ItemPowerGenerator extends Generator{
 	public void draw(Tile tile){
 		super.draw(tile);
 		
-		PowerEntity entity = tile.entity();
+		LogicPowerEntity entity = tile.entity();
 		
 		if(entity.time > 0){
 			Draw.color(heatColor);
@@ -60,10 +60,10 @@ public class ItemPowerGenerator extends Generator{
 	
 	@Override
 	public void update(Tile tile){
-		PowerEntity entity = tile.entity();
+		LogicPowerEntity entity = tile.entity();
 
+		if(entity.selfActive) return;
 
-		
 		float maxPower = Math.min(powerCapacity - entity.power, powerOutput * Timers.delta());
 		float mfract = maxPower/(powerOutput);
 		
