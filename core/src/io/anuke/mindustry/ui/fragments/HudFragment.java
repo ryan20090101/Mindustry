@@ -123,7 +123,99 @@ public class HudFragment implements Fragment{
 
 
 		}}.end();
+		//inventory table
+		new table(){{
+			aleft();
 
+			new table(){{
+
+				new table() {{
+					left();
+					float dsize = 58;
+					defaults().size(dsize).left();
+					float isize = 40;
+
+					menu = new imagebutton("icon-menu", isize, ui.paused::show).get();
+
+					flip = new imagebutton("icon-arrow-up", isize, () -> {
+						if (wavetable.getActions().size != 0) return;
+
+						float dur = 0.3f;
+						Interpolation in = Interpolation.pow3Out;
+
+						flip.getStyle().imageUp = Core.skin.getDrawable(shown ? "icon-arrow-down" : "icon-arrow-up");
+
+						if (shown) {
+							blockfrag.toggle(false, dur, in);
+							wavetable.actions(Actions.translateBy(0, wavetable.getHeight() + dsize, dur, in), Actions.call(() -> shown = false));
+							infolabel.actions(Actions.translateBy(0, wavetable.getHeight(), dur, in), Actions.call(() -> shown = false));
+						} else {
+							shown = true;
+							blockfrag.toggle(true, dur, in);
+							wavetable.actions(Actions.translateBy(0, -wavetable.getTranslation().y, dur, in));
+							infolabel.actions(Actions.translateBy(0, -infolabel.getTranslation().y, dur, in));
+						}
+
+					}).get();
+
+					new imagebutton("icon-pause", isize, () -> {
+						if(android) DebugFragment.printDebugInfo();
+						if (Net.active() && android) {
+							ui.listfrag.visible = !ui.listfrag.visible;
+						} else {
+							state.set(state.is(State.paused) ? State.playing : State.paused);
+						}
+					}).update(i -> {
+						if (Net.active() && android) {
+							i.getStyle().imageUp = Core.skin.getDrawable("icon-players");
+						} else {
+							i.setDisabled(Net.active());
+							i.getStyle().imageUp = Core.skin.getDrawable(state.is(State.paused) ? "icon-play" : "icon-pause");
+						}
+					}).get();
+
+					new imagebutton("icon-settings", isize, () -> {
+						if (Net.active() && android) {
+							if (ui.chatfrag.chatOpen()) {
+								ui.chatfrag.hide();
+							} else {
+								ui.chatfrag.toggle();
+							}
+						} else {
+							ui.settings.show();
+						}
+					}).update(i -> {
+						if (Net.active() && android) {
+							i.getStyle().imageUp = Core.skin.getDrawable("icon-chat");
+						} else {
+							i.getStyle().imageUp = Core.skin.getDrawable("icon-settings");
+						}
+					}).get();
+
+				}}.end();
+
+				row();
+
+				new table() {{
+					touchable(Touchable.enabled);
+					visible(() -> shown);
+					addWaveTable();
+				}}.fillX().end();
+
+				row();
+
+				visible(() -> !state.is(State.menu));
+
+				infolabel = new Label(() -> (Settings.getBool("fps") ? (Gdx.graphics.getFramesPerSecond() + " FPS") +
+						(threads.isEnabled() ?  " / " + threads.getFPS() + " TPS" : "") + (Net.client() && !gwt ? "\nPing: " + Net.getPing() : "") : ""));
+				row();
+				add(infolabel).size(-1);
+
+			}}.end();
+
+
+
+		}}.end();
 		//tutorial ui table
 		new table(){{
 			control.tutorial().buildUI(this);
