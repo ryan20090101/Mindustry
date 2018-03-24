@@ -179,7 +179,7 @@ blocks/block-middle
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/breedingreactor
+blocks/breederreactor
   rotate: false
   xy: 748, 392
   size: 24, 24
