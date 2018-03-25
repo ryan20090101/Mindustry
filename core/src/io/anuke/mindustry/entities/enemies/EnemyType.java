@@ -119,10 +119,10 @@ public class EnemyType {
             enemy.hitTime -= Timers.delta();
         }
         
-        if(enemy.lane >= world.getSpawns().size || enemy.lane < 0) enemy.lane = 0;
+        if(enemy.lane >= world[enemy.dimension].getSpawns().size || enemy.lane < 0) enemy.lane = 0;
 
-        boolean waiting = enemy.lane >= world.getSpawns().size || enemy.lane < 0
-                || world.getSpawns().get(enemy.lane).pathTiles == null || enemy.node <= 0;
+        boolean waiting = enemy.lane >= world[enemy.dimension].getSpawns().size || enemy.lane < 0
+                || world[enemy.dimension].getSpawns().get(enemy.lane).pathTiles == null || enemy.node <= 0;
 
         move(enemy);
 
@@ -145,7 +145,7 @@ public class EnemyType {
             enemy.idletime = 999999f;
         }
 
-        Tile tile = world.tileWorld(enemy.x, enemy.y);
+        Tile tile = world[enemy.dimension].tileWorld(enemy.x, enemy.y);
         if(/*tile != null && tile.floor().solid &&*/ tile.floor()==Blocks.deepwater && tile.block() == Blocks.air){
             enemy.damage(enemy.health+1); //drown
         }
@@ -160,8 +160,8 @@ public class EnemyType {
             enemy.angle = Mathf.slerpDelta(enemy.angle, enemy.angleTo(enemy.target), turretrotatespeed);
         }
 
-        enemy.x = Mathf.clamp(enemy.x, 0, world.width() * tilesize);
-        enemy.y = Mathf.clamp(enemy.y, 0, world.height() * tilesize);
+        enemy.x = Mathf.clamp(enemy.x, 0, world[enemy.dimension].width() * tilesize);
+        enemy.y = Mathf.clamp(enemy.y, 0, world[enemy.dimension].height() * tilesize);
 
         if(!isImmuneRadioactivity){
             boolean timerRad = enemy.timer.get(timerOther,radiationTime);
@@ -194,13 +194,13 @@ public class EnemyType {
         }
 
         float speedModifier;
-        Tile tile = world.tileWorld(enemy.x,enemy.y);
+        Tile tile = world[enemy.dimension].tileWorld(enemy.x,enemy.y);
         speedModifier = tile.floorOrBlock().movementSpeedMultiplier;
 
         float speed = this.speed + 0.04f * enemy.tier * speedModifier;
         float range = this.range + enemy.tier * 5;
 
-        Tile core = world.getCore();
+        Tile core = world[enemy.dimension].getCore();
 
         if(core == null) return;
 
@@ -216,7 +216,7 @@ public class EnemyType {
             vec = move.setZero();
             if(targetCore) enemy.target = core.entity;
         }else{
-            vec = world.pathfinder().find(enemy);
+            vec = world[enemy.dimension].pathfinder().find(enemy);
             vec.sub(enemy.x, enemy.y).limit(speed);
         }
 
@@ -270,7 +270,7 @@ public class EnemyType {
         }
 
         if(enemy.timer.get(timerTarget, 15) && !nearCore){
-            enemy.target = world.findTileTarget(enemy.x, enemy.y, null, range, false);
+            enemy.target = world[enemy.dimension].findTileTarget(enemy.x, enemy.y, null, range, false);
 
             //no tile found
             if(enemy.target == null){
@@ -278,7 +278,7 @@ public class EnemyType {
                     !((Player)e).isDead());
             }
         }else if(nearCore){
-            enemy.target = world.getCore().entity;
+            enemy.target = world[enemy.dimension].getCore().entity;
         }
 
         if(enemy.target != null && bullet != null){

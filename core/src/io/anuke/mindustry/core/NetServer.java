@@ -88,7 +88,7 @@ public class NetServer extends Module{
             player.name = packet.name;
             player.isAndroid = packet.android;
             player.isFlying = packet.flying;
-            player.set(world.getSpawnX(), world.getSpawnY());
+            player.set(world[player.dimension].getSpawnX(), world[player.dimension].getSpawnY());
             player.setNet(player.x, player.y);
             player.setNet(player.x, player.y);
             player.color.set(packet.color);
@@ -96,9 +96,9 @@ public class NetServer extends Module{
 
             admins.getTrace(ip).playerid = player.id;
 
-            if(world.getMap().custom){
+            if(world[player.dimension].getMap().custom){
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                NetworkIO.writeMap(world.getMap(), stream);
+                NetworkIO.writeMap(world[player.dimension].getMap(), stream);
                 CustomMapPacket data = new CustomMapPacket();
                 data.stream = new ByteArrayInputStream(stream.toByteArray());
                 Net.sendStream(id, data);

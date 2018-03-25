@@ -437,7 +437,7 @@ public class KryoServer implements ServerProvider {
 
                 if(message.equals("_ping_")){
                     conn.send("---" + Vars.playerGroup.size() + "|" + (headless ? "Server" : Vars.player.name)
-                    + "|" + world.getMap().name + "|" + state.wave + "|" + Version.build);
+                    + "|" + world[0].getMap().name + "|" + state.wave + "|" + Version.build);
                     connections.remove(k);
                 }else {
                     byte[] out = Base64Coder.decode(message);

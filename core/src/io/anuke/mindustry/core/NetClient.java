@@ -104,7 +104,7 @@ public class NetClient extends Module {
         Net.handleClient(WorldData.class, data -> {
             Log.info("Recieved world data: {0} bytes.", data.stream.available());
             NetworkIO.loadWorld(data.stream);
-            player.set(world.getSpawnX(), world.getSpawnY());
+            player.set(world[player.dimension].getSpawnX(), world[player.dimension].getSpawnY());
 
             gotData = true;
 
@@ -117,7 +117,7 @@ public class NetClient extends Module {
             //custom map is always sent before world data
             Map map = NetworkIO.loadMap(packet.stream);
 
-            world.maps().setNetworkMap(map);
+            world[0].maps().setNetworkMap(map);
 
             MapAckPacket ack = new MapAckPacket();
             Net.send(ack, SendMode.tcp);
@@ -176,7 +176,7 @@ public class NetClient extends Module {
             Placement.placeBlock(packet.x, packet.y, Block.getByID(packet.block), packet.rotation, true, Timers.get("placeblocksound", 10));
 
             if(packet.playerid == player.id){
-                Tile tile = world.tile(packet.x, packet.y);
+                Tile tile = world[player.dimension].tile(packet.x, packet.y);
                 if(tile != null) Block.getByID(packet.block).placed(tile);
             }
         });
@@ -220,14 +220,14 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(BlockDestroyPacket.class, packet -> {
-            Tile tile = world.tile(packet.position % world.width(), packet.position / world.width());
+            Tile tile = world[player.dimension].tile(packet.position % world[player.dimension].width(), packet.position / world[player.dimension].width());
             if (tile != null && tile.entity != null) {
                 tile.entity.onDeath(true);
             }
         });
 
         Net.handleClient(BlockUpdatePacket.class, packet -> {
-            Tile tile = world.tile(packet.position % world.width(), packet.position / world.width());
+            Tile tile = world[player.dimension].tile(packet.position % world[player.dimension].width(), packet.position / world[player.dimension].width());
             if (tile != null && tile.entity != null) {
                 tile.entity.health = packet.health;
             }
@@ -252,9 +252,9 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(GameOverPacket.class, packet -> {
-            if(world.getCore().block() != ProductionBlocks.core &&
-                    world.getCore().entity != null){
-                world.getCore().entity.onDeath(true);
+            if(world[player.dimension].getCore().block() != ProductionBlocks.core &&
+                    world[player.dimension].getCore().entity != null){
+                world[player.dimension].getCore().entity.onDeath(true);
             }
             kicked = true;
             ui.restart.show();
@@ -264,7 +264,7 @@ public class NetClient extends Module {
 
         Net.handleClient(ItemTransferPacket.class, packet -> {
             Runnable r = () -> {
-                Tile tile = world.tile(packet.position);
+                Tile tile = world[player.dimension].tile(packet.position);
                 if (tile == null || tile.entity == null) return;
                 Tile next = tile.getNearby(packet.rotation);
                 tile.entity.items[packet.itemid] --;
@@ -276,7 +276,7 @@ public class NetClient extends Module {
 
         Net.handleClient(ItemSetPacket.class, packet -> {
             Runnable r = () -> {
-                Tile tile = world.tile(packet.position);
+                Tile tile = world[player.dimension].tile(packet.position);
                 if (tile == null || tile.entity == null) return;
                 tile.entity.items[packet.itemid] = packet.amount;
             };
@@ -286,7 +286,7 @@ public class NetClient extends Module {
 
         Net.handleClient(ItemOffloadPacket.class, packet -> {
             Runnable r = () -> {
-                Tile tile = world.tile(packet.position);
+                Tile tile = world[player.dimension].tile(packet.position);
                 if (tile == null || tile.entity == null) return;
                 Tile next = tile.getNearby(tile.getRotation());
                 next.block().handleItem(Item.getByID(packet.itemid), next, tile);

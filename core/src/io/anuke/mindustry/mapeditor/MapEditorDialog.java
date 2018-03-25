@@ -127,7 +127,7 @@ public class MapEditorDialog extends Dialog{
 				String before = editor.getMap().name;
 				editor.getMap().name = name;
 				Timers.run(10f, () -> {
-					world.maps().saveAndReload(editor.getMap(), editor.pixmap());
+					world[player.dimension].maps().saveAndReload(editor.getMap(), editor.pixmap());
 					loadDialog.rebuild();
 					ui.loadfrag.hide();
 					view.clearStack();

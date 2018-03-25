@@ -98,7 +98,7 @@ public class DesktopInput extends InputHandler{
 			}
 		}
 
-		Tile cursor = world.tile(tilex(), tiley());
+		Tile cursor = world[player.dimension].tile(tilex(), tiley());
 		Tile target = cursor == null ? null : cursor.isLinked() ? cursor.getLinked() : cursor;
 		boolean showCursor = false;
 
@@ -171,7 +171,7 @@ public class DesktopInput extends InputHandler{
 				Cursors.restoreCursor();
 		}
 		if (!ui.chatfrag.isVisible()) {
-			if (Inputs.keyRelease("ship_mode") && !player.isFlying && player.flyCooldown <= 0 && Vars.world.bossAmount <= 0) {
+			if (Inputs.keyRelease("ship_mode") && !player.isFlying && player.flyCooldown <= 0 && Vars.world[player.dimension].bossAmount <= 0) {
 				player.flyCooldown = 100;
 				player.isFlying = true;
 			} else if (Inputs.keyRelease("ship_mode") && player.isFlying && player.flyCooldown <= 0) {

@@ -84,7 +84,7 @@ public enum PlaceMode{
 		}
 		
 		public void draw(int tilex, int tiley, int endx, int endy){
-			Tile tile = world.tile(tilex, tiley);
+			Tile tile = world[player.dimension].tile(tilex, tiley);
 			
 			if(tile != null && control.input().validBreak(tilex, tiley)){
 				if(tile.isLinked())
@@ -149,7 +149,7 @@ public enum PlaceMode{
 			Lines.stroke(1f);
 			for(int cx = tilex; cx <= endx; cx ++){
 				for(int cy = tiley; cy <= endy; cy ++){
-					Tile tile = world.tile(cx, cy);
+					Tile tile = world[player.dimension].tile(cx, cy);
 					if(tile != null && tile.getLinked() != null)
 						tile = tile.getLinked();
 					if(tile != null && control.input().validBreak(tile.x, tile.y)){
@@ -399,7 +399,7 @@ public enum PlaceMode{
 		*/
 		
 		public void tapped(int tilex, int tiley){
-			world.tile(tilex,tiley).setRotation((byte)control.input().rotation);
+			world[player.dimension].tile(tilex,tiley).setRotation((byte)control.input().rotation);
 		}
 	},
 	linkTool{
@@ -415,7 +415,7 @@ public enum PlaceMode{
 		public void draw(int tilex, int tiley, int endx, int endy){
 			float x = tilex * tilesize;
 			float y = tiley * tilesize;
-			boolean valid = world.tile(tilex,tiley).block() instanceof LogicAcceptor;
+			boolean valid = world[player.dimension].tile(tilex,tiley).block() instanceof LogicAcceptor;
 
 			float si = MathUtils.sin(Timers.time() / 6f) + 1.5f;
 
@@ -430,8 +430,8 @@ public enum PlaceMode{
 		public void tapped(int tilex, int tiley){
 		    System.out.println("test");
 			if (linking) {
-				Tile tile = world.tile(tilex,tiley);
-				((LogicAcceptor) tile.block()).logicLink(tile,world.tile(othertilex,othertiley));
+				Tile tile = world[player.dimension].tile(tilex,tiley);
+				((LogicAcceptor) tile.block()).logicLink(tile,world[player.dimension].tile(othertilex,othertiley));
                 linking = false;
 			}else{
                 linking = true;

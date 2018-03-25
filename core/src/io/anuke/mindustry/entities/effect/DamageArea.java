@@ -91,7 +91,7 @@ public class DamageArea{
 			int trad = (int)(radius / tilesize);
 			for(int dx = -trad; dx <= trad; dx ++){
 				for(int dy= -trad; dy <= trad; dy ++){
-					Tile tile = world.tile(Mathf.scl2(x, tilesize) + dx, Mathf.scl2(y, tilesize) + dy);
+					Tile tile = world[0].tile(Mathf.scl2(x, tilesize) + dx, Mathf.scl2(y, tilesize) + dy);
 					if(tile != null && tile.entity != null && Vector2.dst(dx, dy, 0, 0) <= trad){
 						int amount = calculateDamage(x, y, tile.worldx(), tile.worldy(), radius, damage);
 						tile.entity.damage(amount);

@@ -37,7 +37,7 @@ public class Logic extends Module {
     @Override
     public void init(){
         Entities.initPhysics();
-        Entities.collisions().setCollider(tilesize, world::solid);
+        Entities.collisions().setCollider(tilesize, world[0]::solid);
     }
 
     public void play(){
@@ -68,12 +68,12 @@ public class Logic extends Module {
     public void runWave(){
 
         if(state.lastUpdated < state.wave + 1){
-            world.pathfinder().resetPaths();
+            world[0].pathfinder().resetPaths();
             state.lastUpdated = state.wave + 1;
         }
 
         for(EnemySpawn spawn : spawns){
-            Array<SpawnPoint> spawns = world.getSpawns();
+            Array<SpawnPoint> spawns = world[0].getSpawns();
 
             for(int lane = 0; lane < spawns.size; lane ++){
                 int fl = lane;
@@ -116,9 +116,9 @@ public class Logic extends Module {
             }
 
             if(!Net.client())
-                world.pathfinder().update();
+                world[0].pathfinder().update();
 
-            if(world.getCore() != null && world.getCore().block() != ProductionBlocks.core && !state.gameOver){
+            if(world[0].getCore() != null && world[0].getCore().block() != ProductionBlocks.core && !state.gameOver){
                 state.gameOver = true;
                 if(Net.server()) NetEvents.handleGameOver();
                 Events.fire(GameOverEvent.class);
@@ -129,10 +129,10 @@ public class Logic extends Module {
                 if(!state.mode.disableWaveTimer){
 
                     if(state.enemies <= 0){
-                        if(!world.getMap().name.equals("tutorial")) state.wavetime -= delta();
+                        if(!world[0].getMap().name.equals("tutorial")) state.wavetime -= delta();
 
                         if(state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding){ //start updating beforehand
-                            world.pathfinder().resetPaths();
+                            world[0].pathfinder().resetPaths();
                             state.lastUpdated = state.wave + 1;
                         }
                     }else{
@@ -154,8 +154,8 @@ public class Logic extends Module {
                 Entities.collideGroups(bulletGroup, enemyGroup);
                 Entities.collideGroups(bulletGroup, playerGroup);
 
-                if (world.time >= maxTime) world.time = 0;
-                world.time += 1;
+                if (world[0].time >= maxTime) world[0].time = 0;
+                world[0].time += 1;
             }
         }
     }

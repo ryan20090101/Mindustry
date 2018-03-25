@@ -23,7 +23,7 @@ public class MapSaveDialog extends FloatingDialog{
 		shown(() -> {
 			content().clear();
 			content().label(() ->{ 
-				Map map = world.maps().getMap(field.getText());
+				Map map = world[0].maps().getMap(field.getText());
 				if(map != null){
 					if(map.custom){
 						return "$text.editor.overwrite";
@@ -68,7 +68,7 @@ public class MapSaveDialog extends FloatingDialog{
 		if(field.getText().isEmpty()){
 			return true;
 		}
-		Map map = world.maps().getMap(field.getText());
+		Map map = world[0].maps().getMap(field.getText());
 		return map != null && !map.custom;
 	}
 }

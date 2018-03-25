@@ -110,14 +110,14 @@ public class Renderer extends RendererModule {
 		} else {
 			boolean smoothcam = Settings.getBool("smoothcam");
 
-			if (world.getCore() == null || world.getCore().block() == ProductionBlocks.core) {
+			if (world[player.dimension].getCore() == null || world[player.dimension].getCore().block() == ProductionBlocks.core) {
 				if (!smoothcam) {
 					setCamera(player.x, player.y);
 				} else {
 					smoothCamera(player.x, player.y, android ? 0.3f : 0.14f);
 				}
 			} else {
-				smoothCamera(world.getCore().worldx(), world.getCore().worldy(), 0.4f);
+				smoothCamera(world[player.dimension].getCore().worldx(), world[player.dimension].getCore().worldy(), 0.4f);
 			}
 
 			if (Settings.getBool("pixelate"))
@@ -126,7 +126,7 @@ public class Renderer extends RendererModule {
 			float prex = camera.position.x, prey = camera.position.y;
 			updateShake(0.75f);
 			float prevx = camera.position.x, prevy = camera.position.y;
-			clampCamera(-tilesize / 2f, -tilesize / 2f + 1, world.width() * tilesize - tilesize / 2f, world.height() * tilesize - tilesize / 2f);
+			clampCamera(-tilesize / 2f, -tilesize / 2f + 1, world[player.dimension].width() * tilesize - tilesize / 2f, world[player.dimension].height() * tilesize - tilesize / 2f);
 
 			float deltax = camera.position.x - prex, deltay = camera.position.y - prey;
 
@@ -232,7 +232,7 @@ public class Renderer extends RendererModule {
 	}
 
 	void drawPadding() {
-		float vw = world.width() * tilesize;
+		float vw = world[player.dimension].width() * tilesize;
 		float cw = camera.viewportWidth * camera.zoom;
 		float ch = camera.viewportHeight * camera.zoom;
 		if (vw < cw) {
@@ -392,9 +392,9 @@ public class Renderer extends RendererModule {
 	void drawOverlay() {
 
 		//draw tutorial placement point
-		if (world.getMap().name.equals("tutorial") && control.tutorial().showBlock()) {
-			int x = world.getCore().x + control.tutorial().getPlacePoint().x;
-			int y = world.getCore().y + control.tutorial().getPlacePoint().y;
+		if (world[player.dimension].getMap().name.equals("tutorial") && control.tutorial().showBlock()) {
+			int x = world[player.dimension].getCore().x + control.tutorial().getPlacePoint().x;
+			int y = world[player.dimension].getCore().y + control.tutorial().getPlacePoint().y;
 			int rot = control.tutorial().getPlaceRotation();
 
 			Lines.stroke(1f);
@@ -438,13 +438,13 @@ public class Renderer extends RendererModule {
 
 			Lines.stroke(1f);
 			Draw.color(Color.SCARLET);
-			for (SpawnPoint spawn : world.getSpawns()) {
+			for (SpawnPoint spawn : world[player.dimension].getSpawns()) {
 				Lines.dashCircle(spawn.start.worldx(), spawn.start.worldy(), enemyspawnspace);
 			}
 
-			if(world.getCore() != null) {
+			if(world[player.dimension].getCore() != null) {
 				Draw.color(Color.LIME);
-				Lines.poly(world.getSpawnX(), world.getSpawnY(), 4, 6f, Timers.time() * 2f);
+				Lines.poly(world[player.dimension].getSpawnX(), world[player.dimension].getSpawnY(), 4, 6f, Timers.time() * 2f);
 			}
 			
 			if(input.breakMode == PlaceMode.holdDelete)
@@ -464,7 +464,7 @@ public class Renderer extends RendererModule {
 
 		//draw selected block bars and info
 		if (input.recipe == null && !ui.hasMouse()) {
-			Tile tile = world.tileWorld(Graphics.mouseWorld().x, Graphics.mouseWorld().y);
+			Tile tile = world[player.dimension].tileWorld(Graphics.mouseWorld().x, Graphics.mouseWorld().y);
 
 			if (tile != null && tile.block() != Blocks.air) {
 				Tile target = tile;

@@ -121,7 +121,7 @@ public class Player extends SyncEntity{
 		Timers.run(respawnduration + 5f, () -> {
 			heal();
             radiation=0;
-			set(world.getSpawnX(), world.getSpawnY());
+			set(world[dimension].getSpawnX(), world[dimension].getSpawnY());
 			interpolator.target.set(x, y);
 		});
 	}
@@ -175,7 +175,7 @@ public class Player extends SyncEntity{
 
 		if(flyCooldown>0) flyCooldown-=1;
 
-		Tile tile = world.tileWorld(x, y);
+		Tile tile = world[dimension].tileWorld(x, y);
 		Block block = tile.floorOrBlock();
 
 		if(!isFlying) {
@@ -299,8 +299,8 @@ public class Player extends SyncEntity{
 			this.angle = Mathf.slerpDelta(this.angle, angle, 0.1f);
 		}
 
-		x = Mathf.clamp(x, 0, world.width() * tilesize);
-		y = Mathf.clamp(y, 0, world.height() * tilesize);
+		x = Mathf.clamp(x, 0, world[dimension].width() * tilesize);
+		y = Mathf.clamp(y, 0, world[dimension].height() * tilesize);
 	}
 
 	@Override

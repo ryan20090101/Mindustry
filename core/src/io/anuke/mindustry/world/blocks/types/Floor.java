@@ -32,7 +32,7 @@ public class Floor extends Block{
 				
 				if(dx == 0 && dy == 0) continue;
 				
-				Tile other = world.tile(tile.x+dx, tile.y+dy);
+				Tile other = world[tile.dimension].tile(tile.x+dx, tile.y+dy);
 				
 				if(other == null) continue;
 				

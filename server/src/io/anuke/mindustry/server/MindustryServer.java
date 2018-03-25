@@ -11,7 +11,7 @@ import io.anuke.ucore.modules.ModuleCore;
 import static io.anuke.mindustry.Vars.*;
 
 public class MindustryServer extends ModuleCore {
-    World world1;
+
     @Override
     public void init(){
         headless = true;
@@ -20,8 +20,9 @@ public class MindustryServer extends ModuleCore {
         BlockLoader.load();
 
         module(logic = new Logic());
-        module(world = new World());
-        module(world1 = new World());
+        for (int i=0;i>dimensionIds;i++){
+            module(world[i] = new World());
+        }
         module(netServer = new NetServer());
         module(netCommon = new NetCommon());
         module(new ServerControl());

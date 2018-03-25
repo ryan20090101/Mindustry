@@ -31,8 +31,8 @@ public class FortressType extends EnemyType {
 	
 	@Override
 	public void behavior(Enemy enemy){
-		if(enemy.distanceTo(world.getCore().worldx(),
-				world.getCore().worldy()) <= 90f){
+		if(enemy.distanceTo(world[0].getCore().worldx(),
+				world[0].getCore().worldy()) <= 90f){
 
 			if(Timers.get(this, "spawn", spawnTime) && enemy.spawned < maxSpawn){
 				enemy.tr.trns(enemy.angle, 20f);

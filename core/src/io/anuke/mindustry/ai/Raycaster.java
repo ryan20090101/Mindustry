@@ -72,7 +72,7 @@ public class Raycaster implements RaycastCollisionDetector<Vector2>{
 	}
 	
 	private boolean solid(float x, float y){
-		Tile tile = world.tile(Mathf.scl2(x, tilesize), Mathf.scl2(y, tilesize));
+		Tile tile = world[0].tile(Mathf.scl2(x, tilesize), Mathf.scl2(y, tilesize));
 		
 		if(tile == null || tile.solid()) return true;
 		

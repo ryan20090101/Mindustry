@@ -28,7 +28,7 @@ public class WorldGenerator {
 	
 	/**Returns the core (starting) block. Should fill spawns with the correct spawnpoints.*/
 	public static Tile generate(Pixmap pixmap, Tile[][] tiles, Array<SpawnPoint> spawns){
-		Noise.setSeed(world.getSeed());
+		Noise.setSeed(world[0].getSeed());
 
 		Tile core = null;
 		
@@ -47,7 +47,7 @@ public class WorldGenerator {
 					
 				if(block == SpecialBlocks.playerSpawn){
 					block = Blocks.air;
-					core = world.tile(x, y);
+					core = world[0].tile(x, y);
 				}else if(block == SpecialBlocks.enemySpawn){
 					block = Blocks.air;
 					spawns.add(new SpawnPoint(tiles[x][y]));
@@ -57,7 +57,7 @@ public class WorldGenerator {
 					block = rocks.get(floor);
 				}
 				
-				if(world.getMap().oreGen && (floor == Blocks.stone || floor == Blocks.grass || floor == Blocks.blackstone ||
+				if(world[0].getMap().oreGen && (floor == Blocks.stone || floor == Blocks.grass || floor == Blocks.blackstone ||
 						floor == Blocks.snow || floor == Blocks.sand)){
 					if(Noise.nnoise(x, y, 8, 1) > 0.21){
 						floor = Blocks.iron;

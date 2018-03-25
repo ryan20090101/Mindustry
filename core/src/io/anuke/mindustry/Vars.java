@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.core.*;
 import io.anuke.mindustry.entities.Bullet;
 import io.anuke.mindustry.entities.Player;
@@ -22,6 +23,8 @@ import io.anuke.ucore.scene.ui.layout.Unit;
 import java.util.Locale;
 
 public class Vars{
+	//How many dimensions are there
+	public static final int dimensionIds = 2;
 
 	public static final boolean testAndroid = false;
 	//shorthand for whether or not this is running on android
@@ -133,8 +136,7 @@ public class Vars{
 	public static Logic logic;
 	public static Renderer renderer;
 	public static UI ui;
-	public static World world;
-	public static World world1;
+	public static World[] world;
 	public static NetCommon netCommon;
 	public static NetServer netServer;
 	public static NetClient netClient;

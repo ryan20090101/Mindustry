@@ -23,6 +23,7 @@ public abstract class SyncEntity extends DestructibleEntity{
     private Vector3 spos = new Vector3();
 
     public float angle;
+    public int dimension;
 
     static{
         setWriteSize(Enemy.class, 4 + 4 + 2 + 2);

@@ -124,7 +124,7 @@ public class Control extends Module{
 
 		KeyBinds.load();
 
-		for(Map map : world.maps().list()){
+		for(Map map : world[0].maps().list()){
 			Settings.defaults("hiscore" + map.name, 0);
 		}
 
@@ -146,7 +146,7 @@ public class Control extends Module{
 		Events.on(PlayEvent.class, () -> {
 			renderer.clearTiles();
 
-			player.set(world.getSpawnX(), world.getSpawnY());
+			player.set(world[player.dimension].getSpawnX(), world[player.dimension].getSpawnY());
 			Core.camera.position.set(player.x, player.y, 0);
 
 			ui.hudfrag.updateItems();
@@ -173,10 +173,10 @@ public class Control extends Module{
 		Events.on(WaveEvent.class, () -> {
 			Sounds.play("spawn");
 
-			int last = Settings.getInt("hiscore" + world.getMap().name);
+			int last = Settings.getInt("hiscore" + world[player.dimension].getMap().name);
 
 			if(state.wave > last && !state.mode.infiniteResources && !state.mode.disableWaveTimer){
-				Settings.putInt("hiscore" + world.getMap().name, state.wave);
+				Settings.putInt("hiscore" + world[player.dimension].getMap().name, state.wave);
 				Settings.save();
 				hiscore = true;
 			}
@@ -188,9 +188,9 @@ public class Control extends Module{
 			Effects.shake(5, 6, Core.camera.position.x, Core.camera.position.y);
 			Sounds.play("corexplode");
 			for(int i = 0; i < 16; i ++){
-				Timers.run(i*2, ()-> Effects.effect(Fx.explosion, world.getCore().worldx()+Mathf.range(40), world.getCore().worldy()+Mathf.range(40)));
+				Timers.run(i*2, ()-> Effects.effect(Fx.explosion, world[player.dimension].getCore().worldx()+Mathf.range(40), world[player.dimension].getCore().worldy()+Mathf.range(40)));
 			}
-			Effects.effect(Fx.coreexplosion, world.getCore().worldx(), world.getCore().worldy());
+			Effects.effect(Fx.coreexplosion, world[player.dimension].getCore().worldx(), world[player.dimension].getCore().worldy());
 
 			ui.restart.show();
 
@@ -224,8 +224,8 @@ public class Control extends Module{
 
 		Timers.runTask(10, () -> {
 			logic.reset();
-			world.loadMap(map);
-			world1.loadMap(map);
+			for (int i = 0;i<dimensionIds;i++)
+				world[i].loadMap(map);
 			logic.play();
 		});
 
@@ -233,7 +233,9 @@ public class Control extends Module{
 	}
 
 	public void resetMap() {
-		playMap(world.getMap());
+
+		for (int i = 0;i<dimensionIds;i++)
+			playMap(world[i].getMap());
 	}
 
 	public boolean isHighScore(){
@@ -255,7 +257,7 @@ public class Control extends Module{
 	private void checkOldUser(){
 		boolean hasPlayed = false;
 
-		for(Map map : world.maps().getAllMaps()){
+		for(Map map : world[0].maps().getAllMaps()){
 			if(Settings.getInt("hiscore" + map.name) != 0){
 				hasPlayed = true;
 				break;
@@ -293,7 +295,7 @@ public class Control extends Module{
 		Timers.run(1f, Musics::shuffleAll);
 
 		Entities.initPhysics();
-		Entities.collisions().setCollider(tilesize, world::solid);
+		Entities.collisions().setCollider(tilesize, world[0]::solid);
 
 		Platform.instance.updateRPC();
 
@@ -386,7 +388,7 @@ public class Control extends Module{
 					respawntime -= delta();
 
 					if(respawntime <= 0){
-						player.set(world.getSpawnX(), world.getSpawnY());
+						player.set(world[player.dimension].getSpawnX(), world[player.dimension].getSpawnY());
 						player.heal();
                         player.radiation=0;
 						player.add();

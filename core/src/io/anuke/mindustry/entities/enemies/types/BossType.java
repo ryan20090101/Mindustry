@@ -24,13 +24,13 @@ public class BossType extends EnemyType {
     }
 
     public void added(Enemy enemy){
-        world.bossAmount++;
+        world[0].bossAmount++;
         super.added(enemy);
     }
 
     @Override
     public void removed(Enemy enemy){
-        world.bossAmount--;
+        world[0].bossAmount--;
         super.removed(enemy);
     }
 }

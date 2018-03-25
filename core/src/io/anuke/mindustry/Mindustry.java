@@ -10,7 +10,7 @@ import io.anuke.ucore.util.Log;
 import static io.anuke.mindustry.Vars.*;
 
 public class Mindustry extends ModuleCore {
-	World world1;
+
 	@Override
 	public void init(){
 		debug = Platform.instance.isDebug();
@@ -20,8 +20,12 @@ public class Mindustry extends ModuleCore {
 		BlockLoader.load();
 
 		module(logic = new Logic());
-		module(world = new World());
-		module(world1 = new World());
+		world = new World[dimensionIds];
+		for (int i=0;i<dimensionIds;i++){
+			System.out.println(i);
+			module(world[i] = new World());
+			System.out.println(world[i]);
+		}
 		module(control = new Control());
 		module(renderer = new Renderer());
 		module(ui = new UI());

@@ -27,6 +27,7 @@ public class TileEntity extends Entity{
 	public float health;
 	public boolean dead = false;
 	public boolean added;
+	public int dimension;
 	
 	/**Sets this tile entity data to this tile, and adds it if necessary.*/
 	public TileEntity init(Tile tile, boolean added){
@@ -75,7 +76,7 @@ public class TileEntity extends Entity{
 
 				block.onDestroyed(tile);
 
-				world.removeBlock(tile);
+				world[0].removeBlock(tile);
 				remove();
 			}
 		}

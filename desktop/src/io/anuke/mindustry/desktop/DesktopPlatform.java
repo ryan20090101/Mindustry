@@ -65,7 +65,7 @@ public class DesktopPlatform extends Platform {
 
         if(!state.is(State.menu)){
             presence.state = Strings.capitalize(state.mode.name()) + ", Solo";
-            presence.details = Strings.capitalize(world.getMap().name) + " | Wave " + state.wave;
+            presence.details = Strings.capitalize(world[player.dimension].getMap().name) + " | Wave " + state.wave;
             presence.largeImageText = "Wave " + state.wave;
 
             if(Net.active()){

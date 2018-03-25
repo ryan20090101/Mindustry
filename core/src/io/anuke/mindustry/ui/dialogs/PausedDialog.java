@@ -50,7 +50,7 @@ public class PausedDialog extends FloatingDialog{
 			content().row();
 			content().addButton("$text.savegame", () -> {
 				save.show();
-			}).disabled(b -> world.getMap().id == -1);
+			}).disabled(b -> world[player.dimension].getMap().id == -1);
 
 			content().row();
 			content().addButton("$text.loadgame", () -> {
@@ -93,7 +93,7 @@ public class PausedDialog extends FloatingDialog{
 			
 			imagebutton sa = new imagebutton("icon-save", isize, save::show);
 			sa.text("$text.save").padTop(4f);
-			sa.cell.disabled(b -> world.getMap().id == -1);
+			sa.cell.disabled(b -> world[player.dimension].getMap().id == -1);
 
 			content().row();
 			

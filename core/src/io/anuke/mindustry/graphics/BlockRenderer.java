@@ -77,22 +77,13 @@ public class BlockRenderer{
 				int worldy = Mathf.scl(camera.position.y, tilesize) + y;
 				boolean expanded = (x < -rangex || x > rangex || y < -rangey || y > rangey);
 
-				Tile tile = world.tile(worldx, worldy);
-				if(player.dimension == 1) {
-					tile = world1.tile(worldx, worldy);
-				}
+				Tile tile = world[player.dimension].tile(worldx, worldy);
 				
 				if(tile != null){
 					Block block = tile.block();
-					if(player.dimension == 1) {
-						if (!expanded && block != Blocks.air && world1.isAccessible(worldx, worldy)) {
+						if (!expanded && block != Blocks.air && world[player.dimension].isAccessible(worldx, worldy)) {
 							block.drawShadow(tile);
 						}
-					}else {
-						if (!expanded && block != Blocks.air && world.isAccessible(worldx, worldy)) {
-							block.drawShadow(tile);
-						}
-					}
 					if(!(block instanceof StaticBlock)){
 						if(block == Blocks.air){
 							if(!state.is(State.paused)) tile.floor().update(tile);
@@ -169,7 +160,7 @@ public class BlockRenderer{
 	}
 	
 	public void drawFloor(){
-		int chunksx = world.width() / chunksize, chunksy = world.height() / chunksize;
+		int chunksx = world[player.dimension].width() / chunksize, chunksy = world[player.dimension].height() / chunksize;
 
 		//render the entire map
 		if(cache == null || cache.length != chunksx || cache[0].length != chunksy){
@@ -219,7 +210,7 @@ public class BlockRenderer{
 	
 	void drawPaths(){
 		Draw.color(Color.RED);
-		for(SpawnPoint point : world.getSpawns()){
+		for(SpawnPoint point : world[player.dimension].getSpawns()){
 			if(point.pathTiles != null){
 				for(int i = 1; i < point.pathTiles.length; i ++){
 					Lines.line(point.pathTiles[i-1].worldx(), point.pathTiles[i-1].worldy(),
@@ -262,10 +253,7 @@ public class BlockRenderer{
 
 		for(int tilex = cx * chunksize; tilex < (cx + 1) * chunksize; tilex++){
 			for(int tiley = cy * chunksize; tiley < (cy + 1) * chunksize; tiley++){
-				Tile tile = world.tile(tilex, tiley);
-				if(player.dimension == 1) {
-					tile = world1.tile(tilex, tiley);
-				}
+				Tile tile = world[player.dimension].tile(tilex, tiley);
 				if(tile == null) continue;
 				if(floor){
 					if(!(tile.block() instanceof StaticBlock)){
@@ -289,6 +277,6 @@ public class BlockRenderer{
 	private void createBatch(){
 		if(cbatch != null)
 			cbatch.dispose();
-		cbatch = new CacheBatch(world.width() * world.height() * 4);
+		cbatch = new CacheBatch(world[player.dimension].width() * world[player.dimension].height() * 4);
 	}
 }

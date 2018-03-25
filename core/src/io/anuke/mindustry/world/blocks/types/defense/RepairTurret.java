@@ -47,7 +47,7 @@ public class RepairTurret extends PowerTurret{
 		}
 		
 		if(entity.timer.get(timerTarget, targetInterval)){
-			entity.blockTarget = world.findTileTarget(tile.worldx(), tile.worldy(), tile, range, true);
+			entity.blockTarget = world[tile.dimension].findTileTarget(tile.worldx(), tile.worldy(), tile, range, true);
 		}
 
 		if(entity.blockTarget != null){

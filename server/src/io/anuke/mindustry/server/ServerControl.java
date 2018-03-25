@@ -81,17 +81,17 @@ public class ServerControl extends Module {
                 Timers.runTask(30f, () -> {
 
                     if (mode != ShuffleMode.off) {
-                        Array<Map> maps = mode == ShuffleMode.both ? world.maps().getAllMaps() :
-                                mode == ShuffleMode.normal ? world.maps().getDefaultMaps() : world.maps().getCustomMaps();
+                        Array<Map> maps = mode == ShuffleMode.both ? world[player.dimension].maps().getAllMaps() :
+                                mode == ShuffleMode.normal ? world[player.dimension].maps().getDefaultMaps() : world[player.dimension].maps().getCustomMaps();
 
-                        Map previous = world.getMap();
+                        Map previous = world[player.dimension].getMap();
                         Map map = previous;
                         while (map == previous || !map.visible) map = maps.random();
 
                         info("Selected next map to be {0}.", map.name);
                         state.set(State.playing);
                         logic.reset();
-                        world.loadMap(map);
+                        world[player.dimension].loadMap(map);
                         host();
                     }
                 });
@@ -130,7 +130,7 @@ public class ServerControl extends Module {
 
             String search = arg[0];
             Map result = null;
-            for(Map map : world.maps().list()){
+            for(Map map : world[player.dimension].maps().list()){
                 if(map.name.equalsIgnoreCase(search))
                     result = map;
             }
@@ -152,7 +152,7 @@ public class ServerControl extends Module {
             state.mode = mode;
 
             logic.reset();
-            world.loadMap(result);
+            world[player.dimension].loadMap(result);
             state.set(State.playing);
             info("Map loaded.");
 
@@ -161,7 +161,7 @@ public class ServerControl extends Module {
 
         handler.register("maps", "Display all available maps.", arg -> {
             Log.info("Maps:");
-            for(Map map : world.maps().getAllMaps()){
+            for(Map map : world[player.dimension].maps().getAllMaps()){
                 Log.info("  &ly{0}: &lb&fi{1} / {2}x{3}", map.name, map.custom ? "Custom" : "Default", map.getWidth(), map.getHeight());
             }
         });
@@ -171,7 +171,7 @@ public class ServerControl extends Module {
                 info("&lyStatus: &rserver closed");
             }else{
                 info("&lyStatus: &lcPlaying on map &fi{0}&fb &lb/&lc Wave {1} &lb/&lc {2}",
-                        Strings.capitalize(world.getMap().name), state.wave, Strings.capitalize(state.difficulty.name()));
+                        Strings.capitalize(world[player.dimension].getMap().name), state.wave, Strings.capitalize(state.difficulty.name()));
                 if(state.enemies > 0){
                     info("&ly{0} enemies remaining.", state.enemies);
                 }else{
@@ -496,7 +496,7 @@ public class ServerControl extends Module {
         });
 
         handler.register("gameover", "Force a game over.", arg -> {
-            world.removeBlock(world.getCore());
+            world[player.dimension].removeBlock(world[player.dimension].getCore());
             info("Core destroyed.");
         });
 
@@ -508,7 +508,7 @@ public class ServerControl extends Module {
             try{
                 int x = Integer.parseInt(arg[0]);
                 int y = Integer.parseInt(arg[1]);
-                Tile tile = world.tile(x, y);
+                Tile tile = world[player.dimension].tile(x, y);
                 if(tile != null){
                     if(tile.entity != null){
                         Array<Object> arr = tile.block().getDebugInfo(tile);

@@ -238,7 +238,7 @@ public class Generator extends PowerBlock {
 		GridPoint2 point = Geometry.d4[rotation];
 
 		for(int i = 1; i < laserRange; i++){
-			Tile other = world.tile(tile.x + i * point.x, tile.y + i * point.y);
+			Tile other = world[tile.dimension].tile(tile.x + i * point.x, tile.y + i * point.y);
 
 			if(other != null && other.block() instanceof PowerAcceptor){
 				Tile linked = other.getLinked();

@@ -26,7 +26,7 @@ public class ANDGate extends LogicBlock {
         Iterator<Integer> it = tile.<LogicEntity>entity().inputBlocks.iterator();
         while(it.hasNext()) {
             pos = it.next();
-            LogicEntity logicEntity = world.tile(pos % world.width(), pos / world.width()).entity();
+            LogicEntity logicEntity = world[tile.dimension].tile(pos % world[tile.dimension].width(), pos / world[tile.dimension].width()).entity();
             if (logicEntity == null)
                 continue;
             active = active && logicEntity.outputActive;

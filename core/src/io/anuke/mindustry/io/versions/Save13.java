@@ -125,7 +125,7 @@ public class Save13 extends SaveFileVersion {
 
         int seed = stream.readInt();
 
-        world.loadMap(world.maps().getMap(mapid), seed);
+        world[0].loadMap(world[0].maps().getMap(mapid), seed);
         renderer.clearTiles();
 
         for(Enemy enemy : enemiesToUpdate){
@@ -134,20 +134,20 @@ public class Save13 extends SaveFileVersion {
 
         int rocks = stream.readInt();
 
-        for(int x = 0; x < world.width(); x ++){
-            for(int y = 0; y < world.height(); y ++){
-                Tile tile = world.tile(x, y);
+        for(int x = 0; x < world[0].width(); x ++){
+            for(int y = 0; y < world[0].height(); y ++){
+                Tile tile = world[0].tile(x, y);
 
                 //remove breakables like rocks
                 if(tile.breakable()){
-                    world.tile(x, y).setBlock(Blocks.air);
+                    world[0].tile(x, y).setBlock(Blocks.air);
                 }
             }
         }
 
         for(int i = 0; i < rocks; i ++){
             int pos = stream.readInt();
-            Tile tile = world.tile(pos % world.width(), pos / world.width());
+            Tile tile = world[0].tile(pos % world[0].width(), pos / world[0].width());
             Block result = WorldGenerator.rocks.get(tile.floor());
             if(result != null) tile.setBlock(result);
         }
@@ -158,7 +158,7 @@ public class Save13 extends SaveFileVersion {
             int pos = stream.readInt();
             int blockid = stream.readInt();
 
-            Tile tile = world.tile(pos % world.width(), pos / world.width());
+            Tile tile = world[0].tile(pos % world[0].width(), pos / world[0].width());
             tile.setBlock(BlockLoader.getByOldID(blockid));
 
             if(blockid == Blocks.blockpart.id){
@@ -192,7 +192,7 @@ public class Save13 extends SaveFileVersion {
 
         //--GENERAL STATE--
         stream.writeByte(state.mode.ordinal()); //gamemode
-        stream.writeByte(world.getMap().id); //map ID
+        stream.writeByte(world[0].getMap().id); //map ID
 
         stream.writeInt(state.wave); //wave
         stream.writeFloat(state.wavetime); //wave countdown
@@ -247,14 +247,14 @@ public class Save13 extends SaveFileVersion {
         //--MAP DATA--
 
         //seed
-        stream.writeInt(world.getSeed());
+        stream.writeInt(world[0].getSeed());
 
         int totalblocks = 0;
         int totalrocks = 0;
 
-        for(int x = 0; x < world.width(); x ++){
-            for(int y = 0; y < world.height(); y ++){
-                Tile tile = world.tile(x, y);
+        for(int x = 0; x < world[0].width(); x ++){
+            for(int y = 0; y < world[0].height(); y ++){
+                Tile tile = world[0].tile(x, y);
 
                 if(tile.breakable()){
                     if(tile.block() instanceof Rock){
@@ -270,9 +270,9 @@ public class Save13 extends SaveFileVersion {
         stream.writeInt(totalrocks);
 
         //write all rocks
-        for(int x = 0; x < world.width(); x ++) {
-            for (int y = 0; y < world.height(); y++) {
-                Tile tile = world.tile(x, y);
+        for(int x = 0; x < world[0].width(); x ++) {
+            for (int y = 0; y < world[0].height(); y++) {
+                Tile tile = world[0].tile(x, y);
 
                 if (tile.block() instanceof Rock) {
                     stream.writeInt(tile.packedPosition());
@@ -283,13 +283,13 @@ public class Save13 extends SaveFileVersion {
         //write all blocks
         stream.writeInt(totalblocks);
 
-        for(int x = 0; x < world.width(); x ++){
-            for(int y = 0; y < world.height(); y ++){
-                Tile tile = world.tile(x, y);
+        for(int x = 0; x < world[0].width(); x ++){
+            for(int y = 0; y < world[0].height(); y ++){
+                Tile tile = world[0].tile(x, y);
 
                 if(tile.breakable() && !(tile.block() instanceof Rock)){
 
-                    stream.writeInt(x + y*world.width()); //tile pos
+                    stream.writeInt(x + y*world[0].width()); //tile pos
                     stream.writeInt(tile.block().id); //block ID
 
                     if(tile.block() instanceof BlockPart) stream.writeByte(tile.link);

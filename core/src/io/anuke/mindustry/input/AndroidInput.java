@@ -72,7 +72,7 @@ public class AndroidInput extends InputHandler{
 		warmup = 0;
 
 		if(!state.is(State.menu)){
-			Tile cursor = world.tile(Mathf.scl2(Graphics.mouseWorld().x, tilesize), Mathf.scl2(Graphics.mouseWorld().y, tilesize));
+			Tile cursor = world[player.dimension].tile(Mathf.scl2(Graphics.mouseWorld().x, tilesize), Mathf.scl2(Graphics.mouseWorld().y, tilesize));
 			if(cursor != null && !ui.hasMouse(screenX, screenY)){
 				Tile linked = cursor.isLinked() ? cursor.getLinked() : cursor;
 				if(linked != null && linked.block().isConfigurable(linked)){
@@ -103,7 +103,7 @@ public class AndroidInput extends InputHandler{
 
 	public Tile selected(){
 		Vector2 vec = Graphics.world(mousex, mousey);
-		return world.tile(Mathf.scl2(vec.x, tilesize), Mathf.scl2(vec.y, tilesize));
+		return world[player.dimension].tile(Mathf.scl2(vec.x, tilesize), Mathf.scl2(vec.y, tilesize));
 	}
 
 	public void breakBlock(){

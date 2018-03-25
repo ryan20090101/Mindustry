@@ -49,23 +49,27 @@ public class LogicBlock extends Block implements LogicAcceptor{
     @Override
     public void onBreak(Tile tile) {
         int pos;
-        Iterator<Integer> it = tile.<LogicEntity>entity().inputBlocks.iterator();
+        LogicEntity ent = tile.entity();
+        if(ent == null) return;
+        if(ent.inputBlocks != null) {
+        Iterator<Integer> it = ent.inputBlocks.iterator();
         while(it.hasNext()) {
             pos = it.next();
-            Tile logicTile = world.tile(pos % world.width(), pos / world.width());
+            Tile logicTile = world[tile.dimension].tile(pos % world[tile.dimension].width(), pos / world[tile.dimension].width());
             if (logicTile.block()!=Blocks.air) {
                 logicTile.<LogicEntity>entity().outputBlocks.removeValue(tile.packedPosition(),false);
             }
-        }
+        }}
 
-        it = tile.<LogicEntity>entity().outputBlocks.iterator();
+        if(ent.outputBlocks != null) {
+        Iterator<Integer> it = tile.<LogicEntity>entity().outputBlocks.iterator();
         while(it.hasNext()) {
             pos = it.next();
-            Tile logicTile = world.tile(pos % world.width(), pos / world.width());
+            Tile logicTile = world[tile.dimension].tile(pos % world[tile.dimension].width(), pos / world[tile.dimension].width());
             if (logicTile.block()!=Blocks.air) {
                 logicTile.<LogicEntity>entity().inputBlocks.removeValue(tile.packedPosition(),false);
             }
-        }
+        }}
     }
 
     @Override
@@ -76,7 +80,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
         Iterator<Integer> it = ent.outputBlocks.iterator();
         while(it.hasNext()) {
             pos = it.next();
-            Tile logicTile = world.tile(pos % world.width(), pos / world.width());
+            Tile logicTile = world[tile.dimension].tile(pos % world[tile.dimension].width(), pos / world[tile.dimension].width());
             if (logicTile.block()!=Blocks.air) {
                 LogicAcceptor blck = ((LogicAcceptor) logicTile.block());
                 blck.setLogic(logicTile, tile, ent.outputActive);
@@ -124,7 +128,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
         int pos;
         while(it.hasNext()) {
             pos = it.next();
-            Lines.line(tile.x*8, tile.y*8, pos % world.width()*8, pos / world.width()*8);
+            Lines.line(tile.x*8, tile.y*8, pos % world[tile.dimension].width()*8, pos / world[tile.dimension].width()*8);
         }
         Draw.reset();
         super.drawLayer2(tile);

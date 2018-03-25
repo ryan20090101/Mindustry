@@ -13,6 +13,7 @@ public class Bullet extends BulletEntity{
 	public Timer timer = new Timer(3);
 
 	public String name;
+	public int dimension;
 
 	public Bullet(BulletType type, Entity owner, float x, float y, float angle){
 		super(type, owner, angle);
@@ -49,9 +50,9 @@ public class Bullet extends BulletEntity{
 		super.update();
 
 		if (collidesTiles()) {
-			world.raycastEach(world.toTile(lastX), world.toTile(lastY), world.toTile(x), world.toTile(y), (x, y) -> {
+			world[dimension].raycastEach(world[dimension].toTile(lastX), world[dimension].toTile(lastY), world[dimension].toTile(x), world[dimension].toTile(y), (x, y) -> {
 
-				Tile tile = world.tile(x, y);
+				Tile tile = world[dimension].tile(x, y);
 				if (tile == null) return false;
 				tile = tile.target();
 

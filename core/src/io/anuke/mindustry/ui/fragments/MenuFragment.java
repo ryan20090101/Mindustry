@@ -34,7 +34,7 @@ public class MenuFragment implements Fragment{
 						row();
 					}
 					
-					add(new MenuButton("$text.tutorial", group, ()-> control.playMap(world.maps().getMap("tutorial"))));
+					add(new MenuButton("$text.tutorial", group, ()-> control.playMap(world[player.dimension].maps().getMap("tutorial"))));
 					row();
 
 					add(new MenuButton("$text.loadgame", group, ui.load::show));
@@ -62,7 +62,7 @@ public class MenuFragment implements Fragment{
 
 					new imagebutton("icon-play-2", isize, ui.levels::show).text("$text.play").padTop(4f);
 
-					new imagebutton("icon-tutorial", isize, () -> control.playMap(world.maps().getMap("tutorial"))).text("$text.tutorial").padTop(4f);
+					new imagebutton("icon-tutorial", isize, () -> control.playMap(world[player.dimension].maps().getMap("tutorial"))).text("$text.tutorial").padTop(4f);
 
 					new imagebutton("icon-load", isize, ui.load::show).text("$text.load").padTop(4f);
 

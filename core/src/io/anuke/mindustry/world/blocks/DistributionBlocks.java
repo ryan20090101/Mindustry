@@ -107,10 +107,10 @@ public class DistributionBlocks{
 	liquidjunction = new LiquidJunction("liquidjunction"){{
 
 	}},
-	powerbooster = new PowerBooster("powerbooster"){{
+	/*powerbooster = new PowerBooster("powerbooster"){{
 		powerRange = 4;
-	}},
-	cooledPowerBooster = new PowerBooster("cooledPowerBooster"){{
+	}},*/
+	powerbooster = new PowerBooster("powerbooster"){{
 		powerRange = 6;
 		powerSpeed = 2f;
 		size = 2;

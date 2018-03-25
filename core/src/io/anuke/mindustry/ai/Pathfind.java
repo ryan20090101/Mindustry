@@ -43,11 +43,11 @@ public class Pathfind{
 			enemy.node = -1;
 		}
 
-		if(enemy.node < 0 || world.getSpawns().get(enemy.lane).pathTiles == null){
+		if(enemy.node < 0 || world[enemy.dimension].getSpawns().get(enemy.lane).pathTiles == null){
 			return vector.set(enemy.x, enemy.y);
 		}
 
-		Tile[] path = world.getSpawns().get(enemy.lane).pathTiles;
+		Tile[] path = world[enemy.dimension].getSpawns().get(enemy.lane).pathTiles;
 
 		if(enemy.node >= path.length){
 			enemy.node = -1;
@@ -64,7 +64,7 @@ public class Pathfind{
 		Tile target = path[enemy.node];
 
 		//a bridge has been broken, re-path
-		if(!world.passable(target.x, target.y)){
+		if(!world[enemy.dimension].passable(target.x, target.y)){
 			remakePath();
 			return vector.set(enemy.x, enemy.y);
 		}
@@ -125,8 +125,8 @@ public class Pathfind{
 	public void update(){
 
 		//go through each spawnpoint, and if it's not found a path yet, update it
-		for(int i = 0; i < world.getSpawns().size; i ++){
-			SpawnPoint point = world.getSpawns().get(i);
+		for(int i = 0; i < world[0].getSpawns().size; i ++){
+			SpawnPoint point = world[0].getSpawns().get(i);
 			if(point.request == null || point.finder == null){
 				continue;
 			}
@@ -150,18 +150,18 @@ public class Pathfind{
 	//1300-1500ms, usually 1400 unoptimized on Caldera
 	/**Benchmark pathfinding speed. Debugging stuff.*/
 	public void benchmark(){
-		SpawnPoint point = world.getSpawns().first();
+		SpawnPoint point = world[0].getSpawns().first();
 		int amount = 100;
 
 		//warmup
 		for(int i = 0; i < 100; i ++){
-			point.finder.searchNodePath(point.start, world.getCore(), state.difficulty.heuristic, point.path);
+			point.finder.searchNodePath(point.start, world[0].getCore(), state.difficulty.heuristic, point.path);
 			point.path.clear();
 		}
 
 		Timers.mark();
 		for(int i = 0; i < amount; i ++){
-			point.finder.searchNodePath(point.start, world.getCore(), state.difficulty.heuristic, point.path);
+			point.finder.searchNodePath(point.start, world[0].getCore(), state.difficulty.heuristic, point.path);
 			point.path.clear();
 		}
 		Log.info("Time elapsed: {0}ms\nAverage MS per path: {1}", Timers.elapsed(), Timers.elapsed()/amount);
@@ -169,8 +169,8 @@ public class Pathfind{
 
 	/**Reset and clear the paths.*/
 	public void resetPaths(){
-		for(int i = 0; i < world.getSpawns().size; i ++){
-			resetPathFor(world.getSpawns().get(i));
+		for(int i = 0; i < world[0].getSpawns().size; i ++){
+			resetPathFor(world[0].getSpawns().get(i));
 		}
 	}
 
@@ -181,21 +181,21 @@ public class Pathfind{
 
 		point.pathTiles = null;
 
-		point.request = new PathFinderRequest<>(point.start, world.getCore(), state.difficulty.heuristic, point.path);
+		point.request = new PathFinderRequest<>(point.start, world[point.dimension].getCore(), state.difficulty.heuristic, point.path);
 		point.request.statusChanged = true; //IMPORTANT!
 	}
 
 	/**For an enemy that was just loaded from a save, find the node in the path it should be following.*/
 	void findNode(Enemy enemy){
-		if(enemy.lane >= world.getSpawns().size || enemy.lane < 0){
+		if(enemy.lane >= world[enemy.dimension].getSpawns().size || enemy.lane < 0){
 			enemy.lane = 0;
 		}
 		
-		if(world.getSpawns().get(enemy.lane).pathTiles == null){
+		if(world[enemy.dimension].getSpawns().get(enemy.lane).pathTiles == null){
 			return;
 		}
 		
-		Tile[] path = world.getSpawns().get(enemy.lane).pathTiles;
+		Tile[] path = world[enemy.dimension].getSpawns().get(enemy.lane).pathTiles;
 		
 		int closest = findClosest(path, enemy.x, enemy.y);
 		

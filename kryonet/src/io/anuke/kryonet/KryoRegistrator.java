@@ -51,7 +51,7 @@ public class KryoRegistrator {
         int maxlen = 32;
 
         String host = (headless ? "Server" : player.name);
-        String map = world.getMap().name;
+        String map = world[0].getMap().name;
 
         host = host.substring(0, Math.min(host.length(), maxlen));
         map = map.substring(0, Math.min(map.length(), maxlen));

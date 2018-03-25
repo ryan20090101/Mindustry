@@ -38,7 +38,7 @@ public abstract class InputHandler extends InputAdapter{
 	public boolean drawPlace(){ return true; }
 	
 	public boolean onConfigurable(){
-		Tile tile = world.tile(getBlockX(), getBlockY());
+		Tile tile = world[player.dimension].tile(getBlockX(), getBlockY());
 		return tile != null && (tile.block().isConfigurable(tile) || (tile.isLinked() && tile.getLinked().block().isConfigurable(tile)));
 	}
 	
@@ -82,7 +82,7 @@ public abstract class InputHandler extends InputAdapter{
 			int rotation = control.tutorial().getPlaceRotation();
 			Block block = control.tutorial().getPlaceBlock();
 			
-			if(type != block || point.x != x - world.getCore().x || point.y != y - world.getCore().y
+			if(type != block || point.x != x - world[player.dimension].getCore().x || point.y != y - world[player.dimension].getCore().y
 					|| (rotation != -1 && rotation != this.rotation)){
 				return false;
 			}
@@ -101,7 +101,7 @@ public abstract class InputHandler extends InputAdapter{
 				int rotation = control.tutorial().getPlaceRotation();
 				Block block = control.tutorial().getPlaceBlock();
 			
-				if(block != Blocks.air || point.x != x - world.getCore().x || point.y != y - world.getCore().y
+				if(block != Blocks.air || point.x != x - world[player.dimension].getCore().x || point.y != y - world[player.dimension].getCore().y
 						|| (rotation != -1 && rotation != this.rotation)){
 					return false;
 				}
@@ -116,7 +116,7 @@ public abstract class InputHandler extends InputAdapter{
 	public void placeBlock(int x, int y, Block result, int rotation, boolean effects, boolean sound){
 		if(!Net.client()){
 			Placement.placeBlock(x, y, result, rotation, effects, sound);
-			Tile tile = world.tile(x, y);
+			Tile tile = world[player.dimension].tile(x, y);
 			if(tile != null) result.placed(tile);
 		}
 

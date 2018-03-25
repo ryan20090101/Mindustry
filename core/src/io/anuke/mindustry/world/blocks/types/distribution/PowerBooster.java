@@ -88,7 +88,7 @@ public class PowerBooster extends LiquidPowerGenerator{
 					}
 
 					if(Vector2.dst(x, y, 0, 0) < powerRange){
-						Tile dest = world.tile(tile.x + x, tile.y + y);
+						Tile dest = world[tile.dimension].tile(tile.x + x, tile.y + y);
 						if(dest != null && dest.block() instanceof PowerAcceptor && ((PowerAcceptor) dest.block()).acceptsPower(dest)){
 							if(i == 1){
 								PowerAcceptor block = (PowerAcceptor) dest.block();

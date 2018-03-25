@@ -12,6 +12,7 @@ public class SpawnPoint{
 	public PathFinder<Tile> finder;
 	public SmoothGraphPath path = new SmoothGraphPath();
 	public PathFinderRequest<Tile> request;
+	public int dimension;
 
 	public SpawnPoint(Tile start){
 		this.start = start;

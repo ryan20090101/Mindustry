@@ -20,7 +20,7 @@ public class SaveMeta {
         this.version = version;
         this.date = Platform.instance.format(new Date(date));
         this.mode = GameMode.values()[mode];
-        this.map = world.maps().getMap(map);
+        this.map = world[0].maps().getMap(map);
         this.wave = wave;
         this.difficulty = difficulty;
     }

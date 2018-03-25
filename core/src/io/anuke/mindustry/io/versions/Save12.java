@@ -122,20 +122,20 @@ public class Save12 extends SaveFileVersion {
         int seed = stream.readInt();
         int tiles = stream.readInt();
 
-        world.loadMap(world.maps().getMap(mapid), seed);
+        world[0].loadMap(world[0].maps().getMap(mapid), seed);
         renderer.clearTiles();
 
         for(Enemy enemy : enemiesToUpdate){
             enemy.node = -2;
         }
 
-        for(int x = 0; x < world.width(); x ++){
-            for(int y = 0; y < world.height(); y ++){
-                Tile tile = world.tile(x, y);
+        for(int x = 0; x < world[0].width(); x ++){
+            for(int y = 0; y < world[0].height(); y ++){
+                Tile tile = world[0].tile(x, y);
 
                 //remove breakables like rocks
                 if(tile.breakable()){
-                    world.tile(x, y).setBlock(Blocks.air);
+                    world[0].tile(x, y).setBlock(Blocks.air);
                 }
             }
         }
@@ -146,7 +146,7 @@ public class Save12 extends SaveFileVersion {
             boolean hasEntity = stream.readBoolean();
             int blockid = stream.readInt();
 
-            Tile tile = world.tile(pos % world.width(), pos / world.width());
+            Tile tile = world[0].tile(pos % world[0].width(), pos / world[0].width());
             tile.setBlock(BlockLoader.getByOldID(blockid));
             tile.link = link;
 
@@ -178,7 +178,7 @@ public class Save12 extends SaveFileVersion {
 
         //--GENERAL STATE--
         stream.writeByte(state.mode.ordinal()); //gamemode
-        stream.writeByte(world.getMap().id); //map ID
+        stream.writeByte(world[0].getMap().id); //map ID
 
         stream.writeInt(state.wave); //wave
         stream.writeFloat(state.wavetime); //wave countdown
@@ -234,13 +234,13 @@ public class Save12 extends SaveFileVersion {
         //--MAP DATA--
 
         //seed
-        stream.writeInt(world.getSeed());
+        stream.writeInt(world[0].getSeed());
 
         int totalblocks = 0;
 
-        for(int x = 0; x < world.width(); x ++){
-            for(int y = 0; y < world.height(); y ++){
-                Tile tile = world.tile(x, y);
+        for(int x = 0; x < world[0].width(); x ++){
+            for(int y = 0; y < world[0].height(); y ++){
+                Tile tile = world[0].tile(x, y);
 
                 if(tile.breakable()){
                     totalblocks ++;
@@ -251,13 +251,13 @@ public class Save12 extends SaveFileVersion {
         //tile amount
         stream.writeInt(totalblocks);
 
-        for(int x = 0; x < world.width(); x ++){
-            for(int y = 0; y < world.height(); y ++){
-                Tile tile = world.tile(x, y);
+        for(int x = 0; x < world[0].width(); x ++){
+            for(int y = 0; y < world[0].height(); y ++){
+                Tile tile = world[0].tile(x, y);
 
                 if(tile.breakable()){
 
-                    stream.writeInt(x + y*world.width()); //tile pos
+                    stream.writeInt(x + y*world[0].width()); //tile pos
                     stream.writeByte(tile.link);
                     stream.writeBoolean(tile.entity != null); //whether it has a tile entity
                     stream.writeInt(tile.block().id); //block ID

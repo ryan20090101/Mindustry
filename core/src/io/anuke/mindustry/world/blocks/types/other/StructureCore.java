@@ -20,8 +20,8 @@ public class StructureCore extends Block{
 	}
 	@Override
 	public void tapped(Tile tile){
-        if(Vars.world.tile(tile.x, tile.y+2).block()==DistributionBlocks.conveyor){
-            Vars.world.tile(tile.x, tile.y+2).setBlock(Blocks.air);
+        if(Vars.world[tile.dimension].tile(tile.x, tile.y+2).block()==DistributionBlocks.conveyor){
+            Vars.world[tile.dimension].tile(tile.x, tile.y+2).setBlock(Blocks.air);
             Enemy enemy = new Enemy(EnemyTypes.demoneye);
             enemy.set(tile.x*8, tile.y*8);
             enemy.add();
@@ -29,8 +29,8 @@ public class StructureCore extends Block{
         }
 	}
     public void configure(Tile tile, byte... data) {
-        if(Vars.world.tile(tile.x, tile.y+2).block()==DistributionBlocks.conveyor){
-            Vars.world.tile(tile.x, tile.y+2).setBlock(Blocks.air);
+        if(Vars.world[tile.dimension].tile(tile.x, tile.y+2).block()==DistributionBlocks.conveyor){
+            Vars.world[tile.dimension].tile(tile.x, tile.y+2).setBlock(Blocks.air);
             Enemy enemy = new Enemy(EnemyTypes.demoneye);
             enemy.set(tile.x*8, tile.y*8);
             enemy.add();
