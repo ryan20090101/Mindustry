@@ -136,6 +136,7 @@ public class Vars{
 	public static Logic logic;
 	public static Renderer renderer;
 	public static UI ui;
+	public static Global global;
 	public static World[] world;
 	public static NetCommon netCommon;
 	public static NetServer netServer;

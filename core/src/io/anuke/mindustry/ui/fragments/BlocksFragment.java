@@ -113,7 +113,7 @@ public class BlocksFragment implements Fragment{
                         
 						for (Recipe r : recipes) {
 							boolean shouldDraw = true;
-                            if(!world[player.dimension].getResearchStatus(Recipes.getResearchByResult(r)))
+                            if(!global.getResearchStatus(Recipes.getResearchByResult(r)))
                                     shouldDraw = false;
                             if(shouldDraw){
                                 TextureRegion region = Draw.hasRegion(r.result.name() + "-icon") ?
@@ -160,7 +160,7 @@ public class BlocksFragment implements Fragment{
 
                                 image.update(() -> {
                                     boolean canPlace = !control.tutorial().active() || control.tutorial().canPlace();
-                                    boolean researched = r.research==null ? true : world[player.dimension].getResearchStatus(r.research);
+                                    boolean researched = r.research==null ? true : global.getResearchStatus(r.research);
                                     boolean has = (state.inventory.hasItems(r.requirements)) && canPlace && researched;
                                     image.setChecked(input.recipe == r);
                                     image.setTouchable(canPlace ? Touchable.enabled : Touchable.disabled);

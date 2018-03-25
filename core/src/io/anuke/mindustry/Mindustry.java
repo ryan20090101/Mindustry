@@ -20,12 +20,13 @@ public class Mindustry extends ModuleCore {
 		BlockLoader.load();
 
 		module(logic = new Logic());
+		module(global = new Global());
+
 		world = new World[dimensionIds];
 		for (int i=0;i<dimensionIds;i++){
-			System.out.println(i);
 			module(world[i] = new World());
-			System.out.println(world[i]);
 		}
+
 		module(control = new Control());
 		module(renderer = new Renderer());
 		module(ui = new UI());

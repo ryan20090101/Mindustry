@@ -50,7 +50,7 @@ public class ResearchCenter extends Block{
         if(!ent.researching)
             return;
 
-        Research res = world[0].getResearchById(ent.resID);
+        Research res = global.getResearchById(ent.resID);
 
         for(ItemStack stack : res.requirements) {
             if (!(ent.items[stack.item.id] >= stack.amount))
@@ -67,7 +67,7 @@ public class ResearchCenter extends Block{
             if(Net.client()){
                 NetEvents.handleResearch(res);
             }
-            world[0].research(res);
+            global.research(res);
             setConfigure(tile,ent.resID,(byte) 0,ent.progress);
             ui.hudfrag.buildRecipe();
         }
@@ -97,7 +97,7 @@ public class ResearchCenter extends Block{
 
         for(Research res : Research.researches){
             
-            if(!world[tile.dimension].getResearchStatus(res.unlock)){continue;}
+            if(!global.getResearchStatus(res.unlock)){continue;}
             
             ItemStack[] requirements = res.requirements;
 
@@ -116,7 +116,7 @@ public class ResearchCenter extends Block{
                 tiptable.row();
                 tiptable.add(reqtable).left();
 
-                if(!world[tile.dimension].getResearchStatus(res)){
+                if(!global.getResearchStatus(res)){
                     for(ItemStack s : requirements){
 
                         int amount = Math.min(state.inventory.getAmount(s.item), s.amount);
@@ -133,7 +133,7 @@ public class ResearchCenter extends Block{
                 tiptable.row();
                 tiptable.add("[gray]" + description).left();
                 tiptable.row();
-                if(world[tile.dimension].getResearchStatus(res)){
+                if(global.getResearchStatus(res)){
                     tiptable.add("$text.researched").padTop(4).left();
                 }
                 tiptable.margin(8f);
@@ -157,7 +157,7 @@ public class ResearchCenter extends Block{
 
             button.setChecked(ent.resID == res.id);
 
-            button.setDisabled(() -> world[tile.dimension].getResearchStatus(res));
+            button.setDisabled(() -> global.getResearchStatus(res));
             //button.getStyle().imageUp = new TextureRegionDrawable(res.region);
             button.getStyle().imageUp = new TextureRegionDrawable(Draw.region(res.name));
             button.addListener(tip);
@@ -176,7 +176,7 @@ public class ResearchCenter extends Block{
 
         if(!ent.researching)
             return false;
-        for(ItemStack stack : world[tile.dimension].getResearchById(ent.resID).requirements) {
+        for(ItemStack stack : global.getResearchById(ent.resID).requirements) {
             if (stack.item.id == item.id)
                 return true;
         }

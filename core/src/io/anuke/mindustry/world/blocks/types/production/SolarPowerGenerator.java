@@ -5,6 +5,8 @@ import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.util.Strings;
 
+import static io.anuke.mindustry.Vars.global;
+
 public class SolarPowerGenerator extends Generator{
 	public float powerOutput;
 
@@ -23,7 +25,7 @@ public class SolarPowerGenerator extends Generator{
 	public void update(Tile tile){
 		PowerEntity entity = tile.entity();
 		
-		if (Vars.world[tile.dimension].time < Vars.maxTime/2) entity.power += powerOutput;
+		if (global.time < Vars.maxTime/2) entity.power += powerOutput;
 		
 		distributeLaserPower(tile);
 		

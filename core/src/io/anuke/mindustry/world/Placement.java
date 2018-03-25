@@ -103,7 +103,7 @@ public class Placement {
             return false;
         }
 
-        if(!world[player.dimension].getResearchStatus(Recipes.getResearchByResult(recipe)))
+        if(!global.getResearchStatus(Recipes.getResearchByResult(recipe)))
                 return false;
 
         rect.setSize(type.size * tilesize, type.size * tilesize);

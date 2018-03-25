@@ -139,7 +139,7 @@ public class Save14 extends SaveFileVersion{
 
         int seed = stream.readInt();
 
-        world[0].loadMap(world[0].maps().getMap(mapid), seed);
+        world[0].loadMap(global.maps().getMap(mapid), seed);
         renderer.clearTiles();
 
         for(Enemy enemy : enemiesToUpdate){

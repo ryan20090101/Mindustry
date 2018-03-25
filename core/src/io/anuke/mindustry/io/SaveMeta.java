@@ -6,6 +6,7 @@ import io.anuke.mindustry.world.Map;
 
 import java.util.Date;
 
+import static io.anuke.mindustry.Vars.global;
 import static io.anuke.mindustry.Vars.world;
 
 public class SaveMeta {
@@ -20,7 +21,7 @@ public class SaveMeta {
         this.version = version;
         this.date = Platform.instance.format(new Date(date));
         this.mode = GameMode.values()[mode];
-        this.map = world[0].maps().getMap(map);
+        this.map = global.maps().getMap(map);
         this.wave = wave;
         this.difficulty = difficulty;
     }

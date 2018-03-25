@@ -3,7 +3,7 @@ package io.anuke.mindustry.entities.enemies.types;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.entities.enemies.EnemyType;
 
-import static io.anuke.mindustry.Vars.world;
+import static io.anuke.mindustry.Vars.global;
 
 public class BossType extends EnemyType {
 
@@ -24,13 +24,13 @@ public class BossType extends EnemyType {
     }
 
     public void added(Enemy enemy){
-        world[0].bossAmount++;
+        global.bossAmount++;
         super.added(enemy);
     }
 
     @Override
     public void removed(Enemy enemy){
-        world[0].bossAmount--;
+        global.bossAmount--;
         super.removed(enemy);
     }
 }

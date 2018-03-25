@@ -117,7 +117,7 @@ public class NetClient extends Module {
             //custom map is always sent before world data
             Map map = NetworkIO.loadMap(packet.stream);
 
-            world[0].maps().setNetworkMap(map);
+            global.maps().setNetworkMap(map);
 
             MapAckPacket ack = new MapAckPacket();
             Net.send(ack, SendMode.tcp);

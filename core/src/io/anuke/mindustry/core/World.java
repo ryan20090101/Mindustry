@@ -21,6 +21,7 @@ import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Tmp;
 
 import static io.anuke.mindustry.Vars.control;
+import static io.anuke.mindustry.Vars.global;
 import static io.anuke.mindustry.Vars.tilesize;
 
 public class World extends Module {
@@ -29,25 +30,13 @@ public class World extends Module {
 	public Map currentMap;
 	private Tile[][] tiles;
 	private Pathfind pathfind = new Pathfind();
-	private Maps maps = new Maps();
 	private Tile core;
 	private Array<SpawnPoint> spawns = new Array<>();
 
 	private Array<Tile> temptiles = new Array<>();
 
-	public int time;
-	private Array<Research> rContainer;
-	public int bossAmount = 0;
-
 	public World() {
-		maps.loadMaps();
-		currentMap = maps.getMap(0);
-		rContainer = Research.researches;
-	}
-
-	@Override
-	public void dispose() {
-		maps.dispose();
+		currentMap = global.maps().getMap(0);
 	}
 
 	public Array<SpawnPoint> getSpawns() {
@@ -56,10 +45,6 @@ public class World extends Module {
 
 	public Tile getCore() {
 		return core;
-	}
-
-	public Maps maps() {
-		return maps;
 	}
 
 	public Pathfind pathfinder() {
@@ -332,27 +317,6 @@ public class World extends Module {
 			}
 		}
 		return null;
-	}
-
-	public void research(Research res) {
-		rContainer.get(res.id).researched = true;
-	}
-
-	public void research(int id) {
-		rContainer.get(id).researched = true;
-	}
-
-	public void unresearch(Research res) {
-		rContainer.get(res.id).researched = false;
-	}
-
-	public boolean getResearchStatus(Research res) {
-		if (res == null) return true;
-		return rContainer.get(res.id).researched;
-	}
-
-	public Research getResearchById(int id) {
-		return rContainer.get(id);
 	}
 
 	public void raycastEach(int x0f, int y0f, int x1, int y1, Raycaster cons) {

@@ -21,7 +21,7 @@ import io.anuke.ucore.util.Mathf;
 import static io.anuke.mindustry.Vars.*;
 
 public class LevelDialog extends FloatingDialog{
-	private Map selectedMap = world[0].maps().getMap(0);
+	private Map selectedMap = global.maps().getMap(0);
 	private TextureRegion region = new TextureRegion();
 	private ScrollPane pane;
 	
@@ -88,7 +88,7 @@ public class LevelDialog extends FloatingDialog{
 		content().row();
 
 		int i = 0;
-		for(Map map : world[0].maps().list()){
+		for(Map map : global.maps().list()){
 			
 			if(!map.visible && !debug) continue;
 			
@@ -127,7 +127,7 @@ public class LevelDialog extends FloatingDialog{
 				delete[0] = image.addButton("Delete", () -> {
 					Timers.run(1f, () -> {
 						ui.showConfirm("$text.level.delete.title", Bundles.format("text.level.delete", Bundles.get("map."+map.name+".name", map.name)), () -> {
-							world[0].maps().removeMap(map);
+							global.maps().removeMap(map);
 							reload();
 							Core.scene.setScrollFocus(pane);
 						});

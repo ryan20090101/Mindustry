@@ -124,7 +124,7 @@ public class Control extends Module{
 
 		KeyBinds.load();
 
-		for(Map map : world[0].maps().list()){
+		for(Map map : global.maps().list()){
 			Settings.defaults("hiscore" + map.name, 0);
 		}
 
@@ -257,7 +257,7 @@ public class Control extends Module{
 	private void checkOldUser(){
 		boolean hasPlayed = false;
 
-		for(Map map : world[0].maps().getAllMaps()){
+		for(Map map : global.maps().getAllMaps()){
 			if(Settings.getInt("hiscore" + map.name) != 0){
 				hasPlayed = true;
 				break;

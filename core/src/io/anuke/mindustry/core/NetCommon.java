@@ -63,7 +63,7 @@ public class NetCommon extends Module {
         });
 
         Net.handle(ResearchPacket.class, packet -> {
-            Vars.world[player.dimension].research(packet.id);
+            Vars.global.research(packet.id);
         });
     }
 

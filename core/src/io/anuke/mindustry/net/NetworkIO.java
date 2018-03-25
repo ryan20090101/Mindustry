@@ -278,10 +278,10 @@ public class NetworkIO {
 
             int seed = stream.readInt();
 
-            world[0].loadMap(world[0].maps().getMap(mapid), seed);
+            world[0].loadMap(global.maps().getMap(mapid), seed);
             renderer.clearTiles();
 
-            player.set(world[0].getSpawnX(), world[0].getSpawnY());
+            player.set(world[player.dimension].getSpawnX(), world[player.dimension].getSpawnY());
 
             for(int x = 0; x < world[0].width(); x ++){
                 for(int y = 0; y < world[0].height(); y ++){
