@@ -35,22 +35,24 @@ public class Logic extends Module {
     private final Array<EnemySpawn> spawns = WaveCreator.getSpawns();
 
     @Override
-    public void init(){
-        Entities.initPhysics();
-        Entities.collisions().setCollider(tilesize, world[player.dimension]::solid);
+    public void init() {
+        for(int i=0;i<dimensionIds;i++){
+            world[i].ents.initPhysics();
+            world[i].ents.collisions().setCollider(tilesize, world[i]::solid);
+        }
     }
 
-    public void play(){
+    public void play() {
         state.wavetime = wavespace * state.difficulty.timeScaling * 2;
 
-        if(state.mode.infiniteResources){
+        if (state.mode.infiniteResources) {
             state.inventory.fill();
         }
 
         Events.fire(PlayEvent.class);
     }
 
-    public void reset(){
+    public void reset() {
         state.wave = 1;
         state.extrawavetime = maxwavespace * state.difficulty.maxTimeScaling;
         state.wavetime = wavespace * state.difficulty.timeScaling;
@@ -65,25 +67,25 @@ public class Logic extends Module {
         Events.fire(ResetEvent.class);
     }
 
-    public void runWave(){
+    public void runWave() {
 
-        if(state.lastUpdated < state.wave + 1){
+        if (state.lastUpdated < state.wave + 1) {
             world[0].pathfinder().resetPaths();
             state.lastUpdated = state.wave + 1;
         }
 
-        for(EnemySpawn spawn : spawns){
+        for (EnemySpawn spawn : spawns) {
             Array<SpawnPoint> spawns = world[0].getSpawns();
 
-            for(int lane = 0; lane < spawns.size; lane ++){
+            for (int lane = 0; lane < spawns.size; lane++) {
                 int fl = lane;
                 Tile tile = spawns.get(lane).start;
                 int spawnamount = spawn.evaluate(state.wave, lane);
 
-                for(int i = 0; i < spawnamount; i ++){
+                for (int i = 0; i < spawnamount; i++) {
                     float range = 12f;
 
-                    Timers.runTask(i*5f, () -> {
+                    Timers.runTask(i * 5f, () -> {
 
                         Enemy enemy = new Enemy(spawn.type);
                         enemy.set(tile.worldx() + Mathf.range(range), tile.worldy() + Mathf.range(range));
@@ -93,13 +95,13 @@ public class Logic extends Module {
 
                         Effects.effect(Fx.spawn, enemy);
 
-                        state.enemies ++;
+                        state.enemies++;
                     });
                 }
             }
         }
 
-        state.wave ++;
+        state.wave++;
         state.wavetime = wavespace * state.difficulty.timeScaling;
         state.extrawavetime = maxwavespace * state.difficulty.maxTimeScaling;
 
@@ -107,53 +109,68 @@ public class Logic extends Module {
     }
 
     @Override
-    public void update(){
+    public void update() {
 
-        if(!state.is(State.menu)){
+        for (int i = 0; i<dimensionIds; i++) {
+            if (!state.is(State.menu)) {
+                if (!Net.client())
+                    world[i].pathfinder().update();
+            }
 
-            if(!state.is(State.paused) || Net.active()){
+            if (!state.is(State.paused) || Net.active()) {
+
+                if (!state.mode.disableWaveTimer) {
+
+                    if (state.enemies <= 0) {
+                        if (state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding) { //start updating beforehand
+                            world[i].pathfinder().resetPaths();
+                            state.lastUpdated = state.wave + 1;
+                        }
+                    }
+                }
+            }
+
+            world[i].ents.update(world[i].ents.defaultGroup());
+            world[i].ents.update(bulletGroup);
+            world[i].ents.update(enemyGroup);
+            world[i].ents.update(tileGroup);
+            world[i].ents.update(shieldGroup);
+            world[i].ents.update(playerGroup);
+
+            world[i].ents.collideGroups(bulletGroup, enemyGroup);
+            world[i].ents.collideGroups(bulletGroup, playerGroup);
+        }
+        if (!state.is(State.menu)) {
+
+            if (!state.is(State.paused) || Net.active()) {
                 Timers.update();
             }
 
-            if(!Net.client())
-                world[0].pathfinder().update();
-
-            if(world[0].getCore() != null && world[0].getCore().block() != ProductionBlocks.core && !state.gameOver){
+            if (world[0].getCore() != null && world[0].getCore().block() != ProductionBlocks.core && !state.gameOver) {
                 state.gameOver = true;
-                if(Net.server()) NetEvents.handleGameOver();
+                if (Net.server()) NetEvents.handleGameOver();
                 Events.fire(GameOverEvent.class);
             }
 
-            if(!state.is(State.paused) || Net.active()){
+            if (!state.is(State.paused) || Net.active()) {
 
-                if(!state.mode.disableWaveTimer){
+                if (!state.mode.disableWaveTimer) {
 
-                    if(state.enemies <= 0){
-                        if(!world[0].getMap().name.equals("tutorial")) state.wavetime -= delta();
+                    if (state.enemies <= 0) {
+                        if (!world[0].getMap().name.equals("tutorial")) state.wavetime -= delta();
 
-                        if(state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding){ //start updating beforehand
+                        if (state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding) { //start updating beforehand
                             world[0].pathfinder().resetPaths();
                             state.lastUpdated = state.wave + 1;
                         }
-                    }else{
+                    } else {
                         state.extrawavetime -= delta();
                     }
                 }
 
-                if(!Net.client() && (state.wavetime <= 0 || state.extrawavetime <= 0)){
+                if (!Net.client() && (state.wavetime <= 0 || state.extrawavetime <= 0)) {
                     runWave();
                 }
-
-                Entities.update(Entities.defaultGroup());
-                Entities.update(bulletGroup);
-                Entities.update(enemyGroup);
-                Entities.update(tileGroup);
-                Entities.update(shieldGroup);
-                Entities.update(playerGroup);
-
-                Entities.collideGroups(bulletGroup, enemyGroup);
-                Entities.collideGroups(bulletGroup, playerGroup);
-
                 if (global.time >= maxTime) global.time = 0;
                 global.time++;
             }

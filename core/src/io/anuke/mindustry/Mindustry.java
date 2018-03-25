@@ -24,7 +24,7 @@ public class Mindustry extends ModuleCore {
 
 		world = new World[dimensionIds];
 		for (int i=0;i<dimensionIds;i++){
-			module(world[i] = new World());
+			module(world[i] = new World(i));
 		}
 
 		module(control = new Control());

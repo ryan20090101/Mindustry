@@ -20,22 +20,23 @@ import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Tmp;
 
-import static io.anuke.mindustry.Vars.control;
-import static io.anuke.mindustry.Vars.global;
-import static io.anuke.mindustry.Vars.tilesize;
+import static io.anuke.mindustry.Vars.*;
 
 public class World extends Module {
 	private int seed;
 
 	public Map currentMap;
+	public int worldDimension;
+	public Entities ents;
 	private Tile[][] tiles;
-	private Pathfind pathfind = new Pathfind();
+	private Pathfind pathfind = new Pathfind(){{dimension = worldDimension;}};
 	private Tile core;
 	private Array<SpawnPoint> spawns = new Array<>();
 
 	private Array<Tile> temptiles = new Array<>();
 
-	public World() {
+	public World(int dimension) {
+		worldDimension = dimension;
 		currentMap = global.maps().getMap(0);
 	}
 
@@ -130,7 +131,7 @@ public class World extends Module {
 		for (int x = 0; x < tiles.length; x++) {
 			for (int y = 0; y < tiles[0].length; y++) {
 				if (tiles[x][y] == null) {
-					tiles[x][y] = new Tile(x, y, Blocks.stone);
+					tiles[x][y] = new Tile(x, y, Blocks.stone){{dimension=worldDimension;}};
 				}
 			}
 		}
