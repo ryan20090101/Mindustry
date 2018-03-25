@@ -109,14 +109,29 @@ public class Logic extends Module {
     @Override
     public void update(){
 
+        for(int i =0;i<dimensionIds;i++) {
+            if(!state.is(State.menu)){
+                if(!Net.client())
+                    world[i].pathfinder().update();
+            }
+
+            if(!state.is(State.paused) || Net.active()){
+
+                if(!state.mode.disableWaveTimer){
+
+                    if(state.enemies <= 0){
+                        if(state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding){ //start updating beforehand
+                            world[i].pathfinder().resetPaths();
+                            state.lastUpdated = state.wave + 1;
+                        }
+                    }
+                }
+        }
         if(!state.is(State.menu)){
 
             if(!state.is(State.paused) || Net.active()){
                 Timers.update();
             }
-
-            if(!Net.client())
-                world[0].pathfinder().update();
 
             if(world[0].getCore() != null && world[0].getCore().block() != ProductionBlocks.core && !state.gameOver){
                 state.gameOver = true;
@@ -157,6 +172,6 @@ public class Logic extends Module {
                 if (global.time >= maxTime) global.time = 0;
                 global.time++;
             }
-        }
+        }}
     }
 }

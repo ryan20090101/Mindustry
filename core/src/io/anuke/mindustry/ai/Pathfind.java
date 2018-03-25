@@ -18,16 +18,18 @@ public class Pathfind{
 	/**Maximum time taken per frame on pathfinding for a single path.*/
 	private static final long maxTime = 1000000 * 5;
 
-	/**Tile graph, for determining conenctions between two tiles*/
-	TileGraph graph = new TileGraph();
-	/**Smoother that removes extra nodes from a path.*/
-	PathSmoother<Tile, Vector2> smoother = new PathSmoother<Tile, Vector2>(new Raycaster());
-	/**temporary vector2 for calculations*/
-	Vector2 vector = new Vector2();
+	protected int dimension;
 
-	Vector2 v1 = new Vector2();
-	Vector2 v2 = new Vector2();
-	Vector2 v3 = new Vector2();
+	/**Tile graph, for determining conenctions between two tiles*/
+	private TileGraph graph = new TileGraph();
+	/**Smoother that removes extra nodes from a path.*/
+	private PathSmoother<Tile, Vector2> smoother = new PathSmoother<>(new Raycaster());
+	/**temporary vector2 for calculations*/
+	private Vector2 vector = new Vector2();
+
+    private Vector2 v1 = new Vector2();
+    private Vector2 v2 = new Vector2();
+    private Vector2 v3 = new Vector2();
 
 	/**Finds the position on the path an enemy should move to.
 	 * If the path is not yet calculated, this returns the enemy's position (i. e. "don't move")
@@ -125,8 +127,8 @@ public class Pathfind{
 	public void update(){
 
 		//go through each spawnpoint, and if it's not found a path yet, update it
-		for(int i = 0; i < world[0].getSpawns().size; i ++){
-			SpawnPoint point = world[0].getSpawns().get(i);
+		for(int i = 0; i < world[dimension].getSpawns().size; i ++){
+			SpawnPoint point = world[dimension].getSpawns().get(i);
 			if(point.request == null || point.finder == null){
 				continue;
 			}
@@ -150,18 +152,18 @@ public class Pathfind{
 	//1300-1500ms, usually 1400 unoptimized on Caldera
 	/**Benchmark pathfinding speed. Debugging stuff.*/
 	public void benchmark(){
-		SpawnPoint point = world[0].getSpawns().first();
+		SpawnPoint point = world[dimension].getSpawns().first();
 		int amount = 100;
 
 		//warmup
 		for(int i = 0; i < 100; i ++){
-			point.finder.searchNodePath(point.start, world[0].getCore(), state.difficulty.heuristic, point.path);
+			point.finder.searchNodePath(point.start, world[dimension].getCore(), state.difficulty.heuristic, point.path);
 			point.path.clear();
 		}
 
 		Timers.mark();
 		for(int i = 0; i < amount; i ++){
-			point.finder.searchNodePath(point.start, world[0].getCore(), state.difficulty.heuristic, point.path);
+			point.finder.searchNodePath(point.start, world[dimension].getCore(), state.difficulty.heuristic, point.path);
 			point.path.clear();
 		}
 		Log.info("Time elapsed: {0}ms\nAverage MS per path: {1}", Timers.elapsed(), Timers.elapsed()/amount);
@@ -169,8 +171,8 @@ public class Pathfind{
 
 	/**Reset and clear the paths.*/
 	public void resetPaths(){
-		for(int i = 0; i < world[0].getSpawns().size; i ++){
-			resetPathFor(world[0].getSpawns().get(i));
+		for(int i = 0; i < world[dimension].getSpawns().size; i ++){
+			resetPathFor(world[dimension].getSpawns().get(i));
 		}
 	}
 
@@ -186,7 +188,7 @@ public class Pathfind{
 	}
 
 	/**For an enemy that was just loaded from a save, find the node in the path it should be following.*/
-	void findNode(Enemy enemy){
+	private void findNode(Enemy enemy){
 		if(enemy.lane >= world[enemy.dimension].getSpawns().size || enemy.lane < 0){
 			enemy.lane = 0;
 		}

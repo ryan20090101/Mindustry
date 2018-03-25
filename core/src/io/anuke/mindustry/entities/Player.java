@@ -57,8 +57,6 @@ public class Player extends SyncEntity{
 
 	private Vector2 movement = new Vector2();
 	private Translator tr = new Translator();
-
-	public int dimension = 0;
 	
 	public Player(){
 		hitbox.setSize(5);
@@ -104,11 +102,7 @@ public class Player extends SyncEntity{
 
 		control.setRespawnTime(respawnduration);
 		ui.hudfrag.fadeRespawn(true);
-		if(player.dimension == 1){
-			player.dimension = 0;
-		}else{
-			player.dimension = 1;
-		}
+		dimension = (dimension==1 ? 0 : 1);
 	}
 
 	/**called when a remote player death event is recieved*/
@@ -191,10 +185,10 @@ public class Player extends SyncEntity{
 			}
 
 			if (radiation >= 100 && timerRad) {
-				damage((radiation - 100) / 25);
 				if (radiation >= radiationDeath) {
-					onDeath();
+					damage(health+1);
 				}
+				damage((radiation - 100) / 25);
 			}
 		}
         
