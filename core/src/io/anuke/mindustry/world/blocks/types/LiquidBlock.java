@@ -60,12 +60,13 @@ public class LiquidBlock extends Block implements LiquidAcceptor{
 		LiquidEntity entity = tile.entity();
 		
 		if(entity.liquidAmount > 0.01f && entity.timer.get(timerFlow, 1)){
-			entity.heat = (int) (entity.heat >= entity.liquid.heat ? entity.liquid.heat : entity.liquid.heat / heatResistance);
+			entity.heat = (int)(entity.heat >= entity.liquid.heat ? entity.liquid.heat : (entity.liquid.heat / heatResistance)+entity.heat);
 			tryMoveLiquid(tile, tile.getNearby(tile.getRotation()));
 		}
 
-		if(entity.heat > maxHeat)
-			entity.damage((int)(entity.heat / heatResistance));
+		if(entity.heat > maxHeat) {
+			System.out.println(entity.heat / heatResistance);
+			entity.damage(entity.heat / heatResistance);}
 	}
 	
 	public void tryDumpLiquid(Tile tile){

@@ -130,13 +130,6 @@ public class Logic extends Module {
                 }
             }
 
-            world[i].ents.update(world[i].ents.defaultGroup());
-            world[i].ents.update(bulletGroup);
-            world[i].ents.update(enemyGroup);
-            world[i].ents.update(tileGroup);
-            world[i].ents.update(shieldGroup);
-            world[i].ents.update(playerGroup);
-
             world[i].ents.collideGroups(bulletGroup, enemyGroup);
             world[i].ents.collideGroups(bulletGroup, playerGroup);
         }
@@ -174,6 +167,13 @@ public class Logic extends Module {
                 if (global.time >= maxTime) global.time = 0;
                 global.time++;
             }
+
+            world[0].ents.update(world[0].ents.defaultGroup());
+            world[0].ents.update(bulletGroup);
+            world[0].ents.update(enemyGroup);
+            world[0].ents.update(tileGroup);
+            world[0].ents.update(shieldGroup);
+            world[0].ents.update(playerGroup);
         }
     }
 }

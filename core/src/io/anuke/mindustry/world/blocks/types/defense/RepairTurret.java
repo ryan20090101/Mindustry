@@ -58,7 +58,7 @@ public class RepairTurret extends PowerTurret{
 			float target = entity.angleTo(entity.blockTarget);
 			entity.rotation = Mathf.slerpDelta(entity.rotation, target, 0.16f);
 
-			int maxhealth = entity.blockTarget.tile.block().health;
+			float maxhealth = entity.blockTarget.tile.block().health;
 
 			if(entity.timer.get(timerReload, reload) && Angles.angleDist(target, entity.rotation) < shootCone){
 				entity.blockTarget.health += maxhealth * repairFrac;

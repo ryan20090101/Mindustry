@@ -10,12 +10,15 @@ public class DistributionBlocks{
 	
 	conduit = new Conduit("conduit"){{
 		health = 45;
+		heatResistance = 24f;
 	}},
 	
 	pulseconduit = new Conduit("pulseconduit"){{
 		liquidCapacity = 16f;
 		flowfactor = 4.9f;
 		health = 65;
+		heatResistance = 300f;
+		maxHeat = 1250;
 	}},
 
 	pressurisedconduit = new PressurisedConduit("pressurisedconduit"){{

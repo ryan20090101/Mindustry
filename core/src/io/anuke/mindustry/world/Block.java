@@ -63,7 +63,7 @@ public class Block{
 	/**time it takes to break*/
 	public float breaktime = 18;
 	/**tile entity health*/
-	public int health = 40;
+	public float health = 40;
 	/**the shadow drawn under the block*/
 	public String shadow = "shadow";
 	/**whether to display a different shadow per variant*/
@@ -180,7 +180,7 @@ public class Block{
 		return false;
 	}
 	
-	public int handleDamage(Tile tile, int amount){
+	public float handleDamage(Tile tile, float amount){
 		return amount;
 	}
 

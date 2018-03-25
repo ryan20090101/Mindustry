@@ -20,7 +20,7 @@ public class CoreBlock extends Block {
     }
 
     @Override
-    public int handleDamage(Tile tile, int amount){
+    public float handleDamage(Tile tile, float amount){
         return debug ? 0 : amount;
     }
 
