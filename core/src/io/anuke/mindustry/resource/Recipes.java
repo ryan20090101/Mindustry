@@ -39,6 +39,8 @@ public class Recipes {
 			new Recipe(distribution, null,DistributionBlocks.tunnel, stack(Item.iron, 2)),
 			new Recipe(distribution, null,DistributionBlocks.conduit, stack(Item.steel, 1)),
 			new Recipe(distribution, null,DistributionBlocks.pulseconduit, stack(Item.titanium, 1), stack(Item.steel, 1)),
+			new Recipe(distribution, null,DistributionBlocks.pressurisedconduit, stack(Item.steel, 1)),
+			new Recipe(distribution, null,DistributionBlocks.pressureLoader, stack(Item.steel, 1)),
 			new Recipe(distribution, null,DistributionBlocks.liquidrouter, stack(Item.steel, 2)),
 			new Recipe(distribution, null,DistributionBlocks.liquidjunction, stack(Item.steel, 2)),
 			new Recipe(distribution, null,DistributionBlocks.sorter, stack(Item.steel, 2)),
