@@ -139,6 +139,14 @@ public class Blocks{
 	grass = new Floor("grass"){{
 		drops = new ItemStack(Item.dirt,1);
 	}},
+
+	moonblock = new StaticBlock("moonblock"){{
+		variants = 3;
+	}},
+
+	moon = new Floor("moonfloor"){{
+		variants = 3;
+	}},
 	
 	sandblock = new StaticBlock("sandblock"){{
 		solid = true;

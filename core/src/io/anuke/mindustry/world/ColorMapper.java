@@ -56,6 +56,8 @@ public class ColorMapper{
 		"6277bc", pair(Blocks.titanium),
         /**"5b71b7", pair(Blocks.titanium, ProductionBlocks.omnidrill),*/
 		"83bc58", pair(Blocks.uranium),
+        "edeff2", pair(Blocks.moon),
+        "dbdde0", pair(Blocks.moon, Blocks.moonblock),
         /**"7bb252", pair(Blocks.uranium, ProductionBlocks.omnidrill),*/
         /*DefenseBlocks*/
         "3d3d3d", pair(Blocks.blackstone, DefenseBlocks.stonewall),
