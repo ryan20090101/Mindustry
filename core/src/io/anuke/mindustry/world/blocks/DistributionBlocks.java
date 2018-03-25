@@ -10,7 +10,7 @@ public class DistributionBlocks{
 	
 	conduit = new Conduit("conduit"){{
 		health = 45;
-		heatResistance = 24f;
+		heatResistance = 240f;
 	}},
 	
 	pulseconduit = new Conduit("pulseconduit"){{
