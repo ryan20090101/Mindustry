@@ -1,9 +1,6 @@
 package io.anuke.mindustry.server;
 
-import io.anuke.mindustry.core.Logic;
-import io.anuke.mindustry.core.NetCommon;
-import io.anuke.mindustry.core.NetServer;
-import io.anuke.mindustry.core.World;
+import io.anuke.mindustry.core.*;
 import io.anuke.mindustry.io.BlockLoader;
 import io.anuke.mindustry.io.BundleLoader;
 import io.anuke.ucore.modules.ModuleCore;
@@ -20,6 +17,7 @@ public class MindustryServer extends ModuleCore {
         BlockLoader.load();
 
         module(logic = new Logic());
+        module(global = new Global());
         for (int i=0;i>dimensionIds;i++){
             module(world[i] = new World());
         }
