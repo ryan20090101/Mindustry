@@ -18,6 +18,8 @@ public class LiquidBlock extends Block implements LiquidAcceptor{
 	
 	protected float liquidCapacity = 10f;
 	protected float flowfactor = 4.9f;
+	protected float heatResistance = 5.5f;
+	protected int maxHeat = 25;
 	
 	public LiquidBlock(String name) {
 		super(name);
@@ -58,9 +60,12 @@ public class LiquidBlock extends Block implements LiquidAcceptor{
 		LiquidEntity entity = tile.entity();
 		
 		if(entity.liquidAmount > 0.01f && entity.timer.get(timerFlow, 1)){
+			entity.heat = (int) (entity.heat >= entity.liquid.heat ? entity.liquid.heat : entity.liquid.heat / heatResistance);
 			tryMoveLiquid(tile, tile.getNearby(tile.getRotation()));
 		}
-		
+
+		if(entity.heat > maxHeat)
+			entity.damage((int)(entity.heat / heatResistance));
 	}
 	
 	public void tryDumpLiquid(Tile tile){
@@ -120,11 +125,13 @@ public class LiquidBlock extends Block implements LiquidAcceptor{
 	public static class LiquidEntity extends TileEntity{
 		public Liquid liquid;
 		public float liquidAmount;
+		public int heat;
 		
 		@Override
 		public void write(DataOutputStream stream) throws IOException{
 			stream.writeByte(liquid == null ? -1 : liquid.id);
 			stream.writeByte((byte)(liquidAmount));
+			stream.writeInt(heat);
 		}
 		
 		@Override
@@ -132,6 +139,7 @@ public class LiquidBlock extends Block implements LiquidAcceptor{
 			byte id = stream.readByte();
 			liquid = id == -1 ? null : Liquid.getByID(id);
 			liquidAmount = stream.readByte();
+			heat = stream.readInt();
 		}
 	}
 }

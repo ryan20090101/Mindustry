@@ -9,19 +9,22 @@ public class Liquid {
 	private static final Array<Liquid> liquids = new Array<>();
 
 	public static final Liquid
-		water = new Liquid("water", Color.ROYAL),
-		plasma = new Liquid("plasma", Color.CORAL),
-		lava = new Liquid("lava", Color.valueOf("ed5334")),
-		oil = new Liquid("oil", Color.valueOf("292929")),
-		cryofluid = new Liquid("cryofluid", Color.SKY);
+		water = new Liquid("water", Color.ROYAL,0),
+		plasma = new Liquid("plasma", Color.CORAL,9999),
+		lava = new Liquid("lava", Color.valueOf("ed5334"),1000),
+		oil = new Liquid("oil", Color.valueOf("292929"),25),
+		steam = new Liquid("steam", Color.GRAY,100),
+		cryofluid = new Liquid("cryofluid", Color.SKY,-100);
 	
 	public final Color color;
 	public final String name;
 	public final int id;
+	public final int heat;
 	
-	public Liquid(String name, Color color) {
+	public Liquid(String name, Color color,int heat) {
 		this.name = name;
 		this.color = new Color(color);
+		this.heat = heat;
 
 		this.id = liquids.size;
 
