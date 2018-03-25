@@ -22,7 +22,6 @@ import io.anuke.mindustry.world.Map;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.core.Inputs.DeviceType;
-import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.scene.ui.layout.Unit;
 import io.anuke.ucore.util.Atlas;
@@ -294,8 +293,8 @@ public class Control extends Module{
 	public void init(){
 		Timers.run(1f, Musics::shuffleAll);
 
-		Entities.initPhysics();
-		Entities.collisions().setCollider(tilesize, world[0]::solid);
+		world[player.dimension].ents.initPhysics();
+		world[player.dimension].ents.collisions().setCollider(tilesize, world[player.dimension]::solid);
 
 		Platform.instance.updateRPC();
 
@@ -381,7 +380,8 @@ public class Control extends Module{
 			}
 
 			if(!state.is(State.paused) || Net.active()){
-				Entities.update(effectGroup);
+				for(int i=0;i<dimensionIds;i++)
+					world[i].ents.update(effectGroup);
 
 				if(respawntime > 0){
 

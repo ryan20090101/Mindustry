@@ -27,6 +27,7 @@ public class World extends Module {
 
 	public Map currentMap;
 	public int worldDimension;
+	public Entities ents;
 	private Tile[][] tiles;
 	private Pathfind pathfind = new Pathfind(){{dimension = worldDimension;}};
 	private Tile core;

@@ -36,8 +36,10 @@ public class Logic extends Module {
 
     @Override
     public void init() {
-        Entities.initPhysics();
-        Entities.collisions().setCollider(tilesize, world[0]::solid);
+        for(int i=0;i<dimensionIds;i++){
+            world[i].ents.initPhysics();
+            world[i].ents.collisions().setCollider(tilesize, world[i]::solid);
+        }
     }
 
     public void play() {
@@ -127,6 +129,16 @@ public class Logic extends Module {
                     }
                 }
             }
+
+            world[i].ents.update(world[i].ents.defaultGroup());
+            world[i].ents.update(bulletGroup);
+            world[i].ents.update(enemyGroup);
+            world[i].ents.update(tileGroup);
+            world[i].ents.update(shieldGroup);
+            world[i].ents.update(playerGroup);
+
+            world[i].ents.collideGroups(bulletGroup, enemyGroup);
+            world[i].ents.collideGroups(bulletGroup, playerGroup);
         }
         if (!state.is(State.menu)) {
 
@@ -159,17 +171,6 @@ public class Logic extends Module {
                 if (!Net.client() && (state.wavetime <= 0 || state.extrawavetime <= 0)) {
                     runWave();
                 }
-
-                Entities.update(Entities.defaultGroup());
-                Entities.update(bulletGroup);
-                Entities.update(enemyGroup);
-                Entities.update(tileGroup);
-                Entities.update(shieldGroup);
-                Entities.update(playerGroup);
-
-                Entities.collideGroups(bulletGroup, enemyGroup);
-                Entities.collideGroups(bulletGroup, playerGroup);
-
                 if (global.time >= maxTime) global.time = 0;
                 global.time++;
             }
