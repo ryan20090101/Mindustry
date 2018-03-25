@@ -15,10 +15,11 @@ public class PressurisedLoader extends LiquidPowerBlock {
 
     @Override
     public boolean acceptLiquid(Tile tile, Tile source, Liquid liquid, float amount){
-        LiquidBlock.LiquidEntity entity = tile.entity();
+        LiquidPowerEntity entity = tile.entity();
 
         return (entity.liquid == liquid || entity.liquidAmount <= 0.01f)
                 && (tile.block() instanceof PressurisedConduit
+                && (tile.block()) instanceof Conduit
                 && entity.liquidAmount >= liquidCapacity);
     }
 

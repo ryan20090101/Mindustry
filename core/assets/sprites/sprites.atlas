@@ -298,21 +298,28 @@ blocks/conduit
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/conduitbottom
+blocks/conduit-bottom
   rotate: false
   xy: 577, 169
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/conduitliquid
+blocks/conduit-liquid
   rotate: false
   xy: 587, 179
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/conduittop
+blocks/pulseconduit-liquid
+  rotate: false
+  xy: 587, 179
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+blocks/conduit-top
   rotate: false
   xy: 597, 189
   size: 8, 8
@@ -1138,56 +1145,56 @@ blocks/powervoid
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pressurerouterbottom
+blocks/pressureLoader
   rotate: false
   xy: 636, 119
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pressurerouterliquid
+blocks/pressureLoader-bottom
   rotate: false
   xy: 824, 396
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pressurisedconduit
+blocks/pressureLoader-liquid
   rotate: false
   xy: 828, 406
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pressurisedconduitbottom
+blocks/pressureLoader-top
   rotate: false
   xy: 905, 413
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pressurisedconduitliquid
+blocks/pressurisedconduit
   rotate: false
   xy: 794, 290
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pressurisedconduittop
+blocks/pressurisedconduit-bottom
   rotate: false
   xy: 798, 300
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pressurisedrouter
+blocks/pressurisedconduit-liquid
   rotate: false
   xy: 556, 109
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pressurissdroutertop
+blocks/pressurisedconduit-top
   rotate: false
   xy: 566, 109
   size: 8, 8
@@ -1201,14 +1208,14 @@ blocks/pulseconduit
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pulseconduitbottom
+blocks/pulseconduit-bottom
   rotate: false
   xy: 586, 109
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-blocks/pulseconduittop
+blocks/pulseconduit-top
   rotate: false
   xy: 596, 109
   size: 8, 8
@@ -2869,6 +2876,13 @@ ui/icons/icon-rotate
   offset: 0, 0
   index: -1
 ui/icons/icon-rotateTool
+  rotate: false
+  xy: 539, 127
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ui/icons/icon-rotatetool
   rotate: false
   xy: 539, 127
   size: 14, 14

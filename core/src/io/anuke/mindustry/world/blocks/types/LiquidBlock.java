@@ -37,16 +37,16 @@ public class LiquidBlock extends Block implements LiquidAcceptor{
 	public void draw(Tile tile){
 		LiquidEntity entity = tile.entity();
 		
-		Draw.rect(name() + "bottom", tile.worldx(), tile.worldy(), tile.getRotation() * 90);
+		Draw.rect(name() + "-bottom", tile.worldx(), tile.worldy(), tile.getRotation() * 90);
 		
 		if(entity.liquid != null && entity.liquidAmount > 0.01f){
 			Draw.color(entity.liquid.color);
 			Draw.alpha(entity.liquidAmount / liquidCapacity);
-			Draw.rect("conduitliquid", tile.worldx(), tile.worldy(), tile.getRotation() * 90);
+			Draw.rect(name()+"-liquid", tile.worldx(), tile.worldy(), tile.getRotation() * 90);
 			Draw.color();
 		}
 		
-		Draw.rect(name() + "top", tile.worldx(), tile.worldy(), tile.getRotation() * 90);
+		Draw.rect(name() + "-top", tile.worldx(), tile.worldy(), tile.getRotation() * 90);
 		
 	}
 	

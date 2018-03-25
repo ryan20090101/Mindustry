@@ -28,7 +28,7 @@ public class LiquidPowerBlock extends Block implements PowerAcceptor, LiquidAcce
 		rotate = true;
 		update = true;
 
-		bars.add(new BlockBar(Color.YELLOW, true, tile -> tile.<PowerBlock.PowerEntity>entity().power / powerCapacity));
+		bars.add(new BlockBar(Color.YELLOW, true, tile -> tile.<LiquidPowerEntity>entity().power / powerCapacity));
 	}
 	
 	@Override
