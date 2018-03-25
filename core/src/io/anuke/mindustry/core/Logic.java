@@ -37,7 +37,7 @@ public class Logic extends Module {
     @Override
     public void init(){
         Entities.initPhysics();
-        Entities.collisions().setCollider(tilesize, world[0]::solid);
+        Entities.collisions().setCollider(tilesize, world[player.dimension]::solid);
     }
 
     public void play(){
