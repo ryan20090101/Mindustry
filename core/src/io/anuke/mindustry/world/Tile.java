@@ -41,7 +41,7 @@ public class Tile{
 	}
 
 	public int packedPosition(){
-		return x + y * world[0].width();
+		return x + y * world[dimension].width();
 	}
 	
 	private void iSetFloor(Block floor){
@@ -101,7 +101,7 @@ public class Tile{
 				float dst = Vector2.dst(dx, dy, 0, 0);
 				if(dst > rad || (dx == 0 && dy == 0)) continue;
 				
-				Tile other = world[0].tile(x + dx, y + dy);
+				Tile other = world[dimension].tile(x + dx, y + dy);
 				if(other != null && other.entity != null){
 					other.entity.damage((int)(amount * Mathf.lerp(1f-dst/rad, 1f, falloff)));
 				}
@@ -110,7 +110,7 @@ public class Tile{
 	}
 	
 	public int id(){
-		return x + y * world[0].width();
+		return x + y * world[dimension].width();
 	}
 	
 	public float worldx(){
@@ -267,7 +267,7 @@ public class Tile{
 			int offsety = -(block.size - 1) / 2;
 			for (int dx = 0; dx < block.size; dx++) {
 				for (int dy = 0; dy < block.size; dy++) {
-					Tile other = world[0].tile(x + dx + offsetx, y + dy + offsety);
+					Tile other = world[dimension].tile(x + dx + offsetx, y + dy + offsety);
 					tmpArray.add(other);
 				}
 			}
@@ -284,7 +284,7 @@ public class Tile{
 		}else{
 			byte dx = Bits.getLeftByte(link);
 			byte dy = Bits.getRightByte(link);
-			return world[0].tile(x - (dx - 8), y - (dy - 8));
+			return world[dimension].tile(x - (dx - 8), y - (dy - 8));
 		}
 	}
 
@@ -299,10 +299,10 @@ public class Tile{
 	}
 
 	public Tile getNearby(int rotation, int addition){
-		if(rotation == 0) return world[0].tile(x + addition, y);
-		if(rotation == 1) return world[0].tile(x, y + addition);
-		if(rotation == 2) return world[0].tile(x - addition, y);
-		if(rotation == 3) return world[0].tile(x, y - addition);
+		if(rotation == 0) return world[dimension].tile(x + addition, y);
+		if(rotation == 1) return world[dimension].tile(x, y + addition);
+		if(rotation == 2) return world[dimension].tile(x - addition, y);
+		if(rotation == 3) return world[dimension].tile(x, y - addition);
 		return null;
 	}
 
@@ -346,10 +346,10 @@ public class Tile{
 		return returnMe;
 	}*/
 	public Tile[] getNearby(Tile[] temptiles){
-		temptiles[0] = world[0].tile(x+1, y);
-		temptiles[1] = world[0].tile(x, y+1);
-		temptiles[2] = world[0].tile(x-1, y);
-		temptiles[3] = world[0].tile(x, y-1);
+		temptiles[0] = world[dimension].tile(x+1, y);
+		temptiles[1] = world[dimension].tile(x, y+1);
+		temptiles[2] = world[dimension].tile(x-1, y);
+		temptiles[3] = world[dimension].tile(x, y-1);
 		return temptiles;
 	}
 
@@ -357,7 +357,7 @@ public class Tile{
 		occluded = false;
 		for(int dx = -1; dx <= 1; dx ++){
 			for(int dy = -1; dy <= 1; dy ++){
-				Tile tile = world[0].tile(x + dx, y + dy);
+				Tile tile = world[dimension].tile(x + dx, y + dy);
 				if(tile != null && tile.solid()){
 					occluded = true;
 					break;

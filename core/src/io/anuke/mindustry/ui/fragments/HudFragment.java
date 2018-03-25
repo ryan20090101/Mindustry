@@ -196,12 +196,12 @@ public class HudFragment implements Fragment{
 
 				row();
 
-				new table() {{
+				/*new table() {{
 					touchable(Touchable.enabled);
 					visible(() -> shown);
 					addWaveTable();
 				}}.fillX().end();
-
+*/
 				row();
 
 				visible(() -> !state.is(State.menu));
