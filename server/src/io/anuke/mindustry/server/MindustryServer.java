@@ -18,7 +18,7 @@ public class MindustryServer extends ModuleCore {
 
         module(logic = new Logic());
         module(global = new Global());
-        for (int i=0;i>dimensionIds;i++){
+        for (int i=0;i<dimensionIds;i++){
             module(world[i] = new World(i));
         }
         module(netServer = new NetServer());
