@@ -38,18 +38,19 @@ public class NetCommon extends Module {
         });
 
         Net.handle(BlockTapPacket.class, (packet) -> {
-            Tile tile = world[player.dimension].tile(packet.position);
+
+            Tile tile = world[packet.dim].tile(packet.position);
             tile.block().tapped(tile);
         });
 
         Net.handle(BlockConfigPacket.class, (packet) -> {
-            Tile tile = world[player.dimension].tile(packet.position);
+            Tile tile = world[packet.dim].tile(packet.position);
             if (tile != null) tile.block().configure(tile,packet.intData ,packet.byteData);
         });
 
         Net.handle(LogicLinkPacket.class, (packet) -> {
-            Tile tile = world[player.dimension].tile(packet.tile);
-            Tile tile2 = world[player.dimension].tile(packet.tile2);
+            Tile tile = world[packet.dim].tile(packet.tile);
+            Tile tile2 = world[packet.dim].tile(packet.tile2);
             if (tile != null && tile2 != null
                 && tile instanceof LogicAcceptor && tile2 instanceof LogicAcceptor)
                 ((LogicAcceptor)tile.block()).logicLink(tile,tile2);

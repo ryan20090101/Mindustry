@@ -434,25 +434,30 @@ public class Packets {
 
     public static class BlockTapPacket implements Packet{
         public int position;
+        public byte dim;
 
         @Override
         public void write(ByteBuffer buffer) {
+            buffer.put(dim);
             buffer.putInt(position);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
+            dim = buffer.get();
             position = buffer.getInt();
         }
     }
 
     public static class BlockConfigPacket implements Packet{
+        public byte dim;
         public int position;
         public int intData;
         public byte[] byteData;
 
         @Override
         public void write(ByteBuffer buffer) {
+            buffer.put(dim);
             buffer.putInt(position);
             buffer.putInt(intData);
             buffer.put(byteData);
@@ -460,6 +465,7 @@ public class Packets {
 
         @Override
         public void read(ByteBuffer buffer) {
+            dim = buffer.get();
             position = buffer.getInt();
             intData = buffer.getInt();
             byteData = new byte[buffer.remaining()];
@@ -689,17 +695,20 @@ public class Packets {
 
     public static class LogicLinkPacket implements Packet{
 
+        public byte dim;
         public int tile;
         public int tile2;
 
         @Override
         public void read(ByteBuffer buffer) {
+            buffer.put(dim);
             buffer.putInt(tile);
             buffer.putInt(tile2);
         }
 
         @Override
         public void write(ByteBuffer buffer) {
+            dim = buffer.get();
             tile = buffer.getInt();
             tile2 = buffer.getInt();
         }
@@ -707,30 +716,21 @@ public class Packets {
 
     //chat commands
     public static class AdminCommandPacket implements Packet{
-        public int commandID;
-        public String arguments;
+        public String message;
 
         @Override
         public void write(ByteBuffer buffer) {
-            buffer.put((byte)commandID);
-            buffer.putShort((short) arguments.getBytes().length);
-            buffer.put(arguments.getBytes());
+            buffer.putShort((short) message.getBytes().length);
+            buffer.put(message.getBytes());
         }
 
         @Override
         public void read(ByteBuffer buffer) {
-            commandID = buffer.get();
             short tlength = buffer.getShort();
             byte[] t = new byte[tlength];
             buffer.get(t);
 
-            arguments = new String(t);
+            message = new String(t);
         }
     }
-
-    public static Array<String> adminCommands = Array.with(
-            "tp",
-            "setwave",
-            "test"
-    );
 }

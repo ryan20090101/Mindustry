@@ -60,7 +60,7 @@ public class Placement {
     }
 
     public static void placeBlock(int x, int y, Block result, int rotation, boolean effects, boolean sound) {
-        Tile tile = world[player.dimension].tile(x, y);
+        Tile tile = world[0].tile(x, y);
 
         //just in case
         if (tile == null) return;

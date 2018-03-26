@@ -1,5 +1,6 @@
 package io.anuke.mindustry;
 
+import io.anuke.mindustry.command.CommandSystem;
 import io.anuke.mindustry.core.*;
 import io.anuke.mindustry.io.BlockLoader;
 import io.anuke.mindustry.io.BundleLoader;
@@ -33,6 +34,7 @@ public class Mindustry extends ModuleCore {
 		module(netServer = new NetServer());
 		module(netClient = new NetClient());
 		module(netCommon = new NetCommon());
+		module(commandSystem = new CommandSystem());
 	}
 
 	@Override

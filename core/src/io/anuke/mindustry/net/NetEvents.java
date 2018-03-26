@@ -182,10 +182,9 @@ public class NetEvents {
         Net.send(packet, SendMode.tcp);
     }
 
-    public static void handleAdminCommand(String args, byte commandID){
+    public static void handleAdminCommand(String message){
         AdminCommandPacket packet = new AdminCommandPacket();
-        packet.arguments = args;
-        packet.commandID = commandID;
+        packet.message = message;
         Net.send(packet, SendMode.tcp);
     }
 

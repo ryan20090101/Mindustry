@@ -1,6 +1,8 @@
 package io.anuke.mindustry.core;
 
 import com.badlogic.gdx.utils.*;
+import io.anuke.mindustry.command.CommandSystem;
+import io.anuke.mindustry.command.Commands;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.SyncEntity;
@@ -28,7 +30,6 @@ import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 import static io.anuke.mindustry.Vars.*;
-import static io.anuke.mindustry.net.Packets.adminCommands;
 
 public class NetServer extends Module{
     private final static float serverSyncTime = 4, itemSyncTime = 10;
@@ -304,12 +305,13 @@ public class NetServer extends Module{
                         player.name, Net.getConnection(player.clientid).address);
                 return;
             }
+            Log.err(packet.message.split(" ")[0]);
+            Object command = Commands.getClass(packet.message.split(" ")[0]);
 
-            if(adminCommands.get(packet.commandID) == "setwave"){
-                state.wave++;
-            }
-            else if(adminCommands.get(packet.commandID) == "runwave") {
-                logic.runWave();
+            if(command != null) {
+                commandSystem.handleCommandReceived(command);
+            }else{
+                //inform the player that the command is false
             }
         });
     }

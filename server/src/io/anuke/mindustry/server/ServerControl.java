@@ -3,6 +3,7 @@ package io.anuke.mindustry.server;
 import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import io.anuke.mindustry.command.CommandSystem;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.game.Difficulty;
@@ -81,17 +82,17 @@ public class ServerControl extends Module {
                 Timers.runTask(30f, () -> {
 
                     if (mode != ShuffleMode.off) {
-                        Array<Map> maps = mode == ShuffleMode.both ? world[player.dimension].maps().getAllMaps() :
-                                mode == ShuffleMode.normal ? world[player.dimension].maps().getDefaultMaps() : world[player.dimension].maps().getCustomMaps();
+                        Array<Map> maps = mode == ShuffleMode.both ? global.maps().getAllMaps() :
+                                mode == ShuffleMode.normal ? global.maps().getDefaultMaps() : global.maps().getCustomMaps();
 
-                        Map previous = world[player.dimension].getMap();
+                        Map previous = world[0].getMap();
                         Map map = previous;
                         while (map == previous || !map.visible) map = maps.random();
 
                         info("Selected next map to be {0}.", map.name);
                         state.set(State.playing);
                         logic.reset();
-                        world[player.dimension].loadMap(map);
+                        world[0].loadMap(map);
                         host();
                     }
                 });
@@ -130,7 +131,7 @@ public class ServerControl extends Module {
 
             String search = arg[0];
             Map result = null;
-            for(Map map : world[player.dimension].maps().list()){
+            for(Map map : global.maps().list()){
                 if(map.name.equalsIgnoreCase(search))
                     result = map;
             }
@@ -152,7 +153,7 @@ public class ServerControl extends Module {
             state.mode = mode;
 
             logic.reset();
-            world[player.dimension].loadMap(result);
+            world[0].loadMap(result);
             state.set(State.playing);
             info("Map loaded.");
 
@@ -161,7 +162,7 @@ public class ServerControl extends Module {
 
         handler.register("maps", "Display all available maps.", arg -> {
             Log.info("Maps:");
-            for(Map map : world[player.dimension].maps().getAllMaps()){
+            for(Map map : global.maps().getAllMaps()){
                 Log.info("  &ly{0}: &lb&fi{1} / {2}x{3}", map.name, map.custom ? "Custom" : "Default", map.getWidth(), map.getHeight());
             }
         });
@@ -171,7 +172,7 @@ public class ServerControl extends Module {
                 info("&lyStatus: &rserver closed");
             }else{
                 info("&lyStatus: &lcPlaying on map &fi{0}&fb &lb/&lc Wave {1} &lb/&lc {2}",
-                        Strings.capitalize(world[player.dimension].getMap().name), state.wave, Strings.capitalize(state.difficulty.name()));
+                        Strings.capitalize(world[0].getMap().name), state.wave, Strings.capitalize(state.difficulty.name()));
                 if(state.enemies > 0){
                     info("&ly{0} enemies remaining.", state.enemies);
                 }else{
@@ -496,7 +497,7 @@ public class ServerControl extends Module {
         });
 
         handler.register("gameover", "Force a game over.", arg -> {
-            world[player.dimension].removeBlock(world[player.dimension].getCore());
+            world[0].removeBlock(world[0].getCore());
             info("Core destroyed.");
         });
 
@@ -508,7 +509,7 @@ public class ServerControl extends Module {
             try{
                 int x = Integer.parseInt(arg[0]);
                 int y = Integer.parseInt(arg[1]);
-                Tile tile = world[player.dimension].tile(x, y);
+                Tile tile = world[0].tile(x, y);
                 if(tile != null){
                     if(tile.entity != null){
                         Array<Object> arr = tile.block().getDebugInfo(tile);
