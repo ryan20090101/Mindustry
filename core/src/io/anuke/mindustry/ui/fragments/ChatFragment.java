@@ -154,11 +154,7 @@ public class ChatFragment extends Table implements Fragment{
         if(message.replaceAll(" ", "").isEmpty()) return;
         //TODO: BEFORE SEND CHECK IF COMMAND, IF YES SEND COMMAND PACKET NOT CHAT PACKET
         if (message.startsWith(commandPrefix)) {
-            String command = message.replace(commandPrefix,"").split(" ")[0];
-            if (Packets.adminCommands.contains(command,false)) {
-                NetEvents.handleAdminCommand(message.replace(commandPrefix+command,""),(byte)Packets.adminCommands.indexOf(command,false));
-            }else
-                addMessage("This command does not exist :(","");
+            NetEvents.handleAdminCommand(message.replaceFirst(commandPrefix,""));
         }else
             NetEvents.handleSendMessage(message);
     }

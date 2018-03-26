@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
+import io.anuke.mindustry.command.CommandSystem;
 import io.anuke.mindustry.core.*;
 import io.anuke.mindustry.entities.Bullet;
 import io.anuke.mindustry.entities.Player;
@@ -141,6 +142,7 @@ public class Vars{
 	public static NetCommon netCommon;
 	public static NetServer netServer;
 	public static NetClient netClient;
+	public static CommandSystem commandSystem;
 	
 	public static Player player;
 

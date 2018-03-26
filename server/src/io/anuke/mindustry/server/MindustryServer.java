@@ -1,5 +1,6 @@
 package io.anuke.mindustry.server;
 
+import io.anuke.mindustry.command.CommandSystem;
 import io.anuke.mindustry.core.*;
 import io.anuke.mindustry.io.BlockLoader;
 import io.anuke.mindustry.io.BundleLoader;
@@ -18,11 +19,13 @@ public class MindustryServer extends ModuleCore {
 
         module(logic = new Logic());
         module(global = new Global());
+        world = new World[dimensionIds];
         for (int i=0;i<dimensionIds;i++){
             module(world[i] = new World(i));
         }
         module(netServer = new NetServer());
         module(netCommon = new NetCommon());
+        module(commandSystem = new CommandSystem());
         module(new ServerControl());
     }
 }
