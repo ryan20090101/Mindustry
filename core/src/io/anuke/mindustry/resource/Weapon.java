@@ -122,6 +122,9 @@ public class Weapon extends Upgrade{
 	}
 
 	public void shoot(Player p, float x, float y, float angle){
+		// weapon switch resets server-side fast shoot accounting
+		NetEvents.handleWeaponSwitch();
+
 		for (int i = 0; i < 3; i++) {
 			shootInternal(p, x, y, angle);
 
