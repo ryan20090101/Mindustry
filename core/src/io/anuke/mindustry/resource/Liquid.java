@@ -9,11 +9,11 @@ public class Liquid {
 	private static final Array<Liquid> liquids = new Array<>();
 
 	public static final Liquid
-		water = new Liquid("water", Color.ROYAL,0),
-		plasma = new Liquid("plasma", Color.CORAL,9999),
-		lava = new Liquid("lava", Color.valueOf("ed5334"),1000),
-		oil = new Liquid("oil", Color.valueOf("292929"),25),
-		steam = new Liquid("steam", Color.GRAY,100),
+		water = new Liquid("water", Color.ROYAL,20),
+		plasma = new Liquid("plasma", Color.CORAL,99999999),
+		lava = new Liquid("lava", Color.valueOf("ed5334"),650),
+		oil = new Liquid("oil", Color.valueOf("292929"),43),
+		steam = new Liquid("steam", Color.valueOf("c4c6c4"),100),
 		cryofluid = new Liquid("cryofluid", Color.SKY,-100);
 	
 	public final Color color;

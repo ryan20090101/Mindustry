@@ -255,5 +255,8 @@ public class ProductionBlocks{
             animationFrames = 3;
             
 		}
+	},
+	reactorCooler = new ReactorCooler("reactorCooler"){
+
 	};
 }

@@ -127,11 +127,15 @@ public class LiquidBlock extends Block implements LiquidAcceptor{
 		public Liquid liquid;
 		public float liquidAmount;
 		public int heat;
+		public Liquid liquid2;
+		public float liquid2Amount;
 		
 		@Override
 		public void write(DataOutputStream stream) throws IOException{
 			stream.writeByte(liquid == null ? -1 : liquid.id);
+			stream.writeByte(liquid2 == null ? -1 : liquid2.id);
 			stream.writeByte((byte)(liquidAmount));
+			stream.writeByte((byte)(liquid2Amount));
 			stream.writeInt(heat);
 		}
 		
@@ -139,7 +143,9 @@ public class LiquidBlock extends Block implements LiquidAcceptor{
 		public void read(DataInputStream stream) throws IOException{
 			byte id = stream.readByte();
 			liquid = id == -1 ? null : Liquid.getByID(id);
+			liquid2 = id == -1 ? null : Liquid.getByID(id);
 			liquidAmount = stream.readByte();
+			liquid2Amount = stream.readByte();
 			heat = stream.readInt();
 		}
 	}

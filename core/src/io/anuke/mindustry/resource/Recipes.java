@@ -111,6 +111,7 @@ public class Recipes {
             new Recipe(crafting, null,OtherBlocks.structurecore, stack(Item.steel, 10)),
             new Recipe(power, null,OtherBlocks.powervoid, stack(Item.stone, 1)),
 			new Recipe(power, null,OtherBlocks.powersource, stack(Item.stone, 1)),
+			new Recipe(power, null,ProductionBlocks.reactorCooler, stack(Item.stone, 1)),
             new Recipe(distribution, null,OtherBlocks.itemspawner, stack(Item.stone, 1))
 	);
 	
