@@ -180,7 +180,14 @@ public class NetClient extends Module {
                 if(tile != null) Block.getByID(packet.block).placed(tile);
             }
         });
-
+        Net.handleClient(CarryPacket.class, (packet) -> {
+            if(!player.carry)
+                player.carry = true;
+            else if(player.carrier != playerGroup.getByID(packet.playerid))
+                player.carrier = playerGroup.getByID(packet.playerid);
+            else
+                player.carry = false;
+        });
         Net.handleClient(BreakPacket.class, (packet) -> {
             Placement.breakBlock(packet.x, packet.y, true, Timers.get("breakblocksound", 10));
         });

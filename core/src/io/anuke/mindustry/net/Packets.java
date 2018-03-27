@@ -241,6 +241,19 @@ public class Packets {
             block = buffer.getInt();
         }
     }
+    public static class CarryPacket implements Packet{
+        public int playerid;
+
+        @Override
+        public void write(ByteBuffer buffer) {
+            buffer.putInt(playerid);
+        }
+
+        @Override
+        public void read(ByteBuffer buffer) {
+            playerid = buffer.getInt();
+        }
+    }
 
     public static class BreakPacket implements Packet{
         public int playerid;

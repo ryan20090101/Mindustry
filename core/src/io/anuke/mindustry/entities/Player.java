@@ -57,6 +57,9 @@ public class Player extends SyncEntity{
 
 	private Vector2 movement = new Vector2();
 	private Translator tr = new Translator();
+
+	public boolean carry = false;
+	public Player carrier;
 	
 	public Player(){
 		hitbox.setSize(5);
@@ -292,9 +295,13 @@ public class Player extends SyncEntity{
 			float angle = Angles.mouseAngle(x, y);
 			this.angle = Mathf.slerpDelta(this.angle, angle, 0.1f);
 		}
-
-		x = Mathf.clamp(x, 0, world[dimension].width() * tilesize);
-		y = Mathf.clamp(y, 0, world[dimension].height() * tilesize);
+		if(!carry && !isAndroid) {
+			x = Mathf.clamp(x, 0, world[dimension].width() * tilesize);
+			y = Mathf.clamp(y, 0, world[dimension].height() * tilesize);
+		}else{
+			x = carrier.x;
+			y = carrier.y;
+		}
 	}
 
 	@Override

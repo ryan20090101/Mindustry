@@ -47,7 +47,8 @@ public class Registrator {
             AdministerRequestPacket.class,
             TracePacket.class,
             AdminCommandPacket.class,
-            LogicLinkPacket.class
+            LogicLinkPacket.class,
+            CarryPacket.class
     };
     private static ObjectIntMap<Class<?>> ids = new ObjectIntMap<>();
 

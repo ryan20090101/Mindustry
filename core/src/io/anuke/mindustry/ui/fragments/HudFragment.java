@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import io.anuke.mindustry.core.GameState.State;
+import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.net.Net;
+import io.anuke.mindustry.net.Packets;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.scene.actions.Actions;
@@ -16,6 +18,7 @@ import io.anuke.ucore.scene.ui.ImageButton;
 import io.anuke.ucore.scene.ui.Label;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Bundles;
+import io.anuke.ucore.entities.Entities;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -123,99 +126,16 @@ public class HudFragment implements Fragment{
 
 
 		}}.end();
-		//inventory table
-		new table(){{
-			aleft();
-
-			new table(){{
-
-				new table() {{
-					left();
-					float dsize = 58;
-					defaults().size(dsize).left();
-					float isize = 40;
-
-					menu = new imagebutton("icon-menu", isize, ui.paused::show).get();
-
-					flip = new imagebutton("icon-arrow-up", isize, () -> {
-						if (wavetable.getActions().size != 0) return;
-
-						float dur = 0.3f;
-						Interpolation in = Interpolation.pow3Out;
-
-						flip.getStyle().imageUp = Core.skin.getDrawable(shown ? "icon-arrow-down" : "icon-arrow-up");
-
-						if (shown) {
-							blockfrag.toggle(false, dur, in);
-							wavetable.actions(Actions.translateBy(0, wavetable.getHeight() + dsize, dur, in), Actions.call(() -> shown = false));
-							infolabel.actions(Actions.translateBy(0, wavetable.getHeight(), dur, in), Actions.call(() -> shown = false));
-						} else {
-							shown = true;
-							blockfrag.toggle(true, dur, in);
-							wavetable.actions(Actions.translateBy(0, -wavetable.getTranslation().y, dur, in));
-							infolabel.actions(Actions.translateBy(0, -infolabel.getTranslation().y, dur, in));
-						}
-
-					}).get();
-
-					new imagebutton("icon-pause", isize, () -> {
-						if(android) DebugFragment.printDebugInfo();
-						if (Net.active() && android) {
-							ui.listfrag.visible = !ui.listfrag.visible;
-						} else {
-							state.set(state.is(State.paused) ? State.playing : State.paused);
-						}
-					}).update(i -> {
-						if (Net.active() && android) {
-							i.getStyle().imageUp = Core.skin.getDrawable("icon-players");
-						} else {
-							i.setDisabled(Net.active());
-							i.getStyle().imageUp = Core.skin.getDrawable(state.is(State.paused) ? "icon-play" : "icon-pause");
-						}
-					}).get();
-
-					new imagebutton("icon-settings", isize, () -> {
-						if (Net.active() && android) {
-							if (ui.chatfrag.chatOpen()) {
-								ui.chatfrag.hide();
-							} else {
-								ui.chatfrag.toggle();
-							}
-						} else {
-							ui.settings.show();
-						}
-					}).update(i -> {
-						if (Net.active() && android) {
-							i.getStyle().imageUp = Core.skin.getDrawable("icon-chat");
-						} else {
-							i.getStyle().imageUp = Core.skin.getDrawable("icon-settings");
-						}
-					}).get();
-
-				}}.end();
-
-				row();
-
-				/*new table() {{
-					touchable(Touchable.enabled);
-					visible(() -> shown);
-					addWaveTable();
-				}}.fillX().end();
-*/
-				row();
-
-				visible(() -> !state.is(State.menu));
-
-				infolabel = new Label(() -> (Settings.getBool("fps") ? (Gdx.graphics.getFramesPerSecond() + " FPS") +
-						(threads.isEnabled() ?  " / " + threads.getFPS() + " TPS" : "") + (Net.client() && !gwt ? "\nPing: " + Net.getPing() : "") : ""));
-				row();
-				add(infolabel).size(-1);
-
-			}}.end();
-
-
-
-		}}.end();
+		if(android) {
+			new imagebutton("icon-pause", 40, () -> {
+				player.carry = player.carry ? false : true;
+				player.carrier = (Player)Entities.getClosest(playerGroup, player.x, player.y, 4, e -> ((Player)e).isAndroid);
+				Packets.CarryPacket packet = new Packets.CarryPacket();
+				packet.playerid = player.id;
+				Net.sendTo(player.carrier.id, packet, Net.SendMode.tcp);
+			}).update(i -> {
+			}).get();
+		}
 		//tutorial ui table
 		new table(){{
 			control.tutorial().buildUI(this);
