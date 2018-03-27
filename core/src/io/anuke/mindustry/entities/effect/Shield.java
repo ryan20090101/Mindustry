@@ -6,18 +6,17 @@ import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.types.defense.ShieldBlock;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.entities.BulletEntity;
-import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.Entity;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Mathf;
 
-import static io.anuke.mindustry.Vars.bulletGroup;
-import static io.anuke.mindustry.Vars.shieldGroup;
+import static io.anuke.mindustry.Vars.world;
 
 public class Shield extends Entity{
 	public boolean active;
 	public boolean hitPlayers = false;
 	public float radius = 0f;
+	public int dimension;
 	
 	private float uptime = 0f;
 	private final Tile tile;
@@ -53,7 +52,7 @@ public class Shield extends Entity{
 		
 		ShieldBlock block = (ShieldBlock)tile.block();
 		
-		Entities.getNearby(bulletGroup, x, y, block.shieldRadius * 2*uptime + 10, entity->{
+		world[dimension].ents.getNearby(world[dimension].bulletGroup, x, y, block.shieldRadius * 2*uptime + 10, entity->{
 			BulletEntity bullet = (BulletEntity)entity;
 			if((bullet.owner instanceof Enemy || hitPlayers)){
 				
@@ -86,7 +85,7 @@ public class Shield extends Entity{
 	
 	@Override
 	public Shield add(){
-		return super.add(shieldGroup);
+		return super.add(world[dimension].shieldGroup);
 	}
 	
 	@Override

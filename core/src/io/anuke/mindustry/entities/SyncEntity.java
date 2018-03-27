@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 
 import static io.anuke.mindustry.Vars.threads;
 
-public abstract class SyncEntity extends DestructibleEntity{
+public abstract class SyncEntity extends DestructibleAltDimEntity{
     private static ObjectIntMap<Class<? extends SyncEntity>> writeSizes = new ObjectIntMap<>();
 
     protected transient Interpolator interpolator = new Interpolator();
