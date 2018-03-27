@@ -306,7 +306,7 @@ public class Player extends SyncEntity{
 
 	@Override
 	public Player add(){
-		return add(playerGroup);
+		return add(world[dimension].playerGroup);
 	}
 
     @Override

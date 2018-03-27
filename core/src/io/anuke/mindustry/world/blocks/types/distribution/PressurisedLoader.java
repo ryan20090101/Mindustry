@@ -19,16 +19,17 @@ public class PressurisedLoader extends LiquidPowerBlock {
 
         return (entity.liquid == liquid || entity.liquidAmount <= 0.01f)
                 && (tile.block() instanceof PressurisedConduit
-                && (tile.block()) instanceof Conduit
-                && entity.liquidAmount >= liquidCapacity);
+                || tile.block() instanceof Conduit)
+                && entity.liquidAmount >= liquidCapacity;
     }
 
     @Override
     public void tryMoveLiquid(Tile tile, Tile next){
         LiquidPowerEntity ent = tile.entity();
-        if((next.block() instanceof Conduit)&&ent.power < powerUsagePerTransfer)
+        if((next.block() instanceof Conduit)&&ent.power >= powerUsagePerTransfer)
+            ent.power-=powerUsagePerTransfer;
+        else if((next.block() instanceof Conduit))
             return;
-        ent.power-=powerUsagePerTransfer;
         super.tryMoveLiquid(tile,next);
     }
 }

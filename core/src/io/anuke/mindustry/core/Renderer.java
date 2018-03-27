@@ -63,7 +63,7 @@ public class Renderer extends RendererModule {
 						.setCenter(camera.position.x, camera.position.y);
 				Rectangle pos = rect2.setSize(name.size).setCenter(x, y);
 				if (view.overlaps(pos)) {
-					new EffectEntity(name, color, rotation).set(x, y).add(effectGroup);
+					new EffectEntity(name, color, rotation).set(x, y).add(world[player.dimension].effectGroup);
 				}
 			}
 		});
@@ -183,8 +183,8 @@ public class Renderer extends RendererModule {
 		blocks.drawBlocks(false);
 
 		Graphics.shader(Shaders.outline, false);
-		Entities.draw(enemyGroup);
-		Entities.draw(playerGroup, p -> !p.isAndroid);
+		world[player.dimension].ents.draw(world[player.dimension].enemyGroup);
+		world[player.dimension].ents.draw(world[player.dimension].playerGroup, p -> !p.isAndroid);
 		Graphics.shader();
 
 		Entities.draw(Entities.defaultGroup());
@@ -192,11 +192,11 @@ public class Renderer extends RendererModule {
 		blocks.drawBlocks(true);
 
 		Graphics.shader(Shaders.outline, false);
-		Entities.draw(playerGroup, p -> p.isAndroid);
+		world[player.dimension].ents.draw(world[player.dimension].playerGroup, p -> p.isAndroid);
 		Graphics.shader();
 
-		Entities.draw(bulletGroup);
-		Entities.draw(effectGroup);
+		world[player.dimension].ents.draw(world[player.dimension].bulletGroup);
+		world[player.dimension].ents.draw(world[player.dimension].effectGroup);
 
 		drawShield();
 
@@ -258,7 +258,7 @@ public class Renderer extends RendererModule {
 		GlyphLayout layout = Pools.obtain(GlyphLayout.class);
 
 		Draw.tscl(0.25f / 2);
-		for (Player player : playerGroup.all()) {
+		for (Player player : world[player.dimension].playerGroup.all()) {
 			if (!player.isLocal && !player.isDead()) {
 				layout.setText(Core.font, player.name);
 				Draw.color(0f, 0f, 0f, 0.3f);
@@ -282,7 +282,7 @@ public class Renderer extends RendererModule {
 		Graphics.surface(indicatorSurface);
 		Draw.color(Color.RED);
 
-		for(Enemy enemy : enemyGroup.all()) {
+		for(Enemy enemy : world[player.dimension].enemyGroup.all()) {
 
 			if (rect.setSize(camera.viewportWidth, camera.viewportHeight).setCenter(camera.position.x, camera.position.y)
 					.overlaps(enemy.hitbox.getRect(enemy.x, enemy.y))) {
@@ -305,7 +305,7 @@ public class Renderer extends RendererModule {
 		Graphics.surface(indicatorSurface);
 		Draw.color(Color.GREEN);
 
-		for(Player playr : playerGroup.all()) {
+		for(Player playr : world[player.dimension].playerGroup.all()) {
 
 			if (!player.isLocal && !player.isDead())
 				continue;
@@ -327,11 +327,11 @@ public class Renderer extends RendererModule {
 	}
 
 	void drawShield() {
-		if (shieldGroup.size() == 0 && shieldDraws.size == 0) return;
+		if (world[player.dimension].shieldGroup.size() == 0 && shieldDraws.size == 0) return;
 
 		Graphics.surface(renderer.shieldSurface, false);
 		Draw.color(Color.ROYAL);
-		Entities.draw(shieldGroup);
+		world[player.dimension].ents.draw(world[player.dimension].shieldGroup);
 		for (Callable c : shieldDraws) {
 			c.run();
 		}
@@ -527,11 +527,11 @@ public class Renderer extends RendererModule {
 		if ((!debug || showUI) && Settings.getBool("healthbars")) {
 
 			//draw entity health bars
-			for (Enemy entity : enemyGroup.all()) {
+			for (Enemy entity : world[player.dimension].enemyGroup.all()) {
 				drawHealth(entity);
 			}
 
-			for (Player player : playerGroup.all()) {
+			for (Player player : world[player.dimension].playerGroup.all()) {
 				if (!player.isDead() && !player.isAndroid) drawHealth(player);
 			}
 		}

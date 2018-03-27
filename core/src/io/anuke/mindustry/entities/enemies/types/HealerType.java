@@ -11,12 +11,11 @@ import io.anuke.mindustry.graphics.Shaders;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Timers;
-import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.graphics.Shapes;
 
-import static io.anuke.mindustry.Vars.enemyGroup;
+import static io.anuke.mindustry.Vars.world;
 
 public class HealerType extends EnemyType {
 
@@ -48,7 +47,7 @@ public class HealerType extends EnemyType {
 	@Override
 	public void updateTargeting(Enemy enemy, boolean nearCore){
 		if(enemy.timer.get(timerTarget, 15)){
-			enemy.target = Entities.getClosest(enemyGroup,
+			enemy.target = world[enemy.dimension].ents.getClosest(world[enemy.dimension].enemyGroup,
 					enemy.x, enemy.y, range, e -> e instanceof Enemy && e != enemy && ((Enemy)e).healthfrac() < 1f);
 		}
 		

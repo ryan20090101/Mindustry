@@ -2,7 +2,10 @@ package io.anuke.mindustry.entities.effect;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import io.anuke.mindustry.entities.AltDimEntity;
+import io.anuke.mindustry.entities.DestructibleAltDimEntity;
 import io.anuke.mindustry.entities.Player;
+import io.anuke.mindustry.entities.SolidAltDimEntity;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Effects.Effect;
@@ -16,13 +19,15 @@ import io.anuke.ucore.util.Physics;
 import io.anuke.ucore.util.Translator;
 
 import static io.anuke.mindustry.Vars.*;
+import static io.anuke.mindustry.core.World.enemyGroup;
+import static io.anuke.mindustry.core.World.playerGroup;
 
 public class DamageArea{
 	private static Rectangle rect = new Rectangle();
 	private static Translator tr = new Translator();
 
 	//only for entities, not tiles (yet!)
-	public static void damageLine(Entity owner, Effect effect, float x, float y, float angle, float length, int damage){
+	public static void damageLine(AltDimEntity owner, Effect effect, float x, float y, float angle, float length, int damage){
 		tr.trns(angle, length);
 		rect.setPosition(x, y).setSize(tr.x, tr.y);
 		float x2 = tr.x + x, y2 = tr.y + y;
@@ -44,9 +49,9 @@ public class DamageArea{
 		rect.width += expand*2;
 		rect.height += expand*2;
 
-        Consumer<SolidEntity> cons = e -> {
+        Consumer<SolidAltDimEntity> cons = e -> {
             if(e == owner || (e instanceof  Player && ((Player)e).isFlying)) return;
-            DestructibleEntity enemy = (DestructibleEntity) e;
+			DestructibleAltDimEntity enemy = (DestructibleAltDimEntity) e;
             Rectangle other = enemy.hitbox.getRect(enemy.x, enemy.y);
             other.y -= expand;
             other.x -= expand;
@@ -61,7 +66,7 @@ public class DamageArea{
             }
         };
 
-		Entities.getNearby(enemyGroup, rect, cons);
+		world[owner.dimension].ents.getNearby(world[owner.dimension].enemyGroup, rect, cons);
         if(state.friendlyFire) Entities.getNearby(playerGroup, rect, cons);
 	}
 	
@@ -76,8 +81,8 @@ public class DamageArea{
 	}
 	
 	public static void damage(boolean enemies, float x, float y, float radius, int damage){
-		Consumer<SolidEntity> cons = entity -> {
-			DestructibleEntity enemy = (DestructibleEntity)entity;
+		Consumer<SolidAltDimEntity> cons = entity -> {
+			DestructibleAltDimEntity enemy = (DestructibleAltDimEntity)entity;
 			if(enemy.distanceTo(x, y) > radius || (entity instanceof Player && ((Player)entity).isFlying)){
 				return;
 			}

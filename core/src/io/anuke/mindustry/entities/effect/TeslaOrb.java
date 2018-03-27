@@ -8,19 +8,19 @@ import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.graphics.Fx;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Timers;
-import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.Entity;
 import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Mathf;
 
-import static io.anuke.mindustry.Vars.enemyGroup;
+import static io.anuke.mindustry.Vars.world;
 
 public class TeslaOrb extends Entity{
 	private Array<Vector2> points = new Array<>();
 	private ObjectSet<Enemy> hit = new ObjectSet<>();
 	private int damage = 0;
+	private int dimension = 0;
 	private float range = 0;
 	private float lifetime = 30f;
 	private float life = 0f;
@@ -44,7 +44,7 @@ public class TeslaOrb extends Entity{
 				break;
 			}
 			
-			Array<SolidEntity> enemies = Entities.getNearby(enemyGroup, curx, cury, range*2f);
+			Array<SolidEntity> enemies = world[dimension].ents.getNearby(world[dimension].enemyGroup, curx, cury, range*2f);
 			
 			for(SolidEntity entity : enemies){
 				if(entity != null && entity.distanceTo(curx, cury) < range && !hit.contains((Enemy)entity)){
