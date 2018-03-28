@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
-import io.anuke.mindustry.entities.SolidAltDimEntity;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.graphics.Fx;
 import io.anuke.ucore.core.Effects;
@@ -45,9 +44,9 @@ public class TeslaOrb extends Entity{
 				break;
 			}
 			
-			Array<SolidAltDimEntity> enemies = world[dimension].ents.getNearby(world[dimension].enemyGroup, curx, cury, range*2f);
+			Array<SolidEntity> enemies = world[dimension].ents.getNearby(world[dimension].enemyGroup, curx, cury, range*2f);
 			
-			for(SolidAltDimEntity entity : enemies){
+			for(SolidEntity entity : enemies){
 				if(entity != null && entity.distanceTo(curx, cury) < range && !hit.contains((Enemy)entity)){
 					hit.add((Enemy)entity);
 					points.add(new Vector2(entity.x + Mathf.range(shake), entity.y + Mathf.range(shake)));

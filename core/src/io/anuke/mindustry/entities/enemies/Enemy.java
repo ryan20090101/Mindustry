@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import io.anuke.mindustry.entities.*;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
+import io.anuke.ucore.entities.BulletEntity;
 import io.anuke.ucore.entities.Entity;
+import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timer;
@@ -30,7 +32,7 @@ public class Enemy extends SyncEntity {
 	public Vector2 velocity = new Vector2();
 	public Vector2 totalMove = new Vector2();
 	public Vector2 tpos = new Vector2(-999, -999);
-	public AltDimEntity target;
+	public Entity target;
 	public float hitTime;
 	public int tier = 1;
 
@@ -65,8 +67,8 @@ public class Enemy extends SyncEntity {
 	}
 
 	@Override
-	public boolean collides(SolidAltDimEntity other){
-		return (other instanceof AltDimBullet) && !(((AltDimBullet) other).owner instanceof Enemy);
+	public boolean collides(SolidEntity other){
+		return (other instanceof BulletEntity) && !(((BulletEntity) other).owner instanceof Enemy);
 	}
 
 	@Override
@@ -150,7 +152,7 @@ public class Enemy extends SyncEntity {
 
 		if(!(Net.client())) {
 			tr.trns(angle + rotation, type.length);
-			AltDimBullet out = new AltDimBullet(bullet, this, x + tr.x, y + tr.y, this.angle + rotation).add();
+			BulletEntity out = new Bullet(bullet, this, x + tr.x, y + tr.y, this.angle + rotation).add();
 			out.damage = (int) ((bullet.damage * (1 + (tier - 1) * 1f)));
 			type.onShoot(this, bullet, rotation);
 

@@ -436,7 +436,7 @@ public class KryoServer implements ServerProvider {
                 if (k == null) return;
 
                 if(message.equals("_ping_")){
-                    conn.send("---" + Vars.playerGroup.size() + "|" + (headless ? "Server" : Vars.player.name)
+                    conn.send("---" + world[0].playerGroup.size() + "|" + (headless ? "Server" : Vars.player.name)
                     + "|" + world[0].getMap().name + "|" + state.wave + "|" + Version.build);
                     connections.remove(k);
                 }else {

@@ -3,7 +3,6 @@ package io.anuke.mindustry.core;
 import com.badlogic.gdx.utils.*;
 import io.anuke.mindustry.command.Commands;
 import io.anuke.mindustry.core.GameState.State;
-import io.anuke.mindustry.entities.AltDimEntityGroup;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.SyncEntity;
 import io.anuke.mindustry.game.EventType.GameOverEvent;
@@ -19,7 +18,7 @@ import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Placement;
 import io.anuke.ucore.core.Events;
 import io.anuke.ucore.core.Timers;
-import io.anuke.ucore.entities.Entities;
+import io.anuke.ucore.entities.EntityGroup;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Log;
 import io.anuke.ucore.util.Timer;
@@ -174,7 +173,7 @@ public class NetServer extends Module {
 
             Block block = Block.getByID(packet.block);
 
-            if (!Placement.validPlace(packet.x, packet.y, block)) return;
+            if (!Placement.validPlace(packet.x, packet.y, packet.dimension, block)) return;
 
             Recipe recipe = Recipes.getByResult(block);
 
@@ -247,7 +246,7 @@ public class NetServer extends Module {
         Net.handleServer(EntityRequestPacket.class, (cid, packet) -> {
             int id = packet.id;
             int dest = cid;
-            AltDimEntityGroup group = world[packet.dimension].ents.getGroup(packet.group);
+            EntityGroup group = world[packet.dimension].ents.getGroup(packet.group);
             if (group.getByID(id) != null) {
                 EntitySpawnPacket p = new EntitySpawnPacket();
                 p.entity = (SyncEntity) group.getByID(id);
@@ -345,7 +344,7 @@ public class NetServer extends Module {
             //scan through all groups with syncable entities
 
             for (int di = 0; di < dimensionIds; di++) {
-                for (AltDimEntityGroup<?> group : world[di].ents.getAllGroups()) {
+                for (EntityGroup<?> group : world[di].ents.getAllGroups()) {
                     if (group.size() == 0 || !(group.all().iterator().next() instanceof SyncEntity)) continue;
 
                     //get write size for one entity (adding 4, as you need to write the ID as well)

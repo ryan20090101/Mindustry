@@ -45,7 +45,7 @@ public class AdminsDialog extends FloatingDialog {
             res.addImageButton("icon-cancel", 14*3, () -> {
                 ui.showConfirm("$text.confirm", "$text.confirmunadmin", () -> {
                     netServer.admins.unAdminPlayer(ip);
-                    for(Player player : playerGroup.all()){
+                    for(Player player : world[player.dimension].playerGroup.all()){
                         NetConnection c = Net.getConnection(player.clientid);
                         if(c != null){
                             NetEvents.handleAdminSet(player, false);

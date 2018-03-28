@@ -2,8 +2,7 @@ package io.anuke.kryonet;
 
 import io.anuke.mindustry.core.ThreadHandler.ThreadProvider;
 import io.anuke.ucore.entities.Entity;
-import io.anuke.ucore.entities.AltDimEntityGroup;
-import io.anuke.ucore.entities.AltDimEntityGroup.EntityContainer;
+import io.anuke.ucore.entities.EntityGroup;
 import io.anuke.ucore.util.Log;
 
 import java.util.Iterator;
@@ -55,11 +54,11 @@ public class DefaultThreadImpl implements ThreadProvider {
     }
 
     @Override
-    public <T extends Entity> void switchContainer(AltDimEntityGroup<T> group) {
+    public <T extends Entity> void switchContainer(EntityGroup<T> group) {
         group.setContainer(new ConcurrentContainer<>());
     }
 
-    static class ConcurrentContainer<T> implements EntityContainer<T>{
+    static class ConcurrentContainer<T> implements EntityGroup.EntityContainer<T> {
         private CopyOnWriteArrayList<T> list = new CopyOnWriteArrayList<>();
 
         @Override

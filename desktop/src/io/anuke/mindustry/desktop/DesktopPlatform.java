@@ -70,7 +70,7 @@ public class DesktopPlatform extends Platform {
 
             if(Net.active()){
                 presence.partyMax = 16;
-                presence.partySize = playerGroup.size();
+                presence.partySize = world[0].playerGroup.size();
                 presence.state = Strings.capitalize(state.mode.name());
             }
         }else{

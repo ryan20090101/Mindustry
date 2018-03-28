@@ -12,6 +12,7 @@ import io.anuke.mindustry.resource.Weapon;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.*;
+import io.anuke.ucore.entities.BulletEntity;
 import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Angles;
@@ -80,8 +81,8 @@ public class Player extends SyncEntity{
 
 	@Override
 	public boolean collides(SolidEntity other){
-		if(other instanceof AltDimBullet){
-			AltDimBullet b = (AltDimBullet)other;
+		if(other instanceof BulletEntity){
+			BulletEntity b = (BulletEntity)other;
 			if(!state.friendlyFire && b.owner instanceof Player){
 				return false;
 			}

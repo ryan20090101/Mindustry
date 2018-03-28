@@ -3,7 +3,6 @@ package io.anuke.mindustry.net;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import io.anuke.mindustry.entities.AltDimEntityGroup;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.SyncEntity;
 import io.anuke.mindustry.io.Version;
@@ -11,6 +10,8 @@ import io.anuke.mindustry.net.Packet.ImportantPacket;
 import io.anuke.mindustry.net.Packet.UnimportantPacket;
 import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.world.Block;
+import io.anuke.ucore.entities.EntityGroup;
+
 import java.nio.ByteBuffer;
 
 import static io.anuke.mindustry.Vars.world;
@@ -222,7 +223,7 @@ public class Packets {
     }
 
     public static class PlacePacket implements Packet{
-        public int playerid;
+        public int playerid,dimension;
         public byte rotation;
         public short x, y;
         public int block;
@@ -230,6 +231,7 @@ public class Packets {
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(playerid);
+            buffer.put((byte) dimension);
             buffer.put(rotation);
             buffer.putShort(x);
             buffer.putShort(y);
@@ -239,6 +241,7 @@ public class Packets {
         @Override
         public void read(ByteBuffer buffer) {
             playerid = buffer.getInt();
+            dimension = buffer.get();
             rotation = buffer.get();
             x = buffer.getShort();
             y = buffer.getShort();
@@ -246,16 +249,18 @@ public class Packets {
         }
     }
     public static class CarryPacket implements Packet{
-        public int playerid;
+        public int playerid,dimension;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(playerid);
+            buffer.put((byte)dimension);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             playerid = buffer.getInt();
+            dimension = buffer.get();
         }
     }
 
@@ -281,7 +286,7 @@ public class Packets {
     public static class EntitySpawnPacket implements Packet{
         public SyncEntity entity;
         public int dimension;
-        public AltDimEntityGroup<?> group;
+        public EntityGroup<?> group;
 
         @Override
         public void write(ByteBuffer buffer){

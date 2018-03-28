@@ -1,6 +1,6 @@
 package io.anuke.mindustry.entities.enemies.types;
 
-import io.anuke.mindustry.entities.AltDimBullet;
+import io.anuke.mindustry.entities.Bullet;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.entities.enemies.Enemy;
@@ -45,7 +45,7 @@ public class BlastType extends EnemyType {
 	}
 	
 	void explode(Enemy enemy){
-		AltDimBullet b = new AltDimBullet(BulletType.blast, enemy, enemy.x, enemy.y, 0).add();
+		Bullet b = new Bullet(BulletType.blast, enemy, enemy.x, enemy.y, 0).add();
 		b.damage = BulletType.blast.damage + (enemy.tier-1) * 40;
 		enemy.damage(999);
 		enemy.remove();

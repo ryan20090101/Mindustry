@@ -14,8 +14,7 @@ import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.DistributionBlocks;
 import io.anuke.mindustry.world.blocks.ProductionBlocks;
 import io.anuke.mindustry.world.blocks.WeaponBlocks;
-import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.Entity;
+import io.anuke.ucore.entities.*;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Tmp;
@@ -25,13 +24,13 @@ import static io.anuke.mindustry.Vars.*;
 public class World extends Module {
 	private int seed;
 
-	public AltDimEntities ents;
-	public static final AltDimEntityGroup<Player> playerGroup = AltDimEntities.addGroup(Player.class).enableMapping();
-	public static final AltDimEntityGroup<Enemy> enemyGroup = AltDimEntities.addGroup(Enemy.class).enableMapping();
-	public static final AltDimEntityGroup<TileEntity> tileGroup = AltDimEntities.addGroup(TileEntity.class, false);
-	public static final AltDimEntityGroup<AltDimBullet> bulletGroup = AltDimEntities.addGroup(AltDimBullet.class);
-	public static final AltDimEntityGroup<Shield> shieldGroup = AltDimEntities.addGroup(Shield.class, false);
-	//public static final AltDimEntityGroup<EffectEntity> effectGroup = AltDimEntities.addGroup(EffectEntity.class, false);
+	public Entities ents;
+	public EntityGroup<Player> playerGroup = ents.addGroup(Player.class).enableMapping();
+	public EntityGroup<Enemy> enemyGroup = ents.addGroup(Enemy.class).enableMapping();
+	public EntityGroup<TileEntity> tileGroup = ents.addGroup(TileEntity.class, false);
+	public EntityGroup<BulletEntity> bulletGroup = ents.addGroup(BulletEntity.class);
+	public EntityGroup<Shield> shieldGroup = ents.addGroup(Shield.class, false);
+	public EntityGroup<EffectEntity> effectGroup = ents.addGroup(EffectEntity.class, false);
 
 	public Map currentMap;
 	public int worldDimension;
@@ -249,7 +248,7 @@ public class World extends Module {
 	}
 
 	public TileEntity findTileTarget(float x, float y, Tile tile, float range, boolean damaged) {
-		AltDimEntity closest = null;
+		Entity closest = null;
 		float dst = 0;
 
 		int rad = (int) (range / tilesize) + 1;

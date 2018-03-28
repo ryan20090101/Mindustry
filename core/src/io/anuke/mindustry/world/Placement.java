@@ -89,7 +89,7 @@ public class Placement {
         if (effects && sound) threads.run(() -> Effects.sound("place", x * tilesize, y * tilesize));
     }
 
-    public static boolean validPlace(int x, int y, Block type){
+    public static boolean validPlace(int x, int y, int dimension, Block type){
         for(int i = 0; i < world[player.dimension].getSpawns().size; i ++){
             SpawnPoint spawn = world[player.dimension].getSpawns().get(i);
             if(Vector2.dst(x * tilesize, y * tilesize, spawn.start.worldx(), spawn.start.worldy()) < enemyspawnspace){
@@ -111,7 +111,7 @@ public class Placement {
         rect.setCenter(offset.x + x * tilesize, offset.y + y * tilesize);
 
         synchronized (Entities.entityLock) {
-            for (SolidEntity e : Entities.getNearby(enemyGroup, x * tilesize, y * tilesize, tilesize * 2f)) {
+            for (SolidEntity e : world[dimension].ents.getNearby(world[dimension].enemyGroup, x * tilesize, y * tilesize, tilesize * 2f)) {
                 if (e == null) continue; //not sure why this happens?
                 Rectangle rect = e.hitbox.getRect(e.x, e.y);
 
@@ -122,7 +122,7 @@ public class Placement {
         }
 
         if(type.solid || type.solidifes) {
-            for (Player player : playerGroup.all()) {
+            for (Player player : world[dimension].playerGroup.all()) {
                 if (!player.isAndroid && rect.overlaps(player.hitbox.getRect(player.x, player.y))) {
                     return false;
                 }

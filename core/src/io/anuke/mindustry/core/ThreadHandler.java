@@ -6,8 +6,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.Entity;
-import io.anuke.ucore.entities.AltDimEntityGroup;
-import io.anuke.ucore.entities.AltDimEntityGroup.ArrayContainer;
+import io.anuke.ucore.entities.EntityGroup;
 import io.anuke.ucore.util.Log;
 
 import static io.anuke.mindustry.Vars.control;
@@ -70,7 +69,7 @@ public class ThreadHandler {
     public void setEnabled(boolean enabled){
         if(enabled){
             logic.doUpdate = false;
-            for(AltDimEntityGroup<?> group : Entities.getAllGroups()){
+            for(EntityGroup<?> group : Entities.getAllGroups()){
                 impl.switchContainer(group);
             }
             Timers.runTask(2f, () -> {
@@ -80,8 +79,8 @@ public class ThreadHandler {
         }else{
             this.enabled = false;
             impl.stop();
-            for(AltDimEntityGroup<?> group : Entities.getAllGroups()){
-                group.setContainer(new ArrayContainer<>());
+            for(EntityGroup<?> group : Entities.getAllGroups()){
+                group.setContainer(new EntityGroup.ArrayContainer<>());
             }
             Timers.runTask(2f, () -> {
                 logic.doUpdate = true;
@@ -140,6 +139,6 @@ public class ThreadHandler {
         void stop();
         void wait(Object object) throws InterruptedException;
         void notify(Object object);
-        <T extends Entity> void switchContainer(AltDimEntityGroup<T> group);
+        <T extends Entity> void switchContainer(EntityGroup<T> group);
     }
 }

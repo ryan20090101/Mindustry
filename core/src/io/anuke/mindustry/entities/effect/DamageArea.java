@@ -2,14 +2,13 @@ package io.anuke.mindustry.entities.effect;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import io.anuke.mindustry.entities.AltDimEntity;
-import io.anuke.mindustry.entities.DestructibleAltDimEntity;
 import io.anuke.mindustry.entities.Player;
-import io.anuke.mindustry.entities.SolidAltDimEntity;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Effects.Effect;
-import io.anuke.ucore.entities.Entities;
+import io.anuke.ucore.entities.DestructibleEntity;
+import io.anuke.ucore.entities.Entity;
+import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.function.Consumer;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Physics;
@@ -22,7 +21,7 @@ public class DamageArea{
 	private static Translator tr = new Translator();
 
 	//only for entities, not tiles (yet!)
-	public static void damageLine(AltDimEntity owner, Effect effect, float x, float y, float angle, float length, int damage){
+	public static void damageLine(Entity owner, Effect effect, float x, float y, float angle, float length, int damage){
 		tr.trns(angle, length);
 		rect.setPosition(x, y).setSize(tr.x, tr.y);
 		float x2 = tr.x + x, y2 = tr.y + y;
@@ -44,9 +43,9 @@ public class DamageArea{
 		rect.width += expand*2;
 		rect.height += expand*2;
 
-        Consumer<SolidAltDimEntity> cons = e -> {
+        Consumer<SolidEntity> cons = e -> {
             if(e == owner || (e instanceof  Player && ((Player)e).isFlying)) return;
-			DestructibleAltDimEntity enemy = (DestructibleAltDimEntity) e;
+			DestructibleEntity enemy = (DestructibleEntity) e;
             Rectangle other = enemy.hitbox.getRect(enemy.x, enemy.y);
             other.y -= expand;
             other.x -= expand;
@@ -76,8 +75,8 @@ public class DamageArea{
 	}
 	
 	public static void damage(boolean enemies, float x, float y, float radius, int damage){
-		Consumer<SolidAltDimEntity> cons = entity -> {
-			DestructibleAltDimEntity enemy = (DestructibleAltDimEntity)entity;
+		Consumer<SolidEntity> cons = entity -> {
+			DestructibleEntity enemy = (DestructibleEntity)entity;
 			if(enemy.distanceTo(x, y) > radius || (entity instanceof Player && ((Player)entity).isFlying)){
 				return;
 			}

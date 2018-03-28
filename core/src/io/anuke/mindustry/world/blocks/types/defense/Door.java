@@ -69,7 +69,7 @@ public class Door extends Wall{
 		rect.setSize(type.size * tilesize, type.size * tilesize);
 		rect.setCenter(tile.drawx(), tile.drawy());
 		
-		for(SolidEntity e : Entities.getNearby(enemyGroup, x * tilesize, y * tilesize, tilesize * 2f)){
+		for(SolidEntity e : world[tile.dimension].ents.getNearby(world[tile.dimension].enemyGroup, x * tilesize, y * tilesize, tilesize * 2f)){
 			Rectangle rect = e.hitbox.getRect(e.x, e.y);
 
 			if(this.rect.overlaps(rect)){
@@ -77,7 +77,7 @@ public class Door extends Wall{
 			}
 		}
 
-		for(SolidEntity e : Entities.getNearby(playerGroup, x * tilesize, y * tilesize, tilesize * 2f)){
+		for(SolidEntity e : world[tile.dimension].ents.getNearby(world[tile.dimension].playerGroup, x * tilesize, y * tilesize, tilesize * 2f)){
 			Rectangle rect = e.hitbox.getRect(e.x, e.y);
 
 			if(this.rect.overlaps(rect)){

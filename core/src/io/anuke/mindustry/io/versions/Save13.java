@@ -19,7 +19,7 @@ import io.anuke.mindustry.world.blocks.types.BlockPart;
 import io.anuke.mindustry.world.blocks.types.Rock;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.AltDimEntityGroup.EntityContainer;
+import io.anuke.ucore.entities.EntityGroup;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -107,7 +107,7 @@ public class Save13 extends SaveFileVersion {
                 enemy.x = x;
                 enemy.y = y;
                 enemy.tier = tier;
-                enemy.add(enemyGroup);
+                enemy.add(world[enemy.dimension].enemyGroup);
                 enemiesToUpdate.add(enemy);
             }catch (Exception e){
                 throw new RuntimeException(e);
@@ -230,7 +230,7 @@ public class Save13 extends SaveFileVersion {
         }
 
         //--ENEMIES--
-        EntityContainer<Enemy> enemies = enemyGroup.all();
+        EntityGroup.EntityContainer<Enemy> enemies = world[0].enemyGroup.all();
 
         stream.writeInt(enemies.size()); //enemy amount
 

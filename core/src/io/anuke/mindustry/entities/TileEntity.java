@@ -19,7 +19,7 @@ import java.io.IOException;
 
 import static io.anuke.mindustry.Vars.world;
 
-public class TileEntity extends AltDimEntity{
+public class TileEntity extends Entity{
 	public Tile tile;
 	public int[] items = new int[Item.getAllItems().size];
 	public Timer timer;
@@ -81,7 +81,7 @@ public class TileEntity extends AltDimEntity{
 		}
 	}
 	
-	public void collision(AltDimBullet other){
+	public void collision(Bullet other){
 		damage(other.getDamage());
 	}
 	
@@ -97,7 +97,7 @@ public class TileEntity extends AltDimEntity{
 		}
 	}
 	
-	public boolean collide(AltDimBullet other){
+	public boolean collide(Bullet other){
 		return true;
 	}
 	

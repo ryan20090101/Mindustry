@@ -90,7 +90,7 @@ public abstract class InputHandler extends InputAdapter{
 			return false;
 		}
 
-		return Placement.validPlace(x, y, type);
+		return Placement.validPlace(x, y, player.dimension,type);
 	}
 	
 	public boolean validBreak(int x, int y){

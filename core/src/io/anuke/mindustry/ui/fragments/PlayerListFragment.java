@@ -34,8 +34,8 @@ public class PlayerListFragment implements Fragment{
         new table(){{
             new table("pane"){{
                 margin(14f);
-                new label(() -> Bundles.format(playerGroup.size() == 1 ? "text.players.single" :
-                        "text.players", playerGroup.size()));
+                new label(() -> Bundles.format(world[player.dimension].playerGroup.size() == 1 ? "text.players.single" :
+                        "text.players", world[player.dimension].playerGroup.size()));
                 row();
                 content.marginRight(13f).marginLeft(13f);
                 ScrollPane pane = new ScrollPane(content, "clear");
@@ -69,9 +69,9 @@ public class PlayerListFragment implements Fragment{
                 if(!(Net.active() && !state.is(State.menu))){
                     visible = false;
                 }
-                if(playerGroup.size() != last){
+                if(world[player.dimension].playerGroup.size() != last){
                     rebuild();
-                    last = playerGroup.size();
+                    last = world[player.dimension].playerGroup.size();
                 }
             });
 
@@ -86,7 +86,7 @@ public class PlayerListFragment implements Fragment{
 
         float h = 74f;
 
-        for(Player player : playerGroup.all()){
+        for(Player player : world[player.dimension].playerGroup.all()){
             NetConnection connection = gwt ? null : Net.getConnection(player.clientid);
 
             if(connection == null && Net.server() && !player.isLocal) continue;

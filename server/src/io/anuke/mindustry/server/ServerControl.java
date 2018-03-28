@@ -179,9 +179,9 @@ public class ServerControl extends Module {
                     info("&ly{0} seconds until next wave.", (int)(state.wavetime / 60));
                 }
 
-                if(playerGroup.size() > 0) {
-                    info("&lyPlayers: {0}", playerGroup.size());
-                    for (Player p : playerGroup.all()) {
+                if(world[0].playerGroup.size() > 0) {
+                    info("&lyPlayers: {0}", world[0].playerGroup.size());
+                    for (Player p : world[0].playerGroup.all()) {
                         print("   &y" + p.name);
                     }
                 }else{
@@ -195,9 +195,9 @@ public class ServerControl extends Module {
             if(state.is(State.menu)){
                 info("&lyServer is closed.");
             }else{
-                if(playerGroup.size() > 0) {
-                    info("&lyPlayers: {0}", playerGroup.size());
-                    for (Player p : playerGroup.all()) {
+                if(world[0].playerGroup.size() > 0) {
+                    info("&lyPlayers: {0}", world[0].playerGroup.size());
+                    for (Player p : world[0].playerGroup.all()) {
                         print("   &y{0} / Connection {1} / IP: {2}", p.name, p.clientid, Net.getConnection(p.clientid).address);
                     }
                 }else{
@@ -261,7 +261,7 @@ public class ServerControl extends Module {
 
             Player target = null;
 
-            for(Player player : playerGroup.all()){
+            for(Player player : world[0].playerGroup.all()){
                 if(player.name.equalsIgnoreCase(arg[0])){
                     target = player;
                     break;
@@ -284,7 +284,7 @@ public class ServerControl extends Module {
 
             Player target = null;
 
-            for(Player player : playerGroup.all()){
+            for(Player player : world[0].playerGroup.all()){
                 if(player.name.equalsIgnoreCase(arg[0])){
                     target = player;
                     break;
@@ -331,7 +331,7 @@ public class ServerControl extends Module {
             if(netServer.admins.banPlayerIP(arg[0])) {
                 info("Banned player by IP: {0}.", arg[0]);
 
-                for(Player player : playerGroup.all()){
+                for(Player player : world[0].playerGroup.all()){
                     if(Net.getConnection(player.clientid).address.equals(arg[0])){
                         Net.kickConnection(player.clientid, KickReason.banned);
                         break;
@@ -346,7 +346,7 @@ public class ServerControl extends Module {
             if(netServer.admins.banPlayerID(arg[0])) {
                 info("Banned player by ID: {0}.", arg[0]);
 
-                for(Player player : playerGroup.all()){
+                for(Player player : world[0].playerGroup.all()){
                     if(netServer.admins.getTrace(Net.getConnection(player.clientid).address).uuid.equals(arg[0])){
                         Net.kickConnection(player.clientid, KickReason.banned);
                         break;
@@ -392,7 +392,7 @@ public class ServerControl extends Module {
 
             Player target = null;
 
-            for(Player player : playerGroup.all()){
+            for(Player player : world[0].playerGroup.all()){
                 if(player.name.equalsIgnoreCase(arg[0])){
                     target = player;
                     break;
@@ -417,7 +417,7 @@ public class ServerControl extends Module {
 
             Player target = null;
 
-            for(Player player : playerGroup.all()){
+            for(Player player : world[0].playerGroup.all()){
                 if(player.name.equalsIgnoreCase(arg[0])){
                     target = player;
                     break;
@@ -540,7 +540,7 @@ public class ServerControl extends Module {
 
             Player target = null;
 
-            for(Player player : playerGroup.all()){
+            for(Player player : world[0].playerGroup.all()){
                 if(player.name.equalsIgnoreCase(arg[0])){
                     target = player;
                     break;

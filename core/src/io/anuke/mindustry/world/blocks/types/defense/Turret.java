@@ -2,7 +2,7 @@ package io.anuke.mindustry.world.blocks.types.defense;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
-import io.anuke.mindustry.entities.AltDimBullet;
+import io.anuke.mindustry.entities.Bullet;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.entities.enemies.Enemy;
@@ -151,7 +151,7 @@ public class Turret extends Block{
 		if(hasAmmo(tile) || (debug && infiniteAmmo)){
 			
 			if(entity.timer.get(timerTarget, targetInterval)){
-				entity.target = (Enemy)Entities.getClosest(enemyGroup,
+				entity.target = (Enemy)Entities.getClosest(world[tile.dimension].enemyGroup,
 						tile.worldx(), tile.worldy(), range, e-> e instanceof Enemy && !((Enemy)e).isDead());
 			}
 			
@@ -255,7 +255,7 @@ public class Turret extends Block{
 	}
 	
 	protected void bullet(Tile tile, float angle){
-		new AltDimBullet(bullet, tile.entity, tile.drawx() + tr.x, tile.drawy() + tr.y, angle).add();
+		new Bullet(bullet, tile.entity, tile.drawx() + tr.x, tile.drawy() + tr.y, angle).add();
 	}
 	
 	public static class TurretEntity extends TileEntity{

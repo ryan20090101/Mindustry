@@ -64,7 +64,7 @@ public class KryoRegistrator {
         buffer.put((byte)map.getBytes().length);
         buffer.put(map.getBytes());
 
-        buffer.putInt(playerGroup.size());
+        buffer.putInt(world[0].playerGroup.size());
         buffer.putInt(state.wave);
         buffer.putInt(Version.build);
         return buffer;

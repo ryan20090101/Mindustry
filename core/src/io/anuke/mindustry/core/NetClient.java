@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.TimeUtils;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.*;
-import io.anuke.mindustry.entities.bullets.BaseBulletAltDimType;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.io.Platform;
 import io.anuke.mindustry.net.Net;
@@ -20,9 +19,7 @@ import io.anuke.mindustry.world.Placement;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.ProductionBlocks;
 import io.anuke.ucore.core.Timers;
-import io.anuke.ucore.entities.BaseBulletType;
-import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.Entity;
+import io.anuke.ucore.entities.*;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Log;
 import io.anuke.ucore.util.Timer;
@@ -40,7 +37,7 @@ public class NetClient extends Module {
     private boolean gotData = false;
     private boolean kicked = false;
     private IntSet recieved = new IntSet();
-    private IntMap<AltDimEntity> recent = new IntMap<>();
+    private IntMap<Entity> recent = new IntMap<>();
 
     public NetClient(){
 
@@ -129,7 +126,7 @@ public class NetClient extends Module {
 
             byte groupid = data.get();
 
-            AltDimEntityGroup<?> group = world[player.dimension].ents.getGroup(groupid);
+            EntityGroup<?> group = world[player.dimension].ents.getGroup(groupid);
 
             while (data.position() < data.capacity()) {
                 int id = data.getInt();
@@ -179,8 +176,8 @@ public class NetClient extends Module {
         Net.handleClient(CarryPacket.class, (packet) -> {
             if(!player.carry)
                 player.carry = true;
-            else if(player.carrier != playerGroup.getByID(packet.playerid))
-                player.carrier = playerGroup.getByID(packet.playerid);
+            else if(player.carrier != world[packet.dimension].playerGroup.getByID(packet.playerid))
+                player.carrier = world[packet.dimension].playerGroup.getByID(packet.playerid);
             else
                 player.carry = false;
         });
@@ -189,7 +186,7 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(EntitySpawnPacket.class, packet -> {
-            AltDimEntityGroup group = packet.group;
+            EntityGroup group = packet.group;
 
             //duplicates.
             if (group.getByID(packet.entity.id) != null ||
@@ -217,9 +214,9 @@ public class NetClient extends Module {
 
         Net.handleClient(BulletPacket.class, packet -> {
             //TODO shoot effects for enemies, clientside as well as serverside
-            BulletType type = (BulletType) BaseBulletAltDimType.getByID(packet.type);
-            AltDimEntity owner = world[packet.dimension].enemyGroup.getByID(packet.owner);
-            new AltDimBullet(type, owner, packet.x, packet.y, packet.angle).add();
+            BulletType type = (BulletType) BaseBulletType.getByID(packet.type);
+            Entity owner = world[packet.dimension].enemyGroup.getByID(packet.owner);
+            new Bullet(type, owner, packet.x, packet.y, packet.angle).add();
         });
 
         Net.handleClient(BlockDestroyPacket.class, packet -> {
