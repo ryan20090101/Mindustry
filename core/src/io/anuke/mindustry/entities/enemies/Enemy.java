@@ -2,13 +2,10 @@ package io.anuke.mindustry.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import io.anuke.mindustry.entities.Bullet;
-import io.anuke.mindustry.entities.BulletType;
-import io.anuke.mindustry.entities.SyncEntity;
+import io.anuke.mindustry.entities.*;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.ucore.entities.Entity;
-import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timer;
@@ -16,7 +13,7 @@ import io.anuke.ucore.util.Translator;
 
 import java.nio.ByteBuffer;
 
-import static io.anuke.mindustry.Vars.enemyGroup;
+import static io.anuke.mindustry.Vars.world;
 
 public class Enemy extends SyncEntity {
 	public EnemyType type;
@@ -33,7 +30,7 @@ public class Enemy extends SyncEntity {
 	public Vector2 velocity = new Vector2();
 	public Vector2 totalMove = new Vector2();
 	public Vector2 tpos = new Vector2(-999, -999);
-	public Entity target;
+	public AltDimEntity target;
 	public float hitTime;
 	public int tier = 1;
 
@@ -68,8 +65,8 @@ public class Enemy extends SyncEntity {
 	}
 
 	@Override
-	public boolean collides(SolidEntity other){
-		return (other instanceof Bullet) && !(((Bullet) other).owner instanceof Enemy);
+	public boolean collides(SolidAltDimEntity other){
+		return (other instanceof AltDimBullet) && !(((AltDimBullet) other).owner instanceof Enemy);
 	}
 
 	@Override
@@ -100,7 +97,7 @@ public class Enemy extends SyncEntity {
 	
 	@Override
 	public Enemy add(){
-		return add(enemyGroup);
+		return add(world[dimension].enemyGroup);
 	}
 
 	@Override
@@ -153,7 +150,7 @@ public class Enemy extends SyncEntity {
 
 		if(!(Net.client())) {
 			tr.trns(angle + rotation, type.length);
-			Bullet out = new Bullet(bullet, this, x + tr.x, y + tr.y, this.angle + rotation).add();
+			AltDimBullet out = new AltDimBullet(bullet, this, x + tr.x, y + tr.y, this.angle + rotation).add();
 			out.damage = (int) ((bullet.damage * (1 + (tier - 1) * 1f)));
 			type.onShoot(this, bullet, rotation);
 

@@ -19,7 +19,7 @@ import io.anuke.mindustry.world.blocks.types.BlockPart;
 import io.anuke.mindustry.world.blocks.types.Rock;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.EntityGroup.EntityContainer;
+import io.anuke.ucore.entities.AltDimEntityGroup.EntityContainer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

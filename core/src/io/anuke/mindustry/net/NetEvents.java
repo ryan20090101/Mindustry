@@ -2,6 +2,7 @@ package io.anuke.mindustry.net;
 
 import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.core.Logic;
+import io.anuke.mindustry.entities.AltDimEntity;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.TileEntity;
@@ -32,7 +33,7 @@ public class NetEvents {
         Net.send(new GameOverPacket(), SendMode.tcp);
     }
 
-    public static void handleBullet(BulletType type, Entity owner, float x, float y, float angle, short damage){
+    public static void handleBullet(BulletType type, AltDimEntity owner, float x, float y, float angle, short damage){
         BulletPacket packet = new BulletPacket();
         packet.x = x;
         packet.y = y;

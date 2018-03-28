@@ -6,9 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import io.anuke.ucore.core.Core;
-import io.anuke.ucore.entities.Entity;
-import io.anuke.ucore.entities.EntityCollisions;
-import io.anuke.ucore.entities.EntityGroup;
 import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.function.Consumer;
 import io.anuke.ucore.function.Predicate;
@@ -16,11 +13,11 @@ import io.anuke.ucore.function.Predicate;
 public class AltDimEntities{
     public static final Object entityLock = new Object();
 
-    private static final EntityGroup<AltDimEntity> defaultGroup;
-    private static final Array<EntityGroup<?>> groupArray = new Array<>();
-    private static final IntMap<EntityGroup<?>> groups = new IntMap<>();
+    private static final AltDimEntityGroup<AltDimEntity> defaultGroup;
+    private static final Array<AltDimEntityGroup<?>> groupArray = new Array<>();
+    private static final IntMap<AltDimEntityGroup<?>> groups = new IntMap<>();
 
-    private static final EntityCollisions collisions = new EntityCollisions();
+    private static final AltDimEntityCollisions collisions = new AltDimEntityCollisions();
     private static final Array<SolidAltDimEntity> array = new Array<>();
     private static final Rectangle viewport = new Rectangle();
     private static final Rectangle r1 = new Rectangle();
@@ -32,12 +29,12 @@ public class AltDimEntities{
         defaultGroup = addGroup(AltDimEntity.class);
     }
 
-    public static EntityCollisions collisions(){
+    public static AltDimEntityCollisions collisions(){
         return collisions;
     }
 
     public static void initPhysics(float x, float y, float w, float h){
-        for(EntityGroup group : groupArray){
+        for(AltDimEntityGroup group : groupArray){
             if(group.useTree)
                 group.setTree(x, y, w, h);
         }
@@ -51,7 +48,7 @@ public class AltDimEntities{
         initPhysics(x, y, w, h);
     }
 
-    public static void getNearby(EntityGroup<?> group, Rectangle rect, Consumer<SolidEntity> out){
+    public static void getNearby(AltDimEntityGroup<?> group, Rectangle rect, Consumer<SolidAltDimEntity> out){
         synchronized (entityLock) {
             if (!group.useTree)
                 throw new RuntimeException("This group does not support quadtrees! Enable quadtrees when creating it.");
@@ -59,7 +56,7 @@ public class AltDimEntities{
         }
     }
 
-    public static Array<SolidAltDimEntity> getNearby(EntityGroup<?> group, Rectangle rect){
+    public static Array<SolidAltDimEntity> getNearby(AltDimEntityGroup<?> group, Rectangle rect){
         synchronized (entityLock) {
             array.clear();
             getNearby(group, rect, array::add);
@@ -71,7 +68,7 @@ public class AltDimEntities{
         getNearby(defaultGroup(), r1.setSize(size).setCenter(x, y), out);
     }
 
-    public static void getNearby(EntityGroup<?> group, float x, float y, float size, Consumer<SolidAltDimEntity> out){
+    public static void getNearby(AltDimEntityGroup<?> group, float x, float y, float size, Consumer<SolidAltDimEntity> out){
         getNearby(group, r1.setSize(size).setCenter(x, y), out);
     }
 
@@ -79,11 +76,11 @@ public class AltDimEntities{
         return getNearby(defaultGroup(), r1.setSize(size).setCenter(x, y));
     }
 
-    public static Array<SolidAltDimEntity> getNearby(EntityGroup<?> group, float x, float y, float size){
+    public static Array<SolidAltDimEntity> getNearby(AltDimEntityGroup<?> group, float x, float y, float size){
         return getNearby(group, r1.setSize(size).setCenter(x, y));
     }
 
-    public static SolidAltDimEntity getClosest(EntityGroup<?> group, float x, float y, float range, Predicate<AltDimEntity> pred){
+    public static SolidAltDimEntity getClosest(AltDimEntityGroup<?> group, float x, float y, float range, Predicate<AltDimEntity> pred){
         synchronized (entityLock) {
             SolidAltDimEntity closest = null;
             float cdist = 0f;
@@ -106,7 +103,7 @@ public class AltDimEntities{
     }
 
     public static void clear(){
-        for(EntityGroup group : groupArray){
+        for(AltDimEntityGroup group : groupArray){
             group.clear();
         }
     }
@@ -115,30 +112,30 @@ public class AltDimEntities{
         return defaultGroup.all();
     }
 
-    public static EntityGroup<?> getGroup(int id){
+    public static AltDimEntityGroup<?> getGroup(int id){
         return groups.get(id);
     }
 
-    public static Iterable<EntityGroup<?>> getAllGroups(){
+    public static Iterable<AltDimEntityGroup<?>> getAllGroups(){
         return groups.values();
     }
 
-    public static EntityGroup<AltDimEntity> defaultGroup(){
+    public static AltDimEntityGroup<AltDimEntity> defaultGroup(){
         return defaultGroup;
     }
 
-    public static <T extends AltDimEntity> EntityGroup<T> addGroup(Class<T> type){
+    public static <T extends AltDimEntity> AltDimEntityGroup<T> addGroup(Class<T> type){
         return addGroup(type, true);
     }
 
-    public static <T extends AltDimEntity> EntityGroup<T> addGroup(Class<T> type, boolean useTree){
-        EntityGroup<T> group = new EntityGroup<>(type, useTree);
+    public static <T extends AltDimEntity> AltDimEntityGroup<T> addGroup(Class<T> type, boolean useTree){
+        AltDimEntityGroup<T> group = new AltDimEntityGroup<>(type, useTree);
         groups.put(group.getID(), group);
         groupArray.add(group);
         return group;
     }
 
-    public static void collideGroups(EntityGroup<?> groupa, EntityGroup<?> groupb){
+    public static void collideGroups(AltDimEntityGroup<?> groupa, AltDimEntityGroup<?> groupb){
         collisions().collideGroups(groupa, groupb);
     }
 
@@ -146,11 +143,11 @@ public class AltDimEntities{
         draw(defaultGroup);
     }
 
-    public static <T extends AltDimEntity> void draw(EntityGroup<T> group){
+    public static <T extends AltDimEntity> void draw(AltDimEntityGroup<T> group){
         draw(group, e -> true);
     }
 
-    public static <T extends AltDimEntity> void draw(EntityGroup<T> group, Predicate<T> toDraw){
+    public static <T extends AltDimEntity> void draw(AltDimEntityGroup<T> group, Predicate<T> toDraw){
         OrthographicCamera cam = Core.camera;
         viewport.set(cam.position.x - cam.viewportWidth / 2 * cam.zoom, cam.position.y - cam.viewportHeight / 2 * cam.zoom, cam.viewportWidth * cam.zoom, cam.viewportHeight * cam.zoom);
 
@@ -176,7 +173,7 @@ public class AltDimEntities{
         collideGroups(defaultGroup(), defaultGroup());
     }
 
-    public static void update(EntityGroup<?> group){
+    public static void update(AltDimEntityGroup<?> group){
 
         group.updateEvents();
 

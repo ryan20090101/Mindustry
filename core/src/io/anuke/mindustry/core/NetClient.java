@@ -4,12 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.TimeUtils;
-import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.core.GameState.State;
-import io.anuke.mindustry.entities.Bullet;
-import io.anuke.mindustry.entities.BulletType;
-import io.anuke.mindustry.entities.Player;
-import io.anuke.mindustry.entities.SyncEntity;
+import io.anuke.mindustry.entities.*;
+import io.anuke.mindustry.entities.bullets.BaseBulletAltDimType;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.io.Platform;
 import io.anuke.mindustry.net.Net;
@@ -26,7 +23,6 @@ import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.entities.BaseBulletType;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.Entity;
-import io.anuke.ucore.entities.EntityGroup;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Log;
 import io.anuke.ucore.util.Timer;
@@ -44,7 +40,7 @@ public class NetClient extends Module {
     private boolean gotData = false;
     private boolean kicked = false;
     private IntSet recieved = new IntSet();
-    private IntMap<Entity> recent = new IntMap<>();
+    private IntMap<AltDimEntity> recent = new IntMap<>();
 
     public NetClient(){
 
@@ -133,7 +129,7 @@ public class NetClient extends Module {
 
             byte groupid = data.get();
 
-            EntityGroup<?> group = Entities.getGroup(groupid);
+            AltDimEntityGroup<?> group = world[player.dimension].ents.getGroup(groupid);
 
             while (data.position() < data.capacity()) {
                 int id = data.getInt();
@@ -180,13 +176,20 @@ public class NetClient extends Module {
                 if(tile != null) Block.getByID(packet.block).placed(tile);
             }
         });
-
+        Net.handleClient(CarryPacket.class, (packet) -> {
+            if(!player.carry)
+                player.carry = true;
+            else if(player.carrier != playerGroup.getByID(packet.playerid))
+                player.carrier = playerGroup.getByID(packet.playerid);
+            else
+                player.carry = false;
+        });
         Net.handleClient(BreakPacket.class, (packet) -> {
             Placement.breakBlock(packet.x, packet.y, true, Timers.get("breakblocksound", 10));
         });
 
         Net.handleClient(EntitySpawnPacket.class, packet -> {
-            EntityGroup group = packet.group;
+            AltDimEntityGroup group = packet.group;
 
             //duplicates.
             if (group.getByID(packet.entity.id) != null ||
@@ -201,7 +204,7 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(EnemyDeathPacket.class, packet -> {
-            Enemy enemy = enemyGroup.getByID(packet.id);
+            Enemy enemy = world[packet.dimension].enemyGroup.getByID(packet.id);
             if (enemy != null){
                 enemy.type.onDeath(enemy, true);
             }else if(recent.get(packet.id) != null){
@@ -214,9 +217,9 @@ public class NetClient extends Module {
 
         Net.handleClient(BulletPacket.class, packet -> {
             //TODO shoot effects for enemies, clientside as well as serverside
-            BulletType type = (BulletType) BaseBulletType.getByID(packet.type);
-            Entity owner = enemyGroup.getByID(packet.owner);
-            new Bullet(type, owner, packet.x, packet.y, packet.angle).add();
+            BulletType type = (BulletType) BaseBulletAltDimType.getByID(packet.type);
+            AltDimEntity owner = world[packet.dimension].enemyGroup.getByID(packet.owner);
+            new AltDimBullet(type, owner, packet.x, packet.y, packet.angle).add();
         });
 
         Net.handleClient(BlockDestroyPacket.class, packet -> {
@@ -234,7 +237,7 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(DisconnectPacket.class, packet -> {
-            Player player = playerGroup.getByID(packet.playerid);
+            Player player = world[packet.dimension].playerGroup.getByID(packet.playerid);
 
             if (player != null) {
                 player.remove();
@@ -301,13 +304,13 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(PlayerAdminPacket.class, packet -> {
-            Player player = playerGroup.getByID(packet.id);
+            Player player = world[packet.dimension].playerGroup.getByID(packet.id);
             player.isAdmin = packet.admin;
             ui.listfrag.rebuild();
         });
 
         Net.handleClient(TracePacket.class, packet -> {
-            Player player = playerGroup.getByID(packet.info.playerid);
+            Player player = world[packet.info.dimension].playerGroup.getByID(packet.info.playerid);
             ui.traces.show(player, packet.info);
         });
     }

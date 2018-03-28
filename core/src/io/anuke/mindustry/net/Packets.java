@@ -1,9 +1,9 @@
 package io.anuke.mindustry.net;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import io.anuke.mindustry.entities.AltDimEntityGroup;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.SyncEntity;
 import io.anuke.mindustry.io.Version;
@@ -11,11 +11,9 @@ import io.anuke.mindustry.net.Packet.ImportantPacket;
 import io.anuke.mindustry.net.Packet.UnimportantPacket;
 import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.world.Block;
-import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.EntityGroup;
-
 import java.nio.ByteBuffer;
-import java.util.Map;
+
+import static io.anuke.mindustry.Vars.world;
 
 /**Class for storing all packets.*/
 public class Packets {
@@ -97,16 +95,18 @@ public class Packets {
     }
 
     public static class DisconnectPacket implements Packet{
-        public int playerid;
+        public int playerid,dimension;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(playerid);
+            buffer.put((byte) dimension);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             playerid = buffer.getInt();
+            dimension = buffer.get();
         }
     }
 
@@ -170,11 +170,12 @@ public class Packets {
     public static class ShootPacket implements Packet{
         public byte weaponid;
         public float x, y, rotation;
-        public int playerid;
+        public int playerid,dimension;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.put(weaponid);
+            buffer.put((byte) dimension);
             buffer.putFloat(x);
             buffer.putFloat(y);
             buffer.putFloat(rotation);
@@ -184,6 +185,7 @@ public class Packets {
         @Override
         public void read(ByteBuffer buffer) {
             weaponid = buffer.get();
+            dimension = buffer.get();
             x = buffer.getFloat();
             y = buffer.getFloat();
             rotation = buffer.getFloat();
@@ -192,7 +194,7 @@ public class Packets {
     }
 
     public static class BulletPacket implements Packet{
-        public int type, owner;
+        public int type, owner, dimension;
         public float x, y, angle;
         public short damage;
 
@@ -200,6 +202,7 @@ public class Packets {
         public void write(ByteBuffer buffer) {
             buffer.putShort((short)type);
             buffer.putInt(owner);
+            buffer.put((byte) dimension);
             buffer.putFloat(x);
             buffer.putFloat(y);
             buffer.putFloat(angle);
@@ -210,6 +213,7 @@ public class Packets {
         public void read(ByteBuffer buffer) {
             type = buffer.getShort();
             owner = buffer.getInt();
+            dimension = buffer.get();
             x = buffer.getFloat();
             y = buffer.getFloat();
             angle = buffer.getFloat();
@@ -241,6 +245,19 @@ public class Packets {
             block = buffer.getInt();
         }
     }
+    public static class CarryPacket implements Packet{
+        public int playerid;
+
+        @Override
+        public void write(ByteBuffer buffer) {
+            buffer.putInt(playerid);
+        }
+
+        @Override
+        public void read(ByteBuffer buffer) {
+            playerid = buffer.getInt();
+        }
+    }
 
     public static class BreakPacket implements Packet{
         public int playerid;
@@ -263,11 +280,13 @@ public class Packets {
 
     public static class EntitySpawnPacket implements Packet{
         public SyncEntity entity;
-        public EntityGroup<?> group;
+        public int dimension;
+        public AltDimEntityGroup<?> group;
 
         @Override
         public void write(ByteBuffer buffer){
             buffer.put((byte)group.getID());
+            buffer.put((byte)dimension);
             buffer.putInt(entity.id);
             entity.writeSpawn(buffer);
         }
@@ -275,8 +294,9 @@ public class Packets {
         @Override
         public void read(ByteBuffer buffer) {
             byte groupid = buffer.get();
+            dimension = buffer.get();
             int id = buffer.getInt();
-            group = Entities.getGroup(groupid);
+            group = world[dimension].ents.getGroup(groupid);
             try {
                 entity = (SyncEntity) ClassReflection.newInstance(group.getType());
                 entity.id = id;
@@ -290,15 +310,18 @@ public class Packets {
 
     public static class EnemyDeathPacket implements Packet{
         public int id;
+        public int dimension;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(id);
+            buffer.put((byte)dimension);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             id = buffer.getInt();
+            dimension = buffer.get();
         }
     }
 
@@ -335,7 +358,7 @@ public class Packets {
     public static class ChatPacket implements Packet{
         public String name;
         public String text;
-        public int id;
+        public int id,dimension;
 
         @Override
         public void write(ByteBuffer buffer) {
@@ -348,6 +371,7 @@ public class Packets {
             buffer.putShort((short)text.getBytes().length);
             buffer.put(text.getBytes());
             buffer.putInt(id);
+            buffer.put((byte) dimension);
         }
 
         @Override
@@ -363,6 +387,7 @@ public class Packets {
             buffer.get(t);
 
             id = buffer.getInt();
+            dimension = buffer.get();
             text = new String(t);
         }
     }
@@ -414,12 +439,13 @@ public class Packets {
     }
 
     public static class WeaponSwitchPacket implements Packet{
-        public int playerid;
+        public int playerid, dimension;
         public byte left, right;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(playerid);
+            buffer.put((byte) dimension);
             buffer.put(left);
             buffer.put(right);
         }
@@ -427,6 +453,7 @@ public class Packets {
         @Override
         public void read(ByteBuffer buffer) {
             playerid = buffer.getInt();
+            dimension = buffer.get();
             left = buffer.get();
             right = buffer.get();
         }
@@ -473,18 +500,20 @@ public class Packets {
         }
     }
     public static class EntityRequestPacket implements Packet{
-        public int id;
+        public int id,dimension;
         public byte group;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(id);
+            buffer.put((byte) dimension);
             buffer.put(group);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             id = buffer.getInt();
+            dimension = buffer.get();
             group = buffer.get();
         }
     }
@@ -512,16 +541,18 @@ public class Packets {
     }
 
     public static class PlayerDeathPacket implements Packet{
-        public int id;
+        public int id, dimension;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(id);
+            buffer.put((byte) dimension);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             id = buffer.getInt();
+            dimension = buffer.get();
         }
     }
 
@@ -613,34 +644,38 @@ public class Packets {
 
     public static class PlayerAdminPacket implements Packet{
         public boolean admin;
-        public int id;
+        public int id,dimension;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.put(admin ? (byte)1 : 0);
+            buffer.put((byte) dimension);
             buffer.putInt(id);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             admin = buffer.get() == 1;
+            dimension = buffer.get();
             id = buffer.getInt();
         }
     }
 
     public static class AdministerRequestPacket implements Packet{
         public AdminAction action;
-        public int id;
+        public int id, dimension;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.put((byte)action.ordinal());
+            buffer.put((byte) dimension);
             buffer.putInt(id);
         }
 
         @Override
         public void read(ByteBuffer buffer) {
             action = AdminAction.values()[buffer.get()];
+            dimension = buffer.get();
             id = buffer.getInt();
         }
     }
@@ -655,6 +690,7 @@ public class Packets {
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(info.playerid);
+            buffer.put((byte) info.dimension);
             buffer.putShort((short)info.ip.getBytes().length);
             buffer.put(info.ip.getBytes());
             buffer.put(info.modclient ? (byte)1 : 0);
@@ -672,6 +708,7 @@ public class Packets {
         @Override
         public void read(ByteBuffer buffer) {
             int id = buffer.getInt();
+            int dimension = buffer.get();
             short iplen = buffer.getShort();
             byte[] ipb = new byte[iplen];
             buffer.get(ipb);
@@ -679,6 +716,7 @@ public class Packets {
             info = new TraceInfo(new String(ipb));
 
             info.playerid = id;
+            info.dimension = dimension;
             info.modclient = buffer.get() == 1;
             info.android = buffer.get() == 1;
             info.totalBlocksBroken = buffer.getInt();

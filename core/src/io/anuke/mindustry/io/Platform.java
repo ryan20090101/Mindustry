@@ -2,7 +2,7 @@ package io.anuke.mindustry.io;
 
 import io.anuke.mindustry.core.ThreadHandler.ThreadProvider;
 import io.anuke.ucore.entities.Entity;
-import io.anuke.ucore.entities.EntityGroup;
+import io.anuke.ucore.entities.AltDimEntityGroup;
 import io.anuke.ucore.scene.ui.TextField;
 
 import java.util.Date;
@@ -40,7 +40,7 @@ public abstract class Platform {
 			@Override public void stop() {}
 			@Override public void notify(Object object) {}
 			@Override public void wait(Object object) {}
-			@Override public <T extends Entity> void switchContainer(EntityGroup<T> group) {}
+			@Override public <T extends Entity> void switchContainer(AltDimEntityGroup<T> group) {}
 		};
 	}
 }

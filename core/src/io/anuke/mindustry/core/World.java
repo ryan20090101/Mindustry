@@ -5,10 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.ai.Pathfind;
-import io.anuke.mindustry.entities.AltDimEntities;
-import io.anuke.mindustry.entities.Bullet;
-import io.anuke.mindustry.entities.Player;
-import io.anuke.mindustry.entities.TileEntity;
+import io.anuke.mindustry.entities.*;
 import io.anuke.mindustry.entities.effect.Shield;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.game.SpawnPoint;
@@ -17,10 +14,8 @@ import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.DistributionBlocks;
 import io.anuke.mindustry.world.blocks.ProductionBlocks;
 import io.anuke.mindustry.world.blocks.WeaponBlocks;
-import io.anuke.ucore.entities.EffectEntity;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.Entity;
-import io.anuke.ucore.entities.EntityGroup;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Tmp;
@@ -31,12 +26,12 @@ public class World extends Module {
 	private int seed;
 
 	public AltDimEntities ents;
-	public static final EntityGroup<Player> playerGroup = Entities.addGroup(Player.class).enableMapping();
-	public static final EntityGroup<Enemy> enemyGroup = Entities.addGroup(Enemy.class).enableMapping();
-	public static final EntityGroup<TileEntity> tileGroup = Entities.addGroup(TileEntity.class, false);
-	public static final EntityGroup<Bullet> bulletGroup = Entities.addGroup(Bullet.class);
-	public static final EntityGroup<Shield> shieldGroup = Entities.addGroup(Shield.class, false);
-	public static final EntityGroup<EffectEntity> effectGroup = Entities.addGroup(EffectEntity.class, false);
+	public static final AltDimEntityGroup<Player> playerGroup = AltDimEntities.addGroup(Player.class).enableMapping();
+	public static final AltDimEntityGroup<Enemy> enemyGroup = AltDimEntities.addGroup(Enemy.class).enableMapping();
+	public static final AltDimEntityGroup<TileEntity> tileGroup = AltDimEntities.addGroup(TileEntity.class, false);
+	public static final AltDimEntityGroup<AltDimBullet> bulletGroup = AltDimEntities.addGroup(AltDimBullet.class);
+	public static final AltDimEntityGroup<Shield> shieldGroup = AltDimEntities.addGroup(Shield.class, false);
+	//public static final AltDimEntityGroup<EffectEntity> effectGroup = AltDimEntities.addGroup(EffectEntity.class, false);
 
 	public Map currentMap;
 	public int worldDimension;
@@ -254,7 +249,7 @@ public class World extends Module {
 	}
 
 	public TileEntity findTileTarget(float x, float y, Tile tile, float range, boolean damaged) {
-		Entity closest = null;
+		AltDimEntity closest = null;
 		float dst = 0;
 
 		int rad = (int) (range / tilesize) + 1;

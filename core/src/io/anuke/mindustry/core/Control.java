@@ -380,8 +380,8 @@ public class Control extends Module{
 			}
 
 			if(!state.is(State.paused) || Net.active()){
-				for(int i=0;i<dimensionIds;i++)
-					world[i].ents.update(effectGroup);
+				//for(int i=0;i<dimensionIds;i++)
+				//	world[i].ents.update(effectGroup);
 
 				if(respawntime > 0){
 

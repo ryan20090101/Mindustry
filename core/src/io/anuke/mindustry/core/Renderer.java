@@ -63,7 +63,7 @@ public class Renderer extends RendererModule {
 						.setCenter(camera.position.x, camera.position.y);
 				Rectangle pos = rect2.setSize(name.size).setCenter(x, y);
 				if (view.overlaps(pos)) {
-					new EffectEntity(name, color, rotation).set(x, y).add(world[player.dimension].effectGroup);
+					//new EffectEntity(name, color, rotation).set(x, y).add(world[player.dimension].effectGroup);
 				}
 			}
 		});
@@ -196,7 +196,7 @@ public class Renderer extends RendererModule {
 		Graphics.shader();
 
 		world[player.dimension].ents.draw(world[player.dimension].bulletGroup);
-		world[player.dimension].ents.draw(world[player.dimension].effectGroup);
+		//world[player.dimension].ents.draw(world[player.dimension].effectGroup);
 
 		drawShield();
 

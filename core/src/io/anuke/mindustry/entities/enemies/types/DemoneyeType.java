@@ -60,7 +60,7 @@ public class DemoneyeType extends BossType {
 		if(enemy.timer.get(timerTarget, 15) && !nearCore)
 			enemy.target = null;
         if(enemy.target == null){
-            enemy.target = Entities.getClosest(playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying &&
+            enemy.target = world[dimension].ents.getClosest(world[dimension].playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying &&
                 !((Player)e).isDead());
             return;
         }        

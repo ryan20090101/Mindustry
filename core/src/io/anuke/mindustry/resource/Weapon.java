@@ -1,7 +1,7 @@
 package io.anuke.mindustry.resource;
 
 import io.anuke.mindustry.Vars;
-import io.anuke.mindustry.entities.Bullet;
+import io.anuke.mindustry.entities.AltDimBullet;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.graphics.Fx;
@@ -160,6 +160,6 @@ public class Weapon extends Upgrade{
 	
 	void bullet(Entity owner, float x, float y, float angle){
 		tr.trns(angle, 3f);
-		new Bullet(type, owner,  x + tr.x, y + tr.y, angle).add();
+		new AltDimBullet(type, owner,  x + tr.x, y + tr.y, angle).add();
 	}
 }

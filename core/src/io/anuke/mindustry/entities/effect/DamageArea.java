@@ -9,18 +9,13 @@ import io.anuke.mindustry.entities.SolidAltDimEntity;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Effects.Effect;
-import io.anuke.ucore.entities.DestructibleEntity;
 import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.Entity;
-import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.function.Consumer;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Physics;
 import io.anuke.ucore.util.Translator;
 
 import static io.anuke.mindustry.Vars.*;
-import static io.anuke.mindustry.core.World.enemyGroup;
-import static io.anuke.mindustry.core.World.playerGroup;
 
 public class DamageArea{
 	private static Rectangle rect = new Rectangle();
@@ -67,13 +62,13 @@ public class DamageArea{
         };
 
 		world[owner.dimension].ents.getNearby(world[owner.dimension].enemyGroup, rect, cons);
-        if(state.friendlyFire) Entities.getNearby(playerGroup, rect, cons);
+        if(state.friendlyFire) world[owner.dimension].ents.getNearby(world[owner.dimension].playerGroup, rect, cons);
 	}
 	
 	public static void damageEntities(float x, float y, float radius, int damage){
 		damage(true, x, y, radius, damage);
 
-		for(Player player : playerGroup.all()){
+		for(Player player : world[0].playerGroup.all()){
 			if(player.isFlying) continue;
 			int amount = calculateDamage(x, y, player.x, player.y, radius, damage);
 			player.damage(amount);
@@ -91,7 +86,7 @@ public class DamageArea{
 		};
 		
 		if(enemies){
-			Entities.getNearby(enemyGroup, x, y, radius*2, cons);
+			world[0].ents.getNearby(world[0].enemyGroup, x, y, radius*2, cons);
 		}else{
 			int trad = (int)(radius / tilesize);
 			for(int dx = -trad; dx <= trad; dx ++){
@@ -104,7 +99,7 @@ public class DamageArea{
 				}
 			}
 
-			Entities.getNearby(playerGroup, x, y, radius*2, cons);
+			world[0].ents.getNearby(world[0].playerGroup, x, y, radius*2, cons);
 		}
 	}
 	

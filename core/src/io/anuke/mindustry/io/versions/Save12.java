@@ -15,7 +15,7 @@ import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.EntityGroup.EntityContainer;
+import io.anuke.ucore.entities.AltDimEntityGroup.EntityContainer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

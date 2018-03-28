@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.net.Packets.Disconnect;
 
-import static io.anuke.mindustry.Vars.playerGroup;
+import static io.anuke.mindustry.Vars.*;
 
 public class ServerDebug {
     private IntMap<OrderedMap<Class<?>, Long>> last = new IntMap<>();
@@ -23,7 +23,9 @@ public class ServerDebug {
 
     public String getOut(){
         StringBuilder build = new StringBuilder();
-        for(Player player : playerGroup.all()){
+
+        for (int i=0;i<dimensionIds;i++){
+        for(Player player : world[i].playerGroup.all()){
             OrderedMap<Class<?>, Long> map = last.get(player.clientid, new OrderedMap<>());
             build.append("connection ");
             build.append(player.clientid);
@@ -40,7 +42,7 @@ public class ServerDebug {
                 build.append(elapsed(type, map));
                 build.append("\n");
             }
-        }
+        }}
         return build.toString();
     }
 

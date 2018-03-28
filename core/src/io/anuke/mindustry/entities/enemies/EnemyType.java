@@ -42,6 +42,8 @@ public class EnemyType {
     public final String name;
     public final byte id;
 
+    public int dimension;
+
     protected int timeid;
     protected int health = 60;
     protected float hitsize = 5f;
@@ -226,7 +228,7 @@ public class EnemyType {
         float attractRange = avoidRange + 7f;
         float avoidSpeed = this.speed/2.7f;
 
-        Entities.getNearby(enemyGroup, enemy.x, enemy.y, range, en -> {
+        world[dimension].ents.getNearby(world[dimension].enemyGroup, enemy.x, enemy.y, range, en -> {
             Enemy other = (Enemy)en;
             if(other == enemy) return;
             float dst = other.distanceTo(enemy);
@@ -274,7 +276,7 @@ public class EnemyType {
 
             //no tile found
             if(enemy.target == null){
-                enemy.target = Entities.getClosest(playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying &&
+                enemy.target = world[dimension].ents.getClosest(world[dimension].playerGroup, enemy.x, enemy.y, range, e -> !((Player)e).isFlying &&
                     !((Player)e).isDead());
             }
         }else if(nearCore){
@@ -296,7 +298,7 @@ public class EnemyType {
 
     public void shoot(Enemy enemy){
         enemy.shoot(bullet);
-        if(shootsound != null) Effects.sound(shootsound, enemy);
+        //if(shootsound != null) Effects.sound(shootsound, enemy);
     }
 
     public void onShoot(Enemy enemy, BulletType type, float rotation){}
@@ -307,9 +309,9 @@ public class EnemyType {
         }
 
         if(!Net.client() || force) {
-            Effects.effect(Fx.explosion, enemy);
-            Effects.shake(3f, 4f, enemy);
-            Effects.sound("bang2", enemy);
+            //Effects.effect(Fx.explosion, enemy);
+            //Effects.shake(3f, 4f, enemy);
+            //Effects.sound("bang2", enemy);
             enemy.remove();
             enemy.dead = true;
         }

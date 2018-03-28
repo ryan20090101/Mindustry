@@ -1,64 +1,58 @@
 package io.anuke.mindustry.entities;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.entities.bullets.*;
 import io.anuke.mindustry.entities.effect.DamageArea;
 import io.anuke.mindustry.entities.effect.EMP;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.graphics.Fx;
-import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
-import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Timers;
-import io.anuke.ucore.entities.BaseBulletType;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
-import com.badlogic.gdx.utils.Array;
+
 import static io.anuke.mindustry.graphics.Fx.*;
 
-public abstract class BulletType extends BaseBulletType<Bullet>{
+public abstract class BulletType extends BaseBulletAltDimType<AltDimBullet>{
 	
 	public static final BulletType
 	
 	none = new BulletType(0f, 0,"none"){
-		public void draw(Bullet b){}
+		public void draw(AltDimBullet b){}
 	},
 	stone = new BulletType(1.5f, 2,"stone"){
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.colorl(0.64f);
 			Draw.rect("blank", b.x, b.y, 2f, 2f);
 			Draw.reset();
 		}
 	},
 	iron = new BulletType(1.7f, 2,"iron"){
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(Color.GRAY);
 			Draw.rect("bullet", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 	},
 	chain = new BulletType(2f, 8,"chain"){
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(whiteOrange);
 			Draw.rect("chainbullet", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 	},
 	sniper = new BulletType(3f, 25,"sniper"){
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(Color.LIGHT_GRAY);
 			Lines.stroke(1f);
 			Lines.lineAngleCenter(b.x, b.y, b.angle(), 3f);
 			Draw.reset();
 		}
 		
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 4)){
-				Effects.effect(Fx.railsmoke, b.x, b.y);
+				//Effects.effect(Fx.railsmoke, b.x, b.y);
 			}
 		}
 	},
@@ -75,26 +69,26 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 270f;
 			hitsize = 80f;
 		}
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			Draw.rect("artilleryshell", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 4)){
-				Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
+				//Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
 			}
 		}
 
-		public void despawned(Bullet b){
+		public void despawned(AltDimBullet b){
 			removed(b);
 		}
 
-		public void removed(Bullet b){
-			Effects.shake(6f, 5f, b);
+		public void removed(AltDimBullet b){
+			//Effects.shake(6f, 5f, b);
 
-			Effects.effect(Fx.shellsmoke, b);
-			Effects.effect(Fx.shockwave, b);
+			//Effects.effect(Fx.shellsmoke, b);
+			//Effects.effect(Fx.shockwave, b);
 
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 80f, (int)(damage * 2));
 		}
@@ -106,7 +100,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			hitsize = 6f;
 		}
 		
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			float rad = 6f + Mathf.sin(Timers.time(), 5f, 2f);
 			
 			Draw.color(Color.SKY);
@@ -115,20 +109,20 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 		
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 2)){
-				Effects.effect(Fx.empspark, b.x + Mathf.range(2), b.y + Mathf.range(2));
+				//Effects.effect(Fx.empspark, b.x + Mathf.range(2), b.y + Mathf.range(2));
 			}
 		}
 		
-		public void despawned(Bullet b){
+		public void despawned(AltDimBullet b){
 			hit(b);
 		}
 		
-		public void hit(Bullet b, float hitx, float hity){
+		public void hit(AltDimBullet b, float hitx, float hity){
 			Timers.run(5f, ()-> new EMP(b.x, b.y, b.getDamage()).add());
-			Effects.effect(Fx.empshockwave, b);
-			Effects.shake(3f, 3f, b);
+			//Effects.effect(Fx.empshockwave, b);
+			//Effects.shake(3f, 3f, b);
 		}
 	},
 	//TODO better visuals for shell
@@ -138,7 +132,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			hitsize = 11f;
 		}
 		
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			float rad = 8f;
 			Draw.color(Color.ORANGE);
 			Draw.color(Color.GRAY);
@@ -149,38 +143,38 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 		
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 7)){
-				Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
+				//Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
 			}
 		}
 		
-		public void despawned(Bullet b){
+		public void despawned(AltDimBullet b){
 			hit(b);
 		}
 		
-		public void hit(Bullet b, float hitx, float hity){
-			Effects.shake(3f, 3f, b);
-			
-			Effects.effect(Fx.shellsmoke, b);
-			Effects.effect(Fx.shellexplosion, b);
+		public void hit(AltDimBullet b, float hitx, float hity){
+			//Effects.shake(3f, 3f, b);
+
+			//Effects.effect(Fx.shellsmoke, b);
+			//Effects.effect(Fx.shellexplosion, b);
 			
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
 	},
 	flak = new BulletType(2.9f, 8,"flak") {
 
-		public void init(Bullet b) {
+		public void init(AltDimBullet b) {
 			b.velocity.scl(Mathf.random(0.6f, 1f));
 		}
 
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 7)){
-				Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
+				//Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
 			}
 		}
 
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			Draw.color(Color.GRAY);
 			Lines.stroke(3f);
 			Lines.lineAngleCenter(b.x, b.y, b.angle(), 2f);
@@ -189,15 +183,15 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 
-		public void hit(Bullet b, float hitx, float hity) {
-			Effects.effect(shellsmoke, b);
+		public void hit(AltDimBullet b, float hitx, float hity) {
+			//Effects.effect(shellsmoke, b);
 			for(int i = 0; i < 3; i ++){
-				Bullet bullet = new Bullet(flakspark, b.owner, hitx, hity, b.angle() + Mathf.range(120f));
+				AltDimBullet bullet = new AltDimBullet(flakspark, b.owner, hitx, hity, b.angle() + Mathf.range(120f));
 				bullet.add();
 			}
 		}
 
-		public void despawned(Bullet b) {
+		public void despawned(AltDimBullet b) {
 			hit(b, b.x, b.y);
 		}
 	},
@@ -206,11 +200,11 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			drag = 0.05f;
 		}
 
-		public void init(Bullet b) {
+		public void init(AltDimBullet b) {
 			b.velocity.scl(Mathf.random(0.6f, 1f));
 		}
 
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			Draw.color(Color.LIGHT_GRAY, Color.GRAY, b.ifract());
 			Lines.stroke(2f - b.ifract());
 			Lines.lineAngleCenter(b.x, b.y, b.angle(), 2f);
@@ -223,27 +217,27 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			hitsize = 15f;
 		}
 		
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(whiteOrange);
 			Draw.rect("titanshell", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 		
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 4)){
-				Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
+				//Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
 			}
 		}
 		
-		public void despawned(Bullet b){
+		public void despawned(AltDimBullet b){
 			hit(b);
 		}
 		
-		public void hit(Bullet b, float hitx, float hity){
-			Effects.shake(3f, 3f, b);
-			
-			Effects.effect(Fx.shellsmoke, b);
-			Effects.effect(Fx.shockwaveSmall, b);
+		public void hit(AltDimBullet b, float hitx, float hity){
+			//Effects.shake(3f, 3f, b);
+
+			//Effects.effect(Fx.shellsmoke, b);
+			//Effects.effect(Fx.shockwaveSmall, b);
 			
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 50f, (int)(damage * 2f/3f));
 		}
@@ -254,27 +248,27 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			hitsize = 11f;
 		}
 		
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(whiteYellow);
 			Draw.rect("titanshell", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 		
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 4)){
-				Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
+				//Effects.effect(Fx.smoke, b.x + Mathf.range(2), b.y + Mathf.range(2));
 			}
 		}
 		
-		public void despawned(Bullet b){
+		public void despawned(AltDimBullet b){
 			hit(b);
 		}
 		
-		public void hit(Bullet b, float hitx, float hity){
-			Effects.shake(3f, 3f, b);
+		public void hit(AltDimBullet b, float hitx, float hity){
+			//Effects.shake(3f, 3f, b);
 			
-			Effects.effect(Fx.shellsmoke, b);
-			Effects.effect(Fx.shockwaveSmall, b);
+			//Effects.effect(Fx.shellsmoke, b);
+			//Effects.effect(Fx.shockwaveSmall, b);
 			
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
@@ -286,41 +280,41 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			speed = 0f;
 		}
 		
-		public void despawned(Bullet b){
+		public void despawned(AltDimBullet b){
 			hit(b);
 		}
 		
-		public void hit(Bullet b, float hitx, float hity){
-			Effects.shake(3f, 3f, b);
+		public void hit(AltDimBullet b, float hitx, float hity){
+			//Effects.shake(3f, 3f, b);
 			
-			Effects.effect(Fx.blastsmoke, b);
-			Effects.effect(Fx.blastexplosion, b);
+			//Effects.effect(Fx.blastsmoke, b);
+			//Effects.effect(Fx.blastexplosion, b);
 
 			//TODO remove translation() usage
 			Angles.circleVectors(30, 6f, (nx, ny) -> {
 				float ang = Mathf.atan2(nx, ny);
-				Bullet o = new Bullet(blastshot, b.owner, b.x + nx, b.y + ny, ang).add();
+				AltDimBullet o = new AltDimBullet(blastshot, b.owner, b.x + nx, b.y + ny, ang).add();
 				o.damage = b.damage/9;
 			});
 		}
 
-		public void draw(Bullet b){}
+		public void draw(AltDimBullet b){}
 	},
 	blastshot = new BulletType(1.6f, 6,"blastshot"){
 		{
 			lifetime = 7f;
 		}
-		public void draw(Bullet b){}
+		public void draw(AltDimBullet b){}
 	},
 	small = new BulletType(1.5f, 2,"small"){
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(glowy);
 			Draw.rect("shot", b.x, b.y, b.angle() - 45);
 			Draw.reset();
 		}
 	},
 	smallSlow = new BulletType(1.2f, 2,"smallSlow"){
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(Color.ORANGE);
 			Draw.rect("shot", b.x, b.y, b.angle() - 45);
 			Draw.reset();
@@ -329,14 +323,14 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 	purple = new BulletType(1.6f, 2,"purple"){
 		Color color = new Color(0x8b5ec9ff);
 		
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(color);
 			Draw.rect("bullet", b.x, b.y, b.angle());
 			Draw.reset();
 		}
 	},
 	flame = new BulletType(0.7f, 5,"flame"){ //for turrets
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(Color.YELLOW, Color.SCARLET, b.time/lifetime);
 			float size = 6f-b.time/lifetime*5f;
 			Draw.rect("circle", b.x, b.y, size, size);
@@ -347,7 +341,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		{
 			lifetime = 65f;
 		}
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(Color.valueOf("efa66c"), Color.valueOf("72deaf"), b.time/lifetime);
 			float size = 7f-b.time/lifetime*6f;
 			Draw.rect("circle", b.x, b.y, size, size);
@@ -355,7 +349,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 	},
 	flameshot = new BulletType(0.5f, 3,"flameshot"){ //for enemies
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(Color.ORANGE, Color.SCARLET, b.time/lifetime);
 			float size = 6f-b.time/lifetime*5f;
 			Draw.rect("circle", b.x, b.y, size, size);
@@ -367,7 +361,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 40;
 		}
 
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Draw.color(Color.WHITE, lightOrange, b.fract()/2f + 0.25f);
 			Lines.stroke(1.5f);
 			Lines.lineAngle(b.x, b.y, b.angle(), 3f);
@@ -379,7 +373,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 70;
 		}
 
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			float size = 3f - b.ifract()*1f;
 
 			Draw.color(Color.PURPLE, Color.WHITE, 0.8f);
@@ -394,7 +388,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			drag = 0.05f;
 		}
 
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
 			Lines.stroke(2f);
 			Draw.color(lightOrange, Color.WHITE, 0.4f);
 			Lines.poly(b.x, b.y, 3, 1.6f, b.angle());
@@ -405,14 +399,14 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			Draw.reset();
 		}
 
-		public void despawned(Bullet b){
+		public void despawned(AltDimBullet b){
 			hit(b);
 		}
 
-		public void hit(Bullet b, float hitx, float hity){
-			Effects.shake(1.5f, 1.5f, b);
+		public void hit(AltDimBullet b, float hitx, float hity){
+			//Effects.shake(1.5f, 1.5f, b);
 
-			Effects.effect(Fx.clusterbomb, b);
+			//Effects.effect(Fx.clusterbomb, b);
 
 			DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 35f, damage);
 		}
@@ -422,20 +416,20 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 50;
 		}
 
-		public void init(Bullet b) {
+		public void init(AltDimBullet b) {
 			Timers.reset(b, "smoke", Mathf.random(4f));
 		}
 
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
             Draw.color(lightGray);
             Lines.stroke(1f);
             Lines.lineAngleCenter(b.x, b.y, b.angle(), 2f);
             Draw.reset();
         }
 
-        public void update(Bullet b){
+        public void update(AltDimBullet b){
             if(b.timer.get(0, 4)){
-                Effects.effect(Fx.chainsmoke, b.x, b.y);
+                //Effects.effect(Fx.chainsmoke, b.x, b.y);
             }
         }
     },
@@ -446,24 +440,24 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 30f;
 		}
 
-		public void init(Bullet b) {
+		public void init(AltDimBullet b) {
 			b.velocity.scl(Mathf.random(0.5f, 1f));
 		}
 
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			Draw.color(Color.WHITE, Color.ORANGE, b.ifract());
 			Lines.stroke(2f);
 			Lines.lineAngleCenter(b.x, b.y, b.angle(), b.fract()*5f);
 			Draw.reset();
 		}
 
-		public void despawned(Bullet b) {
+		public void despawned(AltDimBullet b) {
 			hit(b);
 		}
 
-		public void hit(Bullet b, float hitx, float hity) {
+		public void hit(AltDimBullet b, float hitx, float hity) {
 			for(int i = 0; i < 4; i ++){
-				Bullet bullet = new Bullet(scrap, b.owner, b.x, b.y, b.angle() + Mathf.range(80f));
+				AltDimBullet bullet = new AltDimBullet(scrap, b.owner, b.x, b.y, b.angle() + Mathf.range(80f));
 				bullet.add();
 			}
 		}
@@ -474,11 +468,11 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 30f;
 		}
 
-		public void init(Bullet b) {
+		public void init(AltDimBullet b) {
 			b.velocity.scl(Mathf.random(0.5f, 1f));
 		}
 
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			Draw.color(Color.WHITE, Color.ORANGE, b.ifract());
 			Lines.stroke(1f);
 			Lines.lineAngleCenter(b.x, b.y, b.angle(), b.fract()*4f);
@@ -492,11 +486,11 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 2f;
 		}
 
-		public void init(Bullet b) {
+		public void init(AltDimBullet b) {
 			DamageArea.damageLine(b.owner, Fx.beamhit, b.x, b.y, b.angle(), length, damage);
 		}
         
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			float f = b.fract()*11.5f;
             
 			Draw.color(Color.RED);
@@ -522,11 +516,11 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 15f;
 		}
 
-		public void init(Bullet b) {
+		public void init(AltDimBullet b) {
 			DamageArea.damageLine(b.owner, Fx.beamhit, b.x, b.y, b.angle(), length, damage);
 		}
 
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			float f = b.fract()*1.5f;
 
 			Draw.color(beam);
@@ -546,14 +540,14 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		}
 	},
     railbolt = new BulletType(20f, 90000,"railbolt"){
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
             Draw.rect(b.name, b.x, b.y, b.angle());
 			Draw.reset();
 		}
 		
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 4)){
-				Effects.effect(Fx.railsmoke, b.x, b.y);
+				//Effects.effect(Fx.railsmoke, b.x, b.y);
 			}
 		}
 	},
@@ -562,9 +556,9 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			lifetime = 35f;
 		}
 
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 4)){
-				Effects.effect(Fx.blueTrail, b.x, b.y);
+				//Effects.effect(Fx.blueTrail, b.x, b.y);
 			}
 		}
 	},
@@ -572,12 +566,12 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		{
 			lifetime = 30;
 		}
-		public void update(Bullet b){
+		public void update(AltDimBullet b){
 			if(b.timer.get(0, 4)){
-				Effects.effect(Fx.blueTrail, b.x, b.y);
+				//Effects.effect(Fx.blueTrail, b.x, b.y);
 			}
 		}
-		public void draw(Bullet b){
+		public void draw(AltDimBullet b){
             Draw.rect(b.name, b.x, b.y, b.angle());
 			Draw.reset();
 		}
@@ -588,8 +582,8 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 			homingSpeed = 5f;
 		}
 
-		public void hit(Bullet b, float hitx, float hity) {
-			Effects.effect(Fx.pulserExplosion, b.x, b.y);
+		public void hit(AltDimBullet b, float hitx, float hity) {
+			//Effects.effect(Fx.pulserExplosion, b.x, b.y);
             DamageArea.damage(!(b.owner instanceof Enemy), b.x, b.y, 25f, (int)(damage * 2f/3f));
 		}
 	},
@@ -597,16 +591,16 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 		{
 			lifetime = 1200f;
 		}
-		public void draw(Bullet b) {
+		public void draw(AltDimBullet b) {
 			Draw.rect(b.name, b.x, b.y, b.angle());
 			Draw.reset();
 		}
-        public void init(Bullet b) {
+        public void init(AltDimBullet b) {
 			b.y = b.y + 100;
             b.setVelocity(5f, 0.75f);
 		}
 
-		public void update(Bullet b) {
+		public void update(AltDimBullet b) {
             b.setVelocity(5f, b.angle()-360f/20f/6f);
         }
 	};
@@ -620,7 +614,7 @@ public abstract class BulletType extends BaseBulletType<Bullet>{
 	}
 
 	@Override
-	public void hit(Bullet b, float hitx, float hity){
-		Effects.effect(Fx.hit, hitx, hity);
+	public void hit(AltDimBullet b, float hitx, float hity){
+		//Effects.effect(Fx.hit, hitx, hity);
 	}
 }

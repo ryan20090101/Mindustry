@@ -2,7 +2,7 @@ package io.anuke.mindustry.entities.enemies.types;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-import io.anuke.mindustry.entities.Bullet;
+import io.anuke.mindustry.entities.AltDimBullet;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.entities.enemies.EnemyType;
@@ -89,7 +89,7 @@ public class HealerType extends EnemyType {
 	}
 	
 	void explode(Enemy enemy){
-		Bullet b = new Bullet(BulletType.blast, enemy, enemy.x, enemy.y, 0).add();
+		AltDimBullet b = new AltDimBullet(BulletType.blast, enemy, enemy.x, enemy.y, 0).add();
 		b.damage = BulletType.blast.damage + (enemy.tier-1) * 30;
 		enemy.damage(999);
 		enemy.remove();

@@ -93,7 +93,7 @@ public class Logic extends Module {
                         enemy.tier = spawn.tier(state.wave, fl);
                         enemy.add();
 
-                        Effects.effect(Fx.spawn, enemy);
+                        //Effects.effect(Fx.spawn, enemy);
 
                         state.enemies++;
                     });
@@ -130,8 +130,8 @@ public class Logic extends Module {
                 }
             }
 
-            world[i].ents.collideGroups(bulletGroup, enemyGroup);
-            world[i].ents.collideGroups(bulletGroup, playerGroup);
+            world[i].ents.collideGroups(world[i].bulletGroup, world[i].enemyGroup);
+            world[i].ents.collideGroups(world[i].bulletGroup, world[i].playerGroup);
         }
         if (!state.is(State.menu)) {
 
@@ -169,11 +169,11 @@ public class Logic extends Module {
             }
 
             world[0].ents.update(world[0].ents.defaultGroup());
-            world[0].ents.update(bulletGroup);
-            world[0].ents.update(enemyGroup);
-            world[0].ents.update(tileGroup);
-            world[0].ents.update(shieldGroup);
-            world[0].ents.update(playerGroup);
+            world[0].ents.update(world[0].bulletGroup);
+            world[0].ents.update(world[0].enemyGroup);
+            world[0].ents.update(world[0].tileGroup);
+            world[0].ents.update(world[0].shieldGroup);
+            world[0].ents.update(world[0].playerGroup);
         }
     }
 }

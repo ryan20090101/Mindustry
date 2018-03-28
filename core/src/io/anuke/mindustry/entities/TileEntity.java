@@ -17,10 +17,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static io.anuke.mindustry.Vars.tileGroup;
 import static io.anuke.mindustry.Vars.world;
 
-public class TileEntity extends Entity{
+public class TileEntity extends AltDimEntity{
 	public Tile tile;
 	public int[] items = new int[Item.getAllItems().size];
 	public Timer timer;
@@ -82,7 +81,7 @@ public class TileEntity extends Entity{
 		}
 	}
 	
-	public void collision(Bullet other){
+	public void collision(AltDimBullet other){
 		damage(other.getDamage());
 	}
 	
@@ -98,7 +97,7 @@ public class TileEntity extends Entity{
 		}
 	}
 	
-	public boolean collide(Bullet other){
+	public boolean collide(AltDimBullet other){
 		return true;
 	}
 	
@@ -149,6 +148,6 @@ public class TileEntity extends Entity{
 	
 	@Override
 	public TileEntity add(){
-		return add(tileGroup);
+		return add(world[dimension].tileGroup);
 	}
 }

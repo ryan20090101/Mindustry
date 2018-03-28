@@ -2,6 +2,7 @@ package io.anuke.mindustry.ui.fragments;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import io.anuke.mindustry.core.World;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.entities.enemies.EnemyTypes;
@@ -61,7 +62,9 @@ public class DebugFragment implements Fragment {
                new button("time max", () -> Timers.resetTime(1080000 - 60*10));
                row();
                new button("clear", () -> {
-                   enemyGroup.clear();
+                   for (int i=0;i<dimensionIds;i++){
+                       world[i].enemyGroup.clear();
+                   }
                    state.enemies = 0;
                    netClient.clearRecieved();
                });
@@ -121,20 +124,30 @@ public class DebugFragment implements Fragment {
         Gdx.app.error("Minudstry Info Dump", debugInfo());
     }
 
-    public static String debugInfo(){
+    public static String debugInfo() {
+
+        int players = 0;
+        int enemies = 0;
+        int tiles = 0;
+        for (int i = 0; i < dimensionIds; i++) {
+            players += world[i].playerGroup.size();
+            enemies += world[i].enemyGroup.size();
+            tiles += world[i].tileGroup.size();
+        }
+
         StringBuilder result = join(
                 "net.active: " + Net.active(),
                 "net.server: " + Net.server(),
                 "net.client: " + Net.client(),
                 "state: " + state.getState(),
                 Net.client() ?
-                "chat.open: " + ui.chatfrag.chatOpen() + "\n" +
-                "chat.messages: " + ui.chatfrag.getMessagesSize() + "\n" +
-                "client.connecting: " + netClient.isConnecting() + "\n" +
-                "client.hasdata: " + netClient.hasData() : "",
-                "players: " + playerGroup.size(),
-                "enemies: " + enemyGroup.size(),
-                "tiles: " + tileGroup.size(),
+                        "chat.open: " + ui.chatfrag.chatOpen() + "\n" +
+                                "chat.messages: " + ui.chatfrag.getMessagesSize() + "\n" +
+                                "client.connecting: " + netClient.isConnecting() + "\n" +
+                                "client.hasdata: " + netClient.hasData() : "",
+                "players: " + players,
+                "enemies: " + enemies,
+                "tiles: " + tiles,
                 "time: " + Timers.time(),
                 world[player.dimension].getCore() != null && world[player.dimension].getCore().entity != null ? "core.health: " + world[player.dimension].getCore().entity.health : "",
                 "core: " + world[player.dimension].getCore(),
@@ -145,37 +158,39 @@ public class DebugFragment implements Fragment {
 
         result.append("players: ");
 
-        for(Player player : playerGroup.all()){
-            result.append("   name: ");
-            result.append(player.name);
-            result.append("\n");
-            result.append("   id: ");
-            result.append(player.id);
-            result.append("\n");
-            result.append("   cid: ");
-            result.append(player.clientid);
-            result.append("\n");
-            result.append("   dead: ");
-            result.append(player.isDead());
-            result.append("\n");
-            result.append("   pos: ");
-            result.append(player.x);
-            result.append(", ");
-            result.append(player.y);
-            result.append("\n");
-            result.append("   android: ");
-            result.append(player.isAndroid);
-            result.append("\n");
-            result.append("   flying: ");
-            result.append(player.isFlying);
-            result.append("\n");
-            result.append("   local: ");
-            result.append(player.isLocal);
-            result.append("\n");
-            result.append(player.radiation);
-            result.append("\n");
+        for (int i = 0; i < dimensionIds; i++) {
+            for (Player player : world[i].playerGroup.all()) {
+                result.append("   name: ");
+                result.append(player.name);
+                result.append("\n");
+                result.append("   id: ");
+                result.append(player.id);
+                result.append("\n");
+                result.append("   cid: ");
+                result.append(player.clientid);
+                result.append("\n");
+                result.append("   dead: ");
+                result.append(player.isDead());
+                result.append("\n");
+                result.append("   pos: ");
+                result.append(player.x);
+                result.append(", ");
+                result.append(player.y);
+                result.append("\n");
+                result.append("   android: ");
+                result.append(player.isAndroid);
+                result.append("\n");
+                result.append("   flying: ");
+                result.append(player.isFlying);
+                result.append("\n");
+                result.append("   local: ");
+                result.append(player.isLocal);
+                result.append("\n");
+                result.append(player.radiation);
+                result.append("\n");
 
-            result.append("\n");
+                result.append("\n");
+            }
         }
 
         return result.toString();

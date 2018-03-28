@@ -11,7 +11,6 @@ import io.anuke.mindustry.resource.Upgrade;
 import io.anuke.mindustry.resource.Weapon;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
-import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
@@ -19,8 +18,6 @@ import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timer;
 import io.anuke.ucore.util.Translator;
-import io.anuke.mindustry.Vars;
-import io.anuke.mindustry.Vars.*;
 
 import java.nio.ByteBuffer;
 
@@ -57,6 +54,9 @@ public class Player extends SyncEntity{
 
 	private Vector2 movement = new Vector2();
 	private Translator tr = new Translator();
+
+	public boolean carry = false;
+	public Player carrier;
 	
 	public Player(){
 		hitbox.setSize(5);
@@ -80,8 +80,8 @@ public class Player extends SyncEntity{
 
 	@Override
 	public boolean collides(SolidEntity other){
-		if(other instanceof Bullet){
-			Bullet b = (Bullet)other;
+		if(other instanceof AltDimBullet){
+			AltDimBullet b = (AltDimBullet)other;
 			if(!state.friendlyFire && b.owner instanceof Player){
 				return false;
 			}
@@ -292,9 +292,13 @@ public class Player extends SyncEntity{
 			float angle = Angles.mouseAngle(x, y);
 			this.angle = Mathf.slerpDelta(this.angle, angle, 0.1f);
 		}
-
-		x = Mathf.clamp(x, 0, world[dimension].width() * tilesize);
-		y = Mathf.clamp(y, 0, world[dimension].height() * tilesize);
+		if(!carry && !isAndroid) {
+			x = Mathf.clamp(x, 0, world[dimension].width() * tilesize);
+			y = Mathf.clamp(y, 0, world[dimension].height() * tilesize);
+		}else{
+			x = carrier.x;
+			y = carrier.y;
+		}
 	}
 
 	@Override

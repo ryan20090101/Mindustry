@@ -18,18 +18,18 @@ public class NetCommon extends Module {
     public NetCommon() {
 
         Net.handle(ShootPacket.class, (packet) -> {
-            Player player = playerGroup.getByID(packet.playerid);
+            Player player = world[packet.dimension].playerGroup.getByID(packet.playerid);
 
             Weapon weapon = (Weapon) Upgrade.getByID(packet.weaponid);
             weapon.shoot(player, packet.x, packet.y, packet.rotation);
         });
 
         Net.handle(ChatPacket.class, (packet) -> {
-            ui.chatfrag.addMessage(packet.text, colorizeName(packet.id, packet.name));
+            ui.chatfrag.addMessage(packet.text, colorizeName(packet.id, packet.dimension, packet.name));
         });
 
         Net.handle(WeaponSwitchPacket.class, (packet) -> {
-            Player player = playerGroup.getByID(packet.playerid);
+            Player player = world[packet.dimension].playerGroup.getByID(packet.playerid);
 
             if (player == null) return;
 
@@ -57,7 +57,7 @@ public class NetCommon extends Module {
         });
 
         Net.handle(PlayerDeathPacket.class, (packet) -> {
-            Player player = playerGroup.getByID(packet.id);
+            Player player = world[packet.dimension].playerGroup.getByID(packet.id);
             if (player == null) return;
 
             player.doRespawn();
@@ -76,8 +76,8 @@ public class NetCommon extends Module {
         if(!headless) ui.chatfrag.addMessage(message, null);
     }
 
-    public String colorizeName(int id, String name){
-        Player player = playerGroup.getByID(id);
+    public String colorizeName(int id, int dimension, String name){
+        Player player = world[dimension].playerGroup.getByID(id);
         if(name == null || player == null) return null;
         return "[#" + player.color.toString().toUpperCase() + "]" + name;
     }

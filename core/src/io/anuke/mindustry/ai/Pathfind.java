@@ -114,8 +114,8 @@ public class Pathfind{
 
 	/**Re-calculate paths for all enemies. Runs when a path changes while moving.*/
 	private void remakePath(){
-		for(int i = 0; i < enemyGroup.size(); i ++){
-			Enemy enemy = enemyGroup.all().get(i);
+		for(int i = 0; i < world[dimension].enemyGroup.size(); i ++){
+			Enemy enemy = world[dimension].enemyGroup.all().get(i);
 			enemy.node = -1;
 		}
 
