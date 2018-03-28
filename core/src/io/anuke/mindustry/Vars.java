@@ -44,6 +44,8 @@ public class Vars{
 	public static final String commandPrefix = "/";
 
 	public static final String serverURL = "http://localhost:3000";
+
+	public static final String releasesURL = "https://api.github.com/repos/Anuken/Mindustry/releases";
 	//directory for user-created map data
 	public static final FileHandle customMapDirectory = gwt ? null : UCore.isAssets() ?
 			Gdx.files.local("../../desktop/mindustry-maps") : Gdx.files.local("mindustry-maps/");
@@ -54,7 +56,7 @@ public class Vars{
 	public static float fontscale = Math.max(Unit.dp.scl(1f)/2f, 0.5f);
 	//camera zoom displayed on startup
 	public static final int baseCameraScale = Math.round(Unit.dp.scl(4));
-	//how much the zoom changes every zoom button press
+	//how much the zoom changes every zoom button press (unused?)
 	public static final int zoomScale = Math.round(Unit.dp.scl(1));
 	//if true, player speed will be increased, massive amounts of resources will be given on start, and other debug options will be available
 	public static boolean debug = false;
@@ -95,6 +97,7 @@ public class Vars{
 	public static final Locale[] locales = {new Locale("en"), new Locale("fr", "FR"), new Locale("ru"), new Locale("pl", "PL"),
 			new Locale("de"), new Locale("es", "LA"), new Locale("pt", "BR"), new Locale("ko"), new Locale("in", "ID"), new Locale("egg","EGG")};
 	public static final String[] texturetypes = {"default", "reee", "gimp reincarnation"};
+
 
 	public static final Color[] playerColors = {
 			Color.valueOf("82759a"),

@@ -25,7 +25,7 @@ allprojects {
         appName = 'Alternate Dimension'
         gdxVersion = '1.9.8'
         aiVersion = '1.8.1'
-        uCoreVersion = '642824c'
+        uCoreVersion = '77f0045'
 
         getVersionString = {
             String buildVersion = getBuildVersion()

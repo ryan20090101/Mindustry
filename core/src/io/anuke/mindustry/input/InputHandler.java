@@ -51,7 +51,7 @@ public abstract class InputHandler extends InputAdapter{
 				validPlace(x, y, recipe.result) && !ui.hasMouse() && cursorNear() &&
 				state.inventory.hasItems(recipe.requirements)){
 			
-			placeBlock(x, y, recipe.result, rotation, true, sound);
+			placeBlock(x, y, recipe.result, player.dimension, rotation, true, sound);
 			
 			for(ItemStack stack : recipe.requirements){
 				state.inventory.removeItem(stack);
@@ -113,8 +113,8 @@ public abstract class InputHandler extends InputAdapter{
 		return Placement.validBreak(x, y);
 	}
 	
-	public void placeBlock(int x, int y, Block result, int rotation, boolean effects, boolean sound){
-		if(!Net.client()){
+	public void placeBlock(int x, int y, Block result, int dimension, int rotation, boolean effects, boolean sound){
+		if(!Net.client()){ //is server or singleplayer
 			Placement.placeBlock(x, y, result, rotation, effects, sound);
 			Tile tile = world[player.dimension].tile(x, y);
 			if(tile != null) result.placed(tile);
@@ -123,10 +123,16 @@ public abstract class InputHandler extends InputAdapter{
 		if(Net.active()){
 			NetEvents.handlePlace(x, y, result, rotation);
 		}
+
+		if(!Net.client()){
+			Tile tile = world[dimension].tile(x, y);
+			if(tile != null) result.placed(tile);
+		}
 	}
 
 	public void breakBlock(int x, int y, boolean sound){
-		if(!Net.client()) Placement.breakBlock(x, y, true, sound);
+		if(!Net.client())
+			Placement.breakBlock(x, y, true, sound);
 
 		if(Net.active()){
 			NetEvents.handleBreak(x, y);

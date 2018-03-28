@@ -20,6 +20,7 @@ import io.anuke.ucore.util.Strings;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static io.anuke.mindustry.Vars.syncBlockState;
 
@@ -50,12 +51,6 @@ public class Teleporter extends PowerBlock{
 	}
 
 	@Override
-	public void placed(Tile tile){
-		tile.<TeleporterEntity>entity().channel = lastChannel;
-		Timers.run(1f, () -> setConfigure(tile, lastChannel));
-	}
-
-	@Override
 	public void configure(Tile tile, byte... data) {
 		TeleporterEntity entity = tile.entity();
 		if(entity != null){
@@ -67,6 +62,12 @@ public class Teleporter extends PowerBlock{
 	public void getStats(Array<String> list){
 		super.getStats(list);
 		list.add("[powerinfo]Power/item: " + Strings.toFixed(powerPerItem, 1));
+	}
+
+	@Override
+	public void placed(Tile tile){
+		tile.<TeleporterEntity>entity().channel = lastChannel;
+		setConfigure(tile, lastChannel);
 	}
 	
 	@Override

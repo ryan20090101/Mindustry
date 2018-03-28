@@ -2,7 +2,6 @@ package io.anuke.mindustry.ui.fragments;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import io.anuke.mindustry.core.World;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.entities.enemies.EnemyTypes;
@@ -143,11 +142,10 @@ public class DebugFragment implements Fragment {
                 Net.client() ?
                         "chat.open: " + ui.chatfrag.chatOpen() + "\n" +
                                 "chat.messages: " + ui.chatfrag.getMessagesSize() + "\n" +
-                                "client.connecting: " + netClient.isConnecting() + "\n" +
-                                "client.hasdata: " + netClient.hasData() : "",
-                "players: " + players,
+                                "client.connecting: " + netClient.isConnecting() + "\n" : "",
                 "enemies: " + enemies,
                 "tiles: " + tiles,
+
                 "time: " + Timers.time(),
                 world[player.dimension].getCore() != null && world[player.dimension].getCore().entity != null ? "core.health: " + world[player.dimension].getCore().entity.health : "",
                 "core: " + world[player.dimension].getCore(),

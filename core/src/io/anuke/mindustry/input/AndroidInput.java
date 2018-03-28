@@ -20,9 +20,9 @@ public class AndroidInput extends InputHandler{
 	public float lmousex, lmousey;
 	public float mousex, mousey;
 	public boolean brokeBlock = false;
+	public boolean placing = false;
 	
 	private boolean enableHold = false;
-	private boolean placing = false;
 	private float warmup;
 	private float warmupDelay = 20;
 	
@@ -48,6 +48,7 @@ public class AndroidInput extends InputHandler{
 		}else if(pointer == 0 && !breakMode.pan && breaking() && drawPlace()){
 			breakMode.released(getBlockX(), getBlockY(), getBlockEndX(), getBlockEndY());
 		}
+
 		placing = false;
 		return false;
 	}
@@ -173,7 +174,7 @@ public class AndroidInput extends InputHandler{
 				validPlace(x, y, recipe.result) && cursorNear() &&
 				state.inventory.hasItems(recipe.requirements)){
 			
-			placeBlock(x, y, recipe.result, rotation, true, sound);
+			placeBlock(x, y, recipe.result, player.dimension,rotation, true, sound);
 			
 			for(ItemStack stack : recipe.requirements){
 				state.inventory.removeItem(stack);

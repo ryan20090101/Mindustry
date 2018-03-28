@@ -155,6 +155,7 @@ public class Block{
 	public void setConfigure(Tile tile, byte... byteData){
 		setConfigure(tile,0,byteData);
 	}
+
 	public void setConfigure(Tile tile,int intData, byte... byteData){
 		if(Net.active()) NetEvents.handleBlockConfig(tile,intData, byteData);
 	}

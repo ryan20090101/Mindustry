@@ -24,9 +24,7 @@ import io.anuke.ucore.core.*;
 import io.anuke.ucore.core.Inputs.DeviceType;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.scene.ui.layout.Unit;
-import io.anuke.ucore.util.Atlas;
-import io.anuke.ucore.util.InputProxy;
-import io.anuke.ucore.util.Mathf;
+import io.anuke.ucore.util.*;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -118,7 +116,8 @@ public class Control extends Module{
 			"name", android || gwt ? "player" : UCore.getProperty("user.name"),
 			"servers", "",
 			"color", Color.rgba8888(playerColors[8]),
-			"lastVersion", "3.2"
+			"lastVersion", "3.2",
+			"lastBuild", 0
 		);
 
 		KeyBinds.load();

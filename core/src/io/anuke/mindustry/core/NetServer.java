@@ -8,10 +8,9 @@ import io.anuke.mindustry.entities.SyncEntity;
 import io.anuke.mindustry.game.EventType.GameOverEvent;
 import io.anuke.mindustry.io.Platform;
 import io.anuke.mindustry.io.Version;
-import io.anuke.mindustry.net.Administration;
-import io.anuke.mindustry.net.Net;
+import io.anuke.mindustry.net.*;
+import io.anuke.mindustry.net.Administration.PlayerInfo;
 import io.anuke.mindustry.net.Net.SendMode;
-import io.anuke.mindustry.net.NetworkIO;
 import io.anuke.mindustry.net.Packets.*;
 import io.anuke.mindustry.resource.*;
 import io.anuke.mindustry.world.Block;
@@ -29,8 +28,9 @@ import java.nio.ByteBuffer;
 
 import static io.anuke.mindustry.Vars.*;
 
-public class NetServer extends Module {
-    private final static float serverSyncTime = 4, itemSyncTime = 10;
+
+public class NetServer extends Module{
+    private final static float serverSyncTime = 4, itemSyncTime = 10, kickDuration = 30 * 1000;
 
     private final static int timerEntitySync = 0;
     private final static int timerStateSync = 1;
@@ -50,41 +50,49 @@ public class NetServer extends Module {
         Events.on(GameOverEvent.class, () -> weapons.clear());
 
         Net.handleServer(Connect.class, (id, connect) -> {
-            if (admins.isIPBanned(connect.addressTCP)) {
-                Net.kickConnection(id, KickReason.banned);
+            if(admins.isIPBanned(connect.addressTCP)){
+                kick(id, KickReason.banned);
             }
         });
 
         Net.handleServer(ConnectPacket.class, (id, packet) -> {
             String uuid = new String(Base64Coder.encode(packet.uuid));
-            if (Net.getConnection(id) == null ||
+
+            if(Net.getConnection(id) == null ||
                     admins.isIPBanned(Net.getConnection(id).address)) return;
 
-            if (admins.isIDBanned(uuid)) {
-                Net.kickConnection(id, KickReason.banned);
+            TraceInfo trace = admins.getTrace(Net.getConnection(id).address);
+            PlayerInfo info = admins.getInfo(uuid);
+            trace.uuid = uuid;
+            trace.android = packet.android;
+
+            if(admins.isIDBanned(uuid)){
+                kick(id, KickReason.banned);
+                return;
+            }
+
+            if(TimeUtils.millis() - info.lastKicked < kickDuration){
+                kick(id, KickReason.recentKick);
                 return;
             }
 
             String ip = Net.getConnection(id).address;
 
-            admins.setKnownName(ip, packet.name);
-            admins.setKnownIP(uuid, ip);
-            admins.getTrace(ip).uuid = uuid;
-            admins.getTrace(ip).android = packet.android;
+            admins.updatePlayerJoined(uuid, ip, packet.name);
 
-            if (packet.version != Version.build && Version.build != -1 && packet.version != -1) {
-                Net.kickConnection(id, packet.version > Version.build ? KickReason.serverOutdated : KickReason.clientOutdated);
+            if(packet.version != Version.build && Version.build != -1 && packet.version != -1){
+                kick(id, packet.version > Version.build ? KickReason.serverOutdated : KickReason.clientOutdated);
                 return;
             }
 
-            if (packet.version == -1) {
-                admins.getTrace(ip).modclient = true;
+            if(packet.version == -1){
+                trace.modclient = true;
             }
 
             Log.info("Sending data to player '{0}' / {1}", packet.name, id);
 
             Player player = new Player();
-            player.isAdmin = admins.isAdmin(Net.getConnection(id).address);
+            player.isAdmin = admins.isAdmin(uuid, ip);
             player.clientid = id;
             player.name = packet.name;
             player.isAndroid = packet.android;
@@ -95,7 +103,7 @@ public class NetServer extends Module {
             player.color.set(packet.color);
             connections.put(id, player);
 
-            admins.getTrace(ip).playerid = player.id;
+            trace.playerid = player.id;
 
             if (world[player.dimension].getMap().custom) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -117,7 +125,7 @@ public class NetServer extends Module {
             Player player = connections.get(id);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            NetworkIO.writeWorld(player, weapons.get(player.name, new ByteArray()), stream);
+            NetworkIO.writeWorld(player, weapons.get(admins.getTrace(Net.getConnection(id).address).uuid, new ByteArray()), stream);
             WorldData data = new WorldData();
             data.stream = new ByteArrayInputStream(stream.toByteArray());
             Net.sendStream(id, data);
@@ -153,6 +161,7 @@ public class NetServer extends Module {
             Net.send(dc, SendMode.tcp);
 
             Platform.instance.updateRPC();
+            admins.save();
         });
 
         Net.handleServer(PositionPacket.class, (id, packet) -> {
@@ -164,6 +173,22 @@ public class NetServer extends Module {
         });
 
         Net.handleServer(ShootPacket.class, (id, packet) -> {
+            TraceInfo info = admins.getTrace(Net.getConnection(id).address);
+            Weapon weapon = (Weapon)Upgrade.getByID(packet.weaponid);
+
+            float wtrc = 60;
+
+            if(TimeUtils.millis() < info.lastFastShot + (int)(wtrc/60f*1000)){
+                info.fastShots ++;
+
+                if(info.fastShots - 6 > (int)(wtrc / (weapon.getReload() / 2f))){
+                    kick(id, KickReason.kick);
+                }
+            }else{
+                info.fastShots = 0;
+                info.lastFastShot = TimeUtils.millis();
+            }
+
             packet.playerid = connections.get(id).id;
             Net.sendExcept(id, packet, SendMode.udp);
         });
@@ -184,7 +209,9 @@ public class NetServer extends Module {
             Placement.placeBlock(packet.x, packet.y, block, packet.rotation, true, false);
 
             admins.getTrace(Net.getConnection(id).address).lastBlockPlaced = block;
-            admins.getTrace(Net.getConnection(id).address).totalBlocksPlaced++;
+
+            admins.getTrace(Net.getConnection(id).address).totalBlocksPlaced ++;
+            admins.getInfo(admins.getTrace(Net.getConnection(id).address).uuid).totalBlockPlaced ++;
 
             Net.send(packet, SendMode.tcp);
         });
@@ -199,6 +226,7 @@ public class NetServer extends Module {
             if (block != null) {
                 admins.getTrace(Net.getConnection(id).address).lastBlockBroken = block;
                 admins.getTrace(Net.getConnection(id).address).totalBlocksBroken++;
+                admins.getInfo(admins.getTrace(Net.getConnection(id).address).uuid).totalBlocksBroken ++;
                 if (block.update || block.destructible)
                     admins.getTrace(Net.getConnection(id).address).structureBlocksBroken++;
             }
@@ -223,14 +251,29 @@ public class NetServer extends Module {
             Player player = connections.get(id);
 
             Weapon weapon = (Weapon) Upgrade.getByID(packet.id);
+            String uuid = admins.getTrace(Net.getConnection(id).address).uuid;
 
-            if (!weapons.containsKey(player.name)) weapons.put(player.name, new ByteArray());
-            if (!weapons.get(player.name).contains(weapon.id)) weapons.get(player.name).add(weapon.id);
+            if(!state.inventory.hasItems(UpgradeRecipes.get(weapon))){
+                return;
+            }
+
+            if (!weapons.containsKey(uuid)) weapons.put(uuid, new ByteArray());
+
+            if (!weapons.get(uuid).contains(weapon.id)){
+                weapons.get(uuid).add(weapon.id);
+            }else{
+                return;
+            }
 
             state.inventory.removeItems(UpgradeRecipes.get(weapon));
+            Net.sendTo(id, packet, SendMode.tcp);
         });
 
         Net.handleServer(WeaponSwitchPacket.class, (id, packet) -> {
+            TraceInfo info = admins.getTrace(Net.getConnection(id).address);
+            info.fastShots = 0;
+            info.lastFastShot = TimeUtils.millis();
+
             packet.playerid = connections.get(id).id;
             Net.sendExcept(id, packet, SendMode.tcp);
         });
@@ -284,10 +327,10 @@ public class NetServer extends Module {
 
             if (packet.action == AdminAction.ban) {
                 admins.banPlayerIP(ip);
-                Net.kickConnection(other.clientid, KickReason.banned);
+                kick(other.clientid, KickReason.banned);
                 Log.info("&lc{0} has banned {1}.", player.name, other.name);
-            } else if (packet.action == AdminAction.kick) {
-                Net.kickConnection(other.clientid, KickReason.kick);
+            }else if(packet.action == AdminAction.kick){
+                kick(other.clientid, KickReason.kick);
                 Log.info("&lc{0} has kicked {1}.", player.name, other.name);
             } else if (packet.action == AdminAction.trace) {
                 TracePacket trace = new TracePacket();
@@ -338,8 +381,31 @@ public class NetServer extends Module {
         admins.clearTraces();
     }
 
-    void sync() {
+    public void kick(int connection, KickReason reason){
+        NetConnection con = Net.getConnection(connection);
+        if(con == null){
+            Log.err("Cannot kick unknown player!");
+            return;
+        }else{
+            Log.info("Kicking connection #{0} / IP: {1}. Reason: {2}", connection, con.address, reason);
+        }
 
+        if((reason == KickReason.kick || reason == KickReason.banned) && admins.getTrace(con.address).uuid != null){
+            PlayerInfo info = admins.getInfo(admins.getTrace(con.address).uuid);
+            info.timesKicked ++;
+            info.lastKicked = TimeUtils.millis();
+        }
+
+        KickPacket p = new KickPacket();
+        p.reason = reason;
+
+        con.send(p, SendMode.tcp);
+        Timers.runTask(2f, con::close);
+
+        admins.save();
+    }
+
+    void sync(){
         if (timer.get(timerEntitySync, serverSyncTime)) {
             //scan through all groups with syncable entities
 
