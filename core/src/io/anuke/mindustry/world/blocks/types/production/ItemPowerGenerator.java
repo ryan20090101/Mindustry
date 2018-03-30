@@ -74,7 +74,7 @@ public class ItemPowerGenerator extends LogicGenerator{
 		}
 		
 		if(entity.time <= 0f && entity.hasItem(generateItem)){
-			Effects.effect(generateEffect, tile.worldx() + Mathf.range(3f), tile.worldy() + Mathf.range(3f));
+			Effects.effect(generateEffect, tile.worldx() + Mathf.range(3f), tile.worldy() + Mathf.range(3f), tile.dimension);
 			entity.removeItem(generateItem, 1);
 			entity.time = 1f;
 		}

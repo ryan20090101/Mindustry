@@ -53,7 +53,7 @@ public class Arraydrill extends Drill {
 
         if(tile.floor().drops != null && mineable.contains(tile.floor(),true) && entity.timer.get(timerDrill, 60 * time)){
             offloadNear(tile, tile.floor().drops.item);
-            Effects.effect(drillEffect, tile.worldx(), tile.worldy());
+            Effects.effect(drillEffect, tile.worldx(), tile.worldy(), tile.dimension);
         }
 
         if(entity.timer.get(timerDump, 30)){

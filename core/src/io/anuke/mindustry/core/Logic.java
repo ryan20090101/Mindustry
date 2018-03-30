@@ -164,8 +164,10 @@ public class Logic extends Module {
                 if (!Net.client() && (state.wavetime <= 0 || state.extrawavetime <= 0)) {
                     runWave();
                 }
-                if (global.time >= maxTime) global.time = 0;
-                global.time++;
+                if (global.time >= maxTime) global.reversedTime = true;
+                if (global.time <= 0) global.reversedTime = false;
+                if(!global.reversedTime)global.time++;
+                else global.time--;
             }
 
             world[0].ents.update(world[0].ents.defaultGroup());

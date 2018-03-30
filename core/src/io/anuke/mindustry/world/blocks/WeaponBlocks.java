@@ -215,7 +215,7 @@ public class WeaponBlocks{
 				tr.trns(entity.rotation, len, Mathf.sign(i) * space);
 				bullet(tile, entity.rotation);
 				Effects.effect(shootEffect, tile.drawx() + tr.x,
-						tile.drawy() + tr.y, entity.rotation);
+						tile.drawy() + tr.y, entity.rotation, entity.dimension);
 			}
 			
 			Effects.shake(1f, 1f, tile.worldx(), tile.worldy());

@@ -49,7 +49,7 @@ public class Drill extends LogicBlock {
 		if((tile.floor() == resource || (resource.drops.equals(tile.floor().drops)))
 				&& entity.timer.get(timerDrill, 60 * time) && tile.entity.getItem(result) < capacity){
 			offloadNear(tile, result);
-			Effects.effect(drillEffect, tile.worldx(), tile.worldy());
+			Effects.effect(drillEffect, tile.worldx(), tile.worldy(), tile.dimension);
 		}
 
 		if(entity.timer.get(timerDump, 30)){

@@ -39,8 +39,8 @@ public class HealerType extends EnemyType {
 		
 		if(enemy.idletime > 60f*3){ //explode after 3 seconds of stillness
 			explode(enemy);
-			Effects.effect(Fx.shellexplosion, enemy);
-			Effects.effect(Fx.shellsmoke, enemy);
+			Effects.effect(Fx.shellexplosion, enemy, enemy.dimension);
+			Effects.effect(Fx.shellsmoke, enemy, enemy.dimension);
 		}
 	}
 	

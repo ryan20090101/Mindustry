@@ -57,9 +57,9 @@ public class Door extends Wall{
 		
 		entity.open = !entity.open;
 		if(!entity.open){
-			Effects.effect(closefx, tile.drawx(), tile.drawy());
+			Effects.effect(closefx, tile.drawx(), tile.drawy(), tile.dimension);
 		}else{
-			Effects.effect(openfx, tile.drawx(), tile.drawy());
+			Effects.effect(openfx, tile.drawx(), tile.drawy(), tile.dimension);
 		}
 	}
 	

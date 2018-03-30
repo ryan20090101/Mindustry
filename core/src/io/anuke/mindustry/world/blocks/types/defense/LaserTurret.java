@@ -36,7 +36,7 @@ public class LaserTurret extends PowerTurret{
 		
 		if(Angles.angleDist(entity.rotation, Angles.angle(tile.drawx(), tile.drawy(), enemy.x, enemy.y)) < cone){
 			enemy.damage(damage);
-			Effects.effect(hiteffect, enemy.x + Mathf.range(3), enemy.y + Mathf.range(3));
+			Effects.effect(hiteffect, enemy.x + Mathf.range(3), enemy.y + Mathf.range(3), enemy.dimension);
 		}
 	}
 	

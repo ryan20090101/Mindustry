@@ -222,7 +222,7 @@ public class Turret extends Block{
 		
 		if(Timers.getTime(tile, "reload") <= 0){
 			Timers.run(hittime, ()->{
-				Effects.effect(Fx.spawn, predictX, predictY);
+				Effects.effect(Fx.spawn, predictX, predictY, tile.dimension);
 			});
 		}
 	}
@@ -246,7 +246,7 @@ public class Turret extends Block{
 		
 		if(shootEffect != null){
 			Effects.effect(shootEffect, tile.drawx() + tr.x,
-				tile.drawy() + tr.y, entity.rotation);
+				tile.drawy() + tr.y, entity.rotation, tile.dimension);
 		}
 		
 		if(shootShake > 0){

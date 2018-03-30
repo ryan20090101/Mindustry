@@ -201,8 +201,9 @@ public class Block{
 		float x = tile.worldx(), y = tile.worldy();
 		
 		Effects.shake(4f, 4f, x, y);
-		Effects.effect(explosionEffect, x, y);
+		Effects.effect(explosionEffect, x, y, tile.dimension);
 		Effects.sound(explosionSound, x, y);
+		onBreak(tile);
 	}
 
 	public void onBreak(Tile tile){}

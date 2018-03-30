@@ -44,7 +44,7 @@ public class FortressType extends EnemyType {
 				s.set(enemy.x + enemy.tr.x, enemy.y + enemy.tr.y);
 				s.add();
 
-				Effects.effect(Fx.spawn, enemy);
+				Effects.effect(Fx.spawn, enemy, enemy.dimension);
 				enemy.spawned ++;
 			}
 
@@ -53,7 +53,7 @@ public class FortressType extends EnemyType {
 
 
 	public void onShoot(Enemy enemy, BulletType type, float rotation){
-		Effects.effect(Fx.largeCannonShot, enemy.x + enemy.tr.x, enemy.y + enemy.tr.y, enemy.angle);
+		Effects.effect(Fx.largeCannonShot, enemy.x + enemy.tr.x, enemy.y + enemy.tr.y, enemy.angle, enemy.dimension);
 		Effects.shake(3f, 3f, enemy);
 	}
 

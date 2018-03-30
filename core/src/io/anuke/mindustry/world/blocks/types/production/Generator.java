@@ -111,13 +111,13 @@ public class Generator extends PowerBlock {
 		if(explosive){
 			float x = tile.worldx(), y = tile.worldy();
 
-			Effects.effect(Fx.shellsmoke, x, y);
-			Effects.effect(Fx.blastsmoke, x, y);
+			Effects.effect(Fx.shellsmoke, x, y, tile.dimension);
+			Effects.effect(Fx.blastsmoke, x, y, tile.dimension);
 
 			Timers.run(Mathf.random(8f + Mathf.random(6f)), () -> {
 				Effects.shake(6f, 8f, x, y);
-				Effects.effect(Fx.generatorexplosion, x, y);
-				Effects.effect(Fx.shockwave, x, y);
+				Effects.effect(Fx.generatorexplosion, x, y, tile.dimension);
+				Effects.effect(Fx.shockwave, x, y, tile.dimension);
 
 				Timers.run(12f + Mathf.random(20f), () -> {
 					tile.damageNearby(4, 60, 0f);
@@ -196,13 +196,13 @@ public class Generator extends PowerBlock {
 				Draw.tint(Hue.mix(Color.SCARLET, Color.WHITE, 0.902f + Mathf.sin(Timers.time(), 1.7f, 0.08f)));
 
 				if(state.is(State.playing) && Mathf.chance(Timers.delta() * 0.033)){
-					Effects.effect(Fx.laserspark, target.worldx() - t1.x, target.worldy() - t1.y);
+					Effects.effect(Fx.laserspark, target.worldx() - t1.x, target.worldy() - t1.y, tile.dimension);
 				}
 			}
 
 			float r = interfering ? 0f : 0f;
 			
-			int relative = tile.relativeTo(target.x, target.y);
+			int relative = tile.sizedRelativeTo(target.x, target.y);
 			
 			if(relative == -1){
 				Shapes.laser("laser", "laserend", tile.worldx() + t2.x, tile.worldy() + t2.y,

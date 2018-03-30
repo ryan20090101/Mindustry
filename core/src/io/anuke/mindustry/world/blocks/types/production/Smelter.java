@@ -71,7 +71,7 @@ public class Smelter extends Block{
 		if(entity.getItem(fuel) > 0 && entity.burnTime <= 0f){
 			entity.removeItem(fuel, 1);
 			entity.burnTime += burnDuration;
-			Effects.effect(burnEffect, entity.x + Mathf.range(2f), entity.y + Mathf.range(2f));
+			Effects.effect(burnEffect, entity.x + Mathf.range(2f), entity.y + Mathf.range(2f), tile.dimension);
 		}
 
 		//decrement burntime
@@ -97,7 +97,7 @@ public class Smelter extends Block{
 		}
 		
 		offloadNear(tile, result);
-		Effects.effect(craftEffect, entity);
+		Effects.effect(craftEffect, entity, tile.dimension);
 	}
 
 	@Override
