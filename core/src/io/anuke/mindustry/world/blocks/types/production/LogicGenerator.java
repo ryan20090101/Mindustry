@@ -202,19 +202,19 @@ public class LogicGenerator extends LogicPowerBlock {
 			}
 
 			float r = interfering ? 0f : 0f;
-			
-			int relative = tile.relativeTo(target.x, target.y);
-			
+
+			int relative = tile.sizedRelativeTo(target.x, target.y);
+
 			if(relative == -1){
 				Shapes.laser("laser", "laserend", tile.worldx() + t2.x, tile.worldy() + t2.y,
 						target.worldx() - t1.x + Mathf.range(r),
 						target.worldy() - t1.y + Mathf.range(r), 0.7f);
 			}else{
-				Draw.rect("laserfull", 
+				Draw.rect("laserfull",
 						tile.worldx() + Geometry.d4[relative].x * size * tilesize / 2f,
 						tile.worldy() + Geometry.d4[relative].y * size * tilesize / 2f);
 			}
-			
+
 			Draw.color();
 		}
 	}

@@ -157,11 +157,6 @@ public class HudFragment implements Fragment{
 		new table("white"){{
 			colortable = get();
 			colortable.setColor(Color.CLEAR);
-			update(t -> {
-				if(state.is(State.menu)){
-					colortable.setColor(Color.CLEAR);
-				}
-			});
 		}}.end();
 
 		//respawn background table
