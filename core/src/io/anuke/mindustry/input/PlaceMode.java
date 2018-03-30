@@ -405,29 +405,15 @@ public enum PlaceMode{
 		int othertilex, othertiley;
 		boolean linking;
 
-		{
-			shown = true;
-			lockCamera = true;
-			pan = true;
-		}
-
-		public void draw(int tilex, int tiley, int endx, int endy){
-			float x = tilex * tilesize;
-			float y = tiley * tilesize;
-			boolean valid = world[player.dimension].tile(tilex,tiley).block() instanceof LogicAcceptor;
-
-			float si = MathUtils.sin(Timers.time() / 6f) + 1.5f;
-
-			Draw.color(valid ? Colors.get("place") : Colors.get("placeInvalid"));
-			Lines.stroke(2f);
-			Lines.crect(x, y, tilesize * control.input().recipe.result.size + si,
-					tilesize * control.input().recipe.result.size + si);
-
-			control.input().recipe.result.drawPlace(tilex, tiley, control.input().rotation, valid);
-		}
+			{
+				shown = true;
+				lockCamera = false;
+				showRotate = true;
+				showCancel = true;
+				delete = true;
+			}
 
 		public void tapped(int tilex, int tiley){
-		    System.out.println("test");
 			if (linking) {
 				Tile tile = world[player.dimension].tile(tilex,tiley);
 				((LogicAcceptor) tile.block()).logicLink(tile,world[player.dimension].tile(othertilex,othertiley));

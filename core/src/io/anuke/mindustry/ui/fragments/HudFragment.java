@@ -103,6 +103,17 @@ public class HudFragment implements Fragment{
 						}
 					}).get();
 
+					if(android) {
+						new imagebutton("icon-claw", 40, () -> {
+							player.carry = player.carry ? false : true;
+							player.carrier = (Player)Entities.getClosest(world[player.dimension].playerGroup, player.x, player.y, 4, e -> ((Player)e).isAndroid);
+							Packets.CarryPacket packet = new Packets.CarryPacket();
+							packet.playerid = player.id;
+							Net.sendTo(player.carrier.id, packet, Net.SendMode.tcp);
+						}).update(i -> {
+						}).get();
+					}
+
 				}}.end();
 
 				row();
@@ -127,16 +138,6 @@ public class HudFragment implements Fragment{
 
 
 		}}.end();
-		if(android) {
-			new imagebutton("icon-claw", 40, () -> {
-				player.carry = player.carry ? false : true;
-				player.carrier = (Player)Entities.getClosest(world[player.dimension].playerGroup, player.x, player.y, 4, e -> ((Player)e).isAndroid);
-				Packets.CarryPacket packet = new Packets.CarryPacket();
-				packet.playerid = player.id;
-				Net.sendTo(player.carrier.id, packet, Net.SendMode.tcp);
-			}).update(i -> {
-			}).get();
-		}
 		//tutorial ui table
 		new table(){{
 			control.tutorial().buildUI(this);

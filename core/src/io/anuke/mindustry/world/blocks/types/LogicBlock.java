@@ -94,10 +94,15 @@ public class LogicBlock extends Block implements LogicAcceptor{
     @Override
     public boolean logicLink(Tile tile, Tile source) {
         LogicEntity ent = tile.entity();
+        if(ent.outputBlocks.contains(source.packedPosition(),false)) {
+            ent.outputBlocks.removeValue(source.packedPosition(), false);
+            source.<LogicEntity>entity().inputBlocks.removeValue(tile.packedPosition(), false);
+            ((LogicAcceptor)tile.block()).setLogic(source, tile, false);
+            ent.connectedBlocks--;
+            return false;
+        }
 
         if (ent.connectedBlocks < maxIO) {
-            if(ent.outputBlocks.contains(source.packedPosition(),true))
-                return false;
             ent.outputBlocks.add(source.packedPosition());
             LogicAcceptor blck = (LogicAcceptor) source.block();
             blck.onLogicLink(source,tile);
