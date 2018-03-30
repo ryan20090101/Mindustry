@@ -25,7 +25,7 @@ public class SolarPowerGenerator extends Generator{
 	public void update(Tile tile){
 		PowerEntity entity = tile.entity();
 		
-		if (global.time < Vars.maxTime/2) entity.power += powerOutput;
+		if (global.time < Vars.maxTime/2) entity.power += powerOutput-(global.time/1000);
 		
 		distributeLaserPower(tile);
 		

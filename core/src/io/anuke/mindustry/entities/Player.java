@@ -2,6 +2,7 @@ package io.anuke.mindustry.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.graphics.Fx;
 import io.anuke.mindustry.graphics.Shaders;
 import io.anuke.mindustry.net.Net;
@@ -208,7 +209,7 @@ public class Player extends SyncEntity{
 		if(ui.chatfrag.chatOpen()) return;
 
 
-		ui.hudfrag.setAlpha(Mathf.clamp((float)global.time/15000,0f,0.7f));
+		ui.hudfrag.setAlpha(Mathf.clamp((float)global.time/Vars.maxTime,0f,0.7f));
 
         if(radiation>0){
 			float radFloat = radiation/255;
