@@ -107,7 +107,7 @@ public class TileEntity extends Entity{
 			if (health != 0 && health < tile.block().health && !(tile.block() instanceof Wall) &&
 					Mathf.chance(0.009f * Timers.delta() * (1f - health / tile.block().health))) {
 
-				Effects.effect(Fx.smoke, x + Mathf.range(4), y + Mathf.range(4));
+				Effects.effect(Fx.smoke, x + Mathf.range(4), y + Mathf.range(4), tile.dimension);
 			}
 
 			if (health <= 0) {

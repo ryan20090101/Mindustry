@@ -65,7 +65,7 @@ public class TeslaOrb extends Entity{
 	
 	void damageEnemy(Enemy enemy){
 		enemy.damage(damage);
-		Effects.effect(Fx.laserhit, enemy.x + Mathf.range(2f), enemy.y + Mathf.range(2f));
+		Effects.effect(Fx.laserhit, enemy.x + Mathf.range(2f), enemy.y + Mathf.range(2f), enemy.dimension);
 	}
 	
 	@Override

@@ -145,7 +145,7 @@ public class Weapon extends Upgrade{
 	void shootInternal(Player p, float x, float y, float rotation){
 		Angles.shotgun(shots, spacing, rotation, f -> bullet(p, x, y, f + Mathf.range(inaccuracy)));
 		tr.trns(rotation, 3f);
-		if(effect != null) Effects.effect(effect, x + tr.x, y + tr.y, rotation);
+		if(effect != null) Effects.effect(effect, x + tr.x, y + tr.y, rotation, p.dimension);
 		Effects.shake(shake, shake, x, y);
 		Effects.sound(shootsound, x, y);
 	}

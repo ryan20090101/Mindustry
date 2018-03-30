@@ -73,7 +73,7 @@ public class LiquidCrafter extends LiquidBlock{
 				entity.removeItem(input, inputAmount);
 			entity.liquidAmount -= liquidAmount;
 			offloadNear(tile, output);
-			Effects.effect(craftEffect, tile.worldx(), tile.worldy());
+			Effects.effect(craftEffect, tile.worldx(), tile.worldy(), tile.dimension);
 		}
 		
 		if(entity.timer.get(timerDump, 15)){

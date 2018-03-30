@@ -27,6 +27,7 @@ public class HudFragment implements Fragment{
 	private ImageButton menu, flip;
 	private Table respawntable;
 	private Table wavetable;
+	private Table colortable;
 	private Label infolabel;
 	private boolean shown = true;
     @Override
@@ -152,6 +153,17 @@ public class HudFragment implements Fragment{
 				new label("[orange]< "+ Bundles.get("text.paused") + " >").scale(0.75f).pad(6);
 			}}.end();
 		}}.end();
+
+		new table("white"){{
+			colortable = get();
+			colortable.setColor(Color.CLEAR);
+			update(t -> {
+				if(state.is(State.menu)){
+					colortable.setColor(Color.CLEAR);
+				}
+			});
+		}}.end();
+
 		//respawn background table
 		new table("white"){{
 			respawntable = get();
@@ -254,10 +266,37 @@ public class HudFragment implements Fragment{
 		respawntable.addAction(Actions.color(in ? new Color(0, 0, 0, 0.3f) : Color.CLEAR, 0.3f));
 	}
 
-	public void setFade(float a){
-		respawntable.setColor(new Color(0, 0, 0, a));
+
+	public void setRGBA(float r,float g,float b,float a){
+		colortable.setColor(new Color(r, g, b, a));
 	}
-	public void setRadTint(float a){
-		respawntable.setColor(new Color(0, 255, 0, a));
+
+	public void setRGB(float r,float g,float b){
+		Color color = colortable.getColor();
+		colortable.setColor(new Color(r, g, b, color.a));
+	}
+
+	public void setRed(float r){
+		Color color = colortable.getColor();
+		colortable.setColor(new Color(r, color.g, color.b, color.a));
+	}
+
+	public void setGreen(float g){
+		Color color = colortable.getColor();
+		colortable.setColor(new Color(color.r, g, color.b, color.a));
+	}
+
+	public void setBlue(float b){
+		Color color = colortable.getColor();
+		colortable.setColor(new Color(color.r, color.g, b, color.a));
+	}
+
+	public void setAlpha(float a){
+		Color color = colortable.getColor();
+		colortable.setColor(new Color(color.r, color.g, color.b, a));
+	}
+
+	public void resetColor(){
+		colortable.setColor(new Color(0, 0, 0, colortable.getColor().a));
 	}
 }

@@ -63,7 +63,7 @@ public class EMP extends TimedEntity{
 			if(tile == null) continue;
 
 			//entity may be null here, after the block is dead!
-			Effects.effect(Fx.empspark, tile.worldx(), tile.worldy());
+			Effects.effect(Fx.empspark, tile.worldx(), tile.worldy(), tile.dimension);
 			if(tile.entity != null) tile.entity.damage(damage);
 		}
 	}

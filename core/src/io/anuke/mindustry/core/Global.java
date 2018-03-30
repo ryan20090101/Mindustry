@@ -27,6 +27,7 @@ public class Global extends Module {
 	private Maps maps = new Maps();
 
 	public int time;
+	public boolean reversedTime;
 	private Array<Research> rContainer;
 	public int bossAmount = 0;
 

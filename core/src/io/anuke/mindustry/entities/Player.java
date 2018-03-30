@@ -37,8 +37,8 @@ public class Player extends SyncEntity{
 	public boolean isAndroid;
 	public boolean isAdmin;
 	public Color color = new Color();
-	public int radiation;
-    public int radiationDeath = 200;
+	public float radiation;
+    public int radiationDeath = 255;
 	public Weapon weaponLeft = Weapon.blaster;
 	public Weapon weaponRight = Weapon.blaster;
 	public Mech mech = Mech.standard;
@@ -69,7 +69,7 @@ public class Player extends SyncEntity{
 	}
 
 	@Override
-	public void damage(int amount){
+	public void damage(float amount){
 		if(debug || isFlying) return;
 
 		health -= amount;
@@ -97,19 +97,20 @@ public class Player extends SyncEntity{
 			NetEvents.handlePlayerDeath();
 		}
         radiation=0;
-		Effects.effect(Fx.explosion, this);
+		Effects.effect(Fx.explosion, this, player.dimension);
 		Effects.shake(4f, 5f, this);
 		Effects.sound("die", this);
 
 		control.setRespawnTime(respawnduration);
 		ui.hudfrag.fadeRespawn(true);
-		dimension = (dimension==1 ? 0 : 1);
+		ui.hudfrag.resetColor();
+		//dimension = (dimension==1 ? 0 : 1);
 	}
 
 	/**called when a remote player death event is recieved*/
 	public void doRespawn(){
 		dead = true;
-		Effects.effect(Fx.explosion, this);
+		Effects.effect(Fx.explosion, this, player.dimension);
 		Effects.shake(4f, 5f, this);
 		Effects.sound("die", this);
 
@@ -177,19 +178,18 @@ public class Player extends SyncEntity{
 
 			boolean timerRad = timer.get(timerRadiation,3);
 
-			if (radiation > 0 && timerRad && !tile.floor().radioactive) {
-				radiation -= 1;
-			}
-
-			if (tile.floor().radioactive && timerRad) {
-				radiation += tile.floor().radioactivity;
-			}
-
-			if (radiation >= 100 && timerRad) {
-				if (radiation >= radiationDeath) {
-					damage(health+1);
+			if(timerRad) {
+				if (radiation > 0 && !tile.floor().radioactive) {
+					radiation -= 1;
 				}
-				damage((radiation - 100) / 25);
+
+				if (tile.floor().radioactive) {
+					radiation += tile.floor().radioactivity;
+				}
+				if (radiation >= radiationDeath) {
+					damage(health + 1);
+				}
+				damage(radiation / 255);
 			}
 		}
         
@@ -207,16 +207,15 @@ public class Player extends SyncEntity{
 
 		if(ui.chatfrag.chatOpen()) return;
 
-		/*
-		ui.hudfrag.setFade(Mathf.clamp(world.time/15000,0,1));
-        float radFloat = radiation/225;
-        if(radiation>0){
-            ui.hudfrag.setRadTint(radFloat);
-        }
-    	*/
-		int damageOnTop;
 
-		damageOnTop = block.damageOnTop;
+		ui.hudfrag.setAlpha(Mathf.clamp((float)global.time/15000,0f,0.7f));
+
+        if(radiation>0){
+			float radFloat = radiation/255;
+            ui.hudfrag.setGreen(radFloat);
+        }
+
+		int damageOnTop = block.damageOnTop;
 
 		if(damageOnTop > 0)
 			damage(damageOnTop);
@@ -262,7 +261,7 @@ public class Player extends SyncEntity{
 		}
 		
 		if(dashing && timer.get(timerDash, 3) && movement.len() > 0){
-			Effects.effect(Fx.dashsmoke, x + Angles.trnsx(angle + 180f, 3f), y + Angles.trnsy(angle + 180f, 3f));
+			Effects.effect(Fx.dashsmoke, x + Angles.trnsx(angle + 180f, 3f), y + Angles.trnsy(angle + 180f, 3f), player.dimension);
 		}
 		
 		movement.limit(speed);
@@ -320,7 +319,7 @@ public class Player extends SyncEntity{
 		buffer.put(weaponRight.id);
 		buffer.put(isAndroid ? 1 : (byte)0);
 		buffer.put(isFlying ? 1 : (byte)0);
-		buffer.putInt(radiation);
+		buffer.putFloat(radiation);
 		buffer.put(isAdmin ? 1 : (byte)0);
 		buffer.putInt(Color.rgba8888(color));
 		buffer.putFloat(x);
@@ -337,7 +336,7 @@ public class Player extends SyncEntity{
 		weaponRight = (Weapon) Upgrade.getByID(buffer.get());
 		isAndroid = buffer.get() == 1;
 		isFlying = buffer.get() == 1;
-		radiation = buffer.getInt();
+		radiation = buffer.getFloat();
 		isAdmin = buffer.get() == 1;
 		color.set(buffer.getInt());
 		x = buffer.getFloat();
@@ -355,7 +354,7 @@ public class Player extends SyncEntity{
 			data.putFloat(interpolator.target.y);
 		}
 		data.putFloat(angle);
-		data.putInt(radiation);
+		data.putFloat(radiation);
 		data.putShort((short)health);
 		data.put((byte)(dashing ? 1 : 0));
 		data.put((byte)(isFlying ? 1 : 0));
@@ -366,7 +365,7 @@ public class Player extends SyncEntity{
 		float x = data.getFloat();
 		float y = data.getFloat();
 		float angle = data.getFloat();
-		int radiation = data.getInt();
+		float radiation = data.getFloat();
 		short health = data.getShort();
 		byte dashing = data.get();
 		byte isFlying = data.get();
@@ -389,11 +388,11 @@ public class Player extends SyncEntity{
 		float ty = y + Angles.trnsy(angle + 180f, 4f);
 
 		if(isFlying && i.target.dst(i.last) > 2f && timer.get(timerDash, 1)){
-			Effects.effect(Fx.dashsmoke, tx, ty);
+			Effects.effect(Fx.dashsmoke, tx, ty, player.dimension);
 		}
 
 		if(dashing && !dead && timer.get(timerDash, 3) && i.target.dst(i.last) > 1f){
-			Effects.effect(Fx.dashsmoke, tx, ty);
+			Effects.effect(Fx.dashsmoke, tx, ty, player.dimension);
 		}
 	}
 

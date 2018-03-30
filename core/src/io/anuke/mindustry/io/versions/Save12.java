@@ -186,7 +186,7 @@ public class Save12 extends SaveFileVersion {
         stream.writeFloat(Vars.player.x); //player x/y
         stream.writeFloat(Vars.player.y);
 
-        stream.writeInt(Vars.player.health); //player health
+        stream.writeFloat(Vars.player.health); //player health
 
         stream.writeByte(control.upgrades().getWeapons().size - 1); //amount of weapons
 
@@ -228,7 +228,7 @@ public class Save12 extends SaveFileVersion {
             stream.writeFloat(enemy.x); //x
             stream.writeFloat(enemy.y); //y
             stream.writeByte(enemy.tier); //tier
-            stream.writeInt(enemy.health); //health
+            stream.writeFloat(enemy.health); //health
         }
 
         //--MAP DATA--

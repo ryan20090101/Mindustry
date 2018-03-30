@@ -45,14 +45,14 @@ public class Placement {
 
         if(!tile.block().isMultiblock() && !tile.isLinked()){
             tile.setBlock(Blocks.air);
-            if(effect) Effects.effect(Fx.breakBlock, tile.worldx(), tile.worldy());
+            if(effect) Effects.effect(Fx.breakBlock, tile.worldx(), tile.worldy(), tile.dimension);
         }else{
             Tile target = tile.isLinked() ? tile.getLinked() : tile;
             Array<Tile> removals = target.getLinkedTiles(tempTiles);
             for(Tile toremove : removals){
                 //note that setting a new block automatically unlinks it
                 toremove.setBlock(Blocks.air);
-                if(effect) Effects.effect(Fx.breakBlock, toremove.worldx(), toremove.worldy());
+                if(effect) Effects.effect(Fx.breakBlock, toremove.worldx(), toremove.worldy(), toremove.dimension);
             }
         }
 
@@ -81,10 +81,10 @@ public class Placement {
                             toplace.setLinked((byte) (dx + offsetx), (byte) (dy + offsety));
                     }
 
-                    if (effects) Effects.effect(Fx.place, worldx * tilesize, worldy * tilesize);
+                    if (effects) Effects.effect(Fx.place, worldx * tilesize, worldy * tilesize, tile.dimension);
                 }
             }
-        } else if (effects) Effects.effect(Fx.place, x * tilesize, y * tilesize);
+        } else if (effects) Effects.effect(Fx.place, x * tilesize, y * tilesize, tile.dimension);
 
         if (effects && sound) threads.run(() -> Effects.sound("place", x * tilesize, y * tilesize));
     }

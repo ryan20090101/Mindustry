@@ -55,7 +55,7 @@ public class DamageArea{
             Vector2 vec = Physics.raycastRect(x, y, x2, y2, other);
 
             if (vec != null) {
-                Effects.effect(effect, vec.x, vec.y);
+                Effects.effect(effect, vec.x, vec.y, e.dimension);
                 enemy.damage(damage);
             }
         };

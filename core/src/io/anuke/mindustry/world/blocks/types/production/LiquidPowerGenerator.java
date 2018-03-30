@@ -72,8 +72,7 @@ public class LiquidPowerGenerator extends LogicGenerator implements LiquidAccept
 			entity.power += used * powerPerLiquid;
 			
 			if(used > 0.001f && Mathf.chance(0.05 * Timers.delta())){
-				
-				Effects.effect(generateEffect, tile.drawx() + Mathf.range(3f), tile.drawy() + Mathf.range(3f));
+				Effects.effect(generateEffect, tile.drawx() + Mathf.range(3f), tile.drawy() + Mathf.range(3f), tile.dimension);
 			}
 		}
 		

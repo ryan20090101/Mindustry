@@ -55,7 +55,7 @@ public class LiquidDrill extends LiquidBlock{
                 && entity.timer.get(timerDrill, 60 * time) && tile.entity.getItem(result) < capacity && entity.liquidAmount >= liquidUsage){
             entity.liquidAmount -= liquidUsage;
             offloadNear(tile, result);
-            Effects.effect(drillEffect, tile.worldx(), tile.worldy());
+            Effects.effect(drillEffect, tile.worldx(), tile.worldy(), tile.dimension);
         }
 
         if(entity.timer.get(timerDump, 30)){

@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class Vars{
 	//How many dimensions are there
-	public static final int dimensionIds = 2;
+	public static final int dimensionIds = 1;
 
 	public static final boolean testAndroid = false;
 	//shorthand for whether or not this is running on android

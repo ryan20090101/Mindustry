@@ -186,9 +186,9 @@ public class Control extends Module{
 			Effects.shake(5, 6, Core.camera.position.x, Core.camera.position.y);
 			Sounds.play("corexplode");
 			for(int i = 0; i < 16; i ++){
-				Timers.run(i*2, ()-> Effects.effect(Fx.explosion, world[player.dimension].getCore().worldx()+Mathf.range(40), world[player.dimension].getCore().worldy()+Mathf.range(40)));
+				Timers.run(i*2, ()-> Effects.effect(Fx.explosion, world[player.dimension].getCore().worldx()+Mathf.range(40), world[player.dimension].getCore().worldy()+Mathf.range(40),player.dimension));
 			}
-			Effects.effect(Fx.coreexplosion, world[player.dimension].getCore().worldx(), world[player.dimension].getCore().worldy());
+			Effects.effect(Fx.coreexplosion, world[player.dimension].getCore().worldx(), world[player.dimension].getCore().worldy(),player.dimension);
 
 			ui.restart.show();
 
