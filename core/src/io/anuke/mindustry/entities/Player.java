@@ -212,9 +212,12 @@ public class Player extends SyncEntity{
 		ui.hudfrag.setAlpha(Mathf.clamp((float)global.time/Vars.maxTime,0f,0.7f));
 
         if(radiation>0){
-			float radFloat = radiation/255;
-            ui.hudfrag.setGreen(radFloat);
+            ui.hudfrag.setGreen(radiation/255);
         }
+
+        if(health<100){
+			ui.hudfrag.setRed(1.0f-health/100);
+		}
 
 		int damageOnTop = block.damageOnTop;
 
