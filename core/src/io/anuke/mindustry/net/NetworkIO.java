@@ -103,9 +103,9 @@ public class NetworkIO {
         }
     }
 
-    public static void writeWorld(Player player, ByteArray upgrades, OutputStream os){
+    public static void writeWorld(Player player, ByteArray upgrades, OutputStream os) {
 
-        try(DataOutputStream stream = new DataOutputStream(os)){
+        try (DataOutputStream stream = new DataOutputStream(os)) {
 
             stream.writeFloat(Timers.time()); //timer time
             stream.writeLong(TimeUtils.millis()); //timestamp
@@ -124,13 +124,13 @@ public class NetworkIO {
 
             //--INVENTORY--
 
-            for(int i = 0; i < state.inventory.getItems().length; i ++){ //items
+            for (int i = 0; i < state.inventory.getItems().length; i++) { //items
                 stream.writeInt(state.inventory.getItems()[i]);
             }
 
             stream.writeByte(upgrades.size); //upgrade data
 
-            for(int i = 0; i < upgrades.size; i ++){
+            for (int i = 0; i < upgrades.size; i++) {
                 stream.writeByte(upgrades.get(i));
             }
 
@@ -142,15 +142,15 @@ public class NetworkIO {
             int totalblocks = 0;
             int totalrocks = 0;
 
-            for(int x = 0; x < world[0].width(); x ++){
-                for(int y = 0; y < world[0].height(); y ++){
+            for (int x = 0; x < world[0].width(); x++) {
+                for (int y = 0; y < world[0].height(); y++) {
                     Tile tile = world[0].tile(x, y);
 
-                    if(tile.breakable()){
-                        if(tile.block() instanceof Rock){
-                            totalrocks ++;
-                        }else{
-                            totalblocks ++;
+                    if (tile.breakable()) {
+                        if (tile.block() instanceof Rock) {
+                            totalrocks++;
+                        } else {
+                            totalblocks++;
                         }
                     }
                 }
@@ -160,7 +160,7 @@ public class NetworkIO {
             stream.writeInt(totalrocks);
 
             //write all rocks
-            for(int x = 0; x < world[0].width(); x ++) {
+            for (int x = 0; x < world[0].width(); x++) {
                 for (int y = 0; y < world[0].height(); y++) {
                     Tile tile = world[0].tile(x, y);
 
@@ -173,26 +173,26 @@ public class NetworkIO {
             //tile amount
             stream.writeInt(totalblocks);
 
-            for(int x = 0; x < world[0].width(); x ++){
-                for(int y = 0; y < world[0].height(); y ++){
+            for (int x = 0; x < world[0].width(); x++) {
+                for (int y = 0; y < world[0].height(); y++) {
                     Tile tile = world[0].tile(x, y);
 
-                    if(tile.breakable() && !(tile.block() instanceof Rock)){
+                    if (tile.breakable() && !(tile.block() instanceof Rock)) {
 
-                        stream.writeInt(x + y*world[0].width()); //tile pos
+                        stream.writeInt(x + y * world[0].width()); //tile pos
                         //TODO will break if block number gets over BYTE_MAX
                         stream.writeByte(tile.block().id); //block ID
 
-                        if(tile.block() instanceof BlockPart){
+                        if (tile.block() instanceof BlockPart) {
                             stream.writeByte(tile.link);
                         }
 
-                        if(tile.entity != null){
+                        if (tile.entity != null) {
                             stream.writeShort(tile.getPackedData());
-                            stream.writeShort((short)tile.entity.health); //health
+                            stream.writeShort((short) tile.entity.health); //health
 
                             //items
-                            for(int i = 0; i < tile.entity.items.length; i ++){
+                            for (int i = 0; i < tile.entity.items.length; i++) {
                                 stream.writeInt(tile.entity.items[i]);
                             }
 
@@ -201,15 +201,15 @@ public class NetworkIO {
                             //amount of active timers
                             byte times = 0;
 
-                            for(; times < tile.entity.timer.getTimes().length; times ++){
-                                if(tile.entity.timer.getTimes()[times] <= 1){
+                            for (; times < tile.entity.timer.getTimes().length; times++) {
+                                if (tile.entity.timer.getTimes()[times] <= 1) {
                                     break;
                                 }
                             }
 
                             stream.writeByte(times);
 
-                            for(int i = 0; i < times; i ++){
+                            for (int i = 0; i < times; i++) {
                                 stream.writeFloat(tile.entity.timer.getTimes()[i]);
                             }
 
@@ -219,7 +219,11 @@ public class NetworkIO {
                 }
             }
 
-        }catch (IOException e){
+            for (int r=0;r<global.getResearchAmount();r++) {
+                stream.write(global.getResearchStatus(r) ? 1 : 0);
+            }
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -336,6 +340,10 @@ public class NetworkIO {
 
                     tile.entity.read(stream);
                 }
+            }
+
+            for (int r=0;r<global.getResearchAmount();r++) {
+                global.research(global.getResearchById(stream.read()));
             }
 
         }catch (IOException e){

@@ -6,6 +6,7 @@ import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.world.Tile;
+import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.types.LogicAcceptor;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Inputs;
@@ -22,7 +23,7 @@ public class DesktopInput extends InputHandler{
 	float endx, endy;
 	private boolean enableHold = false;
 	private boolean beganBreak;
-	private boolean linking;
+	public boolean linking;
 	private Tile linkTile;
 	private boolean rotated = false, rotatedAlt, zoomed;
 	
@@ -140,20 +141,6 @@ public class DesktopInput extends InputHandler{
 			recipe = null;
 		}
 
-		if (Inputs.keyTap("logic_link")) {
-			if(cursor.block() instanceof LogicAcceptor) {
-				LogicAcceptor block = (LogicAcceptor) cursor.block();
-				if (!linking && block.canLogicOutput(cursor)) {
-					linking = true;
-					linkTile = cursor;
-				}
-				else if (linking) {
-					linking = false;
-					((LogicAcceptor) linkTile.block()).logicLink(linkTile,cursor);
-				}
-			}
-		}
-
 		//block breaking
 		if (enableHold && Inputs.keyDown("break") && cursor != null && validBreak(tilex(), tiley())) {
 			breaktime += Timers.delta();
@@ -176,6 +163,23 @@ public class DesktopInput extends InputHandler{
 				Cursors.restoreCursor();
 		}
 		if (!ui.chatfrag.isVisible()) {
+			if (Inputs.keyTap("logic_link")) {
+				if(cursor.block() instanceof LogicAcceptor) {
+					LogicAcceptor block = (LogicAcceptor) cursor.block();
+					if (!linking && block.canLogicOutput(cursor)) {
+						linking = true;
+						linkTile = cursor;
+					}
+					else if (linking) {
+						if(linkTile == cursor || !(linkTile.block() instanceof LogicAcceptor))
+							linking = false;
+						else {
+							linking = false;
+							((LogicAcceptor) linkTile.block()).logicLink(linkTile, cursor);
+						}
+					}
+				}
+			}
 			if (Inputs.keyRelease("ship_mode") && !player.isFlying && player.flyCooldown <= 0 && global.bossAmount <= 0) {
 				player.flyCooldown = 100;
 				player.isFlying = true;

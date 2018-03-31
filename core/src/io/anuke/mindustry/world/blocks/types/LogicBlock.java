@@ -2,7 +2,13 @@ package io.anuke.mindustry.world.blocks.types;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
+import io.anuke.mindustry.Vars;
+import io.anuke.mindustry.core.Control;
 import io.anuke.mindustry.entities.TileEntity;
+import io.anuke.mindustry.input.AndroidInput;
+import io.anuke.mindustry.input.DesktopInput;
+import io.anuke.mindustry.input.InputHandler;
+import io.anuke.mindustry.input.PlaceMode;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Layer;
 import io.anuke.mindustry.world.Tile;
@@ -118,7 +124,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
 
     @Override
     public boolean isLayer2(Tile tile) {
-        return true; //check if viewing logic links
+        return Vars.android ? Vars.control.input().placeMode == PlaceMode.linkTool : ((DesktopInput)Vars.control.input()).linking;
     }
 
     @Override

@@ -24,13 +24,13 @@ import static io.anuke.mindustry.Vars.*;
 public class World extends Module {
 	private int seed;
 
-	public Entities ents;
-	public EntityGroup<Player> playerGroup = ents.addGroup(Player.class).enableMapping();
-	public EntityGroup<Enemy> enemyGroup = ents.addGroup(Enemy.class).enableMapping();
-	public EntityGroup<TileEntity> tileGroup = ents.addGroup(TileEntity.class, false);
-	public EntityGroup<BulletEntity> bulletGroup = ents.addGroup(BulletEntity.class);
-	public EntityGroup<Shield> shieldGroup = ents.addGroup(Shield.class, false);
-	public EntityGroup<EffectEntity> effectGroup = ents.addGroup(EffectEntity.class, false);
+	public static Entities ents;
+	public static final EntityGroup<Player> playerGroup = ents.addGroup(Player.class).enableMapping();
+	public static final EntityGroup<Enemy> enemyGroup = ents.addGroup(Enemy.class).enableMapping();
+	public static final EntityGroup<TileEntity> tileGroup = ents.addGroup(TileEntity.class, false);
+	public static final EntityGroup<BulletEntity> bulletGroup = ents.addGroup(BulletEntity.class);
+	public static final EntityGroup<Shield> shieldGroup = ents.addGroup(Shield.class, false);
+	public static final EntityGroup<EffectEntity> effectGroup = ents.addGroup(EffectEntity.class, false);
 
 	public Map currentMap;
 	public int worldDimension;

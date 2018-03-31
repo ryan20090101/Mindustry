@@ -132,7 +132,15 @@ public class Logic extends Module {
 
             world[i].ents.collideGroups(world[i].bulletGroup, world[i].enemyGroup);
             world[i].ents.collideGroups(world[i].bulletGroup, world[i].playerGroup);
+
+            world[i].ents.update(world[i].ents.defaultGroup());
+            world[i].ents.update(world[i].bulletGroup);
+            world[i].ents.update(world[i].enemyGroup);
+            world[i].ents.update(world[i].tileGroup);
+            world[i].ents.update(world[i].shieldGroup);
+            world[i].ents.update(world[i].playerGroup);
         }
+
         if (!state.is(State.menu)) {
 
             if (!state.is(State.paused) || Net.active()) {
@@ -169,13 +177,6 @@ public class Logic extends Module {
                 if(!global.reversedTime)global.time++;
                 else global.time--;
             }
-
-            world[0].ents.update(world[0].ents.defaultGroup());
-            world[0].ents.update(world[0].bulletGroup);
-            world[0].ents.update(world[0].enemyGroup);
-            world[0].ents.update(world[0].tileGroup);
-            world[0].ents.update(world[0].shieldGroup);
-            world[0].ents.update(world[0].playerGroup);
         }
     }
 }

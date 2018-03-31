@@ -45,7 +45,7 @@ import static io.anuke.ucore.core.Core.camera;
 public class Renderer extends RendererModule {
 	private final static float shieldHitDuration = 18f;
 
-	public Surface shadowSurface, shieldSurface, indicatorSurface;
+	private Surface shadowSurface, shieldSurface, indicatorSurface;
 
 	private int targetscale = baseCameraScale;
 	private Texture background = new Texture("sprites/background.png");
@@ -64,7 +64,7 @@ public class Renderer extends RendererModule {
 						.setCenter(camera.position.x, camera.position.y);
 				Rectangle pos = rect2.setSize(name.size).setCenter(x, y);
 				if (view.overlaps(pos)) {
-					new EffectEntity(name, color, rotation, dimension).set(x, y).add(world[player.dimension].effectGroup);
+					new EffectEntity(name, color, rotation, dimension).set(x, y).add(world[dimension].effectGroup);
 				}
 			}
 		});

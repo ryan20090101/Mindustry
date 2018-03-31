@@ -44,6 +44,14 @@ public class Global extends Module {
 		return rContainer.get(res.id).researched;
 	}
 
+	public boolean getResearchStatus(int res) {
+		return rContainer.get(res).researched;
+	}
+
+	public int getResearchAmount() {
+		return rContainer.size;
+	}
+
 	public Research getResearchById(int id) {
 		return rContainer.get(id);
 	}
