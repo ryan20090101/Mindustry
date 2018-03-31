@@ -3,6 +3,8 @@ package io.anuke.mindustry.entities.enemies.types;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.entities.enemies.EnemyType;
+import io.anuke.mindustry.net.Net;
+import io.anuke.mindustry.net.NetEvents;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
@@ -19,7 +21,7 @@ public class DemoneyeType extends BossType {
         doPhases = true;
 		rotatespeed = 0.05f;
 		reload = 30;
-		health = 430;
+		health = 2000;
 		range = 300f;
 		hitsize = 35f;
 		domoving = false;
@@ -27,7 +29,7 @@ public class DemoneyeType extends BossType {
 
 	@Override
 	public void updateShooting(Enemy enemy){
-		/**Timers.get(enemy, ggs"salvo", 240);
+		/**Timers.get(enemy, "salvo", 240);
 		
 		if(Timers.getTime(enemy, "salvo") < 60){
 			if(Timers.get(enemy, "salvoShoot", 6)){
@@ -46,9 +48,9 @@ public class DemoneyeType extends BossType {
 				enemy.shoot(BulletType.smallSlow, f);
 			});
 		}**/
-        if(enemy.phase == 2){
+        if(enemy.phase == 3){
             enemy.shoot(BulletType.demonring, 0f);
-        }else if(enemy.phase == 3){
+        }else if(enemy.phase == 1){
             enemy.shoot(BulletType.redlaser, 0f);
         }else{
             enemy.shoot(BulletType.blueBolt, 5f);
@@ -68,5 +70,24 @@ public class DemoneyeType extends BossType {
             updateShooting(enemy);
         }
     }
+    @Override
+	public void onDeath(Enemy enemy, boolean force){
+		if(Net.server()){
+			NetEvents.handleEnemyDeath(enemy);
+		}
+
+		if(!Net.client() || force) {
+			//Effects.effect(Fx.explosion, enemy);
+			//Effects.shake(3f, 4f, enemy);
+			//Effects.sound("bang2", enemy);
+			enemy.remove();
+			enemy.dead = true;
+			global.bossAmount -= 1;
+		}
+	}
+	@Override
+	public void added(Enemy enemy){
+		global.bossAmount += 1;
+	}
 		
 }
