@@ -20,9 +20,9 @@ allprojects {
     version = 'release'
 
     ext {
-        versionNumber = '0.1'
-        versionType = 'release'
-        appName = 'Alternate Dimension'
+        versionNumber = '1'
+        versionType = 'alpha'
+        appName = 'AltDim'
         gdxVersion = '1.9.8'
         aiVersion = '1.8.1'
         uCoreVersion = '68a20ec'

@@ -88,6 +88,11 @@ public class MenuFragment implements Fragment{
 				get().addButton("", "discord", ui.discord::show);
 			}}.end().visible(() -> state.is(State.menu));
 		}
+		new table(){{
+			visible(() -> state.is(State.menu));
+			abottom().aright();
+			new label("THIS DOES NOT REPRESENT THE FINAL PRODUCT");
+		}}.end();
 
 		//version info
 		new table(){{

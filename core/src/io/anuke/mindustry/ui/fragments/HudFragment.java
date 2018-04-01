@@ -138,6 +138,7 @@ public class HudFragment implements Fragment{
 
 
 		}}.end();
+
 		//tutorial ui table
 		new table(){{
 			control.tutorial().buildUI(this);
