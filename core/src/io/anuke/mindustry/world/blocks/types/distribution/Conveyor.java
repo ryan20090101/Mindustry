@@ -58,13 +58,9 @@ public class Conveyor extends Block{
 	public void draw(Tile tile){
 		byte rotation = tile.getRotation();
         if(animated){
-            if(animationFrames==2){
-                Draw.rect(name() +
-                                (Timers.time() % ((20 / 100f) / speed) < (10 / 100f) / speed && acceptItem(Item.stone, tile, null) ? "" : "move"),
-                        tile.worldx(), tile.worldy(), rotation * 90);
-            }else{
-                Draw.rect(name() + Math.round((Timers.time() % animationFrames) *3),tile.worldx(), tile.worldy(), rotation * 90);
-            }
+			Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants) + "-") : name()
+							+ (Math.round((Timers.time()/animationSpeed) % animationFrames+0.5f)),//*animationFrames),
+					tile.drawx(), tile.drawy(), rotate ? tile.getRotation() * 90 : 0);
         }else{
             Draw.rect(name(),tile.worldx(), tile.worldy(), rotation * 90);
         }

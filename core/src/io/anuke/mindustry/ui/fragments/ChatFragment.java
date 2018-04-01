@@ -172,14 +172,11 @@ public class ChatFragment extends Table implements Fragment{
         clearChatInput();
 
         if(message.replaceAll(" ", "").isEmpty()) return;
-        //TODO: BEFORE SEND CHECK IF COMMAND, IF YES SEND COMMAND PACKET NOT CHAT PACKET
         if (message.startsWith(commandPrefix)) {
             NetEvents.handleAdminCommand(message.replaceFirst(commandPrefix,""));
-        }else
-            NetEvents.handleSendMessage(message);
-
+        }else {
         history.insert(1, message);
-        NetEvents.handleSendMessage(message);
+        NetEvents.handleSendMessage(message);}
     }
 
     public void toggle(){

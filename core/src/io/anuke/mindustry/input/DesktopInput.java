@@ -162,7 +162,7 @@ public class DesktopInput extends InputHandler{
 			else
 				Cursors.restoreCursor();
 		}
-		if (!ui.chatfrag.isVisible()) {
+		if (!ui.chatfrag.chatOpen()) {
 			if (Inputs.keyTap("logic_link")) {
 				if(cursor.block() instanceof LogicAcceptor) {
 					LogicAcceptor block = (LogicAcceptor) cursor.block();

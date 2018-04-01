@@ -392,11 +392,11 @@ public class Player extends SyncEntity{
 		float ty = y + Angles.trnsy(angle + 180f, 4f);
 
 		if(isFlying && i.target.dst(i.last) > 2f && timer.get(timerDash, 1)){
-			Effects.effect(Fx.dashsmoke, tx, ty, player.dimension);
+			Effects.effect(Fx.dashsmoke, tx, ty, dimension);
 		}
 
 		if(dashing && !dead && timer.get(timerDash, 3) && i.target.dst(i.last) > 1f){
-			Effects.effect(Fx.dashsmoke, tx, ty, player.dimension);
+			Effects.effect(Fx.dashsmoke, tx, ty, dimension);
 		}
 	}
 
