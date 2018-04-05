@@ -174,8 +174,8 @@ public class Logic extends Module {
                 }
                 if (global.time >= maxTime) global.reversedTime = true;
                 if (global.time <= 0) global.reversedTime = false;
-                if(!global.reversedTime)global.time++;
-                else global.time--;
+                if(!global.reversedTime)global.time+= Timers.delta();
+                else global.time-=Timers.delta();
             }
         }
     }

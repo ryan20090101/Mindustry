@@ -92,7 +92,7 @@ public class Vars{
 	
 	public static final int tilesize = 8;
 
-	public static final int maxTime = 30000;
+	public static final int maxTime = 2000;
 
 	public static final Locale[] locales = {new Locale("en"), new Locale("fr", "FR"), new Locale("ru"), new Locale("pl", "PL"),
 			new Locale("de"), new Locale("es", "LA"), new Locale("pt", "BR"), new Locale("ko"), new Locale("in", "ID"), new Locale("egg","EGG")};
