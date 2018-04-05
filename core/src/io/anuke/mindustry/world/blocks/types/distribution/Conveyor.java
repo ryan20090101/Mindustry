@@ -57,6 +57,8 @@ public class Conveyor extends Block{
 	@Override
 	public void draw(Tile tile){
 		byte rotation = tile.getRotation();
+		if(name()=="ultraconveyor")
+			rotation += (byte) 1;
         if(animated){
 			Draw.rect(variants > 0 ? (name() + Mathf.randomSeed(tile.id(), 1, variants) + "-") : name()
 							+ (Math.round((Timers.time()/animationSpeed) % animationFrames+0.5f)),//*animationFrames),
