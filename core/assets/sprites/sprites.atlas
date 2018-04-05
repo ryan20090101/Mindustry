@@ -333,6 +333,13 @@ conveyor
   orig: 8, 8
   offset: 0, 0
   index: -1
+conveyor1
+  rotate: false
+  xy: 559, 122
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 toggleconveyor
   rotate: false
   xy: 559, 122
@@ -347,21 +354,21 @@ toggleconveyormove
   orig: 8, 8
   offset: 0, 0
   index: -1
-conveyorMoveIcon
+conveyor2
   rotate: false
   xy: 964, 435
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-conveyorStopIcon
+conveyorMoveIcon
   rotate: false
   xy: 974, 436
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
-conveyormove
+conveyorStopIcon
   rotate: false
   xy: 984, 431
   size: 8, 8
@@ -1103,7 +1110,14 @@ poweredconveyor
   orig: 8, 8
   offset: 0, 0
   index: -1
-poweredconveyormove
+poweredconveyor1
+  rotate: false
+  xy: 830, 383
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+poweredconveyor2
   rotate: false
   xy: 830, 373
   size: 8, 8
@@ -1509,7 +1523,14 @@ steelconveyor
   orig: 8, 8
   offset: 0, 0
   index: -1
-steelconveyormove
+steelconveyor1
+  rotate: false
+  xy: 890, 377
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+steelconveyor2
   rotate: false
   xy: 850, 327
   size: 8, 8

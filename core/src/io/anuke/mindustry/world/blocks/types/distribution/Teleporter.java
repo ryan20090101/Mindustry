@@ -121,7 +121,7 @@ public class Teleporter extends PowerBlock{
 			if (chan < 0) return;
 			lastChannel = (byte) chan;
 			entity.channel = (byte) chan;
-			setConfigure(tile, (byte) chan);
+			setConfigure(tile, chan);
 		}).grow().pad(8);
 
 		table.add(cont);
