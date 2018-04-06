@@ -14,6 +14,7 @@ import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.resource.ItemStack;
 import io.anuke.mindustry.resource.Liquid;
+import io.anuke.mindustry.resource.Weapon;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Effects.Effect;
 import io.anuke.ucore.core.Timers;
@@ -119,6 +120,8 @@ public class Block{
     public int animationFrames = 1;
     public int animationSpeed = 3;
 
+	public Weapon[] lootPool;
+
 	/**calculated based on recipe, will be used in the enemy pathfinding to determine most destructible route*/
 	public int worth;
 
@@ -146,6 +149,9 @@ public class Block{
 	public void drawPlace(int x, int y, int rotation, boolean valid){}
 	public void placed(Tile tile){}
 	public void init(){}
+	public void setLootPool(Tile tile, Weapon[] pool){
+		tile.block().lootPool = pool;
+	}
 
 	public void tapped(Tile tile){}
 	public void buildTable(Tile tile, Table table) {}
