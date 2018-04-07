@@ -2,9 +2,12 @@ package io.anuke.mindustry.command;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import io.anuke.mindustry.entities.Player;
+import io.anuke.mindustry.game.EventType;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetConnection;
+import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.net.Packets;
+import io.anuke.ucore.core.Events;
 import io.anuke.ucore.function.Consumer;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Log;
@@ -44,6 +47,11 @@ public class CommandSystem extends Module {
                 netServer.admins.banPlayerIP(connection.address);
                 netServer.admins.banPlayerID(netServer.admins.getTrace(connection.address).uuid);
             }
+        });
+        registerCommand("surrender", command -> {
+            state.gameOver = true;
+            if (Net.server()) NetEvents.handleGameOver();
+            Events.fire(EventType.GameOverEvent.class);
         });
     }
 
