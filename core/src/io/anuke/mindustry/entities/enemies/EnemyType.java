@@ -11,6 +11,7 @@ import io.anuke.mindustry.graphics.Fx;
 import io.anuke.mindustry.graphics.Shaders;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
+import io.anuke.mindustry.resource.Weapon;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Blocks;
@@ -76,6 +77,9 @@ public class EnemyType {
     protected final Vector2 shift = new Vector2();
     protected final Vector2 move = new Vector2();
     protected final Vector2 calc = new Vector2();
+
+    public Weapon[] weaponPool;
+
 
     public EnemyType(String name){
         this.id = lastid++;

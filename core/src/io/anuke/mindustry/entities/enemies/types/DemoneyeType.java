@@ -1,10 +1,13 @@
 package io.anuke.mindustry.entities.enemies.types;
 
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.entities.BulletType;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.entities.enemies.EnemyType;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
+import io.anuke.mindustry.resource.Weapon;
+import io.anuke.mindustry.world.blocks.OtherBlocks;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
@@ -25,6 +28,7 @@ public class DemoneyeType extends BossType {
 		range = 300f;
 		hitsize = 35f;
 		domoving = false;
+		weaponPool = new Weapon[]{Weapon.pulser};
 	}
 
 	@Override
@@ -80,6 +84,8 @@ public class DemoneyeType extends BossType {
 			//Effects.effect(Fx.explosion, enemy);
 			//Effects.shake(3f, 4f, enemy);
 			//Effects.sound("bang2", enemy);
+			Vars.world[enemy.dimension].tile(Math.round(enemy.x),Math.round(enemy.y)).setBlock(OtherBlocks.bosscrate);
+			Vars.world[enemy.dimension].tile(Math.round(enemy.x),Math.round(enemy.y)).topBlock().setLootPool(Vars.world[enemy.dimension].tile(Math.round(enemy.x),Math.round(enemy.y)),weaponPool);
 			enemy.remove();
 			enemy.dead = true;
 			global.bossAmount -= 1;

@@ -8,5 +8,6 @@ public class OtherBlocks{
     structurecore = new StructureCore("structurecore"){},
     powervoid = new PowerVoid("powervoid"){},
     powersource = new UnlimitedPower("powersource"),
-	itemspawner = new ItemSpawner("itemspawner") {};
+	itemspawner = new ItemSpawner("itemspawner") {},
+	bosscrate = new BossCrate("bosscrate");
 }
