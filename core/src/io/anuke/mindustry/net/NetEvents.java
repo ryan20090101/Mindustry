@@ -187,6 +187,7 @@ public class NetEvents {
 
     public static void handleAdminCommand(String message){
         AdminCommandPacket packet = new AdminCommandPacket();
+        System.out.println(message);
         packet.message = message;
         Net.send(packet, SendMode.tcp);
     }

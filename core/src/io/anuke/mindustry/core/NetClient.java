@@ -178,7 +178,7 @@ public class NetClient extends Module {
         });
 
         Net.handleClient(BreakPacket.class, (packet) -> {
-            Placement.breakBlock(packet.x, packet.y, true, Timers.get("breakblocksound", 10));
+            Placement.breakBlock(packet.x, packet.y, true, Timers.get("breakblocksound", 10), packet.dimension);
         });
 
         Net.handleClient(EntitySpawnPacket.class, packet -> {

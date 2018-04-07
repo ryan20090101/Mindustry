@@ -34,6 +34,7 @@ public class Player extends SyncEntity{
 	static final int timerRegen = 3;
     private int cx = 0;
 	public String name = "name";
+	public String unformatedName = "name";
 	public boolean isFlying;
 	public boolean isAndroid;
 	public boolean isAdmin;

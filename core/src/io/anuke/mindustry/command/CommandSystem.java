@@ -1,30 +1,62 @@
 package io.anuke.mindustry.command;
 
 import com.badlogic.gdx.utils.ObjectMap;
+import io.anuke.mindustry.entities.Player;
+import io.anuke.mindustry.net.Net;
+import io.anuke.mindustry.net.NetConnection;
+import io.anuke.mindustry.net.Packets;
 import io.anuke.ucore.function.Consumer;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Log;
 
+import static io.anuke.mindustry.Vars.*;
+
 public class CommandSystem extends Module {
-    private static ObjectMap<Class<?>, Consumer<Object>> listeners = new ObjectMap<>();
+    private static ObjectMap<String, Consumer<String>> listeners = new ObjectMap<>();
 
     public CommandSystem() {
-        registerCommand(Commands.Kick.class, command -> {
-            System.out.println(command.id);
-            System.out.println(command.arguments);
+        registerCommand("kick", command -> {
+            String arg = ((String) command).replaceFirst(" ","");
+            if (state.players.containsKey(arg))
+                netServer.kick(state.players.get(arg).clientid, Packets.KickReason.kick);
+        });
+        registerCommand("banip", command -> {
+            String arg = ((String) command).replaceFirst(" ","");
+            if (state.players.containsKey(arg)){
+                Player player = state.players.get(arg);
+                NetConnection connection = gwt ? null : Net.getConnection(player.clientid);
+                netServer.admins.banPlayerIP(connection.address);
+            }
+        });
+        registerCommand("banid", command -> {
+            String arg = ((String) command).replaceFirst(" ","");
+            if (state.players.containsKey(arg)){
+                Player player = state.players.get(arg);
+                NetConnection connection = gwt ? null : Net.getConnection(player.clientid);
+                netServer.admins.banPlayerID(netServer.admins.getTrace(connection.address).uuid);
+            }
+        });
+        registerCommand("ban", command -> {
+            String arg = ((String) command).replaceFirst(" ","");
+            if (state.players.containsKey(arg)){
+                Player player = state.players.get(arg);
+                NetConnection connection = gwt ? null : Net.getConnection(player.clientid);
+                netServer.admins.banPlayerIP(connection.address);
+                netServer.admins.banPlayerID(netServer.admins.getTrace(connection.address).uuid);
+            }
         });
     }
 
     /**Call to handle a packet being recieved for the server.*/
-    public static void handleCommandReceived(Object object){
-        if(listeners.get(object.getClass()) != null) listeners.get(object.getClass()).accept(object);
+    public static void handleCommandReceived(Packets.AdminCommandPacket object){
+        String command = object.message.split(" ")[0];
+        if(listeners.get(command) != null) listeners.get(command).accept(object.message.replace(command,""));
         else{
-            Log.err("Unhandled command type: '{0}'!", (object.getClass().getCanonicalName()));
+            Log.err("Unhandled command: '{0}'!", command);
         }
     }
 
-    public static <T> void registerCommand(Class<T> type, Consumer<T> listener){
-        listeners.put(type, (Consumer<Object>) listener);
+    public static <T> void registerCommand(String command, Consumer<T> listener){
+        listeners.put(command, (Consumer<String>) listener);
     }
 }
-

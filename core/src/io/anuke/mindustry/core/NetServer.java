@@ -1,7 +1,6 @@
 package io.anuke.mindustry.core;
 
 import com.badlogic.gdx.utils.*;
-import io.anuke.mindustry.command.Commands;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.SyncEntity;
@@ -71,6 +70,11 @@ public class NetServer extends Module{
                 return;
             }
 
+            if(state.players.containsKey(packet.name.toLowerCase())) {
+                kick(id, KickReason.kick);
+                return;
+            }
+
             if(TimeUtils.millis() - info.lastKicked < kickDuration){
                 kick(id, KickReason.recentKick);
                 return;
@@ -95,6 +99,8 @@ public class NetServer extends Module{
             player.isAdmin = admins.isAdmin(uuid, ip);
             player.clientid = id;
             player.name = packet.name;
+            player.unformatedName = packet.name.replaceAll("\\[([^]]+)\\]","").toLowerCase();
+            System.out.println(player.unformatedName);
             player.isAndroid = packet.android;
             player.isFlying = packet.flying;
             player.set(world[player.dimension].getSpawnX(), world[player.dimension].getSpawnY());
@@ -102,6 +108,8 @@ public class NetServer extends Module{
             player.setNet(player.x, player.y);
             player.color.set(packet.color);
             connections.put(id, player);
+            System.out.println(player.unformatedName);
+            state.players.put(player.unformatedName,player);
 
             trace.playerid = player.id;
 
@@ -149,6 +157,10 @@ public class NetServer extends Module{
             if (player == null) {
                 Log.err("Unknown client has disconnected (ID={0})", id);
                 return;
+            }
+
+            if(state.players.containsKey(player.unformatedName)) {
+                state.players.remove(player.name);
             }
 
             Log.info("&y{0} has disconnected.", player.name);
@@ -219,9 +231,9 @@ public class NetServer extends Module{
         Net.handleServer(BreakPacket.class, (id, packet) -> {
             packet.playerid = connections.get(id).id;
 
-            if (!Placement.validBreak(packet.x, packet.y)) return;
+            if (!Placement.validBreak(packet.x, packet.y,packet.dimension)) return;
 
-            Block block = Placement.breakBlock(packet.x, packet.y, true, false);
+            Block block = Placement.breakBlock(packet.x, packet.y, true, false,packet.dimension);
 
             if (block != null) {
                 admins.getTrace(Net.getConnection(id).address).lastBlockBroken = block;
@@ -348,14 +360,7 @@ public class NetServer extends Module{
                         player.name, Net.getConnection(player.clientid).address);
                 return;
             }
-            Log.err(packet.message.split(" ")[0]);
-            Object command = Commands.getClass(packet.message.split(" ")[0]);
-
-            if (command != null) {
-                commandSystem.handleCommandReceived(command);
-            } else {
-                //inform the player that the command is false
-            }
+            commandSystem.handleCommandReceived(packet);
         });
     }
 

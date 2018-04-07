@@ -265,12 +265,13 @@ public class Packets {
     }
 
     public static class BreakPacket implements Packet{
-        public int playerid;
+        public int playerid,dimension;
         public short x, y;
 
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(playerid);
+            buffer.put((byte) dimension);
             buffer.putShort(x);
             buffer.putShort(y);
         }
@@ -278,6 +279,7 @@ public class Packets {
         @Override
         public void read(ByteBuffer buffer) {
             playerid = buffer.getInt();
+            dimension = buffer.get();
             x = buffer.getShort();
             y = buffer.getShort();
         }

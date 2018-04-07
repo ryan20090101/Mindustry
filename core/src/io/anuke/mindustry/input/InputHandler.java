@@ -110,7 +110,7 @@ public abstract class InputHandler extends InputAdapter{
 			}
 		}
 		
-		return Placement.validBreak(x, y);
+		return Placement.validBreak(x, y, player.dimension);
 	}
 	
 	public void placeBlock(int x, int y, Block result, int dimension, int rotation, boolean effects, boolean sound){
@@ -132,7 +132,7 @@ public abstract class InputHandler extends InputAdapter{
 
 	public void breakBlock(int x, int y, boolean sound){
 		if(!Net.client())
-			Placement.breakBlock(x, y, true, sound);
+			Placement.breakBlock(x, y, true, sound, player.dimension);
 
 		if(Net.active()){
 			NetEvents.handleBreak(x, y);

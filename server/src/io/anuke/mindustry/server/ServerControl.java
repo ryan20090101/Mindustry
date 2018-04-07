@@ -273,11 +273,8 @@ public class ServerControl extends Module {
 
             Player target = null;
 
-            for(Player player : world[0].playerGroup.all()){
-                if(player.name.equalsIgnoreCase(arg[0])){
-                    target = player;
-                    break;
-                }
+            if(state.players.containsKey(arg[0])){
+                target = player;
             }
 
             if(target != null){

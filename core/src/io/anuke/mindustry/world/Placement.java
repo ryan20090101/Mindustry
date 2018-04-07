@@ -22,8 +22,8 @@ public class Placement {
     private static Array<Tile> tempTiles = new Array<>();
 
     /**Returns block type that was broken, or null if unsuccesful.*/
-    public static Block breakBlock(int x, int y, boolean effect, boolean sound){
-        Tile tile = world[player.dimension].tile(x, y);
+    public static Block breakBlock(int x, int y, boolean effect, boolean sound, int dimension){
+        Tile tile = world[dimension].tile(x, y);
 
         if(tile == null) return null;
 
@@ -90,8 +90,8 @@ public class Placement {
     }
 
     public static boolean validPlace(int x, int y, int dimension, Block type){
-        for(int i = 0; i < world[player.dimension].getSpawns().size; i ++){
-            SpawnPoint spawn = world[player.dimension].getSpawns().get(i);
+        for(int i = 0; i < world[dimension].getSpawns().size; i ++){
+            SpawnPoint spawn = world[dimension].getSpawns().get(i);
             if(Vector2.dst(x * tilesize, y * tilesize, spawn.start.worldx(), spawn.start.worldy()) < enemyspawnspace){
                 return false;
             }
@@ -129,16 +129,16 @@ public class Placement {
             }
         }
 
-        Tile tile = world[player.dimension].tile(x, y);
+        Tile tile = world[dimension].tile(x, y);
 
-        if(tile == null || (isSpawnPoint(tile) && (type.solidifes || type.solid))) return false;
+        if(tile == null || (isSpawnPoint(tile,dimension) && (type.solidifes || type.solid))) return false;
 
         if(type.isMultiblock()){
             int offsetd = -(type.size-1)/2;
 
             for(int d = 0; d < type.size; d++) {
-                Tile other = world[player.dimension].tile(x + d + offsetd, y + d + offsetd);
-                if (other == null || (other.block() != Blocks.air && !other.block().alwaysReplace) || isSpawnPoint(other)) {
+                Tile other = world[dimension].tile(x + d + offsetd, y + d + offsetd);
+                if (other == null || (other.block() != Blocks.air && !other.block().alwaysReplace) || isSpawnPoint(other, dimension)) {
                     return false;
                 }
             }
@@ -150,12 +150,12 @@ public class Placement {
         }
     }
 
-    public static boolean isSpawnPoint(Tile tile){
-        return tile != null && tile.x == world[player.dimension].getCore().x && tile.y == world[player.dimension].getCore().y - 2;
+    public static boolean isSpawnPoint(Tile tile,int dimension){
+        return tile != null && tile.x == world[dimension].getCore().x && tile.y == world[dimension].getCore().y - 2;
     }
 
-    public static boolean validBreak(int x, int y){
-        Tile tile = world[player.dimension].tile(x, y);
+    public static boolean validBreak(int x, int y, int dimension){
+        Tile tile = world[dimension].tile(x, y);
 
         if(tile == null || tile.block() == ProductionBlocks.core) return false;
 
