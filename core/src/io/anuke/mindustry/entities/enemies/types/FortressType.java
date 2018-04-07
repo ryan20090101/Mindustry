@@ -46,7 +46,7 @@ public class FortressType extends EnemyType {
 				s.set(enemy.x + enemy.tr.x, enemy.y + enemy.tr.y);
 				s.add();
 
-				Effects.effect(Fx.spawn, enemy, enemy.dimension);
+				Effects.effect(Fx.spawn, enemy);
 				enemy.spawned ++;
 			}
 

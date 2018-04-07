@@ -82,7 +82,7 @@ public class PowerSmelter extends PowerBlock{
 		}
 		entity.power -= powerUsage;
 		offloadNear(tile, result);
-		Effects.effect(craftEffect, entity, tile.dimension);
+		Effects.effect(craftEffect, entity);
 	}
 
 	@Override

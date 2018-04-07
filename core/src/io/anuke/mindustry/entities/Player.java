@@ -98,7 +98,7 @@ public class Player extends SyncEntity{
 			NetEvents.handlePlayerDeath();
 		}
         radiation=0;
-		Effects.effect(Fx.explosion, this, player.dimension);
+		Effects.effect(Fx.explosion, this);
 		Effects.shake(4f, 5f, this);
 		Effects.sound("die", this);
 
@@ -111,7 +111,7 @@ public class Player extends SyncEntity{
 	/**called when a remote player death event is recieved*/
 	public void doRespawn(){
 		dead = true;
-		Effects.effect(Fx.explosion, this, player.dimension);
+		Effects.effect(Fx.explosion, this);
 		Effects.shake(4f, 5f, this);
 		Effects.sound("die", this);
 
@@ -265,7 +265,7 @@ public class Player extends SyncEntity{
 		}
 		
 		if(dashing && timer.get(timerDash, 3) && movement.len() > 0){
-			Effects.effect(Fx.dashsmoke, x + Angles.trnsx(angle + 180f, 3f), y + Angles.trnsy(angle + 180f, 3f), player.dimension);
+			Effects.effect(Fx.dashsmoke, x + Angles.trnsx(angle + 180f, 3f), y + Angles.trnsy(angle + 180f, 3f), this.dimension);
 		}
 		
 		movement.limit(speed);
