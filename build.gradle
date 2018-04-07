@@ -25,7 +25,7 @@ allprojects {
         appName = 'AltDim'
         gdxVersion = '1.9.8'
         aiVersion = '1.8.1'
-        uCoreVersion = '68a20ec'
+        uCoreVersion = 'e57f223'
 
         getVersionString = {
             String buildVersion = getBuildVersion()

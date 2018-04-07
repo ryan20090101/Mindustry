@@ -64,7 +64,8 @@ public class Renderer extends RendererModule {
 						.setCenter(camera.position.x, camera.position.y);
 				Rectangle pos = rect2.setSize(name.size).setCenter(x, y);
 				if (view.overlaps(pos)) {
-					new EffectEntity(name, color, rotation, dimension).set(x, y).add(world[dimension].effectGroup);
+					EffectEntity effectEntity = new EffectEntity(name, color, rotation, dimension).set(x, y);
+					world[dimension].effectGroup.add(effectEntity);
 				}
 			}
 		});
