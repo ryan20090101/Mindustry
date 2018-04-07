@@ -140,6 +140,7 @@ public class Logic extends Module {
             world[i].ents.update(world[i].shieldGroup);
             world[i].ents.update(world[i].effectGroup);
             world[i].ents.update(world[i].playerGroup);
+            world[i].ents.update(world[i].previewGroup);
         }
 
         if (!state.is(State.menu)) {

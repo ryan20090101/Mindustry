@@ -3,6 +3,7 @@ package io.anuke.mindustry.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import io.anuke.mindustry.core.GameState.State;
+import io.anuke.mindustry.entities.PreviewEntity;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.world.Tile;
@@ -103,6 +104,23 @@ public class DesktopInput extends InputHandler{
 		Tile cursor = world[player.dimension].tile(tilex(), tiley());
 		Tile target = cursor == null ? null : cursor.isLinked() ? cursor.getLinked() : cursor;
 		boolean showCursor = false;
+
+		if (recipe != null) {
+			preview.first().set(cursor.worldx(),cursor.worldy());
+			if(recipe.result.name() != preview.first().parentBlock) {
+				preview.first().parentBlock = recipe.result.name();
+				preview.first().rotation = 0f;
+			}
+			if(rotation*90!=preview.first().rotation&&recipe.result.rotate)
+				preview.first().rotation = rotation*90;
+		}
+
+		if(recipe == null && !preview.first().hidden)
+			preview.first().hidden = true;
+		if(recipe != null && preview.first().hidden)
+			preview.first().hidden = false;
+		if(preview.first().getGroup()==null)
+			world[player.dimension].previewGroup.add(preview.first());
 
 		if (recipe == null && target != null && !ui.hasMouse() && Inputs.keyDown("block_info")
 				&& target.block().fullDescription != null) {

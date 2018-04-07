@@ -31,6 +31,7 @@ public class World extends Module {
 	public static final EntityGroup<BulletEntity> bulletGroup = ents.addGroup(BulletEntity.class);
 	public static final EntityGroup<Shield> shieldGroup = ents.addGroup(Shield.class, false);
 	public static final EntityGroup<EffectEntity> effectGroup = ents.addGroup(EffectEntity.class, false);
+	public static final EntityGroup<PreviewEntity> previewGroup = ents.addGroup(PreviewEntity.class, false);
 
 	public Map currentMap;
 	public int worldDimension;

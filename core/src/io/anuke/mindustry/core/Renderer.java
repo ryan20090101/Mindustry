@@ -205,6 +205,7 @@ public class Renderer extends RendererModule {
 
 		world[player.dimension].ents.draw(world[player.dimension].bulletGroup);
 		world[player.dimension].ents.draw(world[player.dimension].effectGroup);
+		world[player.dimension].ents.draw(world[player.dimension].previewGroup);
 
 		drawShield();
 

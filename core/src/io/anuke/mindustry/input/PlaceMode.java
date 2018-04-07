@@ -254,13 +254,13 @@ public enum PlaceMode{
 					x2 = this.endx * t, y2 = this.endy * t;
 			
 			if(x2 >= x){
-				x -= block.size * t/2;
-				x2 += block.size * t/2;
+				x -= (block.size*1.2) * t/2;
+				x2 += (block.size*1.2) * t/2;
 			}
 			
 			if(y2 >= y){
-				y -= block.size * t/2;
-				y2 += block.size * t/2;
+				y -= (block.size*1.2) * t/2;
+				y2 += (block.size*1.2) * t/2;
 			}
 			
 			x += offset.x;

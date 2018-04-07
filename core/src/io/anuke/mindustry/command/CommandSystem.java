@@ -53,6 +53,18 @@ public class CommandSystem extends Module {
             if (Net.server()) NetEvents.handleGameOver();
             Events.fire(EventType.GameOverEvent.class);
         });
+        registerCommand("tp", command -> {
+            String[] arg = ((String) command).replaceFirst(" ","").split(" ");
+            if(arg.length==2){
+            if (state.players.containsKey(arg[0]) && state.players.containsKey(arg[1])){
+                state.players.get(arg[0]).set(state.players.get(arg[1]).x,state.players.get(arg[1]).y);
+            }}
+            if(arg.length==3) {
+                if (state.players.containsKey(arg[0])) {
+                    state.players.get(arg[0]).set(Integer.parseInt(arg[1]),Integer.parseInt(arg[2]));
+                }
+            }
+        });
     }
 
     /**Call to handle a packet being recieved for the server.*/

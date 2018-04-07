@@ -20,7 +20,7 @@ allprojects {
     version = 'release'
 
     ext {
-        versionNumber = '1'
+        versionNumber = '3'
         versionType = 'alpha'
         appName = 'AltDim'
         gdxVersion = '1.9.8'

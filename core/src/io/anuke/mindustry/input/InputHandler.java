@@ -3,6 +3,8 @@ package io.anuke.mindustry.input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import io.anuke.mindustry.entities.PreviewEntity;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.resource.ItemStack;
@@ -24,6 +26,9 @@ public abstract class InputHandler extends InputAdapter{
 	public PlaceMode breakMode = android ? PlaceMode.none : PlaceMode.holdDelete;
 	public PlaceMode lastPlaceMode = placeMode;
 	public PlaceMode lastBreakMode = breakMode;
+	public Array<PreviewEntity> preview = new Array<PreviewEntity>(){{
+		add(new PreviewEntity());
+	}};
 
 	public abstract void update();
 	public abstract float getCursorX();
