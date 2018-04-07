@@ -5,12 +5,15 @@ import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.blocks.types.Wall;
 import io.anuke.mindustry.world.blocks.types.defense.*;
 
+import static io.anuke.mindustry.Vars.fire;
+
 public class DefenseBlocks{
 	static final int wallHealthMultiplier = 4;
 	
 	public static final Block
 
 	stonewall = new Wall("stonewall"){{
+		damageTypeDamageModifier.put(fire,0f);
 		health = 40*wallHealthMultiplier;
 	}},
 

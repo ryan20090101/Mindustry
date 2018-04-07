@@ -11,6 +11,7 @@ import io.anuke.mindustry.io.Platform;
 import io.anuke.mindustry.net.ClientDebug;
 import io.anuke.mindustry.net.ServerDebug;
 import io.anuke.ucore.UCore;
+import io.anuke.ucore.entities.DamageType;
 import io.anuke.ucore.scene.ui.layout.Unit;
 
 import java.util.Locale;
@@ -140,4 +141,6 @@ public class Vars{
 	public static CommandSystem commandSystem;
 	
 	public static Player player;
+
+	public static DamageType fire; //move this to a better place
 }

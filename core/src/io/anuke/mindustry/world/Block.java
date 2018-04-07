@@ -18,10 +18,14 @@ import io.anuke.mindustry.resource.Weapon;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Effects.Effect;
 import io.anuke.ucore.core.Timers;
+import io.anuke.ucore.entities.DamageType;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Bundles;
 import io.anuke.ucore.util.Mathf;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -125,6 +129,10 @@ public class Block{
 	/**calculated based on recipe, will be used in the enemy pathfinding to determine most destructible route*/
 	public int worth;
 
+	public Map<DamageType,Float> damageTypeDamageModifier = new HashMap<DamageType,Float>(){{
+		put(DamageType.None,1f);
+	}};
+
 	public Block(String name) {
 		this.name = name;
 		this.formalName = Bundles.get("block." + name + ".name", name);
@@ -186,9 +194,13 @@ public class Block{
 	public boolean canReplace(Block other){
 		return false;
 	}
+
+	public float handleDamage(Tile tile, float amount, DamageType type){
+		return amount*damageTypeDamageModifier.getOrDefault(type,1f);
+	}
 	
 	public float handleDamage(Tile tile, float amount){
-		return amount;
+		return handleDamage(tile,amount,DamageType.None);
 	}
 
 	public void handleItem(Item item, Tile tile, Tile source){

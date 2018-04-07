@@ -1,13 +1,16 @@
 package io.anuke.mindustry.entities;
 
 import com.badlogic.gdx.graphics.Color;
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.entities.bullets.*;
 import io.anuke.mindustry.entities.effect.DamageArea;
 import io.anuke.mindustry.entities.effect.EMP;
 import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.graphics.Fx;
+import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.entities.BaseBulletType;
 import io.anuke.ucore.entities.BulletEntity;
+import io.anuke.ucore.entities.DamageType;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.graphics.Lines;
@@ -351,6 +354,7 @@ public abstract class BulletType extends BaseBulletType<Bullet> {
 		}
 	},
 	flameshot = new BulletType(0.5f, 3,"flameshot"){ //for enemies
+		{damageType = Vars.fire;}
 		public void draw(Bullet b){
 			Draw.color(Color.ORANGE, Color.SCARLET, b.time/lifetime);
 			float size = 6f-b.time/lifetime*5f;
@@ -608,6 +612,7 @@ public abstract class BulletType extends BaseBulletType<Bullet> {
 	};
 
 	public String name;
+	public DamageType damageType = DamageType.None;
 
 	public BulletType(float speed, int damage, String name){
 		this.speed = speed;
@@ -617,6 +622,6 @@ public abstract class BulletType extends BaseBulletType<Bullet> {
 
 	@Override
 	public void hit(Bullet b, float hitx, float hity){
-		//Effects.effect(Fx.hit, hitx, hity);
+		Effects.effect(Fx.hit, hitx, hity, b.dimension);
 	}
 }
