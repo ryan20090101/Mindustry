@@ -18,11 +18,15 @@ import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Timers;
+import io.anuke.ucore.entities.DamageType;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Strings;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -68,6 +72,9 @@ public class EnemyType {
     protected int radiationDeath = 200;
     protected int radiationTime = 5;
     protected boolean domoving = true;
+    public Map<DamageType,Float> damageTypeDamageModifier = new HashMap<DamageType,Float>(){{
+        put(DamageType.None,1f);
+    }};
     
     protected final int timerTarget = timeid ++;
     protected final int timerReload = timeid ++;
@@ -302,7 +309,7 @@ public class EnemyType {
 
     public void shoot(Enemy enemy){
         enemy.shoot(bullet);
-        //if(shootsound != null) Effects.sound(shootsound, enemy);
+        if(shootsound != null) Effects.sound(shootsound, enemy);
     }
 
     public void onShoot(Enemy enemy, BulletType type, float rotation){}
@@ -313,9 +320,9 @@ public class EnemyType {
         }
 
         if(!Net.client() || force) {
-            //Effects.effect(Fx.explosion, enemy);
-            //Effects.shake(3f, 4f, enemy);
-            //Effects.sound("bang2", enemy);
+            Effects.effect(Fx.explosion, enemy);
+            Effects.shake(3f, 4f, enemy);
+            Effects.sound("bang2", enemy);
             enemy.remove();
             enemy.dead = true;
         }

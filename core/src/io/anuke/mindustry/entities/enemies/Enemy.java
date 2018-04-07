@@ -41,10 +41,12 @@ public class Enemy extends SyncEntity {
 
 	public Enemy(EnemyType type){
 		this.type = type;
+		this.damageTypeDamageModifier = type.damageTypeDamageModifier;
 	}
 
 	/**internal constructor used for deserialization, DO NOT USE*/
-	public Enemy(){}
+	public Enemy(){
+	}
 
 	@Override
 	public void update(){

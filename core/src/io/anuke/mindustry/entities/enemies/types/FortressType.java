@@ -7,6 +7,7 @@ import io.anuke.mindustry.entities.enemies.EnemyTypes;
 import io.anuke.mindustry.graphics.Fx;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Timers;
+import io.anuke.ucore.entities.DamageType;
 import io.anuke.ucore.util.Angles;
 
 import static io.anuke.mindustry.Vars.world;
@@ -20,13 +21,14 @@ public class FortressType extends EnemyType {
 		
 		speed = 0.25f;
 		reload = 90;
-		health = 700;
+		health = 500;
 		range = 70f;
 		bullet = BulletType.yellowshell;
 		hitsize = 10f;
 		turretrotatespeed = rotatespeed = 0.08f;
 		length = 7f;
 		mass = 7f;
+		damageTypeDamageModifier.put(DamageType.None,0.7f);
 	}
 	
 	@Override
