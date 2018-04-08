@@ -114,6 +114,20 @@ public class StampUtil {
      * Create Stamp object from tiles in World[dimension]
      */
     public static Stamp createStamp(int wx, int wy, int sx, int sy, int dimension) {
+        //temporary, fixes crash but causes issues
+        
+        //START BAD FIX
+        int tmpWX,tmpWY,tmpSX,tmpSY;
+        if(sx<0){ tmpWX = -sx; tmpSX = wx;
+            wx = tmpWX; sx = tmpSX;}
+        if(sy<0){ tmpWY = -sy; tmpSY = wy;
+            wy = tmpWY; sy = tmpSY;}
+        if(wx<0){ tmpSX = -wx; tmpWX = sx;
+            wx = tmpWX; sx = tmpSX;}
+        if(wy<0){ tmpSY = -wy; tmpWY = sx;
+            wy = tmpWY; sy = tmpSY;}
+        //END BAD FIX
+
         Stamp stamp = new Stamp();
         stamp.x = sx;
         stamp.y = sy;

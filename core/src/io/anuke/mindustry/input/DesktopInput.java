@@ -15,10 +15,12 @@ import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Inputs.DeviceType;
 import io.anuke.ucore.core.KeyBinds;
 import io.anuke.ucore.core.Timers;
+import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.scene.utils.Cursors;
 import io.anuke.ucore.util.Input;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.mindustry.Vars;
+import javafx.scene.input.KeyCode;
 
 import java.io.IOException;
 import java.util.Random;
@@ -30,10 +32,9 @@ public class DesktopInput extends InputHandler{
 	float endx, endy;
 	private boolean enableHold = false;
 	private boolean beganBreak;
-	public boolean linking;
-	public StampUtil.Stamp stamp = new StampUtil.Stamp(){{
-		id=new Random().nextInt();
-	}};
+	public boolean linking,placingStamp,stamping;
+	public Vector2 stampOrigin = new Vector2();
+	public StampUtil.Stamp stamp;
 	private Tile linkTile;
 	private boolean rotated = false, rotatedAlt, zoomed;
 	
@@ -191,14 +192,29 @@ public class DesktopInput extends InputHandler{
 		}
 
 		if (Inputs.keyDown(Input.C.code)&&Inputs.keyDown(Input.CONTROL_LEFT.code)) {
-			stamp = StampUtil.createStamp(cursor.x,cursor.y,5,5, player.dimension);
-			try {StampUtil.writeStampFile(Integer.toString(stamp.id),stamp);
-			} catch (IOException e) { e.printStackTrace(); }
-			ui.stampChooser.reload();
+			stamping = true;
+			stampOrigin.x = cursor.worldx();
+			stampOrigin.y = cursor.worldy();
 		}
 
-		if (Inputs.keyDown(Input.V.code)&&Inputs.keyDown(Input.CONTROL_LEFT.code)) {
-			StampUtil.loadStamp(cursor.x,cursor.y, stamp, player.dimension);
+		if (Inputs.keyDown(Input.V.code)&&Inputs.keyDown(Input.CONTROL_LEFT.code)&&stamp!=null) {
+		    placingStamp = true;
+		}
+
+		if(Inputs.buttonDown(Input.MOUSE_RIGHT.code)&&(placingStamp||stamping)){
+			placingStamp = false;
+			stamping = false;
+		}
+
+		if(Inputs.buttonDown(Input.MOUSE_LEFT.code)&&placingStamp){
+		    StampUtil.loadStamp(cursor.x,cursor.y,stamp,player.dimension);
+		    placingStamp=false;
+        }
+
+		if(Inputs.buttonDown(Input.MOUSE_LEFT.code)&&stamping){
+			Tile tile = world[player.dimension].tileWorld(stampOrigin.x,stampOrigin.y);
+			stamp = StampUtil.createStamp(tile.x,tile.y,cursor.x+1-tile.x, cursor.y+1-tile.y ,player.dimension);
+			stamping=false;
 		}
 
 		if (Inputs.keyTap(Input.O.code)) {

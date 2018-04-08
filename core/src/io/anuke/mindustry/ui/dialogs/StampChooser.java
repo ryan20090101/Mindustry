@@ -34,12 +34,12 @@ public class StampChooser extends FloatingDialog {
 		DesktopInput inHandler = ((DesktopInput)control.input());
 		try {for(StampUtil.Stamp stamp : StampUtil.loadStampsFromFolder(stampDirectory)) {
 			TextButton button = new TextButton(Integer.toString(stamp.id), "toggle");
-			button.setChecked(inHandler.stamp.id==stamp.id);
 			button.clicked(() -> {
+				if(stamp==null) ((DesktopInput)control.input()).stamp = stamp;
 				if(stamp.id == inHandler.stamp.id) return;
 				((DesktopInput)control.input()).stamp = stamp;
 			});
-			stamps.add(button).group(group).update(t -> t.setChecked(inHandler.stamp.id==stamp.id));
+			stamps.add(button).group(group).update(t -> t.setChecked(inHandler.stamp!=null?inHandler.stamp.id==stamp.id:false));
 		}}catch (IOException e){e.printStackTrace();}
 		content().add(pane);
 	}
