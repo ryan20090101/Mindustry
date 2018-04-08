@@ -10,6 +10,7 @@ import java.nio.*;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 
+import static io.anuke.mindustry.Vars.stampDirectory;
 import static io.anuke.mindustry.Vars.world;
 
 public class StampUtil {
@@ -58,7 +59,7 @@ public class StampUtil {
             }
         }
         stampBuffer.flip();
-        File stampFile = new File(filename);
+        File stampFile = stampDirectory.child(filename+".minstamp").file();
         stampFile.createNewFile();
         FileOutputStream stampOutput = new FileOutputStream(stampFile);
         WritableByteChannel channel = Channels.newChannel(stampOutput);
@@ -70,7 +71,7 @@ public class StampUtil {
      * Read Stamp object from a file
      */
     public static Stamp readStamp(String filename) throws IOException {
-        File stampFile = new File(filename);
+        File stampFile = stampDirectory.child(filename+".minstamp").file();
         if(!stampFile.exists()) return null;
         FileInputStream stampInput = new FileInputStream(stampFile);
         ByteBuffer stampBuffer = ByteBuffer.wrap(IOUtils.toByteArray(stampInput));
