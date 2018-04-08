@@ -35,7 +35,7 @@ public class StampUtil {
         public int id, x, y;
         public BlockData[][] data;
 
-        public Stamp() {
+        Stamp() {
         }
     }
 
@@ -47,7 +47,7 @@ public class StampUtil {
         public int id;
         public byte rotation;
 
-        public BlockData() {
+        BlockData() {
         }
     }
 
@@ -69,6 +69,7 @@ public class StampUtil {
         }
         stampBuffer.flip();
         File stampFile = stampDirectory.child(filename + ".minstamp").file();
+        //noinspection ResultOfMethodCallIgnored
         stampFile.createNewFile();
         FileOutputStream stampOutput = new FileOutputStream(stampFile);
         WritableByteChannel channel = Channels.newChannel(stampOutput);
@@ -78,8 +79,8 @@ public class StampUtil {
 
     /**
      *
-     * @param filename
-     * @return
+     * @param filename the filename of stamp file in Vars.stampDiretory
+     * @return returns Stamp
      * @throws IOException
      */
     public static Stamp readStampFile(String filename) throws IOException {
@@ -114,6 +115,20 @@ public class StampUtil {
      * Create Stamp object from tiles in World[dimension]
      */
     public static Stamp createStamp(int wx, int wy, int sx, int sy, int dimension) {
+        //temporary, fixes crash but causes issues
+        //instead of this move the negative number in place of the positive one, invert and in case of wx/wy do magic
+        //START BAD FIX
+        int tmpWX,tmpWY,tmpSX,tmpSY;
+        if(sx<0){ tmpWX = -sx; tmpSX = wx;
+            wx = tmpWX; sx = tmpSX;}
+        if(sy<0){ tmpWY = -sy; tmpSY = wy;
+            wy = tmpWY; sy = tmpSY;}
+        if(wx<0){ tmpSX = -wx; tmpWX = sx;
+            wx = tmpWX; sx = tmpSX;}
+        if(wy<0){ tmpSY = -wy; tmpWY = sx;
+            wy = tmpWY; sy = tmpSY;}
+        //END BAD FIX
+
         Stamp stamp = new Stamp();
         stamp.x = sx;
         stamp.y = sy;
@@ -145,8 +160,8 @@ public class StampUtil {
 
     /**
      * Get stamps from folder
-     * @param folder
-     * @return
+     * @param folder folder to get stamps from
+     * @return Stamps array
      * @throws IOException
      */
     public static Stamp[] loadStampsFromFolder(FileHandle folder) throws IOException {

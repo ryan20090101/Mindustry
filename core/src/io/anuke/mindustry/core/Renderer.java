@@ -19,6 +19,7 @@ import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.game.SpawnPoint;
 import io.anuke.mindustry.graphics.BlockRenderer;
 import io.anuke.mindustry.graphics.Shaders;
+import io.anuke.mindustry.input.DesktopInput;
 import io.anuke.mindustry.input.InputHandler;
 import io.anuke.mindustry.input.PlaceMode;
 import io.anuke.mindustry.ui.fragments.ToolFragment;
@@ -438,6 +439,29 @@ public class Renderer extends RendererModule {
 		}
 
 		InputHandler input = control.input();
+
+		if(((DesktopInput)input).stamp!=null&&((DesktopInput) input).placingStamp){
+			Lines.stroke(1f);
+			Tile tile = world[player.dimension].tileWorld(Graphics.mouseWorld().x, Graphics.mouseWorld().y);
+			Lines.rect(tile.worldx()-4, tile.worldy()-4,((DesktopInput)input).stamp.x*tilesize,
+					((DesktopInput)input).stamp.y*tilesize);
+		}
+
+		if(((DesktopInput) input).stamping) {
+			Tile cursor = world[player.dimension].tile(((DesktopInput) input).tilex(),((DesktopInput) input).tiley());
+			float x = ((DesktopInput) input).stampOrigin.x-4;
+			float y = ((DesktopInput) input).stampOrigin.y-4;
+			float dx = cursor.drawx()+4;
+			float dy = cursor.drawy()+4;
+			Lines.line(x,y,
+					x, dy);
+			Lines.line(x,y,
+					dx, y);
+			Lines.line(dx,dy,
+					dx, y);
+			Lines.line(dx,dy,
+					x, dy);
+		}
 
 		//draw placement box
 		if ((input.recipe != null && state.inventory.hasItems(input.recipe.requirements) && (!ui.hasMouse() || android)
