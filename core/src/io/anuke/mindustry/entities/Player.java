@@ -63,7 +63,7 @@ public class Player extends SyncEntity{
 
 	public boolean walking = true;
 	public int jumpHeightMultiplier = 1;
-	public float gravity = 0.02f;
+	public float gravity = 0.3f;
 	private float oldy = 0;
 
 	//Debug
@@ -257,8 +257,8 @@ public class Player extends SyncEntity{
 		health = Mathf.clamp(health, -1, maxhealth);
 
 		if (walking){
-			if (movement.y != 0.01f)
-				movement.y = movement.y - gravity * Timers.delta();
+			if (y != oldy)
+				movement.y = movement.y - gravity/8 * Timers.delta();
 			else
 				movement.y = -0.01f;
 			movement.x = 0;
@@ -274,8 +274,8 @@ public class Player extends SyncEntity{
 		if(Math.abs(xa) < 0.3) xa = 0;
 		if(Math.abs(ya) < 0.3) ya = 0;
 
-		if (walking && y == oldy && ya != 0)
-			movement.y += 25f * jumpHeightMultiplier;
+		if (walking && y == oldy && ya != 0 && movement.y == -0.01f)
+			movement.y = 1.5f * jumpHeightMultiplier;
 		else if (!walking)
 			movement.y += ya*speed;
 		movement.x += xa*speed;
@@ -291,7 +291,7 @@ public class Player extends SyncEntity{
 			Effects.effect(Fx.dashsmoke, x + Angles.trnsx(angle + 180f, 3f), y + Angles.trnsy(angle + 180f, 3f), this.dimension);
 		}
 		
-		movement.limit(speed);
+		movement.limit(10);
 
 		if(tile.block().activeMovement && !walking) {
 			if (tile.getRotation() == 0) movement.x += 0.5f * block.activeMovementSpeedMultiplier;
