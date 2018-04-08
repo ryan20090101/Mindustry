@@ -183,6 +183,15 @@ public class Tile{
 			changed();
 		}
 	}
+
+	public void setBlock(int type){
+		synchronized (tileSetLock) {
+			short id = (short) type;
+			blocks[2] = id;
+			this.link = 0;
+			changed();
+		}
+	}
 	
 	public void setFloor(Block type){
 		iSetFloor(type);
