@@ -60,7 +60,17 @@ public class Player extends SyncEntity{
 
 	public boolean carry = false;
 	public Player carrier;
-	
+
+	public boolean walking = true;
+	public int jumpHeightMultiplier = 1;
+	public float gravity = 0.02f;
+	private float oldy = 0;
+
+	//Debug
+	public float movementx;
+	public float movementy;
+
+
 	public Player(){
 		hitbox.setSize(5);
 		hitboxTile.setSize(5f);
@@ -245,17 +255,29 @@ public class Player extends SyncEntity{
         
 
 		health = Mathf.clamp(health, -1, maxhealth);
-        if(block.icePhysics)
+
+		if (walking){
+			if (movement.y != 0.01f)
+				movement.y = movement.y - gravity * Timers.delta();
+			else
+				movement.y = -0.01f;
+			movement.x = 0;
+		}
+
+        else if(block.icePhysics)
             movement.set(movement.x*block.iceMovementModifier, movement.y*block.iceMovementModifier);
 		else
-            movement.set(0, 0);
+			movement.set(0, 0);
         
         float xa = Inputs.getAxis("move_x");
 		float ya = Inputs.getAxis("move_y");
 		if(Math.abs(xa) < 0.3) xa = 0;
 		if(Math.abs(ya) < 0.3) ya = 0;
 
-		movement.y += ya*speed;
+		if (walking && y == oldy && ya != 0)
+			movement.y += 25f * jumpHeightMultiplier;
+		else if (!walking)
+			movement.y += ya*speed;
 		movement.x += xa*speed;
 		
 		boolean shooting = !Inputs.keyDown("dash") && Inputs.keyDown("shoot") && control.input().recipe == null
@@ -271,13 +293,15 @@ public class Player extends SyncEntity{
 		
 		movement.limit(speed);
 
-		if(tile.block().activeMovement) {
+		if(tile.block().activeMovement && !walking) {
 			if (tile.getRotation() == 0) movement.x += 0.5f * block.activeMovementSpeedMultiplier;
 			if (tile.getRotation() == 1) movement.y += 0.5f * block.activeMovementSpeedMultiplier;
 			if (tile.getRotation() == 2) movement.x -= 0.5f * block.activeMovementSpeedMultiplier;
 			if (tile.getRotation() == 3) movement.y -= 0.5f * block.activeMovementSpeedMultiplier;
 		}
-
+		movementx = movement.x;
+		movementy = movement.y;
+		oldy = y;
 		if(isFlying) {
 			//TODO: Make flying smoother, less responsive but smooth?
 			x += movement.x*Timers.delta();
@@ -288,6 +312,7 @@ public class Player extends SyncEntity{
 			y += movement.y*Timers.delta();
 		}else{
 			move(movement.x*Timers.delta(), movement.y*Timers.delta());
+
 		}
 		
 		if(!shooting){

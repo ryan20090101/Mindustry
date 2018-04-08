@@ -184,9 +184,14 @@ public class DebugFragment implements Fragment {
                 result.append("   local: ");
                 result.append(player.isLocal);
                 result.append("\n");
+                result.append("   radiation: ");
                 result.append(player.radiation);
                 result.append("\n");
-
+                result.append("   movement.x: ");
+                result.append(player.movementx);
+                result.append("\n");
+                result.append("   movement.y: ");
+                result.append(player.movementy);
                 result.append("\n");
             }
         }
