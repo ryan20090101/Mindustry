@@ -66,6 +66,8 @@ public class Player extends SyncEntity{
 	public float gravity = 0.3f;
 	private float oldy = 0;
 
+	private float legframe = 1f;
+
 	//Debug
 	public float movementx;
 	public float movementy;
@@ -140,6 +142,10 @@ public class Player extends SyncEntity{
         boolean snap = snapCamera && Settings.getBool("smoothcam") && Settings.getBool("pixelate") && isLocal;
 
 		String part = isFlying ? "ship" : "mech";
+		mech = walking ? mech.walk : mech.standard;
+
+		if(part == "ship" && mech == mech.walk)
+			part = "mech";
 
 		Shaders.outline.color.set(getColor());
 		Shaders.outline.lighten = 0f;
@@ -147,31 +153,47 @@ public class Player extends SyncEntity{
 
 		Shaders.outline.apply();
 
-		if(!isFlying) {
+		if(!isFlying && !walking) {
 			for (int i : Mathf.signs) {
 				Weapon weapon = i < 0 ? weaponLeft : weaponRight;
 				tr.trns(angle - 90, weapon.dx*i, weapon.dy);
 				float w = i > 0 ? -8 : 8;
 				if(snap){
-					Draw.rect(weapon.name + "-equip", (int)x + tr.x, (int)y + tr.y, w, weapon.dh, angle - 90);
+					Draw.rect(weapon.name + "-equip", (int)x + tr.x, (int)y + tr.y + (walking ? 10 : 0), w, weapon.dh, angle - 90);
                 }else{
-					Draw.rect(weapon.name + "-equip", x + tr.x, y + tr.y, w, weapon.dh, angle - 90);
+					Draw.rect(weapon.name + "-equip", x + tr.x, y + tr.y + (walking ? 10 : 0), w, weapon.dh, angle - 90);
 				}
 			}
 		}
+        if(snap && walking){
+            Draw.rect(part + "-" + mech.name + "-leg-" + Math.round(legframe) + (angle>90&&angle<270 ? "L":""), (int)x, (int)y-4, 0);
+        }else if (walking) {
+			Draw.rect(part + "-" + mech.name + "-leg-" + Math.round(legframe) + (angle > 90 && angle < 270 ? "L" : ""), x, y - 4, 0);
+		}
 
 		if(snap){
-			Draw.rect(part + "-" + mech.name, (int)x, (int)y, angle-90);
+
+			Draw.rect(part + "-" + mech.name, (int)x, (int)y + (walking ? 10 : 0)-4, angle-90);
+			Draw.rect(weaponLeft.name + "-equip", (int)x, y, 0, weaponLeft.dh, angle - 90);
 		}else{
-			Draw.rect(part + "-" + mech.name, x, y, angle-90);
+			Draw.rect(part + "-" + mech.name, x, y + (walking ? 10 : 0)-4, angle-90);
+			Draw.rect(weaponLeft.name + "-equip", x, y, 0, weaponLeft.dh, angle - 90);
 		}
+
 
 		Graphics.flush();
 	}
 	
 	@Override
 	public void update(){
-		if(!isLocal || isAndroid){
+	    if(walking) {
+            hitbox.setSize(5, 22);
+            hitboxTile.setSize(5f, 22f);
+        }else {
+            hitbox.setSize(5);
+            hitboxTile.setSize(5f);
+        }
+        if(!isLocal || isAndroid){
 			if(isAndroid && isLocal){
 				angle = Mathf.slerpDelta(angle, targetAngle, 0.2f);
 			}
@@ -256,7 +278,7 @@ public class Player extends SyncEntity{
 
 		health = Mathf.clamp(health, -1, maxhealth);
 
-		if (walking){
+		if (walking && !isFlying){
 			if (y != oldy)
 				movement.y = movement.y - gravity/8 * Timers.delta();
 			else
@@ -274,12 +296,22 @@ public class Player extends SyncEntity{
 		if(Math.abs(xa) < 0.3) xa = 0;
 		if(Math.abs(ya) < 0.3) ya = 0;
 
-		if (walking && y == oldy && ya != 0 && movement.y == -0.01f)
-			movement.y = 1.5f * jumpHeightMultiplier;
-		else if (!walking)
+		if (!isFlying && walking && y == oldy && ya != 0 && movement.y == -0.01f)
+			movement.y = 1.75f * jumpHeightMultiplier;
+		else if (!walking && !isFlying)
 			movement.y += ya*speed;
-		movement.x += xa*speed;
-		
+		if (xa != 0) {
+            movement.x += xa * speed;
+			if(angle>90&&angle<270)
+				legframe += movement.x < 0 ? 0.25f : -0.25f;
+			else
+				legframe += movement.x > 0 ? 0.25f : -0.25f;
+            if (Math.round(legframe)==7)
+                legframe = 1f;
+            if (Math.round(legframe)==0)
+            	legframe = 6f;
+		}
+
 		boolean shooting = !Inputs.keyDown("dash") && Inputs.keyDown("shoot") && control.input().recipe == null
 				&& !ui.hasMouse() && !control.input().onConfigurable() && !isFlying;
 		if(shooting){
@@ -314,14 +346,18 @@ public class Player extends SyncEntity{
 			move(movement.x*Timers.delta(), movement.y*Timers.delta());
 
 		}
-		
-		if(!shooting){
-			if(!movement.isZero())
-				angle = Mathf.slerpDelta(angle, movement.angle(), 0.13f);
-		}else{
-			float angle = Angles.mouseAngle(x, y);
-			this.angle = Mathf.slerpDelta(this.angle, angle, 0.1f);
-		}
+		if (!walking) {
+            if (!shooting) {
+                if (!movement.isZero())
+                    angle = Mathf.slerpDelta(angle, movement.angle(), 0.13f);
+            } else {
+                float angle = Angles.mouseAngle(x, y);
+                this.angle = Mathf.slerpDelta(this.angle, angle, 0.1f);
+            }
+        }else{
+            this.angle = Angles.mouseAngle(x, y);
+        }
+
 		if(!carry && !isAndroid) {
 			x = Mathf.clamp(x, 0, world[dimension].width() * tilesize);
 			y = Mathf.clamp(y, 0, world[dimension].height() * tilesize);

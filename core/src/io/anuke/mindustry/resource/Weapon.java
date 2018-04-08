@@ -138,7 +138,10 @@ public class Weapon extends Upgrade{
 			}
 			float ang = Angles.mouseAngle(p.x, p.y);
 			tr.trns(ang - 90, 3f * Mathf.sign(left), length);
-			shoot(p, p.x + tr.x, p.y + tr.y, Angles.mouseAngle(p.x + tr.x, p.y + tr.y));
+			if(!p.walking)
+				shoot(p, p.x + tr.x, p.y + tr.y, Angles.mouseAngle(p.x + tr.x, p.y + tr.y));
+			else
+				shoot(p, p.x, p.y, Angles.mouseAngle(p.x, p.y));
 		}
 	}
 
