@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import io.anuke.mindustry.entities.PreviewEntity;
 import io.anuke.mindustry.ui.fragments.ToolFragment;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
@@ -39,7 +41,7 @@ public enum PlaceMode{
 			float si = MathUtils.sin(Timers.time() / 6f) + 1.5f;
 
 			Draw.color(valid ? Colors.get("place") : Colors.get("placeInvalid"));
-			Lines.stroke(2f);
+			Lines.stroke(1f);
 			Lines.crect(x + offset.x, y + offset.y, tilesize * control.input().recipe.result.size + si,
 					tilesize * control.input().recipe.result.size + si);
 
@@ -433,6 +435,9 @@ public enum PlaceMode{
 	public boolean showCancel;
 	public boolean delete = false;
 	public boolean both = false;
+	public Array<PreviewEntity> preview = new Array<PreviewEntity>(){{
+		add(new PreviewEntity());
+	}};
 
 	private static final Translator tr = new Translator();
 	
