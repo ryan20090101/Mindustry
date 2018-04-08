@@ -36,6 +36,7 @@ import static io.anuke.ucore.scene.actions.Actions.*;
 public class UI extends SceneModule{
 	public AboutDialog about;
 	public RestartDialog restart;
+	public StampChooser stampChooser;
 	public LevelDialog levels;
 	public LoadDialog load;
 	public DiscordDialog discord;
@@ -147,6 +148,7 @@ public class UI extends SceneModule{
 
 		editor = new MapEditorDialog();
 		controls = new ControlsDialog();
+		stampChooser = new StampChooser("Stamp Chooser");
 		restart = new RestartDialog();
 		join = new JoinDialog();
 		discord = new DiscordDialog();

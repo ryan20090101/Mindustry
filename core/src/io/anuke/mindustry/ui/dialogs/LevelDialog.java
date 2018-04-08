@@ -31,7 +31,7 @@ public class LevelDialog extends FloatingDialog{
 		addCloseButton();
 		setup();
 	}
-	
+
 	public void reload(){
 		content().clear();
 		setup();

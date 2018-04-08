@@ -21,6 +21,7 @@ import io.anuke.ucore.util.Mathf;
 import io.anuke.mindustry.Vars;
 
 import java.io.IOException;
+import java.util.Random;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -30,8 +31,10 @@ public class DesktopInput extends InputHandler{
 	private boolean enableHold = false;
 	private boolean beganBreak;
 	public boolean linking;
+	public StampUtil.Stamp stamp = new StampUtil.Stamp(){{
+		id=new Random().nextInt();
+	}};
 	private Tile linkTile;
-	private StampUtil.Stamp stamp;
 	private boolean rotated = false, rotatedAlt, zoomed;
 	
 	@Override public float getCursorEndX(){ return endx; }
@@ -187,20 +190,19 @@ public class DesktopInput extends InputHandler{
 				Cursors.restoreCursor();
 		}
 
-		if (Inputs.keyTap(Input.K.code)) {
+		if (Inputs.keyDown(Input.C.code)&&Inputs.keyDown(Input.CONTROL_LEFT.code)) {
 			stamp = StampUtil.createStamp(cursor.x,cursor.y,5,5, player.dimension);
+			try {StampUtil.writeStampFile(Integer.toString(stamp.id),stamp);
+			} catch (IOException e) { e.printStackTrace(); }
+			ui.stampChooser.reload();
 		}
 
-		if (Inputs.keyTap(Input.J.code)) {
+		if (Inputs.keyDown(Input.V.code)&&Inputs.keyDown(Input.CONTROL_LEFT.code)) {
 			StampUtil.loadStamp(cursor.x,cursor.y, stamp, player.dimension);
 		}
 
-		if (Inputs.keyTap(Input.I.code)) {
-			try {
-			StampUtil.writeStampFile("temp" ,stamp);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (Inputs.keyTap(Input.O.code)) {
+			ui.stampChooser.show();
 		}
 
 		if (!ui.chatfrag.chatOpen()) {
