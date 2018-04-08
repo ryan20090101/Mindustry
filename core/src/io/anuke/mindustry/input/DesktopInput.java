@@ -6,6 +6,7 @@ import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.PreviewEntity;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
+import io.anuke.mindustry.util.StampUtil;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.types.LogicAcceptor;
@@ -15,8 +16,12 @@ import io.anuke.ucore.core.Inputs.DeviceType;
 import io.anuke.ucore.core.KeyBinds;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.scene.utils.Cursors;
+import io.anuke.ucore.util.Input;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.mindustry.Vars;
+
+import java.io.IOException;
+
 import static io.anuke.mindustry.Vars.*;
 
 public class DesktopInput extends InputHandler{
@@ -26,6 +31,7 @@ public class DesktopInput extends InputHandler{
 	private boolean beganBreak;
 	public boolean linking;
 	private Tile linkTile;
+	private StampUtil.Stamp stamp;
 	private boolean rotated = false, rotatedAlt, zoomed;
 	
 	@Override public float getCursorEndX(){ return endx; }
@@ -180,6 +186,23 @@ public class DesktopInput extends InputHandler{
 			else
 				Cursors.restoreCursor();
 		}
+
+		if (Inputs.keyTap(Input.K.code)) {
+			stamp = StampUtil.createStamp(cursor.x,cursor.y,5,5, player.dimension);
+		}
+
+		if (Inputs.keyTap(Input.J.code)) {
+			StampUtil.loadStamp(cursor.x,cursor.y, stamp, player.dimension);
+		}
+
+		if (Inputs.keyTap(Input.I.code)) {
+			try {
+			StampUtil.writeStampFile("temp" ,stamp);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		if (!ui.chatfrag.chatOpen()) {
 			if (Inputs.keyTap("logic_link")) {
 				if(cursor.block() instanceof LogicAcceptor) {
