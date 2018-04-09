@@ -52,6 +52,9 @@ public class Vars{
 	//save file directory
 	public static final FileHandle saveDirectory = gwt ? null : UCore.isAssets() ?
 			Gdx.files.local("../../desktop/mindustry-saves") : Gdx.files.local("mindustry-saves/");
+	//stamp file directory
+	public static final FileHandle stampDirectory = gwt ? null : UCore.isAssets() ?
+			Gdx.files.local("../../desktop/mindustry-stamps") : Gdx.files.local("mindustry-stamps/");
 	//scale of the font
 	public static float fontscale = Math.max(Unit.dp.scl(1f)/2f, 0.5f);
 	//camera zoom displayed on startup
