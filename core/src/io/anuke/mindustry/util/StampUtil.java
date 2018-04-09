@@ -28,11 +28,12 @@ public class StampUtil {
      */
 
     /**
-     * Stamp object
+     * Stamp Object contains block data, size and id
      */
     public static class Stamp {
 
-        public int id, x, y;
+        public String name;
+        public int x, y;
         public BlockData[][] data;
 
         Stamp() {
@@ -115,19 +116,25 @@ public class StampUtil {
      * Create Stamp object from tiles in World[dimension]
      */
     public static Stamp createStamp(int wx, int wy, int sx, int sy, int dimension) {
-        //temporary, fixes crash but causes issues
-        //instead of this move the negative number in place of the positive one, invert and in case of wx/wy do magic
-        //START BAD FIX
-        int tmpWX,tmpWY,tmpSX,tmpSY;
-        if(sx<0){ tmpWX = -sx; tmpSX = wx;
-            wx = tmpWX; sx = tmpSX;}
-        if(sy<0){ tmpWY = -sy; tmpSY = wy;
-            wy = tmpWY; sy = tmpSY;}
-        if(wx<0){ tmpSX = -wx; tmpWX = sx;
-            wx = tmpWX; sx = tmpSX;}
-        if(wy<0){ tmpSY = -wy; tmpWY = sx;
-            wy = tmpWY; sy = tmpSY;}
-        //END BAD FIX
+
+        //if size is negative do this
+        if (sx < 0 || sy < 0) {
+            int tmpSX, tmpSY;
+            sx = wx + sx;
+            sy = wy + sy;
+            if (sx < wx) {
+                tmpSX = wx;
+                wx = sx;
+                sx = tmpSX;
+            }
+            if (sy < wy) {
+                tmpSY = wy;
+                wy = sy;
+                sy = tmpSY;
+            }
+            sy = sy - wy;
+            sx = sx - wx;
+        }
 
         Stamp stamp = new Stamp();
         stamp.x = sx;
@@ -141,7 +148,7 @@ public class StampUtil {
                 stamp.data[x][y].rotation = tile.getRotation();
             }
         }
-        stamp.id=new Random().nextInt();
+        stamp.name = Integer.toString(new Random().nextInt());
         return stamp;
     }
 
@@ -169,7 +176,7 @@ public class StampUtil {
         int i=0;
         for(FileHandle file : folder.list()){
             stamps[i]=readStampFile(file);
-            stamps[i].id = i++;
+            stamps[i].name = file.nameWithoutExtension();
         }
         return stamps;
     }
