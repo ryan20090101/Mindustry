@@ -4,13 +4,13 @@ import com.badlogic.gdx.files.FileHandle;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Placement;
 import io.anuke.mindustry.world.Tile;
-import org.apache.commons.io.IOUtils;
-
 
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
 
 import static io.anuke.mindustry.Vars.stampDirectory;
@@ -92,10 +92,8 @@ public class StampUtil {
      * Read Stamp object from a file
      */
     public static Stamp readStampFile(FileHandle file) throws IOException {
-        File stampFile = file.file();
-        if (!stampFile.exists()) return null;
-        FileInputStream stampInput = new FileInputStream(stampFile);
-        ByteBuffer stampBuffer = ByteBuffer.wrap(IOUtils.toByteArray(stampInput));
+        if (!file.exists()) return null;
+        ByteBuffer stampBuffer = ByteBuffer.wrap(Files.readAllBytes(Paths.get(file.path())));
         Stamp stamp = new Stamp();
         int sx = stampBuffer.getShort();
         int sy = stampBuffer.getShort();

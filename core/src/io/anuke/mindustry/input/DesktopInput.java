@@ -117,8 +117,8 @@ public class DesktopInput extends InputHandler{
 
 		if (recipe != null) {
 			preview.first().set(cursor.worldx(),cursor.worldy());
-			if(recipe.result.name() != preview.first().parentBlock) {
-				preview.first().parentBlock = recipe.result.name();
+			if(recipe.result.name() != preview.first().parentBlock.name()) {
+				preview.first().parentBlock = recipe.result;
 				preview.first().rotation = 0f;
 			}
 			if(rotation*90!=preview.first().rotation&&recipe.result.rotate)
@@ -214,6 +214,7 @@ public class DesktopInput extends InputHandler{
 		if(Inputs.buttonDown(Input.MOUSE_LEFT.code)&&stamping){
 			Tile tile = world[player.dimension].tileWorld(stampOrigin.x,stampOrigin.y);
 			stamp = StampUtil.createStamp(tile.x,tile.y,cursor.x+1-tile.x, cursor.y+1-tile.y ,player.dimension);
+			try{StampUtil.writeStampFile("temp",stamp);}catch (IOException e) {e.printStackTrace();}
 			stamping=false;
 		}
 
