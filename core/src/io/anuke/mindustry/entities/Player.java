@@ -144,9 +144,6 @@ public class Player extends SyncEntity{
 		String part = isFlying ? "ship" : "mech";
 		mech = walking ? mech.walk : mech.standard;
 
-		if(part == "ship" && mech == mech.walk)
-			part = "mech";
-
 		Shaders.outline.color.set(getColor());
 		Shaders.outline.lighten = 0f;
 		Shaders.outline.region = Draw.region(part + "-" + mech.name);
@@ -165,9 +162,9 @@ public class Player extends SyncEntity{
 				}
 			}
 		}
-        if(snap && walking){
+        if(snap && walking && !isFlying){
             Draw.rect(part + "-" + mech.name + "-leg-" + Math.round(legframe) + (angle>90&&angle<270 ? "L":""), (int)x, (int)y-4, 0);
-        }else if (walking) {
+        }else if (walking && !isFlying) {
 			Draw.rect(part + "-" + mech.name + "-leg-" + Math.round(legframe) + (angle > 90 && angle < 270 ? "L" : ""), x, y - 4, 0);
 		}
 
@@ -186,7 +183,11 @@ public class Player extends SyncEntity{
 	
 	@Override
 	public void update(){
-	    if(walking) {
+		if(isFlying && walking) {
+			Effects.effect(Fx.hoverSmoke, x + 0 + Angles.trnsx(angle - 10f + 225f, 6f), y + 6 + Angles.trnsy(angle - 10f + 225f, 6f), this.dimension);
+			Effects.effect(Fx.hoverSmoke, x + 0 + Angles.trnsx(angle + 10f + 135f, 6f), y + 6 + Angles.trnsy(angle +10f + 135f, 6f), this.dimension);
+		}
+		if(walking && !isFlying) {
             hitbox.setSize(5, 22);
             hitboxTile.setSize(5f, 22f);
         }else {
@@ -298,7 +299,9 @@ public class Player extends SyncEntity{
 
 		if (!isFlying && walking && y == oldy && ya != 0 && movement.y == -0.01f)
 			movement.y = 1.75f * jumpHeightMultiplier;
-		else if (!walking && !isFlying)
+		else if (!walking)
+			movement.y += ya*speed;
+		if(isFlying)
 			movement.y += ya*speed;
 		if (xa != 0) {
             movement.x += xa * speed;

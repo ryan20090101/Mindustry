@@ -23,7 +23,8 @@ public class Fx{
 	public static Color glowy = Color.valueOf("fdc056");
 	public static Color beam = Color.valueOf("9bffbe");
 	public static Color beamLight = Color.valueOf("ddffe9");
-    public static Color lightBlue = Hue.mix(Color.BLUE, Color.WHITE, 0.5f);	
+    public static Color lightBlue = Hue.mix(Color.BLUE, Color.WHITE, 0.5f);
+	public static Color semiLightBlue = Hue.mix(Color.BLUE, Color.WHITE, 0.25f);
     public static Color redLightRed = Hue.mix(Color.RED, lightRed, 0.5f);
 	public static final Effect
 	
@@ -530,6 +531,13 @@ public class Fx{
 	dashsmoke = new Effect(30, e -> {
 		Draw.color(Color.CORAL, Color.GRAY, e.ifract());
 		float size = e.fract()*4f;
+		Draw.rect("circle", e.x, e.y, size, size);
+		Draw.reset();
+	}),
+
+	hoverSmoke = new Effect(15, e -> {
+		Draw.color(semiLightBlue, lightBlue, e.ifract());
+		float size = e.fract()*3f;
 		Draw.rect("circle", e.x, e.y, size, size);
 		Draw.reset();
 	}),
