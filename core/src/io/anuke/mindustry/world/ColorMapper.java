@@ -158,14 +158,17 @@ public class ColorMapper{
         "38b22c", pair(Blocks.grass, Blocks.shrub),
         "2cb294", pair(Blocks.snow, Blocks.icerock),
         "141212", pair(Blocks.blackstone, Blocks.blackrock),
-        "424141", pair(Blocks.blackstone, Blocks.rock)
+        "424141", pair(Blocks.blackstone, Blocks.rock),
 
 
         
         /**"", pair(Blocks.floor, Blocks.block),
         "", pair(Blocks.floor, Blocks.block),
         "", pair(Blocks.floor, Blocks.block),
-        "", pair(Blocks.floor, Blocks.block),**/        
+        "", pair(Blocks.floor, Blocks.block),**/
+
+        /**Ship**/
+        "FEFFFF", pair(Blocks.sand, Blocks.ship1floor1)
         
 
     );

@@ -201,5 +201,9 @@ public class Blocks{
 	
 	dirtblock = new StaticBlock("dirtblock"){{
 		solid = true;
+	}},
+	ship1floor1 = new StaticBlock("ship1-floor1"){{
+		solid = true;
+		variants = 0;
 	}};
 }

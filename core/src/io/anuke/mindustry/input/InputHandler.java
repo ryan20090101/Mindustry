@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.entities.PreviewEntity;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
@@ -79,7 +80,12 @@ public abstract class InputHandler extends InputAdapter{
 	}
 	
 	public boolean validPlace(int x, int y, Block type){
-		
+
+        if(Vars.player.walking){
+            if(Vars.world[player.dimension].tile(x, y-1).block() == Blocks.air)
+                return false;
+        }
+
 		if(!type.isMultiblock() && control.tutorial().active() &&
 				control.tutorial().showBlock()){
 			
@@ -136,11 +142,16 @@ public abstract class InputHandler extends InputAdapter{
 	}
 
 	public void breakBlock(int x, int y, boolean sound){
-		if(!Net.client())
-			Placement.breakBlock(x, y, true, sound, player.dimension);
+	    while (world[player.dimension].tile(x, y).block() != Blocks.air) {
 
-		if(Net.active()){
-			NetEvents.handleBreak(x, y);
-		}
+
+            if (!Net.client())
+                Placement.breakBlock(x, y, true, sound, player.dimension);
+
+            if (Net.active()) {
+                NetEvents.handleBreak(x, y);
+            }
+            y += 1;
+        }
 	}
 }
