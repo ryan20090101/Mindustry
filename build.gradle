@@ -48,6 +48,7 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url 'https://jitpack.io' }
+        maven { url 'http://4thline.org/m2' }
     }
 }
 
@@ -61,6 +62,7 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
         compile 'com.github.MinnDevelopment:java-discord-rpc:v1.3.2'
+	compile 'org.fourthline.cling:cling-core:2.1.1'
     }
 }
 
