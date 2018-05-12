@@ -20,11 +20,17 @@ public class Shield extends Entity {
 	
 	private float uptime = 0f;
 	private final Tile tile;
-	
+	private portable = false;
+
 	public Shield(Tile tile){
 		this.tile = tile;
 		this.x = tile.worldx();
 		this.y = tile.worldy();
+	}
+	public Shield(int x, int y){
+		this.x = x;
+		this.y = y;
+		this.portable = true;
 	}
 	
 	public float drawSize(){
@@ -45,24 +51,46 @@ public class Shield extends Entity {
 		}
 		uptime = Mathf.clamp(uptime);
 		
-		if(!(tile.block() instanceof ShieldBlock)){
+		if(!(tile.block() instanceof ShieldBlock) && !portable){
 			remove();
 			return;
 		}
-		
-		ShieldBlock block = (ShieldBlock)tile.block();
-		
-		world[dimension].ents.getNearby(world[dimension].bulletGroup, x, y, block.shieldRadius * 2*uptime + 10, entity->{
-			BulletEntity bullet = (BulletEntity)entity;
-			if((bullet.owner instanceof Enemy || hitPlayers)){
-				
-				float dst =  entity.distanceTo(this);
-				
-				if(dst  < drawRadius()/2f){
-					((ShieldBlock)tile.block()).handleBullet(tile, bullet);
+		if(!portable) {
+			ShieldBlock block = (ShieldBlock) tile.block();
+
+			world[dimension].ents.getNearby(world[dimension].bulletGroup, x, y, block.shieldRadius * 2 * uptime + 10, entity -> {
+				BulletEntity bullet = (BulletEntity) entity;
+				if ((bullet.owner instanceof Enemy || hitPlayers)) {
+
+					float dst = entity.distanceTo(this);
+
+					if (dst < drawRadius() / 2f) {
+						((ShieldBlock) tile.block()).handleBullet(tile, bullet);
+					}
 				}
-			}
-		});
+			});
+		}else{
+			world[dimension].ents.getNearby(world[dimension].bulletGroup, x, y, this.radius, entity -> {
+				BulletEntity bullet = (BulletEntity) entity;
+				if ((bullet.owner instanceof Enemy || hitPlayers)) {
+
+					float dst = entity.distanceTo(this);
+
+					if (dst < drawRadius() / 2f) {
+						if(this.radius > bullet.getDamage() * 0.05f){
+							bullet.remove();
+							if(!headless) renderer.addShieldHit(bullet.x, bullet.y);
+							this.radius -= bullet.getDamage() * 0.005f;
+						}
+
+
+						//Effects.effect(bullet.damage > 5 ? Fx.shieldhit : Fx.laserhit, bullet);
+
+
+
+					}
+				}
+		}
 	}
 	
 	@Override

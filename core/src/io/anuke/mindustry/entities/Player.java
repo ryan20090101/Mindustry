@@ -20,6 +20,7 @@ import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timer;
 import io.anuke.ucore.util.Translator;
+import io.anuke.mindustry.entities.effect.Shield;
 
 import java.nio.ByteBuffer;
 
@@ -67,6 +68,7 @@ public class Player extends SyncEntity{
 	private float oldy = 0;
 
 	private float legframe = 1f;
+	public Shield personalshield = new Shield(this.x, this.y)
 
 	//Debug
 	public float movementx;
@@ -317,9 +319,13 @@ public class Player extends SyncEntity{
 
 		boolean shooting = !Inputs.keyDown("dash") && Inputs.keyDown("shoot") && control.input().recipe == null
 				&& !ui.hasMouse() && !control.input().onConfigurable() && !isFlying;
-		if(shooting){
+		if(shooting && weaponLeft != Weapon.portableshieldgenerator){
 			weaponLeft.update(player, true);
 			weaponRight.update(player, false);
+		}else if(weaponLeft == Weapon.portableshieldgenerator){
+			this.personalshield.x = this.x;
+			this.personalshield.y = this.y;
+			this.personalshield.radius = 10;
 		}
 		
 		if(dashing && timer.get(timerDash, 3) && movement.len() > 0){

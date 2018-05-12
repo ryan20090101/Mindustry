@@ -93,6 +93,9 @@ public class Weapon extends Upgrade{
 			dy = 8;
 			dh = 24;
 		}
+	},
+	portableshieldgenerator = new Weapon("portableshieldgenerator", 10, null){
+
 	};
 	/**weapon reload in frames*/
 	float reload;
