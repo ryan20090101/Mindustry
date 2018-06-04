@@ -3,27 +3,21 @@ package io.anuke.mindustry.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import io.anuke.mindustry.core.GameState.State;
-import io.anuke.mindustry.entities.PreviewEntity;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.util.StampUtil;
 import io.anuke.mindustry.world.Tile;
-import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.types.LogicAcceptor;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Inputs.DeviceType;
 import io.anuke.ucore.core.KeyBinds;
 import io.anuke.ucore.core.Timers;
-import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.scene.utils.Cursors;
 import io.anuke.ucore.util.Input;
 import io.anuke.ucore.util.Mathf;
-import io.anuke.mindustry.Vars;
-import javafx.scene.input.KeyCode;
 
 import java.io.IOException;
-import java.util.Random;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -33,8 +27,6 @@ public class DesktopInput extends InputHandler{
 	private boolean enableHold = false;
 	private boolean beganBreak;
 	public boolean linking,placingStamp,stamping;
-	public Vector2 stampOrigin = new Vector2();
-	public StampUtil.Stamp stamp;
 	private Tile linkTile;
 	private boolean rotated = false, rotatedAlt, zoomed;
 	

@@ -10,6 +10,7 @@ import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.resource.ItemStack;
 import io.anuke.mindustry.resource.Recipe;
+import io.anuke.mindustry.util.StampUtil;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Placement;
 import io.anuke.mindustry.world.Tile;
@@ -30,6 +31,8 @@ public abstract class InputHandler extends InputAdapter{
 	public Array<PreviewEntity> preview = new Array<PreviewEntity>(){{
 		add(new PreviewEntity());
 	}};
+	public Vector2 stampOrigin = new Vector2();
+	public StampUtil.Stamp stamp;
 
 	public abstract void update();
 	public abstract float getCursorX();

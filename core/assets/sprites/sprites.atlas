@@ -3113,6 +3113,13 @@ icon-rotateTool
   orig: 14, 14
   offset: 0, 0
   index: -1
+icon-rotatetool
+  rotate: false
+  xy: 571, 172
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
 icon-rotate-arrow
   rotate: false
   xy: 555, 168
