@@ -122,8 +122,8 @@ public class Renderer extends RendererModule {
 			if (world[player.dimension].getCore() == null || world[player.dimension].getCore().block() == ProductionBlocks.core) {
 				if (!smoothcam) {
 					setCamera(player.x, player.y);
-				} else {
-					smoothCamera(player.x, player.y, android ? 0.3f : 0.14f);
+				}else{
+					smoothCamera(player.x, player.y, mobile ? 0.3f : 0.14f);
 				}
 			} else {
 				smoothCamera(world[player.dimension].getCore().worldx(), world[player.dimension].getCore().worldy(), 0.4f);
@@ -139,7 +139,7 @@ public class Renderer extends RendererModule {
 
 			float deltax = camera.position.x - prex, deltay = camera.position.y - prey;
 
-			if (android) {
+			if(mobile){
 				player.x += camera.position.x - prevx;
 				player.y += camera.position.y - prevy;
 			}
@@ -272,14 +272,15 @@ public class Renderer extends RendererModule {
 			if (!player.isLocal && !player.isDead()) {
 				layout.setText(Core.font, player.name);
 				Draw.color(0f, 0f, 0f, 0.3f);
-				Draw.rect("blank", player.x, player.y + 8 - layout.height / 2, layout.width + 2, layout.height + 2);
+				Draw.rect("blank", player.getDrawPosition().x, player.getDrawPosition().y + 8 - layout.height/2, layout.width + 2, layout.height + 2);
 				Draw.color();
 				Draw.tcolor(player.getColor());
-	            Draw.text(player.name, player.x, player.y + 8);
+	            Draw.text(player.name, player.getDrawPosition().x, player.getDrawPosition().y + 8);
+
 	            if(player.isAdmin){
 	            	Draw.color(player.getColor());
 	            	float s = 3f;
-					Draw.rect("icon-admin-small", player.x + layout.width/2f + 2 + 1, player.y + 7f, s, s);
+					Draw.rect("icon-admin-small", player.getDrawPosition().x + layout.width/2f + 2 + 1, player.getDrawPosition().y + 7f, s, s);
 				}
 				Draw.reset();
            }
@@ -431,8 +432,8 @@ public class Renderer extends RendererModule {
 
 		int tilex = control.input().getBlockX();
 		int tiley = control.input().getBlockY();
-
-		if (android) {
+		
+		if(mobile){
 			Vector2 vec = Graphics.world(Gdx.input.getX(0), Gdx.input.getY(0));
 			tilex = Mathf.scl2(vec.x, tilesize);
 			tiley = Mathf.scl2(vec.y, tilesize);
@@ -457,8 +458,8 @@ public class Renderer extends RendererModule {
 		}
 
 		//draw placement box
-		if ((input.recipe != null && state.inventory.hasItems(input.recipe.requirements) && (!ui.hasMouse() || android)
-				&& control.input().drawPlace())) {
+		if((input.recipe != null && state.inventory.hasItems(input.recipe.requirements) && (!ui.hasMouse() || mobile)
+				&& control.input().drawPlace())){
 
 			input.placeMode.draw(control.input().getBlockX(), control.input().getBlockY(),
 					control.input().getBlockEndX(), control.input().getBlockEndY());
@@ -479,7 +480,7 @@ public class Renderer extends RendererModule {
 			
 		}else if(input.breakMode.delete && control.input().drawPlace()
 				&& (input.recipe == null || !state.inventory.hasItems(input.recipe.requirements))
-				&& (input.placeMode.delete || input.breakMode.both || !android)){
+				&& (input.placeMode.delete || input.breakMode.both || !mobile)){
 
             if(input.breakMode == PlaceMode.holdDelete)
                 input.breakMode.draw(tilex, tiley, 0, 0);
@@ -529,6 +530,12 @@ public class Renderer extends RendererModule {
 				}
 
 				if (Inputs.keyDown("block_info") && target.block().fullDescription != null) {
+					Draw.color(Colors.get("accent"));
+					Lines.crect(target.drawx(), target.drawy(), target.block().size * tilesize, target.block().size * tilesize);
+					Draw.color();
+				}
+				
+				if(Inputs.keyDown("block_logs")){
 					Draw.color(Colors.get("accent"));
 					Lines.crect(target.drawx(), target.drawy(), target.block().size * tilesize, target.block().size * tilesize);
 					Draw.color();
@@ -585,14 +592,14 @@ public class Renderer extends RendererModule {
 	}
 
 	//TODO optimize!
-	public void drawBar(Color color, float x, float y, float fraction) {
-		fraction = Mathf.clamp(fraction);
+	public void drawBar(Color color, float x, float y, float finion){
+		finion = Mathf.clamp(finion);
 
-		if (fraction > 0) fraction = Mathf.clamp(fraction + 0.2f, 0.24f, 1f);
+		if(finion > 0) finion = Mathf.clamp(finion + 0.2f, 0.24f, 1f);
 
 		float len = 3;
 
-		float w = (int) (len * 2 * fraction) + 0.5f;
+		float w = (int) (len * 2 * finion) + 0.5f;
 
 		x -= 0.5f;
 		y += 0.5f;

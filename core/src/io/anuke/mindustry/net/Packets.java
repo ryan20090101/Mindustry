@@ -1,8 +1,11 @@
 package io.anuke.mindustry.net;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Base64Coder;
+import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.SyncEntity;
 import io.anuke.mindustry.io.Version;
@@ -11,7 +14,6 @@ import io.anuke.mindustry.net.Packet.UnimportantPacket;
 import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.world.Block;
 import io.anuke.ucore.entities.EntityGroup;
-
 import java.nio.ByteBuffer;
 
 import static io.anuke.mindustry.Vars.world;
@@ -145,7 +147,61 @@ public class Packets {
             timestamp = buffer.getLong();
         }
     }
-
+	
+	public static class BlockLogRequestPacket implements Packet {
+		public int x;
+		public int y;
+		public Array<EditLog> editlogs;
+		
+		@Override
+		public void write(ByteBuffer buffer) {
+			buffer.putShort((short)x);
+			buffer.putShort((short)y);
+			buffer.putInt(editlogs.size);
+			for(EditLog value : editlogs) {
+				buffer.put((byte)value.playername.getBytes().length);
+				buffer.put(value.playername.getBytes());
+				buffer.putInt(value.block.id);
+				buffer.put((byte) value.rotation);
+				buffer.put((byte) value.action.ordinal());
+			}
+		}
+		
+		@Override
+		public void read(ByteBuffer buffer) {
+			x = buffer.getShort();
+			y = buffer.getShort();
+			editlogs = new Array<>();
+			int arraySize = buffer.getInt();
+			for(int a = 0; a < arraySize; a ++) {
+				byte length = buffer.get();
+				byte[] bytes = new byte[length];
+				buffer.get(bytes);
+				String name = new String(bytes);
+				
+				int blockid = buffer.getInt();
+				int rotation = buffer.get();
+				int ordinal = buffer.get();
+				
+				editlogs.add(new EditLog(name, Block.getByID(blockid), rotation, EditLog.EditAction.values()[ordinal]));
+			}
+		}
+	}
+    
+    public static class RollbackRequestPacket implements Packet {
+        public int rollbackTimes;
+        
+        @Override
+        public void write(ByteBuffer buffer) {
+            buffer.putInt(rollbackTimes);
+        }
+        
+        @Override
+        public void read(ByteBuffer buffer) {
+            rollbackTimes = buffer.getInt();
+        }
+    }
+    
     public static class PositionPacket implements Packet{
         public byte[] data;
 
@@ -168,7 +224,7 @@ public class Packets {
         public int color;
     }
 
-    public static class ShootPacket implements Packet{
+    public static class ShootPacket implements Packet, UnimportantPacket{
         public byte weaponid;
         public float x, y, rotation;
         public int playerid,dimension;
@@ -194,8 +250,13 @@ public class Packets {
         }
     }
 
+<<<<<<< HEAD
     public static class BulletPacket implements Packet{
         public int type, owner, dimension;
+=======
+    public static class BulletPacket implements Packet, UnimportantPacket{
+        public int type, owner;
+>>>>>>> upstream/master
         public float x, y, angle;
         public short damage;
 
@@ -414,7 +475,7 @@ public class Packets {
     }
 
     public enum KickReason{
-        kick, invalidPassword, clientOutdated, serverOutdated, banned, gameover(true), recentKick;
+        kick, invalidPassword, clientOutdated, serverOutdated, banned, gameover(true), recentKick, fastShoot;
         public final boolean quiet;
 
         KickReason(){ quiet = false; }

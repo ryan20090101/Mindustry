@@ -1,23 +1,161 @@
 package io.anuke.mindustry.net;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.TimeUtils;
+import io.anuke.mindustry.entities.Player;
+import io.anuke.mindustry.world.Block;
+import io.anuke.mindustry.world.Placement;
+import io.anuke.mindustry.world.blocks.types.BlockPart;
+import io.anuke.mindustry.world.blocks.types.Floor;
+import io.anuke.mindustry.world.blocks.types.Rock;
+import io.anuke.mindustry.world.blocks.types.StaticBlock;
 import io.anuke.ucore.core.Settings;
+import static io.anuke.mindustry.Vars.world;
 
 public class Administration {
+    public static final int defaultMaxBrokenBlocks = 15;
+    public static final int defaultBreakCooldown = 1000*15;
+
     private Json json = new Json();
     /**All player info. Maps UUIDs to info. This persists throughout restarts.*/
     private ObjectMap<String, PlayerInfo> playerInfo = new ObjectMap<>();
     /**Maps UUIDs to trace infos. This is wiped when a player logs off.*/
     private ObjectMap<String, TraceInfo> traceInfo = new ObjectMap<>();
+    /**Maps packed coordinates to logs for that coordinate */
+    private IntMap<Array<EditLog>> editLogs = new IntMap<>();
+    
     private Array<String> bannedIPs = new Array<>();
 
     public Administration(){
-        Settings.defaults("playerInfo", "{}");
-        Settings.defaults("bannedIPs", "{}");
+        Settings.defaultList(
+            "playerInfo", "{}",
+            "bannedIPs", "{}",
+            "antigrief", false,
+            "antigrief-max", defaultMaxBrokenBlocks,
+            "antigrief-cooldown", defaultBreakCooldown
+        );
 
         load();
+    }
+
+    public boolean isAntiGrief(){
+        return Settings.getBool("antigrief");
+    }
+
+    public boolean isValidateReplace(){
+        return false;
+    }
+
+    public void setAntiGrief(boolean antiGrief){
+        Settings.putBool("antigrief", antiGrief);
+        Settings.save();
+    }
+
+    public void setAntiGriefParams(int maxBreak, int cooldown){
+        Settings.putInt("antigrief-max", maxBreak);
+        Settings.putInt("antigrief-cooldown", cooldown);
+        Settings.save();
+    }
+
+    public IntMap<Array<EditLog>> getEditLogs() {
+        return editLogs;
+    }
+    
+    public void logEdit(int x, int y, Player player, Block block, int rotation, EditLog.EditAction action) {
+    	if(block instanceof BlockPart || block instanceof Rock || block instanceof Floor || block instanceof StaticBlock) return;
+    	if(editLogs.containsKey(x + y * world.width())) {
+			editLogs.get(x + y * world.width()).add(new EditLog(player.name, block, rotation, action));
+		}
+		else {
+			Array<EditLog> logs = new Array<>();
+			logs.add(new EditLog(player.name, block, rotation, action));
+			editLogs.put(x + y * world.width(), logs);
+		}
+    }
+    
+    public void rollbackWorld(int rollbackTimes) {
+        for(IntMap.Entry<Array<EditLog>> editLog : editLogs.entries()) {
+            int coords = editLog.key;
+            Array<EditLog> logs = editLog.value;
+        
+            for(int i = 0; i < rollbackTimes; i++) {
+            
+                EditLog log = logs.get(logs.size - 1);
+            
+                int x = coords % world.width();
+                int y = coords / world.width();
+                Block result = log.block;
+                int rotation = log.rotation;
+            
+                if(log.action == EditLog.EditAction.PLACE) {
+                    Placement.breakBlock(x, y, false, false);
+                
+                    Packets.BreakPacket packet = new Packets.BreakPacket();
+                    packet.x = (short) x;
+                    packet.y = (short) y;
+                    packet.playerid = 0;
+                
+                    Net.send(packet, Net.SendMode.tcp);
+                }
+                else if(log.action == EditLog.EditAction.BREAK) {
+                    Placement.placeBlock(x, y, result, rotation, false, false);
+                
+                    Packets.PlacePacket packet = new Packets.PlacePacket();
+                    packet.x = (short) x;
+                    packet.y = (short) y;
+                    packet.rotation = (byte) rotation;
+                    packet.playerid = 0;
+                    packet.block = result.id;
+                
+                    Net.send(packet, Net.SendMode.tcp);
+                }
+            
+                logs.removeIndex(logs.size - 1);
+                if(logs.size == 0) {
+                    editLogs.remove(coords);
+                    break;
+                }
+            }
+        }
+    }
+    
+    public boolean validateBreak(String id, String ip){
+        if(!isAntiGrief() || isAdmin(id, ip)) return true;
+
+        PlayerInfo info = getCreateInfo(id);
+
+        if(info.lastBroken == null || info.lastBroken.length != Settings.getInt("antigrief-max")){
+            info.lastBroken = new long[Settings.getInt("antigrief-max")];
+        }
+
+        long[] breaks = info.lastBroken;
+
+        int shiftBy = 0;
+        for(int i = 0; i < breaks.length && breaks[i] != 0; i ++){
+            if(TimeUtils.timeSinceMillis(breaks[i]) >= Settings.getInt("antigrief-cooldown")){
+                shiftBy = i;
+            }
+        }
+
+        for (int i = 0; i < breaks.length; i++) {
+            breaks[i] = (i + shiftBy >= breaks.length) ? 0 : breaks[i + shiftBy];
+        }
+
+        int remaining = 0;
+        for(int i = 0; i < breaks.length; i ++){
+            if(breaks[i] == 0){
+                remaining = breaks.length - i;
+                break;
+            }
+        }
+
+        if(remaining == 0) return false;
+
+        breaks[breaks.length - remaining] = TimeUtils.millis();
+        return true;
     }
 
     /**Call when a player joins to update their information here.*/
@@ -172,6 +310,30 @@ public class Administration {
         return info.admin && ip.equals(info.validAdminIP);
     }
 
+    public Array<PlayerInfo> findByName(String name, boolean last){
+        Array<PlayerInfo> result = new Array<>();
+
+        for(PlayerInfo info : playerInfo.values()){
+            if(info.lastName.toLowerCase().equals(name.toLowerCase()) || (last && info.names.contains(name, false))){
+                result.add(info);
+            }
+        }
+
+        return result;
+    }
+
+    public Array<PlayerInfo> findByIPs(String ip){
+        Array<PlayerInfo> result = new Array<>();
+
+        for(PlayerInfo info : playerInfo.values()){
+            if(info.ips.contains(ip, false)){
+                result.add(info);
+            }
+        }
+
+        return result;
+    }
+
     public PlayerInfo getInfo(String id){
         return getCreateInfo(id);
     }
@@ -223,6 +385,8 @@ public class Administration {
         public int totalBlocksBroken;
         public boolean banned, admin;
         public long lastKicked; //last kicked timestamp
+
+        public long[] lastBroken;
 
         PlayerInfo(String id){
             this.id = id;

@@ -3,12 +3,17 @@ package io.anuke.mindustry.desktop;
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Base64Coder;
 import io.anuke.kryonet.DefaultThreadImpl;
 import io.anuke.mindustry.core.GameState.State;
+import io.anuke.mindustry.core.Platform;
 import io.anuke.mindustry.core.ThreadHandler.ThreadProvider;
-import io.anuke.mindustry.io.Platform;
 import io.anuke.mindustry.net.Net;
+import io.anuke.mindustry.ui.dialogs.FileChooser;
 import io.anuke.ucore.UCore;
+import io.anuke.ucore.core.Settings;
+import io.anuke.ucore.function.Consumer;
 import io.anuke.ucore.util.Strings;
 
 import javax.swing.*;
@@ -19,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Random;
 
 import static io.anuke.mindustry.Vars.*;
 
@@ -35,6 +41,11 @@ public class DesktopPlatform extends Platform {
             DiscordEventHandlers handlers = new DiscordEventHandlers();
             DiscordRPC.INSTANCE.Discord_Initialize(applicationId, handlers, true, "");
         }
+    }
+
+    @Override
+    public void showFileChooser(String text, String content, Consumer<FileHandle> cons, boolean open, String filter) {
+        new FileChooser(text, file -> file.extension().equalsIgnoreCase(filter), open, cons).show();
     }
 
     @Override
@@ -106,15 +117,34 @@ public class DesktopPlatform extends Platform {
         try {
             Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
             NetworkInterface out;
-            for(out = e.nextElement(); out.getHardwareAddress() == null && e.hasMoreElements(); out = e.nextElement());
+            for(out = e.nextElement(); out.getHardwareAddress() == null && e.hasMoreElements() && validAddress(out.getHardwareAddress()); out = e.nextElement());
 
             byte[] bytes = out.getHardwareAddress();
             byte[] result = new byte[8];
             System.arraycopy(bytes, 0, result, 0, bytes.length);
+
+            if(new String(Base64Coder.encode(result)).equals("AAAAAAAAAOA=")) throw new RuntimeException("Bad UUID.");
+
             return result;
         }catch (Exception e){
-            e.printStackTrace();
-            return null;
+            Settings.defaults("uuid", "");
+
+            String uuid = Settings.getString("uuid");
+            if(uuid.isEmpty()){
+                byte[] result = new byte[8];
+                new Random().nextBytes(result);
+                uuid = new String(Base64Coder.encode(result));
+                Settings.putString("uuid", uuid);
+                Settings.save();
+                return result;
+            }
+            return Base64Coder.decode(uuid);
         }
+    }
+
+    private boolean validAddress(byte[] bytes){
+        byte[] result = new byte[8];
+        System.arraycopy(bytes, 0, result, 0, bytes.length);
+        return !new String(Base64Coder.encode(result)).equals("AAAAAAAAAOA=");
     }
 }

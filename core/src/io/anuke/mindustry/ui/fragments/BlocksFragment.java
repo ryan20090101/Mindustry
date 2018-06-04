@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.input.InputHandler;
+import io.anuke.mindustry.net.EditLog;
 import io.anuke.mindustry.resource.*;
 import io.anuke.mindustry.ui.dialogs.FloatingDialog;
 import io.anuke.mindustry.world.Block;
@@ -24,7 +25,6 @@ import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Bundles;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Strings;
-
 import static io.anuke.mindustry.Vars.*;
 
 public class BlocksFragment implements Fragment{
@@ -191,7 +191,7 @@ public class BlocksFragment implements Fragment{
 
 				row();
 
-				if(!android) {
+				if(!mobile) {
 					weapons = new table("button").margin(0).fillX().end().get();
 				}
 
@@ -204,7 +204,7 @@ public class BlocksFragment implements Fragment{
 	}
 
 	public void updateWeapons(){
-		if(android) return;
+		if(mobile) return;
 
 		weapons.clearChildren();
 		weapons.left();
@@ -349,7 +349,45 @@ public class BlocksFragment implements Fragment{
 
 		d.show();
 	}
-
+	
+	public void showBlockLogs(int x, int y){
+		boolean wasPaused = state.is(State.paused);
+		state.set(State.paused);
+		
+		FloatingDialog d = new FloatingDialog("$text.blocks.editlogs");
+		Table table = new Table();
+		table.defaults().pad(1f);
+		ScrollPane pane = new ScrollPane(table, "clear");
+		pane.setFadeScrollBars(false);
+		Table top = new Table();
+		top.left();
+		top.add("[accent]Edit logs for: "+ x + ", " + y);
+		table.add(top).fill().left();
+		table.row();
+		
+		d.content().add(pane).grow();
+		
+		if(currentEditLogs == null || currentEditLogs.size == 0) {
+			table.add("$text.block.editlogsnotfound").left();
+			table.row();
+		}
+		else {
+			for(int i = 0; i < currentEditLogs.size; i++) {
+				EditLog log = currentEditLogs.get(i);
+				table.add("[gold]" + (i + 1) + ". [white]" + log.info()).left();
+				table.row();
+			}
+		}
+		
+		d.buttons().addButton("$text.ok", () -> {
+			if(!wasPaused)
+				state.set(State.playing);
+			d.hide();
+		}).size(110, 50).pad(10f);
+		
+		d.show();
+	}
+	
 	public void updateItems(){
 
 		itemtable.clear();

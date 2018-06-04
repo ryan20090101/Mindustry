@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.TimeUtils;
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.*;
 import io.anuke.mindustry.entities.enemies.Enemy;
-import io.anuke.mindustry.io.Platform;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.Net.SendMode;
 import io.anuke.mindustry.net.NetworkIO;
@@ -35,12 +35,14 @@ import static io.anuke.mindustry.Vars.*;
 public class NetClient extends Module {
     private final static float dataTimeout = 60*18; //18 seconds timeout
     private final static float playerSyncTime = 2;
+    private final static int maxRequests = 50;
 
     private Timer timer = new Timer(5);
     private boolean connecting = false;
     private boolean kicked = false;
     private IntSet recieved = new IntSet();
     private IntMap<Entity> recent = new IntMap<>();
+    private int requests = 0;
     private float timeoutTime = 0f; //data timeout counter
 
     public NetClient(){
@@ -63,7 +65,7 @@ public class NetClient extends Module {
 
             ConnectPacket c = new ConnectPacket();
             c.name = player.name;
-            c.android = android;
+            c.android = mobile;
             c.color = Color.rgba8888(player.color);
             c.uuid = Platform.instance.getUUID();
 
@@ -131,11 +133,12 @@ public class NetClient extends Module {
                 if(entity instanceof Enemy) enemies ++;
 
                 if (entity == null || id == player.id) {
-                    if (id != player.id) {
+                    if (id != player.id && requests < maxRequests) {
                         EntityRequestPacket req = new EntityRequestPacket();
                         req.id = id;
                         req.group = groupid;
                         Net.send(req, SendMode.udp);
+                        requests ++;
                     }
                     data.position(data.position() + SyncEntity.getWriteSize((Class<? extends SyncEntity>) group.getType()));
                 } else {
@@ -158,6 +161,10 @@ public class NetClient extends Module {
 
             ui.hudfrag.updateItems();
         });
+    
+        Net.handleClient(BlockLogRequestPacket.class, packet -> {
+			currentEditLogs = packet.editlogs;
+		});
 
         Net.handleClient(PlacePacket.class, (packet) -> {
             Placement.placeBlock(packet.x, packet.y, Block.getByID(packet.block), packet.rotation, true, Timers.get("placeblocksound", 10));
@@ -366,6 +373,7 @@ public class NetClient extends Module {
     }
 
     void sync(){
+        requests = 0;
 
         if(timer.get(0, playerSyncTime)){
 

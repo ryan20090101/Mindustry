@@ -119,6 +119,7 @@ public class Logic extends Module {
 
             if (!state.is(State.paused) || Net.active()) {
 
+<<<<<<< HEAD
                 if (!state.mode.disableWaveTimer) {
 
                     if (state.enemies <= 0) {
@@ -128,6 +129,12 @@ public class Logic extends Module {
                         }
                     }
                 }
+=======
+            if(control != null) control.triggerInputUpdate();
+
+            if(!state.is(State.paused) || Net.active()){
+                Timers.update();
+>>>>>>> upstream/master
             }
 
             world[i].ents.collideGroups(world[i].bulletGroup, world[i].enemyGroup);
@@ -159,15 +166,25 @@ public class Logic extends Module {
 
                 if (!state.mode.disableWaveTimer) {
 
+<<<<<<< HEAD
                     if (state.enemies <= 0) {
                         if (!world[0].getMap().name.equals("tutorial")) state.wavetime -= delta();
+=======
+                    if(state.enemies <= 0){
+                        if(!world.getMap().name.equals("tutorial")) state.wavetime -= Timers.delta();
+>>>>>>> upstream/master
 
                         if (state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding) { //start updating beforehand
                             world[0].pathfinder().resetPaths();
                             state.lastUpdated = state.wave + 1;
                         }
+<<<<<<< HEAD
                     } else {
                         state.extrawavetime -= delta();
+=======
+                    }else if(!world.getMap().name.equals("tutorial")){
+                        state.extrawavetime -= Timers.delta();
+>>>>>>> upstream/master
                     }
                 }
 

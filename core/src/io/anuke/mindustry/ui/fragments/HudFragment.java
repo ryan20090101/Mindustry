@@ -8,6 +8,7 @@ import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.Packets;
 import io.anuke.ucore.core.Core;
+import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.scene.actions.Actions;
 import io.anuke.ucore.scene.builders.imagebutton;
@@ -24,13 +25,20 @@ import static io.anuke.mindustry.Vars.*;
 
 public class HudFragment implements Fragment{
 	public final BlocksFragment blockfrag = new BlocksFragment();
+
 	private ImageButton menu, flip;
 	private Table respawntable;
 	private Table wavetable;
 	private Table colortable;
 	private Label infolabel;
 	private boolean shown = true;
+<<<<<<< HEAD
     @Override
+=======
+	private float dsize = 58;
+	private float isize = 40;
+
+>>>>>>> upstream/master
 	public void build(){
 
 		//menu at top left
@@ -42,42 +50,25 @@ public class HudFragment implements Fragment{
 
 				new table() {{
 					left();
-					float dsize = 58;
 					defaults().size(dsize).left();
-					float isize = 40;
 
 					menu = new imagebutton("icon-menu", isize, ui.paused::show).get();
+					flip = new imagebutton("icon-arrow-up", isize, () -> toggleMenus()).get();
 
-					flip = new imagebutton("icon-arrow-up", isize, () -> {
-						if (wavetable.getActions().size != 0) return;
-
-						float dur = 0.3f;
-						Interpolation in = Interpolation.pow3Out;
-
-						flip.getStyle().imageUp = Core.skin.getDrawable(shown ? "icon-arrow-down" : "icon-arrow-up");
-
-						if (shown) {
-							blockfrag.toggle(false, dur, in);
-							wavetable.actions(Actions.translateBy(0, wavetable.getHeight() + dsize, dur, in), Actions.call(() -> shown = false));
-							infolabel.actions(Actions.translateBy(0, wavetable.getHeight(), dur, in), Actions.call(() -> shown = false));
-						} else {
-							shown = true;
-							blockfrag.toggle(true, dur, in);
-							wavetable.actions(Actions.translateBy(0, -wavetable.getTranslation().y, dur, in));
-							infolabel.actions(Actions.translateBy(0, -infolabel.getTranslation().y, dur, in));
+					update(t -> {
+						if(Inputs.keyTap("toggle_menus") && !ui.chatfrag.chatOpen()){
+							toggleMenus();
 						}
-
-					}).get();
+					});
 
 					new imagebutton("icon-pause", isize, () -> {
-						if(android) DebugFragment.printDebugInfo();
-						if (Net.active() && android) {
+						if (Net.active()) {
 							ui.listfrag.visible = !ui.listfrag.visible;
 						} else {
 							state.set(state.is(State.paused) ? State.playing : State.paused);
 						}
 					}).update(i -> {
-						if (Net.active() && android) {
+						if (Net.active()) {
 							i.getStyle().imageUp = Core.skin.getDrawable("icon-players");
 						} else {
 							i.setDisabled(Net.active());
@@ -86,7 +77,7 @@ public class HudFragment implements Fragment{
 					}).get();
 
 					new imagebutton("icon-settings", isize, () -> {
-						if (Net.active() && android) {
+						if (Net.active() && mobile) {
 							if (ui.chatfrag.chatOpen()) {
 								ui.chatfrag.hide();
 							} else {
@@ -96,7 +87,7 @@ public class HudFragment implements Fragment{
 							ui.settings.show();
 						}
 					}).update(i -> {
-						if (Net.active() && android) {
+						if (Net.active() && mobile) {
 							i.getStyle().imageUp = Core.skin.getDrawable("icon-chat");
 						} else {
 							i.getStyle().imageUp = Core.skin.getDrawable("icon-settings");
@@ -200,6 +191,26 @@ public class HudFragment implements Fragment{
 		blockfrag.build();
     }
 	
+
+	private void toggleMenus(){
+		if (wavetable.getActions().size != 0) return;
+
+		float dur = 0.3f;
+		Interpolation in = Interpolation.pow3Out;
+
+		flip.getStyle().imageUp = Core.skin.getDrawable(shown ? "icon-arrow-down" : "icon-arrow-up");
+
+		if (shown) {
+			blockfrag.toggle(false, dur, in);
+			wavetable.actions(Actions.translateBy(0, wavetable.getHeight() + dsize, dur, in), Actions.call(() -> shown = false));
+			infolabel.actions(Actions.translateBy(0, wavetable.getHeight(), dur, in), Actions.call(() -> shown = false));
+		} else {
+			shown = true;
+			blockfrag.toggle(true, dur, in);
+			wavetable.actions(Actions.translateBy(0, -wavetable.getTranslation().y, dur, in));
+			infolabel.actions(Actions.translateBy(0, -infolabel.getTranslation().y, dur, in));
+		}
+	}
 
 	private String getEnemiesRemaining() {
 		if(state.enemies == 1) {

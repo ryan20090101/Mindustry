@@ -33,6 +33,7 @@ public class PlayerListFragment implements Fragment{
     public void build(){
         new table(){{
             new table("pane"){{
+                touchable(Touchable.enabled);
                 margin(14f);
                 new label(() -> Bundles.format(world[player.dimension].playerGroup.size() == 1 ? "text.players.single" :
                         "text.players", world[player.dimension].playerGroup.size()));
@@ -58,13 +59,19 @@ public class PlayerListFragment implements Fragment{
                     new button("$text.server.admins", () -> {
                         ui.admins.show();
                     }).padTop(-12).padBottom(-12).padRight(-12).fillY().cell.disabled(b -> Net.client());
+    
+                    new button("$text.server.rollback", () -> {
+                        ui.rollback.show();
+                    }).padTop(-12).padBottom(-12).padRight(-12).fillY().cell.disabled(b -> !player.isAdmin);
 
                 }}.pad(10f).growX().end();
             }}.end();
 
             update(t -> {
-                if(!android){
-                    visible = Inputs.keyDown("player_list");
+                if(!mobile){
+                    if(Inputs.keyTap("player_list")){
+                        visible = !visible;
+                    }
                 }
                 if(!(Net.active() && !state.is(State.menu))){
                     visible = false;

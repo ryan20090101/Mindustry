@@ -2,6 +2,7 @@ package io.anuke.mindustry.ui.dialogs;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import io.anuke.mindustry.game.Difficulty;
 import io.anuke.mindustry.game.GameMode;
 import io.anuke.mindustry.world.Map;
@@ -52,6 +53,7 @@ public class LevelDialog extends FloatingDialog{
 			TextButton[] b = {null};
 			b[0] = Elements.newButton("$mode." + mode.name() + ".name", "toggle", () -> state.mode = mode);
 			b[0].update(() -> b[0].setChecked(state.mode == mode));
+			b[0].getLabelCell().wrap().growX().get().setAlignment(Align.center, Align.left);
 			group.add(b[0]);
 			selmode.add(b[0]).size(130f, 54f);
 		}
@@ -99,6 +101,7 @@ public class LevelDialog extends FloatingDialog{
 			Table inset = new Table("pane-button");
 			inset.add("[accent]" + Bundles.get("map."+map.name+".name", map.name)).pad(3f);
 			inset.row();
+<<<<<<< HEAD
 			inset.label((() ->{
 				try{
 					return Bundles.format("text.level.highscore", Settings.getInt("hiscore" + map.name));
@@ -109,6 +112,10 @@ public class LevelDialog extends FloatingDialog{
 			}))
 			.pad(3f);
 			inset.add("[red]"+Bundles.get("text.level.by")+map.creator==null?"":map.creator).pad(3f);
+=======
+			inset.label((() -> Bundles.format("text.level.highscore", Settings.getInt("hiscore" + map.name, 0)))).pad(3f).padLeft(-2).padRight(-2)
+					.wrap().growX().get().setAlignment(Align.center, Align.left);
+>>>>>>> upstream/master
 			inset.pack();
 			
 			float images = 154f;

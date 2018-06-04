@@ -5,24 +5,29 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import io.anuke.mindustry.command.CommandSystem;
+import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.core.*;
 import io.anuke.mindustry.entities.Player;
-import io.anuke.mindustry.io.Platform;
+import io.anuke.mindustry.core.Platform;
+import io.anuke.mindustry.net.EditLog;
 import io.anuke.mindustry.net.ClientDebug;
 import io.anuke.mindustry.net.ServerDebug;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.entities.DamageType;
 import io.anuke.ucore.scene.ui.layout.Unit;
-
+import io.anuke.ucore.util.OS;
 import java.util.Locale;
 
 public class Vars{
 	//How many dimensions are there
 	public static final int dimensionIds = 1;
 
-	public static final boolean testAndroid = false;
+	public static final boolean testMobile = false;
 	//shorthand for whether or not this is running on android
-	public static final boolean android = (Gdx.app.getType() == ApplicationType.Android) || testAndroid;
+	public static final boolean mobile = (Gdx.app.getType() == ApplicationType.Android) ||
+											Gdx.app.getType() == ApplicationType.iOS || testMobile;
+	public static final boolean ios = Gdx.app.getType() == ApplicationType.iOS;
+	public static final boolean android = Gdx.app.getType() == ApplicationType.Android;
 	//shorthand for whether or not this is running on GWT
 	public static final boolean gwt = (Gdx.app.getType() == ApplicationType.WebGL);
 	//whether to send block state change events to players
@@ -32,7 +37,7 @@ public class Vars{
 	//respawn time in frames
 	public static final float respawnduration = 60*4;
 	//time between waves in frames (on normal mode)
-	public static final float wavespace = 60*60*(android ? 1 : 1);
+	public static final float wavespace = 60*60*(mobile ? 1 : 1);
 	//waves can last no longer than 3 minutes, otherwise the next one spawns
 	public static final float maxwavespace = 60*60*4f;
 	//advance time the pathfinding starts at
@@ -47,13 +52,19 @@ public class Vars{
 	public static final String serverURL = "http://localhost:3000";
 
 	public static final String releasesURL = "https://api.github.com/repos/Anuken/Mindustry/releases";
+	public static final String macAppDir = UCore.getProperty("user.home") + "/Library/Application Support/";
 	//directory for user-created map data
 	public static final FileHandle customMapDirectory = gwt ? null : UCore.isAssets() ?
-			Gdx.files.local("../../desktop/mindustry-maps") : Gdx.files.local("mindustry-maps/");
+			Gdx.files.local("../../desktop/mindustry-maps") :
+			OS.isMac ? (Gdx.files.absolute(macAppDir).child("maps/")) :
+					Gdx.files.local("mindustry-maps/");
 	//save file directory
 	public static final FileHandle saveDirectory = gwt ? null : UCore.isAssets() ?
-			Gdx.files.local("../../desktop/mindustry-saves") : Gdx.files.local("mindustry-saves/");
-	public static final FileHandle stampDirectory = gwt ? null : Gdx.files.local("mindustry-stamps/");
+			Gdx.files.local("../../desktop/mindustry-saves") :
+			OS.isMac ? (Gdx.files.absolute(macAppDir).child("saves/")) :
+			Gdx.files.local("mindustry-saves/");
+
+    public static final FileHandle stampDirectory = gwt ? null : Gdx.files.local("mindustry-stamps/");
 	//scale of the font
 	public static float fontscale = Math.max(Unit.dp.scl(1f)/2f, 0.5f);
 	//camera zoom displayed on startup
@@ -88,6 +99,8 @@ public class Vars{
 	public static final int saveSlots = 64;
 	//amount of drops that are left when breaking a block
 	public static final float breakDropAmount = 0.5f;
+	
+	public static Array<EditLog> currentEditLogs = new Array<>();
 	
 	//only if smoothCamera
 	public static boolean snapCamera = true;

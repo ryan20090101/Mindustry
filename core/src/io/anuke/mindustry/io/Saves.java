@@ -52,6 +52,7 @@ public class Saves {
 
                 exec.submit(() -> {
                     SaveIO.saveToSlot(current.index);
+                    current.meta = SaveIO.getData(current.index);
                     saving = false;
                     return true;
                 });
@@ -85,7 +86,7 @@ public class Saves {
         current = slot;
     }
 
-    public void importSave(FileHandle file) throws IOException{
+    public SaveSlot importSave(FileHandle file) throws IOException{
         SaveSlot slot = new SaveSlot(nextSlot);
         slot.importFile(file);
         nextSlot ++;
@@ -93,6 +94,7 @@ public class Saves {
         saves.add(slot);
         slot.meta = SaveIO.getData(slot.index);
         current = slot;
+        return slot;
     }
 
     public Array<SaveSlot> getSaveSlots(){

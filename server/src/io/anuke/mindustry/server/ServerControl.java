@@ -3,7 +3,11 @@ package io.anuke.mindustry.server;
 import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+<<<<<<< HEAD
 import io.anuke.mindustry.command.CommandSystem;
+=======
+import com.badlogic.gdx.utils.IntMap;
+>>>>>>> upstream/master
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.game.Difficulty;
@@ -11,15 +15,14 @@ import io.anuke.mindustry.game.EventType.GameOverEvent;
 import io.anuke.mindustry.game.GameMode;
 import io.anuke.mindustry.io.SaveIO;
 import io.anuke.mindustry.io.Version;
+import io.anuke.mindustry.net.*;
 import io.anuke.mindustry.net.Administration.PlayerInfo;
-import io.anuke.mindustry.net.Net;
-import io.anuke.mindustry.net.NetConnection;
-import io.anuke.mindustry.net.NetEvents;
 import io.anuke.mindustry.net.Packets.ChatPacket;
 import io.anuke.mindustry.net.Packets.KickReason;
-import io.anuke.mindustry.net.TraceInfo;
 import io.anuke.mindustry.ui.fragments.DebugFragment;
+import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Map;
+import io.anuke.mindustry.world.Placement;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.modules.Module;
@@ -36,13 +39,11 @@ import java.util.Scanner;
 import static io.anuke.mindustry.Vars.*;
 import static io.anuke.ucore.util.Log.*;
 
-;
-
 public class ServerControl extends Module {
     private final CommandHandler handler = new CommandHandler("");
     private ShuffleMode mode;
 
-    public ServerControl(){
+    public ServerControl(String[] args){
         Settings.defaultList(
             "shufflemode", "normal",
             "bans", "",
@@ -70,7 +71,24 @@ public class ServerControl extends Module {
             @Override public void debug(String tag, String message, Throwable exception) { }
         });
 
+        String[] commands = {};
+
+        if(args.length > 0){
+            commands = String.join(" ", args).split(",");
+            Log.info("&lmFound {0} command-line arguments to parse. {1}", commands.length);
+        }
+
         registerCommands();
+
+        for(String s : commands){
+            Response response = handler.handleMessage(s);
+            if(response.type != ResponseType.valid){
+                Log.err("Invalid command argument sent: '{0}': {1}", s, response.type.name());
+                Log.err("Argument usage: &lc<command-1> <command1-args...>,<command-2> <command-2-args2...>");
+                System.exit(1);
+            }
+        }
+
         Thread thread = new Thread(this::readCommands, "Server Controls");
         thread.setDaemon(true);
         thread.start();
@@ -238,7 +256,7 @@ public class ServerControl extends Module {
             }
         });
 
-        handler.register("friendlyfire", "<on/off>", "Enable or disable friendly fire", arg -> {
+        handler.register("friendlyfire", "<on/off>", "Enable or disable friendly fire.", arg -> {
             String s = arg[0];
             if(s.equalsIgnoreCase("on")){
                 NetEvents.handleFriendlyFireChange(true);
@@ -250,6 +268,35 @@ public class ServerControl extends Module {
                 info("Friendly fire disabled.");
             }else{
                 err("Incorrect command usage.");
+            }
+        });
+
+        handler.register("antigrief", "[on/off] [max-break] [cooldown-in-ms]", "Enable or disable anti-grief.", arg -> {
+            if(arg.length == 0){
+                info("Anti-grief is currently &lc{0}.", netServer.admins.isAntiGrief() ? "on" : "off");
+                return;
+            }
+
+            String s = arg[0];
+            if(s.equalsIgnoreCase("on")){
+                netServer.admins.setAntiGrief(true);
+                info("Anti-grief enabled.");
+            }else if(s.equalsIgnoreCase("off")){
+                netServer.admins.setAntiGrief(false);
+                info("Anti-grief disabled.");
+            }else{
+                err("Incorrect command usage.");
+            }
+
+            if(arg.length >= 2) {
+                try {
+                    int maxbreak = Integer.parseInt(arg[1]);
+                    int cooldown = (arg.length >= 3 ? Integer.parseInt(arg[2]) : Administration.defaultBreakCooldown);
+                    netServer.admins.setAntiGriefParams(maxbreak, cooldown);
+                    info("Anti-grief parameters set.");
+                } catch (NumberFormatException e) {
+                    err("Invalid number format.");
+                }
             }
         });
 
@@ -331,7 +378,11 @@ public class ServerControl extends Module {
                 Log.info("&lmBanned players [IP]:");
                 for(String string : ipbans){
                     PlayerInfo info = netServer.admins.findByIP(string);
-                    Log.info(" &lm '{0}' / Last known name: '{1}' / ID: '{2}'", string, info.lastName, info.id);
+                    if(info != null) {
+                        Log.info(" &lm '{0}' / Last known name: '{1}' / ID: '{2}'", string, info.lastName, info.id);
+                    }else{
+                        Log.info(" &lm '{0}' (No known name or info)", string);
+                    }
                 }
             }
         });
@@ -340,8 +391,15 @@ public class ServerControl extends Module {
             if(netServer.admins.banPlayerIP(arg[0])) {
                 info("Banned player by IP: {0}.", arg[0]);
 
+<<<<<<< HEAD
                 for(Player player : world[0].playerGroup.all()){
                     if(Net.getConnection(player.clientid).address.equals(arg[0])){
+=======
+                for(Player player : playerGroup.all()){
+                    if(Net.getConnection(player.clientid) != null &&
+                            Net.getConnection(player.clientid).address != null &&
+                            Net.getConnection(player.clientid).address.equals(arg[0])){
+>>>>>>> upstream/master
                         netServer.kick(player.clientid, KickReason.banned);
                         break;
                     }
@@ -494,6 +552,41 @@ public class ServerControl extends Module {
             info("Saved to slot {0}.", slot);
         });
 
+        handler.register("griefers", "[min-break:place-ratio] [min-breakage]", "Find possible griefers currently online.", arg -> {
+            if(!state.is(State.playing)) {
+                err("Open the server first.");
+                return;
+            }
+
+            try {
+
+                float ratio = arg.length > 0 ? Float.parseFloat(arg[0]) : 0.5f;
+                int minbreak = arg.length > 1 ? Integer.parseInt(arg[1]) : 100;
+
+                boolean found = false;
+
+                for (Player player : playerGroup.all()) {
+                    if(Net.getConnection(player.clientid) == null){
+                        err("Player \"{0}\" does not have an associated connection!");
+                        continue;
+                    }
+                    TraceInfo info = netServer.admins.getTrace(Net.getConnection(player.clientid).address);
+                    if(info.totalBlocksBroken >= minbreak && info.totalBlocksBroken / Math.max(info.totalBlocksPlaced, 1f) >= ratio){
+                        info("&ly - Player '{0}' / UUID &lm{1}&ly found: &lc{2}&ly broken and &lc{3}&ly placed.",
+                                player.name, info.uuid, info.totalBlocksBroken, info.totalBlocksPlaced);
+                        found = true;
+                    }
+                }
+
+                if (!found) {
+                    info("No griefers matching the criteria have been found.");
+                }
+
+            }catch (NumberFormatException e){
+                err("Invalid number format.");
+            }
+        });
+
         handler.register("gameover", "Force a game over.", arg -> {
             if(state.is(State.menu)){
                info("Not playing a map.");
@@ -534,6 +627,60 @@ public class ServerControl extends Module {
                 Log.err("Invalid coordinates passed.");
             }
         });
+
+        handler.register("find", "<name...>", "Find player info(s) by name. Can optionally check for all names a player has had.", arg -> {
+            boolean checkAll = true;
+
+            Array<PlayerInfo> infos = netServer.admins.findByName(arg[0], checkAll);
+
+            if(infos.size == 1) {
+                PlayerInfo info = infos.peek();
+                Log.info("&lcTrace info for player '{0}' / UUID {1}:", info.lastName, info.id);
+                Log.info("  &lyall names used: {0}", info.names);
+                Log.info("  &lyIP: {0}", info.lastIP);
+                Log.info("  &lyall IPs used: {0}", info.ips);
+                Log.info("  &lytimes joined: {0}", info.timesJoined);
+                Log.info("  &lytimes kicked: {0}", info.timesKicked);
+                Log.info("");
+                Log.info("  &lytotal blocks broken: {0}", info.totalBlocksBroken);
+                Log.info("  &lytotal blocks placed: {0}", info.totalBlockPlaced);
+            }else if(infos.size > 1){
+                Log.info("&lcMultiple people have been found with that name:");
+                for(PlayerInfo info : infos){
+                    Log.info("  &ly{0}", info.id);
+                }
+                Log.info("&lcUse the info command to examine each person individually.");
+            }else{
+                info("Nobody with that name could be found.");
+            }
+        });
+
+        handler.register("findip", "<ip>", "Find player info(s) by IP.", arg -> {
+
+            Array<PlayerInfo> infos = netServer.admins.findByIPs(arg[0]);
+
+            if(infos.size == 1) {
+                PlayerInfo info = infos.peek();
+                Log.info("&lcTrace info for player '{0}' / UUID {1}:", info.lastName, info.id);
+                Log.info("  &lyall names used: {0}", info.names);
+                Log.info("  &lyIP: {0}", info.lastIP);
+                Log.info("  &lyall IPs used: {0}", info.ips);
+                Log.info("  &lytimes joined: {0}", info.timesJoined);
+                Log.info("  &lytimes kicked: {0}", info.timesKicked);
+                Log.info("");
+                Log.info("  &lytotal blocks broken: {0}", info.totalBlocksBroken);
+                Log.info("  &lytotal blocks placed: {0}", info.totalBlockPlaced);
+            }else if(infos.size > 1){
+                Log.info("&lcMultiple people have been found with that IP:");
+                for(PlayerInfo info : infos){
+                    Log.info("  &ly{0}", info.id);
+                }
+                Log.info("&lcUse the info command to examine each person individually.");
+            }else{
+                info("Nobody with that IP could be found.");
+            }
+        });
+
 
         handler.register("info", "<UUID>", "Get global info for a player's UUID.", arg -> {
             PlayerInfo info = netServer.admins.getInfoOptional(arg[0]);
@@ -587,6 +734,28 @@ public class ServerControl extends Module {
                 info("Nobody with that name could be found.");
             }
         });
+	
+		handler.register("rollback", "<amount>", "Rollback the block edits in the world", arg -> {
+			if(!state.is(State.playing)) {
+				err("Open the server first.");
+				return;
+			}
+			
+			if(!Strings.canParsePostiveInt(arg[0])) {
+				err("Please input a valid, positive, number of times to rollback");
+				return;
+			}
+			
+			int rollbackTimes = Integer.valueOf(arg[0]);
+			IntMap<Array<EditLog>> editLogs = netServer.admins.getEditLogs();
+			if(editLogs.size == 0){
+				err("Nothing to rollback!");
+				return;
+			}
+			
+			netServer.admins.rollbackWorld(rollbackTimes);
+			info("Rollback done!");
+		});
     }
 
     private void readCommands(){

@@ -12,14 +12,20 @@ import io.anuke.mindustry.world.Layer;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Blocks;
 import io.anuke.mindustry.world.blocks.types.StaticBlock;
+import io.anuke.mindustry.world.blocks.types.defense.Turret;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Graphics;
+import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.graphics.CacheBatch;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Mathf;
+<<<<<<< HEAD
 
 import io.anuke.mindustry.entities.Player;
+=======
+import java.util.Arrays;
+>>>>>>> upstream/master
 
 import java.util.Arrays;
 import static io.anuke.mindustry.Vars.*;
@@ -28,6 +34,8 @@ import static io.anuke.ucore.core.Core.camera;
 public class BlockRenderer{
 	private final static int chunksize = 32;
 	private final static int initialRequests = 32*32;
+	private static float storeX = 0;
+	private static float storeY = 0;
 	
 	private int[][][] cache;
 	private CacheBatch cbatch;
@@ -50,7 +58,7 @@ public class BlockRenderer{
 		public int compareTo(BlockRequest other){
 			return layer.compareTo(other.layer);
 		}
-
+		
 		@Override
 		public String toString(){
 			return tile.block().name + ":" + layer.toString();
@@ -66,11 +74,11 @@ public class BlockRenderer{
 		
 		int rangex = (int) (camera.viewportWidth * camera.zoom / tilesize / 2)+2;
 		int rangey = (int) (camera.viewportHeight * camera.zoom / tilesize / 2)+2;
-			
+		
 		int expandr = 3;
 		
 		Graphics.surface(renderer.shadowSurface);
-
+		
 		for(int x = -rangex - expandr; x <= rangex + expandr; x++){
 			for(int y = -rangey - expandr; y <= rangey + expandr; y++){
 				int worldx = Mathf.scl(camera.position.x, tilesize) + x;
@@ -88,16 +96,16 @@ public class BlockRenderer{
 						if(block == Blocks.air){
 							if(!state.is(State.paused)) tile.floor().update(tile);
 						}else{
-						
+							
 							if(!expanded){
 								addRequest(tile, Layer.block);
 							}
-						
+							
 							if(block.expanded || !expanded){
 								if(block.layer != null && block.isLayer(tile)){
 									addRequest(tile, block.layer);
 								}
-						
+								
 								if(block.layer2 != null && block.isLayer2(tile)){
 									addRequest(tile, block.layer2);
 								}
@@ -119,7 +127,7 @@ public class BlockRenderer{
 		Arrays.sort(requests.items, 0, requestidx);
 		iterateidx = 0;
 	}
-
+	
 	public int getRequests(){
 		return requestidx;
 	}
@@ -128,14 +136,14 @@ public class BlockRenderer{
 		Layer stopAt = top ? Layer.laser : Layer.overlay;
 		
 		for(; iterateidx < requestidx; iterateidx ++){
-
+			
 			if(iterateidx < requests.size - 1 && requests.get(iterateidx).layer.ordinal() > stopAt.ordinal()){
 				break;
 			}
 			
 			BlockRequest req = requests.get(iterateidx);
 			Block block = req.tile.block();
-
+			
 			if(req.layer == Layer.block){
 				block.draw(req.tile);
 			}else if(req.layer == block.layer){
@@ -160,12 +168,17 @@ public class BlockRenderer{
 	}
 	
 	public void drawFloor(){
+<<<<<<< HEAD
 		int chunksx = world[player.dimension].width() / chunksize, chunksy = world[player.dimension].height() / chunksize;
 
+=======
+		int chunksx = world.width() / chunksize, chunksy = world.height() / chunksize;
+		
+>>>>>>> upstream/master
 		//render the entire map
 		if(cache == null || cache.length != chunksx || cache[0].length != chunksy){
 			cache = new int[chunksx][chunksy][2];
-
+			
 			for(int x = 0; x < chunksx; x++){
 				for(int y = 0; y < chunksy; y++){
 					cacheChunk(x, y, true);
@@ -173,24 +186,24 @@ public class BlockRenderer{
 				}
 			}
 		}
-
+		
 		OrthographicCamera camera = Core.camera;
-
+		
 		if(Graphics.drawing()) Graphics.end();
-
+		
 		int crangex = (int)(camera.viewportWidth * camera.zoom / (chunksize * tilesize))+1;
 		int crangey = (int)(camera.viewportHeight * camera.zoom / (chunksize * tilesize))+1;
-
+		
 		drawCache(0, crangex, crangey);
-
+		
 		Graphics.begin();
-
+		
 		Draw.reset();
 		
 		if(showPaths && debug){
 			drawPaths();
 		}
-
+		
 		if(debug && debugChunks){
 			Draw.color(Color.YELLOW);
 			Lines.stroke(1f);
@@ -198,7 +211,7 @@ public class BlockRenderer{
 				for(int y = -crangey; y <= crangey; y++){
 					int worldx = Mathf.scl(camera.position.x, chunksize * tilesize) + x;
 					int worldy = Mathf.scl(camera.position.y, chunksize * tilesize) + y;
-
+					
 					if(!Mathf.inBounds(worldx, worldy, cache))
 						continue;
 					Lines.rect(worldx * chunksize * tilesize, worldy * chunksize * tilesize, chunksize * tilesize, chunksize * tilesize);
@@ -214,7 +227,7 @@ public class BlockRenderer{
 			if(point.pathTiles != null){
 				for(int i = 1; i < point.pathTiles.length; i ++){
 					Lines.line(point.pathTiles[i-1].worldx(), point.pathTiles[i-1].worldy(),
-							point.pathTiles[i].worldx(), point.pathTiles[i].worldy());
+							   point.pathTiles[i].worldx(), point.pathTiles[i].worldy());
 					Lines.circle(point.pathTiles[i-1].worldx(), point.pathTiles[i-1].worldy(), 6f);
 				}
 			}
@@ -222,35 +235,35 @@ public class BlockRenderer{
 		Draw.reset();
 	}
 	
-
+	
 	void drawCache(int layer, int crangex, int crangey){
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-
+		
 		cbatch.setProjectionMatrix(Core.camera.combined);
 		cbatch.beginDraw();
 		for(int x = -crangex; x <= crangex; x++){
 			for(int y = -crangey; y <= crangey; y++){
 				int worldx = Mathf.scl(camera.position.x, chunksize * tilesize) + x;
 				int worldy = Mathf.scl(camera.position.y, chunksize * tilesize) + y;
-
+				
 				if(!Mathf.inBounds(worldx, worldy, cache))
 					continue;
-
+				
 				cbatch.drawCache(cache[worldx][worldy][layer]);
 			}
 		}
-
+		
 		cbatch.endDraw();
 	}
-
+	
 	void cacheChunk(int cx, int cy, boolean floor){
 		if(cbatch == null){
 			createBatch();
 		}
-
+		
 		cbatch.begin();
 		Graphics.useBatch(cbatch);
-
+		
 		for(int tilex = cx * chunksize; tilex < (cx + 1) * chunksize; tilex++){
 			for(int tiley = cy * chunksize; tiley < (cy + 1) * chunksize; tiley++){
 				Tile tile = world[player.dimension].tile(tilex, tiley);
@@ -268,15 +281,60 @@ public class BlockRenderer{
 		cbatch.end();
 		cache[cx][cy][floor ? 0 : 1] = cbatch.getLastCache();
 	}
-
+	
 	public void clearTiles(){
 		cache = null;
 		createBatch();
 	}
-
+	
 	private void createBatch(){
 		if(cbatch != null)
 			cbatch.dispose();
 		cbatch = new CacheBatch(world[player.dimension].width() * world[player.dimension].height() * 4);
+	}
+	
+	 public void drawPreview(Block block, float drawx, float drawy, float rotation, float opacity) {
+		Draw.alpha(opacity);
+		Draw.rect(block.name(), drawx, drawy, rotation);
+	}
+	
+	public void handlePreview(Block block, float rotation, float drawx, float drawy, int tilex, int tiley) {
+		
+		if(control.input().recipe != null && state.inventory.hasItems(control.input().recipe.requirements)
+		   && control.input().validPlace(tilex, tiley, block) && (mobile || control.input().cursorNear())) {
+			
+			 if(block.isMultiblock()) {
+				 float halfBlockWidth = (block.width * tilesize) / 2;
+				 float halfBlockHeight = (block.height * tilesize) / 2;
+			 	if((storeX == 0 && storeY == 0)) {
+			 		storeX = drawx;
+			 		storeY = drawy;
+				}
+				if((storeX == drawx - halfBlockWidth || storeX == drawx + halfBlockWidth || storeY == drawy - halfBlockHeight || storeY == drawy + halfBlockHeight) &&
+				   ((tiley - control.input().getBlockY()) % block.height != 0 || (tilex - control.input().getBlockX()) % block.width != 0)) {
+			 		return;
+			 	}
+			 	else {
+					storeX = drawx;
+					storeY = drawy;
+				}
+			 }
+			
+			float opacity = (float) Settings.getInt("previewopacity") / 100f;
+			Draw.color(Color.WHITE);
+			Draw.alpha(opacity);
+			
+			if(block instanceof Turret) {
+				if (block.isMultiblock()) {
+					Draw.rect("block-" + block.width + "x" + block.height, drawx, drawy);
+				} else {
+					Draw.rect("block", drawx, drawy);
+				}
+			}
+			
+			drawPreview(block, drawx, drawy, rotation, opacity);
+			
+			Draw.reset();
+		}
 	}
 }

@@ -9,7 +9,7 @@ import io.anuke.ucore.util.Input;
 
 public class DefaultKeybinds {
 
-    public static void load(){
+    public static void load() {
         KeyBinds.defaults(
                 "move_x", new Axis(Input.A, Input.D),
                 "move_y", new Axis(Input.S, Input.W),

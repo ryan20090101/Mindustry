@@ -1,12 +1,11 @@
 package io.anuke.mindustry.mapeditor;
 
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import io.anuke.mindustry.io.Platform;
-import io.anuke.mindustry.ui.dialogs.FileChooser;
+import io.anuke.mindustry.core.Platform;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.ColorMapper;
 import io.anuke.mindustry.world.ColorMapper.BlockPair;
@@ -27,6 +26,7 @@ import io.anuke.ucore.scene.builders.table;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Bundles;
+import io.anuke.ucore.util.Input;
 import io.anuke.ucore.util.Log;
 import io.anuke.ucore.util.Strings;
 
@@ -42,7 +42,6 @@ public class MapEditorDialog extends Dialog{
 	private MapSaveDialog saveDialog;
 	private MapResizeDialog resizeDialog;
 	private ScrollPane pane;
-	private FileChooser openFile, saveFile;
 	private boolean saved = false;
 	
 	private ButtonGroup<ImageButton> blockgroup;
@@ -54,42 +53,6 @@ public class MapEditorDialog extends Dialog{
 		editor = new MapEditor();
 		dialog = new MapGenerateDialog(editor);
 		view = new MapView(editor);
-		
-		openFile = new FileChooser("$text.loadimage", FileChooser.pngFilter, true, file -> {
-			ui.loadfrag.show();
-			Timers.run(3f, () -> {
-				try{
-					Pixmap pixmap = new Pixmap(file);
-					if(verifySize(pixmap)){
-						editor.setPixmap(pixmap);
-						view.clearStack();
-					}else{
-						ui.showError(Bundles.format("text.editor.badsize", Arrays.toString(MapEditor.validMapSizes)));
-					}
-				}catch (Exception e){
-					ui.showError(Bundles.format("text.editor.errorimageload", Strings.parseException(e, false)));
-					Log.err(e);
-				}
-				ui.loadfrag.hide();
-			});
-		});
-		
-		saveFile = new FileChooser("$saveimage", false, file -> {
-			if(!file.extension().toLowerCase().equals(".png")){
-				file = file.parent().child(file.nameWithoutExtension() + ".png");
-			}
-			FileHandle result = file;
-			ui.loadfrag.show();
-			Timers.run(3f, () -> {
-				try{
-					Pixmaps.write(editor.pixmap(), result);
-				}catch (Exception e){
-					ui.showError(Bundles.format("text.editor.errorimagesave", Strings.parseException(e, false)));
-					if(!android) Log.err(e);
-				}
-				ui.loadfrag.hide();
-			});
-		});
 		
 		loadDialog = new MapLoadDialog(map -> {
 			saveDialog.setFieldText(map.name);
@@ -237,16 +200,46 @@ public class MapEditorDialog extends Dialog{
 				).text("$text.editor.savemap");
 				
 				row();
+
+				//iOS does not support loading raw files.
+				if(!ios) {
+
+                    new imagebutton("icon-load-image", isize, () -> {
+                    	Platform.instance.showFileChooser(Bundles.get("text.loadimage"), "Image Files", MapEditorDialog.this::tryLoadMap, true, "png");
+					}).text("$text.editor.loadimage");
+
+                    row();
+                }
 				
-				new imagebutton("icon-load-image", isize, () ->
-					openFile.show()
-				).text("$text.editor.loadimage");
-				
-				row();
-				
-				new imagebutton("icon-save-image", isize, () ->
-					saveFile.show()
-				).text("$text.editor.saveimage");
+				new imagebutton("icon-save-image", isize, () -> {
+				    //iOS doesn't really support saving raw files. Sharing is used instead.
+                    if(!ios){
+                    	Platform.instance.showFileChooser(Bundles.get("text.saveimage"), "Image Files", file -> {
+							if(!file.extension().toLowerCase().equals(".png")){
+								file = file.parent().child(file.nameWithoutExtension() + ".png");
+							}
+							FileHandle result = file;
+							ui.loadfrag.show();
+							Timers.run(3f, () -> {
+								try{
+									Pixmaps.write(editor.pixmap(), result);
+								}catch (Exception e){
+									ui.showError(Bundles.format("text.editor.errorimagesave", Strings.parseException(e, false)));
+									if(!mobile) Log.err(e);
+								}
+								ui.loadfrag.hide();
+							});
+						}, false, "png");
+                    }else{
+                        try{
+                            FileHandle file = Gdx.files.local(("map-" + ((editor.getMap().name == null) ? "unknown" : editor.getMap().name) + ".png"));
+                            Pixmaps.write(editor.pixmap(), file);
+                            Platform.instance.shareFile(file);
+                        }catch (Exception e){
+                            ui.showError(Bundles.format("text.editor.errorimagesave", Strings.parseException(e, false)));
+                        }
+                    }
+                }).text("$text.editor.saveimage");
 				
 				row();
 				
@@ -329,6 +322,25 @@ public class MapEditorDialog extends Dialog{
 		}}.grow().end();
 	}
 
+	public void tryLoadMap(FileHandle file){
+        ui.loadfrag.show();
+        Timers.runTask(3f, () -> {
+            try{
+                Pixmap pixmap = new Pixmap(file);
+                if(verifySize(pixmap)){
+                    editor.setPixmap(pixmap);
+                    view.clearStack();
+                }else{
+                    ui.showError(Bundles.format("text.editor.badsize", Arrays.toString(MapEditor.validMapSizes)));
+                }
+            }catch (Exception e){
+                ui.showError(Bundles.format("text.editor.errorimageload", Strings.parseException(e, false)));
+                Log.err(e);
+            }
+            ui.loadfrag.hide();
+        });
+    }
+
 	private void doInput(){
 		//tool select
 		for(int i = 0; i < EditorTool.values().length; i ++){
@@ -340,20 +352,20 @@ public class MapEditorDialog extends Dialog{
 		}
 
 		//ctrl keys (undo, redo, save)
-		if(Inputs.keyDown(Keys.CONTROL_LEFT)){
-			if(Inputs.keyTap(Keys.Z)){
+		if(Inputs.keyDown(Input.CONTROL_LEFT)){
+			if(Inputs.keyTap(Input.Z)){
 				view.undo();
 			}
 
-			if(Inputs.keyTap(Keys.Y)){
+			if(Inputs.keyTap(Input.Y)){
 				view.redo();
 			}
 
-			if(Inputs.keyTap(Keys.S)){
+			if(Inputs.keyTap(Input.S)){
 				saveDialog.save();
 			}
 
-			if(Inputs.keyTap(Keys.G)){
+			if(Inputs.keyTap(Input.G)){
 				view.setGrid(!view.isGrid());
 			}
 		}

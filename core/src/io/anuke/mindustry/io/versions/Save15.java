@@ -148,7 +148,7 @@ public class Save15 extends SaveFileVersion {
         state.wave = wave;
         state.wavetime = wavetime;
 
-        if(!android && !headless)
+        if(!mobile && !headless)
             player.add();
 
         //map
@@ -244,7 +244,11 @@ public class Save15 extends SaveFileVersion {
             stream.writeFloat(player.x); //player x/y
             stream.writeFloat(player.y);
 
+<<<<<<< HEAD
             stream.writeFloat(player.health); //player health
+=======
+            stream.writeInt((int)player.health); //player health
+>>>>>>> upstream/master
 
             stream.writeByte(control.upgrades().getWeapons().size - 1); //amount of weapons
 
@@ -292,7 +296,11 @@ public class Save15 extends SaveFileVersion {
             stream.writeFloat(enemy.x); //x
             stream.writeFloat(enemy.y); //y
             stream.writeByte(enemy.tier); //tier
+<<<<<<< HEAD
             stream.writeFloat(enemy.health); //health
+=======
+            stream.writeShort((short)enemy.health); //health
+>>>>>>> upstream/master
         }
 
         //--MAP DATA--

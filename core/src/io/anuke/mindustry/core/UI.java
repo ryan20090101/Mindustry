@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Align;
 import io.anuke.mindustry.Vars;
-import io.anuke.mindustry.io.Platform;
 import io.anuke.mindustry.mapeditor.MapEditorDialog;
 import io.anuke.mindustry.ui.dialogs.*;
 import io.anuke.mindustry.ui.fragments.*;
@@ -51,6 +50,7 @@ public class UI extends SceneModule{
 	public BansDialog bans;
 	public AdminsDialog admins;
 	public TraceDialog traces;
+	public RollbackDialog rollback;
 	public ChangelogDialog changelog;
 
 	public final MenuFragment menufrag = new MenuFragment();
@@ -164,6 +164,7 @@ public class UI extends SceneModule{
 		bans = new BansDialog();
 		admins = new AdminsDialog();
 		traces = new TraceDialog();
+		rollback = new RollbackDialog();
 		
 		build.begin(scene);
 
