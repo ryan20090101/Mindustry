@@ -21,9 +21,9 @@ allprojects {
     version = 'release'
 
     ext {
-        versionNumber = '3'
+        versionNumber = '-666'
         versionType = 'alpha'
-        appName = 'AltDim'
+        appName = 'Mindustry - Alternate Dimension'
         gdxVersion = '1.9.8'
         roboVMVersion = '2.3.0'
         aiVersion = '1.8.1'
