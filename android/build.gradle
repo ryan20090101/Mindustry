@@ -59,11 +59,7 @@ android {
         }
 
         applicationId "io.anuke.mindustry"
-<<<<<<< HEAD
-        minSdkVersion 9
-=======
         minSdkVersion 14
->>>>>>> upstream/master
         targetSdkVersion 27
         versionCode code
         versionName versionNameResult
