@@ -68,7 +68,7 @@ public class Player extends SyncEntity{
 	private float oldy = 0;
 
 	private float legframe = 1f;
-	public Shield personalshield = new Shield(this.x, this.y)
+	public Shield personalshield = new Shield((int)x,(int)y);
 
 	//Debug
 	public float movementx;

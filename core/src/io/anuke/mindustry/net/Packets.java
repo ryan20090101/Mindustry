@@ -151,12 +151,14 @@ public class Packets {
 	public static class BlockLogRequestPacket implements Packet {
 		public int x;
 		public int y;
+		public int dimension;
 		public Array<EditLog> editlogs;
 		
 		@Override
 		public void write(ByteBuffer buffer) {
 			buffer.putShort((short)x);
 			buffer.putShort((short)y);
+            buffer.putShort((short)dimension);
 			buffer.putInt(editlogs.size);
 			for(EditLog value : editlogs) {
 				buffer.put((byte)value.playername.getBytes().length);
@@ -171,6 +173,7 @@ public class Packets {
 		public void read(ByteBuffer buffer) {
 			x = buffer.getShort();
 			y = buffer.getShort();
+			dimension = buffer.getShort();
 			editlogs = new Array<>();
 			int arraySize = buffer.getInt();
 			for(int a = 0; a < arraySize; a ++) {
@@ -190,15 +193,18 @@ public class Packets {
     
     public static class RollbackRequestPacket implements Packet {
         public int rollbackTimes;
+        public int dimension;
         
         @Override
         public void write(ByteBuffer buffer) {
             buffer.putInt(rollbackTimes);
+            buffer.putInt(dimension);
         }
         
         @Override
         public void read(ByteBuffer buffer) {
             rollbackTimes = buffer.getInt();
+            dimension = buffer.getInt();
         }
     }
     
@@ -250,13 +256,8 @@ public class Packets {
         }
     }
 
-<<<<<<< HEAD
-    public static class BulletPacket implements Packet{
-        public int type, owner, dimension;
-=======
     public static class BulletPacket implements Packet, UnimportantPacket{
-        public int type, owner;
->>>>>>> upstream/master
+        public int type, owner, dimension;
         public float x, y, angle;
         public short damage;
 

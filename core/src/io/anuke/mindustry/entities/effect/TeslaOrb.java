@@ -8,6 +8,7 @@ import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.graphics.Fx;
 import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.core.Timers;
+import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.entities.Entity;
 import io.anuke.ucore.entities.SolidEntity;
 import io.anuke.ucore.graphics.Draw;
@@ -15,6 +16,7 @@ import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Mathf;
 
 import static io.anuke.mindustry.Vars.world;
+
 
 public class TeslaOrb extends Entity{
 	private Array<Vector2> points = new Array<>();
@@ -43,20 +45,8 @@ public class TeslaOrb extends Entity{
 			if(Mathf.chance(stopchance)){
 				break;
 			}
-			
-<<<<<<< HEAD
-			Array<SolidEntity> enemies = world[dimension].ents.getNearby(world[dimension].enemyGroup, curx, cury, range*2f);
-			
-			for(SolidEntity entity : enemies){
-				if(entity != null && entity.distanceTo(curx, cury) < range && !hit.contains((Enemy)entity)){
-					hit.add((Enemy)entity);
-					points.add(new Vector2(entity.x + Mathf.range(shake), entity.y + Mathf.range(shake)));
-					damageEnemy((Enemy)entity);
-					curx = entity.x;
-					cury = entity.y;
-					break;
-=======
-			Array<SolidEntity> enemies = Entities.getNearby(enemyGroup, curx, cury, range*2f);
+
+			Array<SolidEntity> enemies = Entities.getNearby(world[dimension].enemyGroup, curx, cury, range*2f);
 
 			synchronized (Entities.entityLock) {
 
@@ -69,7 +59,6 @@ public class TeslaOrb extends Entity{
 						cury = entity.y;
 						break;
 					}
->>>>>>> upstream/master
 				}
 			}
 		}

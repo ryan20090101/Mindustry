@@ -32,13 +32,10 @@ public class HudFragment implements Fragment{
 	private Table colortable;
 	private Label infolabel;
 	private boolean shown = true;
-<<<<<<< HEAD
-    @Override
-=======
 	private float dsize = 58;
 	private float isize = 40;
 
->>>>>>> upstream/master
+	@Override
 	public void build(){
 
 		//menu at top left

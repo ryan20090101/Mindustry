@@ -36,7 +36,7 @@ public class Logic extends Module {
 
     @Override
     public void init() {
-        for(int i=0;i<dimensionIds;i++){
+        for (int i = 0; i < dimensionIds; i++) {
             world[i].ents.initPhysics();
             world[i].ents.collisions().setCollider(tilesize, world[i]::solid);
         }
@@ -111,90 +111,68 @@ public class Logic extends Module {
     @Override
     public void update() {
 
-        for (int i = 0; i<dimensionIds; i++) {
+        for (int i = 0; i < dimensionIds; i++) {
             if (!state.is(State.menu)) {
                 if (!Net.client())
                     world[i].pathfinder().update();
             }
 
             if (!state.is(State.paused) || Net.active()) {
+                if (control != null) control.triggerInputUpdate();
 
-<<<<<<< HEAD
-                if (!state.mode.disableWaveTimer) {
+                if (!state.is(State.paused) || Net.active()) {
+                    Timers.update();
+                }
 
-                    if (state.enemies <= 0) {
-                        if (state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding) { //start updating beforehand
-                            world[i].pathfinder().resetPaths();
-                            state.lastUpdated = state.wave + 1;
+                world[i].ents.collideGroups(world[i].bulletGroup, world[i].enemyGroup);
+                world[i].ents.collideGroups(world[i].bulletGroup, world[i].playerGroup);
+
+                world[i].ents.update(world[i].ents.defaultGroup());
+                world[i].ents.update(world[i].bulletGroup);
+                world[i].ents.update(world[i].enemyGroup);
+                world[i].ents.update(world[i].tileGroup);
+                world[i].ents.update(world[i].shieldGroup);
+                world[i].ents.update(world[i].effectGroup);
+                world[i].ents.update(world[i].playerGroup);
+                world[i].ents.update(world[i].previewGroup);
+            }
+
+            if (!state.is(State.menu)) {
+
+                if (!state.is(State.paused) || Net.active()) {
+                    Timers.update();
+                }
+
+                if (world[0].getCore() != null && world[0].getCore().block() != ProductionBlocks.core && !state.gameOver) {
+                    state.gameOver = true;
+                    if (Net.server()) NetEvents.handleGameOver();
+                    Events.fire(GameOverEvent.class);
+                }
+
+                if (!state.is(State.paused) || Net.active()) {
+
+                    if (!state.mode.disableWaveTimer) {
+
+                        if (state.enemies <= 0) {
+                            if (!world[0].getMap().name.equals("tutorial")) state.wavetime -= Timers.delta();
+
+                            if (state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding) { //start updating beforehand
+                                world[0].pathfinder().resetPaths();
+                                state.lastUpdated = state.wave + 1;
+                            }
+                        } else if (!world[0].getMap().name.equals("tutorial")) {
+                            state.extrawavetime -= Timers.delta();
                         }
                     }
-                }
-=======
-            if(control != null) control.triggerInputUpdate();
 
-            if(!state.is(State.paused) || Net.active()){
-                Timers.update();
->>>>>>> upstream/master
-            }
-
-            world[i].ents.collideGroups(world[i].bulletGroup, world[i].enemyGroup);
-            world[i].ents.collideGroups(world[i].bulletGroup, world[i].playerGroup);
-
-            world[i].ents.update(world[i].ents.defaultGroup());
-            world[i].ents.update(world[i].bulletGroup);
-            world[i].ents.update(world[i].enemyGroup);
-            world[i].ents.update(world[i].tileGroup);
-            world[i].ents.update(world[i].shieldGroup);
-            world[i].ents.update(world[i].effectGroup);
-            world[i].ents.update(world[i].playerGroup);
-            world[i].ents.update(world[i].previewGroup);
-        }
-
-        if (!state.is(State.menu)) {
-
-            if (!state.is(State.paused) || Net.active()) {
-                Timers.update();
-            }
-
-            if (world[0].getCore() != null && world[0].getCore().block() != ProductionBlocks.core && !state.gameOver) {
-                state.gameOver = true;
-                if (Net.server()) NetEvents.handleGameOver();
-                Events.fire(GameOverEvent.class);
-            }
-
-            if (!state.is(State.paused) || Net.active()) {
-
-                if (!state.mode.disableWaveTimer) {
-
-<<<<<<< HEAD
-                    if (state.enemies <= 0) {
-                        if (!world[0].getMap().name.equals("tutorial")) state.wavetime -= delta();
-=======
-                    if(state.enemies <= 0){
-                        if(!world.getMap().name.equals("tutorial")) state.wavetime -= Timers.delta();
->>>>>>> upstream/master
-
-                        if (state.lastUpdated < state.wave + 1 && state.wavetime < aheadPathfinding) { //start updating beforehand
-                            world[0].pathfinder().resetPaths();
-                            state.lastUpdated = state.wave + 1;
-                        }
-<<<<<<< HEAD
-                    } else {
-                        state.extrawavetime -= delta();
-=======
-                    }else if(!world.getMap().name.equals("tutorial")){
-                        state.extrawavetime -= Timers.delta();
->>>>>>> upstream/master
+                    if (!Net.client() && (state.wavetime <= 0 || state.extrawavetime <= 0)) {
+                        runWave();
                     }
+                    if (global.time >= maxTime) global.reversedTime = true;
+                    if (global.time <= 0) global.reversedTime = false;
+                    if (!global.reversedTime) global.time += Timers.delta();
+                    else global.time -= Timers.delta();
                 }
-
-                if (!Net.client() && (state.wavetime <= 0 || state.extrawavetime <= 0)) {
-                    runWave();
-                }
-                if (global.time >= maxTime) global.reversedTime = true;
-                if (global.time <= 0) global.reversedTime = false;
-                if(!global.reversedTime)global.time+= Timers.delta();
-                else global.time-=Timers.delta();
             }
         }
     }

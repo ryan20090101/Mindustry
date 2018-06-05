@@ -20,12 +20,9 @@ import io.anuke.ucore.graphics.CacheBatch;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.util.Mathf;
-<<<<<<< HEAD
 
 import io.anuke.mindustry.entities.Player;
-=======
 import java.util.Arrays;
->>>>>>> upstream/master
 
 import java.util.Arrays;
 import static io.anuke.mindustry.Vars.*;
@@ -168,13 +165,8 @@ public class BlockRenderer{
 	}
 	
 	public void drawFloor(){
-<<<<<<< HEAD
 		int chunksx = world[player.dimension].width() / chunksize, chunksy = world[player.dimension].height() / chunksize;
 
-=======
-		int chunksx = world.width() / chunksize, chunksy = world.height() / chunksize;
-		
->>>>>>> upstream/master
 		//render the entire map
 		if(cache == null || cache.length != chunksx || cache[0].length != chunksy){
 			cache = new int[chunksx][chunksy][2];
@@ -304,14 +296,13 @@ public class BlockRenderer{
 		   && control.input().validPlace(tilex, tiley, block) && (mobile || control.input().cursorNear())) {
 			
 			 if(block.isMultiblock()) {
-				 float halfBlockWidth = (block.width * tilesize) / 2;
-				 float halfBlockHeight = (block.height * tilesize) / 2;
+				 float halfBlockSize = (block.size * tilesize) / 2;
 			 	if((storeX == 0 && storeY == 0)) {
 			 		storeX = drawx;
 			 		storeY = drawy;
 				}
-				if((storeX == drawx - halfBlockWidth || storeX == drawx + halfBlockWidth || storeY == drawy - halfBlockHeight || storeY == drawy + halfBlockHeight) &&
-				   ((tiley - control.input().getBlockY()) % block.height != 0 || (tilex - control.input().getBlockX()) % block.width != 0)) {
+				if((storeX == drawx - halfBlockSize || storeX == drawx + halfBlockSize || storeY == drawy - halfBlockSize || storeY == drawy + halfBlockSize) &&
+				   ((tiley - control.input().getBlockY()) % block.size != 0 || (tilex - control.input().getBlockX()) % block.size != 0)) {
 			 		return;
 			 	}
 			 	else {
@@ -326,7 +317,7 @@ public class BlockRenderer{
 			
 			if(block instanceof Turret) {
 				if (block.isMultiblock()) {
-					Draw.rect("block-" + block.width + "x" + block.height, drawx, drawy);
+					Draw.rect("block-" + block.size, drawx, drawy);
 				} else {
 					Draw.rect("block", drawx, drawy);
 				}

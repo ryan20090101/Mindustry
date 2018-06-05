@@ -111,23 +111,17 @@ public class Placement {
         rect.setCenter(offset.x + x * tilesize, offset.y + y * tilesize);
 
         synchronized (Entities.entityLock) {
-<<<<<<< HEAD
-            for (SolidEntity e : world[dimension].ents.getNearby(world[dimension].enemyGroup, x * tilesize, y * tilesize, tilesize * 2f)) {
-                if (e == null) continue; //not sure why this happens?
-                Rectangle rect = e.hitbox.getRect(e.x, e.y);
-=======
             //exception sometimes thrown due to multithreading, not sure what else to try at this point
             try {
-                for (SolidEntity e : Entities.getNearby(enemyGroup, x * tilesize, y * tilesize, tilesize * 2f)) {
+                for (SolidEntity e : world[dimension].ents.getNearby(world[dimension].enemyGroup, x * tilesize, y * tilesize, tilesize * 2f)) {
                     if (e == null) continue; //not sure why this happens?
                     Rectangle rect = e.hitbox.getRect(e.x, e.y);
->>>>>>> upstream/master
 
                     if (Placement.rect.overlaps(rect)) {
                         return false;
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 return false;
             }
         }

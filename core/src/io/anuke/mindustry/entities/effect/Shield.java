@@ -10,7 +10,7 @@ import io.anuke.ucore.entities.Entity;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Mathf;
 
-import static io.anuke.mindustry.Vars.world;
+import static io.anuke.mindustry.Vars.*;
 
 public class Shield extends Entity {
 	public boolean active;
@@ -19,14 +19,15 @@ public class Shield extends Entity {
 	public int dimension;
 	
 	private float uptime = 0f;
-	private final Tile tile;
-	private portable = false;
+	private Tile tile;
+	private boolean portable = false;
 
 	public Shield(Tile tile){
 		this.tile = tile;
 		this.x = tile.worldx();
 		this.y = tile.worldy();
 	}
+
 	public Shield(int x, int y){
 		this.x = x;
 		this.y = y;
@@ -77,9 +78,9 @@ public class Shield extends Entity {
 					float dst = entity.distanceTo(this);
 
 					if (dst < drawRadius() / 2f) {
-						if(this.radius > bullet.getDamage() * 0.05f){
+						if (this.radius > bullet.getDamage() * 0.05f) {
 							bullet.remove();
-							if(!headless) renderer.addShieldHit(bullet.x, bullet.y);
+							if (!headless) renderer.addShieldHit(bullet.x, bullet.y);
 							this.radius -= bullet.getDamage() * 0.005f;
 						}
 
@@ -87,9 +88,9 @@ public class Shield extends Entity {
 						//Effects.effect(bullet.damage > 5 ? Fx.shieldhit : Fx.laserhit, bullet);
 
 
-
 					}
 				}
+			});
 		}
 	}
 	

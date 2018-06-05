@@ -64,19 +64,19 @@ public class Administration {
         return editLogs;
     }
     
-    public void logEdit(int x, int y, Player player, Block block, int rotation, EditLog.EditAction action) {
+    public void logEdit(int x, int y, Player player, Block block, int rotation, int dimension, EditLog.EditAction action) {
     	if(block instanceof BlockPart || block instanceof Rock || block instanceof Floor || block instanceof StaticBlock) return;
-    	if(editLogs.containsKey(x + y * world.width())) {
-			editLogs.get(x + y * world.width()).add(new EditLog(player.name, block, rotation, action));
+    	if(editLogs.containsKey(x + y * world[dimension].width())) {
+			editLogs.get(x + y * world[dimension].width()).add(new EditLog(player.name, block, rotation, action));
 		}
 		else {
 			Array<EditLog> logs = new Array<>();
 			logs.add(new EditLog(player.name, block, rotation, action));
-			editLogs.put(x + y * world.width(), logs);
+			editLogs.put(x + y * world[dimension].width(), logs);
 		}
     }
     
-    public void rollbackWorld(int rollbackTimes) {
+    public void rollbackWorld(int rollbackTimes, int dimension) {
         for(IntMap.Entry<Array<EditLog>> editLog : editLogs.entries()) {
             int coords = editLog.key;
             Array<EditLog> logs = editLog.value;
@@ -85,13 +85,13 @@ public class Administration {
             
                 EditLog log = logs.get(logs.size - 1);
             
-                int x = coords % world.width();
-                int y = coords / world.width();
+                int x = coords % world[dimension].width();
+                int y = coords / world[dimension].width();
                 Block result = log.block;
                 int rotation = log.rotation;
             
                 if(log.action == EditLog.EditAction.PLACE) {
-                    Placement.breakBlock(x, y, false, false);
+                    Placement.breakBlock(x, y, false, false, dimension);
                 
                     Packets.BreakPacket packet = new Packets.BreakPacket();
                     packet.x = (short) x;

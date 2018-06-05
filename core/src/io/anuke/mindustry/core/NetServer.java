@@ -217,7 +217,7 @@ public class NetServer extends Module{
 
             if (recipe == null) return;
 
-            Tile tile = world.tile(packet.x, packet.y);
+            Tile tile = world[packet.dimension].tile(packet.x, packet.y);
             if(tile.synthetic() && admins.isValidateReplace() && !admins.validateBreak(admins.getTrace(Net.getConnection(id).address).uuid, Net.getConnection(id).address)){
                 if(Timers.get("break-message-" + id, 120)){
                     sendMessageTo(id, "[scarlet]Anti-grief: you are replacing blocks too quickly. wait until replacing again.");
@@ -229,7 +229,7 @@ public class NetServer extends Module{
 
             Placement.placeBlock(packet.x, packet.y, block, packet.rotation, true, false);
 
-            admins.logEdit(packet.x, packet.y, connections.get(id), block, packet.rotation, EditLog.EditAction.PLACE);
+            admins.logEdit(packet.x, packet.y, connections.get(id), block, packet.rotation, packet.dimension, EditLog.EditAction.PLACE);
             admins.getTrace(Net.getConnection(id).address).lastBlockPlaced = block;
 
             admins.getTrace(Net.getConnection(id).address).totalBlocksPlaced ++;
@@ -243,7 +243,7 @@ public class NetServer extends Module{
 
             if (!Placement.validBreak(packet.x, packet.y,packet.dimension)) return;
 
-            Tile tile = world.tile(packet.x, packet.y);
+            Tile tile = world[packet.dimension].tile(packet.x, packet.y);
 
             if(tile.synthetic() && !admins.validateBreak(admins.getTrace(Net.getConnection(id).address).uuid, Net.getConnection(id).address)){
                 if(Timers.get("break-message-" + id, 120)){
@@ -252,10 +252,10 @@ public class NetServer extends Module{
                 return;
             }
 
-            Block block = Placement.breakBlock(packet.x, packet.y, true, false);
+            Block block = Placement.breakBlock(packet.x, packet.y, true, false, packet.dimension);
 
             if(block != null) {
-                admins.logEdit(packet.x, packet.y, connections.get(id), block, tile.getRotation(), EditLog.EditAction.BREAK);
+                admins.logEdit(packet.x, packet.y, connections.get(id), block, tile.getRotation(), packet.dimension, EditLog.EditAction.BREAK);
                 admins.getTrace(Net.getConnection(id).address).lastBlockBroken = block;
                 admins.getTrace(Net.getConnection(id).address).totalBlocksBroken++;
                 admins.getInfo(admins.getTrace(Net.getConnection(id).address).uuid).totalBlocksBroken ++;
@@ -370,7 +370,6 @@ public class NetServer extends Module{
                 Log.info("&lc{0} has requested trace info of {1}.", player.name, other.name);
             }
         });
-<<<<<<< HEAD
 
         Net.handleServer(AdminCommandPacket.class, (id, packet) -> {
             Player player = connections.get(id);
@@ -381,10 +380,10 @@ public class NetServer extends Module{
                 return;
             }
             commandSystem.handleCommandReceived(packet);
-=======
+        });
     
         Net.handleServer(BlockLogRequestPacket.class, (id, packet) -> {
-            packet.editlogs = admins.getEditLogs().get(packet.x + packet.y * world.width(), new Array<>());
+            packet.editlogs = admins.getEditLogs().get(packet.x + packet.y * world[packet.dimension].width(), new Array<>());
             Net.sendTo(id, packet, SendMode.udp);
         });
     
@@ -397,9 +396,9 @@ public class NetServer extends Module{
                 return;
             }
             
-            admins.rollbackWorld(packet.rollbackTimes);
+            admins.rollbackWorld(packet.rollbackTimes, packet.dimension);
             Log.info("&lc{0} has rolled back the world {1} times.", player.name, packet.rollbackTimes);
->>>>>>> upstream/master
+
         });
     }
 

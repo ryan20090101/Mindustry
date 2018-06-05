@@ -129,12 +129,8 @@ public class Control extends Module{
 
 		player = new Player();
 		player.name = Settings.getString("name");
-<<<<<<< HEAD
-		player.isAndroid = android;
-		player.isFlying = android;
-=======
+		player.isFlying = mobile;
 		player.isAndroid = mobile;
->>>>>>> upstream/master
 		player.color.set(Settings.getInt("color"));
 		player.isLocal = true;
 
@@ -176,11 +172,7 @@ public class Control extends Module{
 		Events.on(WaveEvent.class, () -> {
 			Sounds.play("spawn");
 
-<<<<<<< HEAD
-			int last = Settings.getInt("hiscore" + world[player.dimension].getMap().name);
-=======
-			int last = Settings.getInt("hiscore" + world.getMap().name, 0);
->>>>>>> upstream/master
+			int last = Settings.getInt("hiscore" + world[player.dimension].getMap().name, 0);
 
 			if(state.wave > last && !state.mode.infiniteResources && !state.mode.disableWaveTimer){
 				Settings.putInt("hiscore" + world[player.dimension].getMap().name, state.wave);
