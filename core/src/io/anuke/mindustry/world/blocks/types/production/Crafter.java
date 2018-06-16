@@ -74,7 +74,7 @@ public class Crafter extends Block{
                 }
 
                 offloadNear(tile, result);
-                Effects.effect(craftEffect, tile.entity);
+                Effects.effect(craftEffect, tile.entity, tile.entity.dimension);
             }
         }
     }

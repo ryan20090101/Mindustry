@@ -30,11 +30,7 @@ public class MindustryServer extends ModuleCore {
         }
         module(netServer = new NetServer());
         module(netCommon = new NetCommon());
-<<<<<<< HEAD
         module(commandSystem = new CommandSystem());
-        module(new ServerControl());
-=======
         module(new ServerControl(args));
->>>>>>> upstream/master
     }
 }

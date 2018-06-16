@@ -19,7 +19,7 @@ import java.io.IOException;
 
 import static io.anuke.mindustry.Vars.world;
 
-public class TileEntity extends Entity{
+public class TileEntity extends Entity {
 	public Tile tile;
 	public int[] items = new int[Item.getAllItems().size];
 	public Timer timer;

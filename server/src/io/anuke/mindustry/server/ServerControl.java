@@ -3,11 +3,8 @@ package io.anuke.mindustry.server;
 import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-<<<<<<< HEAD
 import io.anuke.mindustry.command.CommandSystem;
-=======
 import com.badlogic.gdx.utils.IntMap;
->>>>>>> upstream/master
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.game.Difficulty;
@@ -391,15 +388,10 @@ public class ServerControl extends Module {
             if(netServer.admins.banPlayerIP(arg[0])) {
                 info("Banned player by IP: {0}.", arg[0]);
 
-<<<<<<< HEAD
                 for(Player player : world[0].playerGroup.all()){
-                    if(Net.getConnection(player.clientid).address.equals(arg[0])){
-=======
-                for(Player player : playerGroup.all()){
                     if(Net.getConnection(player.clientid) != null &&
                             Net.getConnection(player.clientid).address != null &&
                             Net.getConnection(player.clientid).address.equals(arg[0])){
->>>>>>> upstream/master
                         netServer.kick(player.clientid, KickReason.banned);
                         break;
                     }
@@ -565,7 +557,7 @@ public class ServerControl extends Module {
 
                 boolean found = false;
 
-                for (Player player : playerGroup.all()) {
+                for (Player player : world[0].playerGroup.all()) {
                     if(Net.getConnection(player.clientid) == null){
                         err("Player \"{0}\" does not have an associated connection!");
                         continue;
@@ -745,15 +737,21 @@ public class ServerControl extends Module {
 				err("Please input a valid, positive, number of times to rollback");
 				return;
 			}
+
+            if(!Strings.canParsePostiveInt(arg[1])) {
+                err("Please input a valid, positive, dimension id");
+                return;
+            }
 			
 			int rollbackTimes = Integer.valueOf(arg[0]);
+			int dimension = Integer.valueOf(arg[1]);
 			IntMap<Array<EditLog>> editLogs = netServer.admins.getEditLogs();
 			if(editLogs.size == 0){
 				err("Nothing to rollback!");
 				return;
 			}
 			
-			netServer.admins.rollbackWorld(rollbackTimes);
+			netServer.admins.rollbackWorld(rollbackTimes, dimension);
 			info("Rollback done!");
 		});
     }

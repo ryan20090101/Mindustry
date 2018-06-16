@@ -18,6 +18,8 @@ import io.anuke.ucore.scene.ui.layout.Unit;
 import io.anuke.ucore.util.OS;
 import java.util.Locale;
 
+import static io.anuke.ucore.UCore.getProperty;
+
 public class Vars{
 	//How many dimensions are there
 	public static final int dimensionIds = 1;
@@ -52,7 +54,7 @@ public class Vars{
 	public static final String serverURL = "http://localhost:3000";
 
 	public static final String releasesURL = "https://api.github.com/repos/Anuken/Mindustry/releases";
-	public static final String macAppDir = UCore.getProperty("user.home") + "/Library/Application Support/";
+	public static final String macAppDir = getProperty("user.home") + "/Library/Application Support/";
 	//directory for user-created map data
 	public static final FileHandle customMapDirectory = gwt ? null : UCore.isAssets() ?
 			Gdx.files.local("../../desktop/mindustry-maps") :

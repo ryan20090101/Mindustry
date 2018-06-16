@@ -97,7 +97,7 @@ public class Smelter extends Block{
 		}
 		
 		offloadNear(tile, result);
-		Effects.effect(craftEffect, entity);
+		Effects.effect(craftEffect, entity, entity.dimension);
 	}
 
 	@Override

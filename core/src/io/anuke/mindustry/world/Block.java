@@ -130,7 +130,7 @@ public class Block{
 	public int worth;
 
 	public Map<DamageType,Float> damageTypeDamageModifier = new HashMap<DamageType,Float>(){{
-		put(DamageType.None,1f);
+		put(DamageType.none,1f);
 	}};
 
 	public Block(String name) {
@@ -200,7 +200,7 @@ public class Block{
 	}
 	
 	public float handleDamage(Tile tile, float amount){
-		return handleDamage(tile,amount,DamageType.None);
+		return handleDamage(tile,amount,DamageType.none);
 	}
 
 	public void handleItem(Item item, Tile tile, Tile source){

@@ -15,6 +15,8 @@ import io.anuke.mindustry.world.blocks.DistributionBlocks;
 import io.anuke.mindustry.world.blocks.ProductionBlocks;
 import io.anuke.mindustry.world.blocks.WeaponBlocks;
 import io.anuke.ucore.entities.*;
+import io.anuke.ucore.entities.BulletEntity;
+import io.anuke.ucore.entities.EffectEntity;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Tmp;

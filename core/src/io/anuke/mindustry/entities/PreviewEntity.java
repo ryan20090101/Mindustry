@@ -12,7 +12,6 @@ public class PreviewEntity extends Entity {
     public boolean hidden;
     public float rotation = 0;
 
-    @Override
     public void draw() {
         if(hidden) return;
         Draw.alpha(0.5f);

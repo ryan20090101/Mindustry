@@ -74,6 +74,8 @@ public class Player extends SyncEntity{
 	public float movementx;
 	public float movementy;
 
+	public int maxhealth;
+
 
 	public Player(){
 		hitbox.setSize(5);
@@ -94,17 +96,6 @@ public class Player extends SyncEntity{
 			dead = true;
 		}
 	}
-
-	@Override
-	public boolean collides(SolidEntity other){
-		if(other instanceof BulletEntity){
-			BulletEntity b = (BulletEntity)other;
-			if(!state.friendlyFire && b.owner instanceof Player){
-				return false;
-			}
-		}
-		return !isDead() && super.collides(other) && !isFlying;
-	}
 	
 	@Override
 	public void onDeath(){
@@ -113,7 +104,7 @@ public class Player extends SyncEntity{
 			NetEvents.handlePlayerDeath();
 		}
         radiation=0;
-		Effects.effect(Fx.explosion, this);
+		Effects.effect(Fx.explosion, this, dimension);
 		Effects.shake(4f, 5f, this);
 		Effects.sound("die", this);
 
@@ -126,7 +117,7 @@ public class Player extends SyncEntity{
 	/**called when a remote player death event is recieved*/
 	public void doRespawn(){
 		dead = true;
-		Effects.effect(Fx.explosion, this);
+		Effects.effect(Fx.explosion, this, dimension);
 		Effects.shake(4f, 5f, this);
 		Effects.sound("die", this);
 

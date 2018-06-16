@@ -95,7 +95,7 @@ public class RandomCrafter extends Block {
                 ent.removeItem(input, 1);
 
             offloadNear(tile, Item.getByID(ent.craftingItem));
-            Effects.effect(createEffect, tile.entity);
+            Effects.effect(createEffect, tile.entity, tile.entity.dimension);
         } else {
             ent.craftingItem = (byte) output.random().id;
             ent.crafting = true;

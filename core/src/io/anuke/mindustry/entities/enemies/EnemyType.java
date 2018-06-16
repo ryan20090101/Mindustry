@@ -72,8 +72,8 @@ public class EnemyType {
     protected int radiationDeath = 200;
     protected int radiationTime = 5;
     protected boolean domoving = true;
-    public Map<DamageType,Float> damageTypeDamageModifier = new HashMap<DamageType,Float>(){{
-        put(DamageType.None,1f);
+    public HashMap<DamageType,Float> damageTypeDamageModifier = new HashMap<DamageType,Float>(){{
+        put(DamageType.none,1f);
     }};
     
     protected final int timerTarget = timeid ++;
@@ -320,7 +320,7 @@ public class EnemyType {
         }
 
         if(!Net.client() || force) {
-            Effects.effect(Fx.explosion, enemy);
+            Effects.effect(Fx.explosion, enemy, dimension);
             Effects.shake(3f, 4f, enemy);
             Effects.sound("bang2", enemy);
             enemy.remove();

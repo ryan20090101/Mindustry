@@ -18,7 +18,6 @@ import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.resource.Weapon;
 import io.anuke.mindustry.world.Map;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.core.Inputs.DeviceType;
 import io.anuke.ucore.modules.Module;
@@ -28,6 +27,7 @@ import io.anuke.ucore.util.InputProxy;
 import io.anuke.ucore.util.Mathf;
 
 import static io.anuke.mindustry.Vars.*;
+import static io.anuke.ucore.UCore.getProperty;
 
 /**Control module.
  * Handles all input, saving, keybinds and keybinds.
@@ -114,7 +114,7 @@ public class Control extends Module{
 		Settings.defaultList(
 			"ip", "localhost",
 			"port", port+"",
-			"name", mobile || gwt ? "player" : UCore.getProperty("user.name"),
+			"name", mobile || gwt ? "player" : getProperty("user.name"),
 			"servers", "",
 			"color", Color.rgba8888(playerColors[8]),
 			"lastVersion", "3.2",

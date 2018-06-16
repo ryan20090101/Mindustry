@@ -9,6 +9,7 @@ import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.graphics.Shapes;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
+import io.anuke.ucore.util.Scalable;
 
 import static io.anuke.mindustry.Vars.respawnduration;
 import static io.anuke.mindustry.Vars.tilesize;
@@ -37,15 +38,15 @@ public class Fx{
 		});
 	}),
     artilleryshot = new Effect (28, 40f, e -> {
-		Angles.randLenVectors(e.id, 116, 110f + e.ifract()*80f, (x, y)->{
-            float len = 5f+e.fract()*16f;
-			Draw.color(Color.ORANGE, Color.RED, e.ifract());
-            Lines.stroke(e.fract()*17f);
-            Lines.lineAngle(e.x, e.y, e.rotation+0.1f, e.fract()*12f);
-            Lines.stroke(e.fract()*14f);
-            Lines.lineAngle(e.x, e.y, e.rotation, e.fract()*16f);
-            Lines.stroke(e.fract()*12f);
-            Lines.lineAngle(e.x, e.y, e.rotation-0.1f, e.fract()*18f);
+		Angles.randLenVectors(e.id, 116, 110f + e.fin()*80f, (x, y)->{
+            float len = 5f+e.fout()*16f;
+			Draw.color(Color.ORANGE, Color.RED, e.fin());
+            Lines.stroke(e.fout()*17f);
+            Lines.lineAngle(e.x, e.y, e.rotation+0.1f, e.fout()*12f);
+            Lines.stroke(e.fout()*14f);
+            Lines.lineAngle(e.x, e.y, e.rotation, e.fout()*16f);
+            Lines.stroke(e.fout()*12f);
+            Lines.lineAngle(e.x, e.y, e.rotation-0.1f, e.fout()*18f);
             Draw.reset();
         });
     }),
@@ -410,18 +411,18 @@ public class Fx{
 		Draw.reset();
 	}),
 	pulserShoot = new Effect(8, e -> {
-		Draw.color(Color.PURPLE, Color.VIOLET, e.ifract());
-		Shapes.lineShot(e.x, e.y, e.rotation - 70, 3, e.fract(), 10f, 1f, 0.75f);
-		Shapes.lineShot(e.x, e.y, e.rotation + 70, 3, e.fract(), 10f, 1f, 0.75f);
+		Draw.color(Color.PURPLE, Color.VIOLET, e.fin());
+		Shapes.lineShot(e.x, e.y, e.rotation - 70, 3, e.fout(), 10f, 1f, 0.75f);
+		Shapes.lineShot(e.x, e.y, e.rotation + 70, 3, e.fout(), 10f, 1f, 0.75f);
 		Draw.reset();
 	}),
 	pulserExplosion = new Effect(11, e -> {
-		Lines.stroke(2f*e.fract()+0.5f);
-		Draw.color(Color.PURPLE, Color.MAGENTA, e.powfract());
-		Lines.circle(e.x, e.y, 5f + e.powfract() * 6f);
+		Lines.stroke(2f*e.fout()+0.5f);
+		Draw.color(Color.PURPLE, Color.MAGENTA, e.powfin());
+		Lines.circle(e.x, e.y, 5f + e.powfin() * 6f);
 		
-		Draw.color(e.ifract() < 0.5f ? Color.MAGENTA : Color.PURPLE);
-		float rad = e.fract()*10f + 5f;
+		Draw.color(e.fin() < 0.5f ? Color.MAGENTA : Color.PURPLE);
+		float rad = e.fout()*10f + 5f;
 		Angles.randLenVectors(e.id, 5, 8f, (x, y)->{
 			Draw.rect("circle2", e.x + x, e.y + y, rad, rad);
 		});
@@ -516,8 +517,8 @@ public class Fx{
 		Draw.reset();
 	}),
 	blueTrail = new Effect(30, e -> {
-		Draw.color(lightBlue, Color.BLUE, e.ifract());
-		float size = e.fract()*4f;
+		Draw.color(lightBlue, Color.BLUE, e.fin());
+		float size = e.fout()*4f;
 		Draw.rect("circle", e.x, e.y, size, size);
 		Draw.reset();
 	}),
@@ -536,8 +537,8 @@ public class Fx{
 	}),
 
 	hoverSmoke = new Effect(15, e -> {
-		Draw.color(semiLightBlue, lightBlue, e.ifract());
-		float size = e.fract()*3f;
+		Draw.color(semiLightBlue, lightBlue, e.fin());
+		float size = e.fout()*3f;
 		Draw.rect("circle", e.x, e.y, size, size);
 		Draw.reset();
 	}),

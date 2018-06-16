@@ -497,7 +497,7 @@ public abstract class BulletType extends BaseBulletType<Bullet> {
 		}
         
 		public void draw(Bullet b) {
-			float f = b.fract()*11.5f;
+			float f = b.fout()*11.5f;
             
 			Draw.color(Color.RED);
 			Lines.stroke(3f * f);
@@ -612,7 +612,7 @@ public abstract class BulletType extends BaseBulletType<Bullet> {
 	};
 
 	public String name;
-	public DamageType damageType = DamageType.None;
+	public DamageType damageType = DamageType.none;
 
 	public BulletType(float speed, int damage, String name){
 		this.speed = speed;

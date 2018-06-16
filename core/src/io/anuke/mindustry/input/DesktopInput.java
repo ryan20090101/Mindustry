@@ -194,13 +194,13 @@ public class DesktopInput extends InputHandler{
 				Cursors.restoreCursor();
 		}
 
-		if (Inputs.keyDown(Input.C.code)&&Inputs.keyDown(Input.CONTROL_LEFT.code)) {
+		if (Inputs.keyDown(Input.C)&&Inputs.keyDown(Input.CONTROL_LEFT)) {
 			stamping = true;
 			stampOrigin.x = cursor.worldx();
 			stampOrigin.y = cursor.worldy();
 		}
 
-		if (Inputs.keyDown(Input.V.code)&&Inputs.keyDown(Input.CONTROL_LEFT.code)&&stamp!=null) {
+		if (Inputs.keyDown(Input.V)&&Inputs.keyDown(Input.CONTROL_LEFT)&&stamp!=null) {
 		    placingStamp = true;
 		}
 
@@ -212,7 +212,7 @@ public class DesktopInput extends InputHandler{
 		if(Inputs.buttonDown(Input.MOUSE_LEFT.code)&&placingStamp){
 		    StampUtil.loadStamp(cursor.x,cursor.y,stamp,player.dimension);
 		    placingStamp=false;
-        }
+        	}
 
 		if(Inputs.buttonDown(Input.MOUSE_LEFT.code)&&stamping){
 			Tile tile = world[player.dimension].tileWorld(stampOrigin.x,stampOrigin.y);
@@ -221,7 +221,7 @@ public class DesktopInput extends InputHandler{
 			stamping=false;
 		}
 
-		if (Inputs.keyTap(Input.O.code)) {
+		if (Inputs.keyTap(Input.O)) {
 			ui.stampChooser.show();
 		}
 

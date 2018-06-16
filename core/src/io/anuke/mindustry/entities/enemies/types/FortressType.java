@@ -28,7 +28,7 @@ public class FortressType extends EnemyType {
 		turretrotatespeed = rotatespeed = 0.08f;
 		length = 7f;
 		mass = 7f;
-		damageTypeDamageModifier.put(DamageType.None,0.7f);
+		damageTypeDamageModifier.put(DamageType.none,0.7f);
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public class FortressType extends EnemyType {
 				s.set(enemy.x + enemy.tr.x, enemy.y + enemy.tr.y);
 				s.add();
 
-				Effects.effect(Fx.spawn, enemy);
+				Effects.effect(Fx.spawn, enemy, dimension);
 				enemy.spawned ++;
 			}
 

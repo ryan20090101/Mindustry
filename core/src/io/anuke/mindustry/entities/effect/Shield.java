@@ -5,8 +5,8 @@ import io.anuke.mindustry.entities.enemies.Enemy;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.types.defense.ShieldBlock;
 import io.anuke.ucore.core.Timers;
-import io.anuke.ucore.entities.BulletEntity;
 import io.anuke.ucore.entities.Entity;
+import io.anuke.ucore.entities.BulletEntity;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.util.Mathf;
 
