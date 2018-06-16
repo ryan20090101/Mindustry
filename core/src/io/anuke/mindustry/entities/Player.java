@@ -74,8 +74,6 @@ public class Player extends SyncEntity{
 	public float movementx;
 	public float movementy;
 
-	public int maxhealth;
-
 
 	public Player(){
 		hitbox.setSize(5);
