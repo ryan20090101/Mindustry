@@ -441,14 +441,14 @@ public class Renderer extends RendererModule {
 
 		InputHandler input = control.input();
 
-		if(((DesktopInput)input).stamp!=null&&((DesktopInput) input).placingStamp){
+		if(input.stamp!=null&&input.placingStamp){
 			Lines.stroke(1f);
 			Tile tile = world[player.dimension].tileWorld(Graphics.mouseWorld().x, Graphics.mouseWorld().y);
 			Lines.rect(tile.worldx()-4, tile.worldy()-4,((DesktopInput)input).stamp.x*tilesize,
 					((DesktopInput)input).stamp.y*tilesize);
 		}
 
-		if(((DesktopInput) input).stamping) {
+		if(input.stamping) {
 			Tile cursor = world[player.dimension].tile(((DesktopInput) input).tilex(),((DesktopInput) input).tiley());
 			float x = ((DesktopInput) input).stampOrigin.x-4;
 			float y = ((DesktopInput) input).stampOrigin.y-4;

@@ -8,6 +8,7 @@ import io.anuke.mindustry.resource.Item;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.types.defense.LaserTurret;
+import io.anuke.mindustry.world.blocks.types.defense.NuclearBomb;
 import io.anuke.mindustry.world.blocks.types.defense.PowerTurret;
 import io.anuke.mindustry.world.blocks.types.defense.Turret;
 import io.anuke.ucore.core.Effects;
@@ -237,5 +238,9 @@ public class WeaponBlocks{
 			shootEffect = Fx.titanshot;
 			shootShake = 3f;
 		}
-	};
+	},
+
+	nuclearBomb = new NuclearBomb(""){{
+		size = 3;
+	}};
 }

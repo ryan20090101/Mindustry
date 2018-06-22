@@ -124,7 +124,7 @@ public class LogicBlock extends Block implements LogicAcceptor{
 
     @Override
     public boolean isLayer2(Tile tile) {
-        return Vars.android ? Vars.control.input().placeMode == PlaceMode.linkTool : ((DesktopInput)Vars.control.input()).linking;
+        return Vars.android ? Vars.control.input().placeMode == PlaceMode.linkTool : Vars.control.input().linking;
     }
 
     @Override

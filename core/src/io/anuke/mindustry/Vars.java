@@ -24,7 +24,7 @@ public class Vars{
 	//How many dimensions are there
 	public static final int dimensionIds = 1;
 
-	public static final boolean testMobile = false;
+	public static final boolean testMobile = true;
 	//shorthand for whether or not this is running on android
 	public static final boolean mobile = (Gdx.app.getType() == ApplicationType.Android) ||
 											Gdx.app.getType() == ApplicationType.iOS || testMobile;

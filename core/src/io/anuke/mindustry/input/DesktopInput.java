@@ -26,7 +26,6 @@ public class DesktopInput extends InputHandler{
 	float endx, endy;
 	private boolean enableHold = false;
 	private boolean beganBreak;
-	public boolean linking,placingStamp,stamping;
 	private Tile linkTile;
 	private boolean rotated = false, rotatedAlt, zoomed;
 	

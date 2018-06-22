@@ -22,7 +22,7 @@ public class Item{
 		silicon = new Item("silicon"),
 		copper = new Item("copper"),
 		tin = new Item("tin"),
-		gravel = new Item("gravel"),
+		gravel = new Item("gravel"){{material=false;}},
 		plutonium = new Item("plutonium"){{material=false;}},
 		dirt = new Item("dirt");
 

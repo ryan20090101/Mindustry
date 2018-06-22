@@ -62,7 +62,7 @@ public class Player extends SyncEntity{
 	public boolean carry = false;
 	public Player carrier;
 
-	public boolean walking = true;
+	public boolean walking = false;
 	public int jumpHeightMultiplier = 1;
 	public float gravity = 0.3f;
 	private float oldy = 0;

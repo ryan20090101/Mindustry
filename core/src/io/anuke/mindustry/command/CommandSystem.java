@@ -67,7 +67,7 @@ public class CommandSystem extends Module {
         });
     }
 
-    /**Call to handle a packet being recieved for the server.*/
+    /**Call to handle a packet being received for the server.*/
     public static void handleCommandReceived(Packets.AdminCommandPacket object){
         String command = object.message.split(" ")[0];
         if(listeners.get(command) != null) listeners.get(command).accept(object.message.replace(command,""));

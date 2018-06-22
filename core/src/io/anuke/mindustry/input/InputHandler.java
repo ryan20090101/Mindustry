@@ -33,6 +33,7 @@ public abstract class InputHandler extends InputAdapter{
 	}};
 	public Vector2 stampOrigin = new Vector2();
 	public StampUtil.Stamp stamp;
+	public boolean linking,placingStamp,stamping;
 
 	public abstract void update();
 	public abstract float getCursorX();

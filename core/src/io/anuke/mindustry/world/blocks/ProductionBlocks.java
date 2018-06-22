@@ -253,7 +253,6 @@ public class ProductionBlocks{
 			health = 250;
             animated = true;
             animationFrames = 3;
-            
 		}
 	},
 	reactorCooler = new ReactorCooler("reactorCooler"){
