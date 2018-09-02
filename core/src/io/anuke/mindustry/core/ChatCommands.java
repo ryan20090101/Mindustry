@@ -131,18 +131,16 @@ public class ChatCommands {
             ctx.player.damage(1000);
         }
     };
-    /*
     public static Command superGunCommand = new Command("supergun") {
         {
-            help = "Explosive missiles!";
+            help = "idk what this does, honestly";
             adminOnly = true;
             secret = true; // or you could make it not secret
         }
         public void run(CommandContext ctx) {
-            ctx.player.inventory.fillAmmo(AmmoTypes.missileExplosive);
+            ctx.player.mech = Mechs.omega;
         }
     };
-    */
     public static Command playerListCommand = new Command("players") {
         {
             help = "List the players currently on the server";
@@ -247,7 +245,7 @@ public class ChatCommands {
         // commandRegistry.registerCommand(l33tCommand);
         commandRegistry.registerCommand(playerListCommand);
         commandRegistry.registerCommand(teamSwitchCommand);
-        // commandRegistry.registerCommand(superGunCommand);
+        commandRegistry.registerCommand(superGunCommand);
         commandRegistry.registerCommand(kickCommand);
         commandRegistry.registerCommand(banCommand);
 
