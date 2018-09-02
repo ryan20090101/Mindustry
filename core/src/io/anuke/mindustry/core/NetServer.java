@@ -18,6 +18,7 @@ import io.anuke.mindustry.game.Version;
 import io.anuke.mindustry.gen.Call;
 import io.anuke.mindustry.gen.RemoteReadServer;
 import io.anuke.mindustry.net.*;
+import io.anuke.mindustry.net.Cancelled;
 import io.anuke.mindustry.net.Administration.PlayerInfo;
 import io.anuke.mindustry.net.Packets.*;
 import io.anuke.mindustry.world.Tile;
@@ -255,9 +256,14 @@ public class NetServer extends Module{
         });
 
         Net.handleServer(InvokePacket.class, (id, packet) -> {
-            Player player = connections.get(id);
-            if(player == null) return;
-            RemoteReadServer.readPacket(packet.writeBuffer, packet.type, player);
+            try {
+                Player player = connections.get(id);
+                if (player == null) return;
+                RemoteReadServer.readPacket(packet.writeBuffer, packet.type, player);
+            }
+            catch (ValidateException e){
+
+            }
         });
     }
 

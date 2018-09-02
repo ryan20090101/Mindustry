@@ -10,6 +10,7 @@ import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.entities.traits.BuilderTrait;
 import io.anuke.mindustry.game.Team;
 import io.anuke.mindustry.gen.Call;
+import io.anuke.mindustry.net.Packets;
 import io.anuke.mindustry.net.ValidateException;
 import io.anuke.mindustry.type.Item;
 import io.anuke.mindustry.type.Mech;
@@ -32,10 +33,10 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-import static io.anuke.mindustry.Vars.tileGroup;
-import static io.anuke.mindustry.Vars.tilesize;
-import static io.anuke.mindustry.Vars.world;
+import static io.anuke.mindustry.Vars.*;
+import static io.anuke.mindustry.Vars.netServer;
 import static io.anuke.mindustry.gen.Call.sendMessage;
+import static io.anuke.ucore.util.Log.info;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.round;
 
@@ -177,6 +178,83 @@ public class ChatCommands {
         }
     };
 
+    public static Command playersCommand = new Command("players") {
+        {
+            help = "List of all players and their number";
+        }
+        public void run(CommandContext ctx) {
+            Player player = ctx.player;
+            String[] args = ctx.args;
+            int i = 0;
+            for (Player p : Vars.playerGroup.all()) {
+                if (p.getTeam() == player.getTeam()){
+                    ctx.reply("[blue]#[white]" + i + "-   [red]" + p.name);
+                }
+                i++;
+            }
+        }
+    };
+
+    public static Command kickCommand = new Command("kick") {
+        {
+            help = "Use !players to get player number, then use '!kick # reasons'";
+            adminOnly = true;
+            secret = false;
+        }
+        public void run(CommandContext ctx) {
+            String reason = "";
+            for (int i = 2; i < ctx.args.length; i++) reason = reason + " " + ctx.args[i];
+            reason = " \"" + reason + "\"";
+
+            int p = parseInt(ctx.args[1].replaceAll(" ", ""));
+            if ((p < 0) || (p >= Vars.playerGroup.size())) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            Player target = Vars.playerGroup.all().get(p);
+            netServer.kick(target.con.id, Packets.KickReason.kick);
+            cmdAdminBot(" kick " + target.name + " " + ctx.player.name + reason);
+            info("Kicked player " + target.name);
+        }
+    };
+
+    public static Command banCommand = new Command("ban") {
+        {
+            help = "Use !players to get player number, then use '!ban # reasons'";
+            adminOnly = true;
+            secret = false;
+        }
+        public void run(CommandContext ctx) {
+            String reason = "";
+            for (int i = 2; i < ctx.args.length; i++) reason = reason + " " + ctx.args[i];
+            reason = " \"" + reason + "\"";
+
+            int p = parseInt(ctx.args[1].replaceAll(" ", ""));
+            if ((p < 0) || (p >= Vars.playerGroup.size())) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            Player target = Vars.playerGroup.all().get(p);
+            netServer.admins.banPlayerIP(target.con.address);
+            netServer.admins.banPlayerID(target.uuid);
+            netServer.kick(target.con.id, Packets.KickReason.banned);
+            info("Banned player by IP and ID: {0} / {1}", target.con.address, target.uuid);
+            cmdAdminBot(" ban " + target.name + " " + ctx.player.name + reason);
+        }
+    };
+
+    static void cmdAdminBot(String params){
+        String botPath = System.getProperty("user.dir") + "\\admin_bot.py";
+        String cmd = "py " + botPath + params;
+
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     static {
         System.out.println("loading commands");
         commandRegistry.registerCommand(teleportCommand);
@@ -212,69 +290,8 @@ public class ChatCommands {
             return false;
         } else return true;
     }
-                /*
-            else if (player.isAdmin && message.contains("!clear")) {
-                for (int i = 0; i < world.width(); i++) {
-                    for (int q = 0; q < world.height(); q++) {
-                        Tile t = world.tile(i,q);
-                        if (t.getTeam() == Team.red) {
-                            if  (t.block() != Blocks.blockpart && (t.block() != StorageBlocks.core)){
-                                Call.onDeconstructFinish(t, t.block());
-                            }
-                        }
-                    }
-                }
 
-            } 
-            else if (message.contains("!test")) {
-                int x = round(player.x / tilesize), y = round(player.y / tilesize);
-                Tile t = world.tile(x, y);
-                Call.sendMessage(t.block().name);
-                Block b = Block.getByName("conveyor");
-                if (Build.validPlace(player.getTeam(),x,y,b,(byte)0)) {
-                    Call.onConstructFinish(t, b, player.id, (byte) 0, Team.blue);
-                }
-            }
-            //throw new ValidateException(player, "chatCommand"); // Blocks original message from broadcasting to other
-            players, doesnt work here because try{}
-            */
-
-    static void pipeTeleport(Player player, int direction) {
-        int x = round(player.x / tilesize), y = round(player.y / tilesize);
-        Tile t = world.tile(x, y);
-        System.out.println(t.block().name);
-        int max = 200;
-        while ((t.block().name.contains("conduit") && (max-- > 0))) {
-            int rot = t.getRotation();
-            x += direction * Geometry.d4[rot].x;
-            y += direction * Geometry.d4[rot].y;
-            t = world.tile(x, y);
-        }
-        player.setNet(x * tilesize, y * tilesize);
-    }
-
-    static void teamBattle() {
-        sendMessage("[red] BATTLE TO THE [black]D E A T H");
-        int totPlayers = Vars.playerGroup.size();
-        int halfPlayers = totPlayers / 2;
-        int radius = 100;
-        //for (int i = 0; i < totPlayers; i++){
-        int i = 0;
-        Item ammo = Item.getByID(4);
-        for (Player p : Vars.playerGroup.all()) {
-            float x = 1600, y = 1600;
-            x += Math.sin(i * 6.28 / totPlayers) * radius;
-            y += Math.cos(i * 6.28 / totPlayers) * radius;
-            p.mech = Mechs.delta;
-
-            p.setNet(x, y);
-            if (i < halfPlayers) p.toggleTeam();
-            i++;
-            for (int q = 0; q < 100; q++) {
-                p.addAmmo(p.getWeapon().getAcceptedItems().iterator().next());
-            }
-        }
-    }
+    static Mech [] mechs = {Mechs.alpha, Mechs.tau, Mechs.trident, Mechs.dart, Mechs.delta, Mechs.halberd, Mechs.javelin, Mechs.omega};
 
     static boolean mechSet(Player player, String message) {
         String[] split = message.split("mech");
@@ -282,32 +299,8 @@ public class ChatCommands {
         int p = parseInt(split[1].replaceAll(" ", ""));
         if ((p < 0) || (p > 7)) return false;
         Mech mech = null;
-        switch (p) {
-            case 0:
-                mech = Mechs.alpha;
-                break;
-            case 1:
-                mech = Mechs.tau;
-                break;
-            case 2:
-                mech = Mechs.trident;
-                break;
-            case 3:
-                mech = Mechs.dart;
-                break;
-            case 4:
-                mech = Mechs.delta;
-                break;
-            case 5:
-                mech = Mechs.halberd;
-                break;
-            case 6:
-                mech = Mechs.javelin;
-                break;
-            case 7:
-                mech = Mechs.omega;
-                break;
-        }
+
+        mech = mechs[p];
         if (mech == null) return false;
         player.mech = mech;
         player.mech.load();
@@ -325,79 +318,6 @@ public class ChatCommands {
                         "[royal] 5-halberd " +
                         "[scarlet] 6-javelin " +
                         "[white] 7-omega");
-    }
-
-    public int markX = 0, markY = 0;
-    public int previewCount = 0;
-    public int previewLength = 25;
-    public boolean drawPreview = false;
-
-
-    int tileSize = 8;
-
-    static boolean saveMap(){
-        int sx = 0,  sy = 0,  ex = world.width(), ey = world.height();
-        int wd = 1+(ex-sx);
-        int hd = 1+(ey-sy);
-
-        /*if ((wd >25)||(hd>25)) {
-            return false;
-        }*/
-
-        String[][] patNames = new String[wd][hd];
-        int[][] patRot = new int[wd][hd];
-
-        System.out.println(wd + " x " + hd);
-
-        for (int i = 0; i < wd; i++) {
-            for (int q = 0; q < hd; q++) {
-                Tile t = world.tile(sx + i , sy + q ); //  Tile t = world.tileWorld(sx + i * tileSize, sy + q * tileSize);
-                patRot[i][q] = t.getRotation();
-                patNames[i][q] = t.block().name;
-                /*if (patNames[i][q].equals("router")){
-                    Sorter.SorterEntity sorter = t.entity();
-                    patNames[i][q] += "." + sorter.sortItem.id;
-                }
-                if (patNames[i][q].equals("teleporter")) {
-                    Teleporter.TeleporterEntity tp = t.entity();
-                    patNames[i][q] += "." + tp.color;
-                }*/
-            }
-        }
-
-        String s = "worldSave";
-
-        try {
-            String content = "";
-            String nl = System.getProperty("line.separator");
-            // = wd + "x" + hd + nl;
-            content = wd + nl + hd + nl;
-            for (int i = 0; i < wd; i++) {
-                for (int q = 0; q < hd; q++) {
-                    content = content + patNames[i][q] + "," + patRot[i][q] + " ";
-                }
-                content = content + nl;
-            }
-            String fpath = new File(".").getCanonicalPath();
-            String path = fpath + "\\patterns\\" + s + ".txt";
-            System.out.println(fpath);
-            File file = new File(path);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(content);
-            bw.close();
-            System.out.println(file.getAbsoluteFile());
-            Log.info("saved " + s);
-            return true;
-            //return "[green]saved " + s;
-        } catch (Exception e) {
-            Log.info(e.toString());
-            return false;//return e.toString();
-        }
-        //if (netServer == null) ui.chatfrag.addMessage("[green]saved " + s, null);
     }
 
 }
