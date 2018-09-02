@@ -16,9 +16,3 @@ android:
 
 script: 
     - ./gradlew desktop:dist
-
-after_success:
-    - chmod +x upload-build.sh
-    - chmod +x cleanup_builds.sh
-    - ./upload-build.sh
-
