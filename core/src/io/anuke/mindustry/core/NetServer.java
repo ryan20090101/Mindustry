@@ -178,7 +178,7 @@ public class NetServer extends Module{
             if(state.mode.isPvp){
                 //find team with minimum amount of players and auto-assign player to that.
                 Team min = Mathf.findMin(Team.all, team -> {
-                    if(state.teams.isActive(team)){
+                    if (state.teams.isActive(team) && state.teams.isPlayable(team)) {
                         int count = 0;
                         for(Player other : playerGroup.all()){
                             if(other.getTeam() == team){

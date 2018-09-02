@@ -35,7 +35,7 @@ public class Vars{
     //team of the player by default
     public static final Team defaultTeam = Team.blue;
     //team of the enemy in waves
-    public static final Team waveTeam = Team.red;
+    public static final Team waveTeam = Team.none;
 
     //discord group URL
     public static final String discordURL = "https://discord.gg/mindustry";

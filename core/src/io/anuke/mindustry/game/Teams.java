@@ -43,6 +43,11 @@ public class Teams{
         return (!Vars.state.mode.disableWaves && team == Vars.waveTeam) || get(team).cores.size > 0;
     }
 
+    /** Returns whether a pvp player can join a team */
+    public boolean isPlayable(Team team) {
+        return team != Vars.waveTeam;
+    }
+
     /**Returns a set of all teams that are enemies of this team.*/
     public EnumSet<Team> enemiesOf(Team team){
         return get(team).enemies;
