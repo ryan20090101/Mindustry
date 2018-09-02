@@ -147,7 +147,7 @@ public class UnitPad extends Block{
 
         entity.time += Timers.delta() * entity.speedScl;
 
-        boolean isEnemy = tile.getTeam() == Team.red;
+        boolean isEnemy = false;//tile.getTeam() == Team.red;
 
         if(isEnemy){
             entity.warmup += Timers.delta();

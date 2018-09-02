@@ -81,9 +81,9 @@ public class Mechs implements ContentList{
         }};
 
         halberd = new Mech("halberd-ship", true){{
-            drillPower = 2;
-            speed = 0.4f;
-            maxSpeed = 3f;
+            drillPower = 10;
+            speed = 0.6f;
+            maxSpeed = 9f;
             drag = 0.1f;
         }};
 

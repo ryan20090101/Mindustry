@@ -64,7 +64,7 @@ public class Logic extends Module{
                 if(world.getSector() != null){
                     Array<ItemStack> items = world.getSector().startingItems;
                     for(ItemStack stack : items){
-                        tile.entity.items.add(stack.item, stack.amount);
+                    //    tile.entity.items.add(stack.item, stack.amount);
                     }
                 }
             }
@@ -72,8 +72,8 @@ public class Logic extends Module{
 
         for(TeamData team : state.teams.getTeams(false)){
             for(Tile tile : team.cores){
-                tile.entity.items.add(Items.tungsten, 2000);
-                tile.entity.items.add(Items.blastCompound, 2000);
+                //tile.entity.items.add(Items.tungsten, 2000);
+                //tile.entity.items.add(Items.blastCompound, 2000);
             }
         }
 
