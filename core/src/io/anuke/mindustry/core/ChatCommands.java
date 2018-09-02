@@ -103,6 +103,7 @@ public class ChatCommands {
             else ctx.player.mech = Mechs.starterMobile;
         }
     };
+    /*
     public static Command l33tCommand = new Command("1337") {
         {
             help = "Switch to the halberd";
@@ -112,6 +113,7 @@ public class ChatCommands {
             ctx.player.mech = Mechs.halberd;
         }
     };
+    */
     public static Command teamSwitchCommand = new Command("team") {
         {
             help = "Switch between teams";
@@ -129,6 +131,7 @@ public class ChatCommands {
             ctx.player.damage(1000);
         }
     };
+    /*
     public static Command superGunCommand = new Command("supergun") {
         {
             help = "Explosive missiles!";
@@ -139,6 +142,7 @@ public class ChatCommands {
             ctx.player.inventory.fillAmmo(AmmoTypes.missileExplosive);
         }
     };
+    */
     public static Command playerListCommand = new Command("players") {
         {
             help = "List the players currently on the server";
@@ -240,10 +244,10 @@ public class ChatCommands {
         System.out.println("loading commands");
         commandRegistry.registerCommand(teleportCommand);
         commandRegistry.registerCommand(mechCommand);
-        commandRegistry.registerCommand(l33tCommand);
+        // commandRegistry.registerCommand(l33tCommand);
         commandRegistry.registerCommand(playerListCommand);
         commandRegistry.registerCommand(teamSwitchCommand);
-        commandRegistry.registerCommand(superGunCommand);
+        // commandRegistry.registerCommand(superGunCommand);
         commandRegistry.registerCommand(kickCommand);
         commandRegistry.registerCommand(banCommand);
 
@@ -286,6 +290,8 @@ public class ChatCommands {
         }
     }
 
+
+    /* old stuff that doesn't work anymore
     static Mech [] mechs = {Mechs.alpha, Mechs.tau, Mechs.trident, Mechs.dart, Mechs.delta, Mechs.halberd, Mechs.javelin, Mechs.omega};
 
     static boolean mechSet(Player player, String message) {
@@ -314,5 +320,5 @@ public class ChatCommands {
                         "[scarlet] 6-javelin " +
                         "[white] 7-omega");
     }
-
+    */
 }

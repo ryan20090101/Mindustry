@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.content.Items;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.game.Team;
+import io.anuke.mindustry.io.SaveIO;
 import io.anuke.mindustry.maps.generation.WorldGenerator.GenResult;
 import io.anuke.mindustry.maps.missions.BattleMission;
 import io.anuke.mindustry.maps.missions.WaveMission;
@@ -23,8 +24,8 @@ import io.anuke.ucore.util.Mathf;
 import static io.anuke.mindustry.Vars.*;
 
 public class Sectors{
-    private static final int sectorImageSize = 16;
-    private static final float sectorLargeChance = 0.23f;
+    private static final int sectorImageSize = 32;
+    private static final float sectorLargeChance = 0.24f;
 
     private GridMap<Sector> grid = new GridMap<>();
 
@@ -33,12 +34,19 @@ public class Sectors{
     }
 
     public void playSector(Sector sector){
+        if(sector.hasSave() && SaveIO.breakingVersions.contains(sector.getSave().getBuild())){
+            sector.getSave().delete();
+            ui.showInfo("$text.save.old");
+        }
+
         if(!sector.hasSave()){
             world.loadSector(sector);
             logic.play();
             sector.saveID = control.getSaves().addSave("sector-" + sector.packedPosition()).index;
             world.sectors().save();
             world.setSector(sector);
+        }else if(SaveIO.breakingVersions.contains(sector.getSave().getBuild())){
+            ui.showInfo("$text.save.old");
         }else try{
             sector.getSave().load();
             world.setSector(sector);
@@ -133,7 +141,7 @@ public class Sectors{
     }
 
     private void initSector(Sector sector){
-        double waveChance = 0.2;
+        double waveChance = 0.3;
 
         sector.difficulty = (int)(Mathf.dst(sector.x, sector.y));
 
@@ -147,21 +155,21 @@ public class Sectors{
         sector.spawns = sector.missions.first().getWaves(sector);
 
         //add all ores for now since material differences aren't well handled yet
-        sector.ores.addAll(Items.tungsten, Items.coal, Items.lead, Items.thorium, Items.titanium);
+        sector.ores.addAll(Items.copper, Items.coal, Items.lead, Items.thorium, Items.titanium);
 
         //set starter items
         if(sector.difficulty > 12){ //now with titanium
-            sector.startingItems = Array.with(new ItemStack(Items.tungsten, 1900), new ItemStack(Items.lead, 600), new ItemStack(Items.carbide, 470), new ItemStack(Items.silicon, 460), new ItemStack(Items.titanium, 230));
+            sector.startingItems = Array.with(new ItemStack(Items.copper, 1900), new ItemStack(Items.lead, 500), new ItemStack(Items.densealloy, 470), new ItemStack(Items.silicon, 460), new ItemStack(Items.titanium, 230));
         }else if(sector.difficulty > 8){ //just more resources
-            sector.startingItems = Array.with(new ItemStack(Items.tungsten, 1500), new ItemStack(Items.lead, 450), new ItemStack(Items.carbide, 340), new ItemStack(Items.silicon, 250));
+            sector.startingItems = Array.with(new ItemStack(Items.copper, 1500), new ItemStack(Items.lead, 400), new ItemStack(Items.densealloy, 340), new ItemStack(Items.silicon, 250));
         }else if(sector.difficulty > 5){ //now with silicon
-            sector.startingItems = Array.with(new ItemStack(Items.tungsten, 950), new ItemStack(Items.lead, 350), new ItemStack(Items.carbide, 190), new ItemStack(Items.silicon, 140));
+            sector.startingItems = Array.with(new ItemStack(Items.copper, 950), new ItemStack(Items.lead, 300), new ItemStack(Items.densealloy, 190), new ItemStack(Items.silicon, 140));
         }else if(sector.difficulty > 3){ //now with carbide
-            sector.startingItems = Array.with(new ItemStack(Items.tungsten, 700), new ItemStack(Items.lead, 250), new ItemStack(Items.carbide, 130));
+            sector.startingItems = Array.with(new ItemStack(Items.copper, 700), new ItemStack(Items.lead, 200), new ItemStack(Items.densealloy, 130));
         }else if(sector.difficulty > 1){ //more starter items for faster start
-            sector.startingItems = Array.with(new ItemStack(Items.tungsten, 500), new ItemStack(Items.lead, 180));
+            sector.startingItems = Array.with(new ItemStack(Items.copper, 400), new ItemStack(Items.lead, 100));
         }else{ //base starting items to prevent grinding much
-            sector.startingItems = Array.with(new ItemStack(Items.tungsten, 170), new ItemStack(Items.lead, 70));
+            sector.startingItems = Array.with(new ItemStack(Items.copper, 130));
         }
     }
 

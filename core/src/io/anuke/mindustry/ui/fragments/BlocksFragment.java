@@ -89,14 +89,12 @@ public class BlocksFragment extends Fragment{
             }).bottom().right().get();
         });
 
-        Events.on(WorldLoadEvent.class, this::rebuild);
+        Events.on(WorldLoadEvent.class, event -> rebuild());
 
         rebuild();
     }
 
-    /**
-     * Rebuilds the whole placement menu, attempting to preserve previous state.
-     */
+    /**Rebuilds the whole placement menu, attempting to preserve previous state.*/
     void rebuild(){
         selectTable.clear();
 
@@ -258,7 +256,7 @@ public class BlocksFragment extends Fragment{
         }
 
         selectTable.row();
-        selectTable.add(stack).growX().left().top().colspan(Category.values().length).padBottom(-5).height((size + 12) * rowsUsed);
+        selectTable.add(stack).growX().left().top().colspan(Category.values().length).padBottom(-5).height((size + 12) * Math.min(rowsUsed, 3));
     }
 
     void toggle(float t, Interpolation ip){

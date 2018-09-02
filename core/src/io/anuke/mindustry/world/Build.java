@@ -6,7 +6,6 @@ import io.anuke.mindustry.content.blocks.Blocks;
 import io.anuke.mindustry.entities.Units;
 import io.anuke.mindustry.game.EventType.BlockBuildEvent;
 import io.anuke.mindustry.game.Team;
-import io.anuke.mindustry.game.TeamInfo.TeamData;
 import io.anuke.mindustry.type.Recipe;
 import io.anuke.mindustry.world.blocks.BuildBlock.BuildEntity;
 import io.anuke.ucore.core.Events;
@@ -100,7 +99,7 @@ public class Build{
         }
 
 
-        threads.runDelay(() -> Events.fire(BlockBuildEvent.class, team, tile));
+        threads.runDelay(() -> Events.fire(new BlockBuildEvent(tile, team)));
     }
 
     /**Returns whether a tile can be placed at this location by this team.*/
@@ -138,9 +137,9 @@ public class Build{
         }
 
         //check for enemy cores
-        for(TeamData data : state.teams.enemyDataOf(team)){
-            for(Tile core : data.cores){
-                if(Vector2.dst(x*tilesize + type.offset(), y*tilesize + type.offset(), core.drawx(), core.drawy()) < enemyCoreBuildRange + type.size*tilesize/2f){
+        for(Team enemy : state.teams.enemiesOf(team)){
+            for(Tile core : state.teams.get(enemy).cores){
+                if(Vector2.dst(x*tilesize + type.offset(), y*tilesize + type.offset(), core.drawx(), core.drawy()) < state.mode.enemyCoreBuildRadius + type.size*tilesize/2f){
                     return false;
                 }
             }
@@ -166,7 +165,7 @@ public class Build{
                     Tile other = world.tile(x + dx + offsetx, y + dy + offsety);
                     if(other == null || (other.block() != Blocks.air && !other.block().alwaysReplace)
                             || other.hasCliffs() || !other.floor().placeableOn ||
-                            (tile.floor().liquidDrop != null && !type.floating)){
+                            (other.floor().isLiquid && !type.floating)){
                         return false;
                     }
                 }
@@ -174,7 +173,7 @@ public class Build{
             return true;
         }else{
             return (tile.getTeam() == Team.none || tile.getTeam() == team)
-                    && (tile.floor().liquidDrop == null || type.floating)
+                    && (!tile.floor().isLiquid || type.floating)
                     && tile.floor().placeableOn && !tile.hasCliffs()
                     && ((type.canReplace(tile.block())
                     && !(type == tile.block() && rotation == tile.getRotation() && type.rotate)) || tile.block().alwaysReplace || tile.block() == Blocks.air)

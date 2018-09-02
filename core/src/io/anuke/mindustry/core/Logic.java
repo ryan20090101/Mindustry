@@ -2,16 +2,13 @@ package io.anuke.mindustry.core;
 
 import com.badlogic.gdx.utils.Array;
 import io.anuke.mindustry.Vars;
-import io.anuke.mindustry.content.Items;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.game.EventType.GameOverEvent;
 import io.anuke.mindustry.game.EventType.PlayEvent;
 import io.anuke.mindustry.game.EventType.ResetEvent;
 import io.anuke.mindustry.game.EventType.WaveEvent;
-import io.anuke.mindustry.game.Team;
-import io.anuke.mindustry.game.TeamInfo;
-import io.anuke.mindustry.game.TeamInfo.TeamData;
+import io.anuke.mindustry.game.Teams;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.type.Item;
 import io.anuke.mindustry.type.ItemStack;
@@ -51,49 +48,39 @@ public class Logic extends Module{
         state.set(State.playing);
         state.wavetime = wavespace * state.difficulty.timeScaling * 2;
 
-        for(TeamData team : state.teams.getTeams(true)){
-            for(Tile tile : team.cores){
-                if(debug){
-                    for(Item item : Item.all()){
-                        if(item.type == ItemType.material){
-                            tile.entity.items.set(item, 1000);
-                        }
-                    }
-                }
-
-                if(world.getSector() != null){
-                    Array<ItemStack> items = world.getSector().startingItems;
-                    for(ItemStack stack : items){
-                    //    tile.entity.items.add(stack.item, stack.amount);
+        for(Tile tile : state.teams.get(defaultTeam).cores){
+            if(debug){
+                for(Item item : Item.all()){
+                    if(item.type == ItemType.material){
+                        tile.entity.items.set(item, 1000);
                     }
                 }
             }
-        }
 
-        for(TeamData team : state.teams.getTeams(false)){
-            for(Tile tile : team.cores){
-                //tile.entity.items.add(Items.tungsten, 2000);
-                //tile.entity.items.add(Items.blastCompound, 2000);
+            /*
+            if(world.getSector() != null){
+                Array<ItemStack> items = world.getSector().startingItems;
+                for(ItemStack stack : items){
+                    tile.entity.items.add(stack.item, stack.amount);
+                }
             }
+            */
         }
 
-
-        Events.fire(PlayEvent.class);
+        Events.fire(new PlayEvent());
     }
 
     public void reset(){
         state.wave = 1;
         state.wavetime = wavespace * state.difficulty.timeScaling;
         state.gameOver = false;
-        state.teams = new TeamInfo();
-        state.teams.add(Team.blue, true);
-        state.teams.add(Team.red, false);
+        state.teams = new Teams();
 
         Timers.clear();
         Entities.clear();
         TileEntity.sleepingEntities = 0;
 
-        Events.fire(ResetEvent.class);
+        Events.fire(new ResetEvent());
     }
 
     public void runWave(){
@@ -101,22 +88,14 @@ public class Logic extends Module{
         state.wave++;
         state.wavetime = wavespace * state.difficulty.timeScaling;
 
-        Events.fire(WaveEvent.class);
+        Events.fire(new WaveEvent());
     }
 
+    //this never triggers in PvP; only for checking sector game-overs
     private void checkGameOver(){
-        boolean gameOver = true;
-
-        for(TeamData data : state.teams.getTeams(true)){
-            if(data.cores.size > 0){
-                gameOver = false;
-                break;
-            }
-        }
-
-        if(gameOver && !state.gameOver){
+        if(state.teams.get(defaultTeam).cores.size == 0 && !state.gameOver){
             state.gameOver = true;
-            Events.fire(GameOverEvent.class);
+            Events.fire(new GameOverEvent());
         }
     }
 
@@ -136,7 +115,7 @@ public class Logic extends Module{
                 Timers.update();
             }
 
-            if(!world.isInvalidMap()){
+            if(!Net.client() && !world.isInvalidMap()){
                 checkGameOver();
             }
 
@@ -153,12 +132,13 @@ public class Logic extends Module{
                 if(!Entities.defaultGroup().isEmpty())
                     throw new RuntimeException("Do not add anything to the default group!");
 
-                Entities.update(bulletGroup);
+
                 for(EntityGroup group : unitGroups){
                     Entities.update(group);
                 }
                 Entities.update(puddleGroup);
                 Entities.update(tileGroup);
+                Entities.update(bulletGroup);
                 Entities.update(fireGroup);
                 Entities.update(playerGroup);
                 Entities.update(itemGroup);

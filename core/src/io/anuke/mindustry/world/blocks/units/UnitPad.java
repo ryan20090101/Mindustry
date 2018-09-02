@@ -8,12 +8,10 @@ import io.anuke.mindustry.content.fx.BlockFx;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.entities.units.BaseUnit;
 import io.anuke.mindustry.entities.units.UnitType;
-import io.anuke.mindustry.game.Team;
 import io.anuke.mindustry.gen.Call;
 import io.anuke.mindustry.graphics.Palette;
 import io.anuke.mindustry.graphics.Shaders;
 import io.anuke.mindustry.net.Net;
-import io.anuke.mindustry.type.AmmoType;
 import io.anuke.mindustry.type.Item;
 import io.anuke.mindustry.type.ItemStack;
 import io.anuke.mindustry.world.BarType;
@@ -45,6 +43,7 @@ public class UnitPad extends Block{
     protected UnitType type;
     protected float produceTime = 1000f;
     protected float launchVelocity = 0f;
+    protected TextureRegion topRegion;
 
     public UnitPad(String name){
         super(name);
@@ -74,11 +73,14 @@ public class UnitPad extends Block{
             unit.set(tile.drawx(), tile.drawy());
             unit.add();
             unit.getVelocity().y = factory.launchVelocity;
-
-            //fill inventory with 1st ammo
-            AmmoType type = unit.getWeapon().getAmmoType(unit.getWeapon().getAcceptedItems().iterator().next());
-            unit.inventory.fillAmmo(type);
         }
+    }
+
+    @Override
+    public void load(){
+        super.load();
+
+        topRegion = Draw.region(name + "-top");
     }
 
     @Override
@@ -138,7 +140,7 @@ public class UnitPad extends Block{
 
         Draw.reset();
 
-        Draw.rect(name + "-top", tile.drawx(), tile.drawy());
+        Draw.rect(topRegion, tile.drawx(), tile.drawy());
     }
 
     @Override
@@ -147,13 +149,11 @@ public class UnitPad extends Block{
 
         entity.time += Timers.delta() * entity.speedScl;
 
-        boolean isEnemy = false;//tile.getTeam() == Team.red;
-
-        if(isEnemy){
+        if(tile.isEnemyCheat()){
             entity.warmup += Timers.delta();
         }
 
-        if(!isEnemy){
+        if(!tile.isEnemyCheat()){
             //player-made spawners have default behavior
 
             if(hasRequirements(entity.items, entity.buildTime / produceTime) && entity.cons.valid()){

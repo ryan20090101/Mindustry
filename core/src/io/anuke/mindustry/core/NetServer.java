@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.TimeUtils;
 import io.anuke.annotations.Annotations.Loc;
@@ -14,6 +15,7 @@ import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.traits.BuilderTrait.BuildRequest;
 import io.anuke.mindustry.entities.traits.SyncTrait;
+import io.anuke.mindustry.game.Team;
 import io.anuke.mindustry.game.Version;
 import io.anuke.mindustry.gen.Call;
 import io.anuke.mindustry.gen.RemoteReadServer;
@@ -32,6 +34,7 @@ import io.anuke.ucore.io.delta.ByteMatcherHash;
 import io.anuke.ucore.io.delta.DEZEncoder;
 import io.anuke.ucore.modules.Module;
 import io.anuke.ucore.util.Log;
+import io.anuke.ucore.util.Mathf;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -44,11 +47,15 @@ import static io.anuke.mindustry.Vars.*;
 
 public class NetServer extends Module{
     public final static int maxSnapshotSize = 2047;
-    public final static boolean showSnapshotSize = false;
+
+    public final static boolean debugSnapshots = false;
+    public final static float maxSnapshotDelay = 200;
+    public final static float snapshotDropchance = 0.01f;
 
     private final static byte[] reusableSnapArray = new byte[maxSnapshotSize];
     private final static float serverSyncTime = 4, kickDuration = 30 * 1000;
     private final static Vector2 vector = new Vector2();
+    private final static IntArray removals = new IntArray();
     /**If a play goes away of their server-side coordinates by this distance, they get teleported back.*/
     private final static float correctDist = 16f;
 
@@ -117,11 +124,11 @@ public class NetServer extends Module{
                 return;
             }
 
-            boolean preventDuplicates = headless;
+            boolean preventDuplicates = headless && !debug;
 
             if(preventDuplicates){
                 for(Player player : playerGroup.all()){
-                    if(player.name.equalsIgnoreCase(packet.name)){
+                    if(player.name.trim().equalsIgnoreCase(packet.name.trim())){
                         kick(id, KickReason.nameInUse);
                         return;
                     }
@@ -167,19 +174,29 @@ public class NetServer extends Module{
             player.setNet(player.x, player.y);
             player.color.set(packet.color);
             player.color.a = 1f;
+
+            if(state.mode.isPvp){
+                //find team with minimum amount of players and auto-assign player to that.
+                Team min = Mathf.findMin(Team.all, team -> {
+                    if(state.teams.isActive(team)){
+                        int count = 0;
+                        for(Player other : playerGroup.all()){
+                            if(other.getTeam() == team){
+                                count ++;
+                            }
+                        }
+                        return count;
+                    }
+                    return Integer.MAX_VALUE;
+                });
+                player.setTeam(min);
+            }
+
             connections.put(id, player);
 
             trace.playerid = player.id;
 
-            //TODO try DeflaterOutputStream
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            DeflaterOutputStream def = new DeflaterOutputStream(stream);
-            NetworkIO.writeWorld(player, def);
-            WorldStream data = new WorldStream();
-            data.stream = new ByteArrayInputStream(stream.toByteArray());
-            Net.sendStream(id, data);
-
-            Log.info("Packed {0} uncompressed bytes of WORLD data.", stream.size());
+            sendWorldData(player, id);
 
             Platform.instance.updateRPC();
         });
@@ -204,6 +221,7 @@ public class NetServer extends Module{
             player.setMineTile(packet.mining);
             player.isBoosting = packet.boosting;
             player.isShooting = packet.shooting;
+            player.isAlt = packet.alting;
             player.getPlaceQueue().clear();
             for(BuildRequest req : packet.requests){
                 //auto-skip done requests
@@ -220,7 +238,7 @@ public class NetServer extends Module{
 
             float prevx = player.x, prevy = player.y;
             player.set(player.getInterpolator().target.x, player.getInterpolator().target.y);
-            if(!player.mech.flying){
+            if(!player.mech.flying && player.boostHeat < 0.01f){
                 player.move(vector.x, vector.y);
             }else{
                 player.x += vector.x;
@@ -246,9 +264,18 @@ public class NetServer extends Module{
             player.getVelocity().set(packet.xv, packet.yv); //only for visual calculation purposes, doesn't actually update the player
 
             //when the client confirms recieveing a snapshot, update base and clear map
-            if(packet.lastSnapshot > connection.currentBaseID){
-                connection.currentBaseID = packet.lastSnapshot;
-                connection.currentBaseSnapshot = connection.lastSentRawSnapshot;
+            if(packet.lastSnapshot > connection.lastRecievedSnapshotID){
+                connection.lastRecievedSnapshotID = packet.lastSnapshot;
+                removals.clear();
+                for(IntMap.Entry entry : connection.sent){
+                    if(entry.key < packet.lastSnapshot){
+                        removals.add(entry.key);
+                    }
+                }
+
+                for(int i = 0; i < removals.size; i++){
+                    connection.sent.remove(removals.get(i));
+                }
             }
 
             connection.lastRecievedClientSnapshot = packet.snapid;
@@ -279,7 +306,7 @@ public class NetServer extends Module{
     /** Sends a raw byte[] snapshot to a client, splitting up into chunks when needed.*/
     private static void sendSplitSnapshot(int userid, byte[] bytes, int snapshotID, int base){
         if(bytes.length < maxSnapshotSize){
-            Call.onSnapshot(userid, bytes, snapshotID, (short) 0, bytes.length, base);
+            scheduleSnapshot(() -> Call.onSnapshot(userid, bytes, snapshotID, (short) 0, bytes.length, base));
         }else{
             int remaining = bytes.length;
             int offset = 0;
@@ -288,13 +315,15 @@ public class NetServer extends Module{
                 int used = Math.min(remaining, maxSnapshotSize);
                 byte[] toSend;
                 //re-use sent byte arrays when possible
-                if(used == maxSnapshotSize){
+                if(used == maxSnapshotSize && !debugSnapshots){
                     toSend = reusableSnapArray;
                     System.arraycopy(bytes, offset, toSend, 0, Math.min(offset + maxSnapshotSize, bytes.length) - offset);
                 }else{
                     toSend = Arrays.copyOfRange(bytes, offset, Math.min(offset + maxSnapshotSize, bytes.length));
                 }
-                Call.onSnapshot(userid, toSend, snapshotID, (short) chunkid, bytes.length, base);
+
+                short fchunk = (short)chunkid;
+                scheduleSnapshot(() -> Call.onSnapshot(userid, toSend, snapshotID, fchunk, bytes.length, base));
 
                 remaining -= used;
                 offset += used;
@@ -303,9 +332,30 @@ public class NetServer extends Module{
         }
     }
 
+    private static void scheduleSnapshot(Runnable r){
+        if(debugSnapshots){
+            if(!Mathf.chance(snapshotDropchance)){
+                Timers.run(maxSnapshotDelay / 1000f * 60f, r);
+            }
+        }else{
+            r.run();
+        }
+    }
+
+    public void sendWorldData(Player player, int clientID){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        DeflaterOutputStream def = new DeflaterOutputStream(stream);
+        NetworkIO.writeWorld(player, def);
+        WorldStream data = new WorldStream();
+        data.stream = new ByteArrayInputStream(stream.toByteArray());
+        Net.sendStream(clientID, data);
+
+        Log.info("Packed {0} compressed bytes of world data.", stream.size());
+    }
+
     public static void onDisconnect(Player player){
         if(player.con.hasConnected){
-            Call.sendMessage("[accent]" + player.name + " [accent]has disconnected.");
+            Call.sendMessage("[accent]" + player.name + "[accent] has disconnected.");
             Call.onPlayerDisconnect(player.id);
         }
         player.remove();
@@ -443,7 +493,7 @@ public class NetServer extends Module{
 
         //check for syncable groups
         for(EntityGroup<?> group : Entities.getAllGroups()){
-            //TODO range-check sync positions to optimize?
+            //TODO screen-check sync positions to optimize?
             if(group.isEmpty() || !(group.all().get(0) instanceof SyncTrait)) continue;
 
             //make sure mapping is enabled for this group
@@ -474,16 +524,15 @@ public class NetServer extends Module{
                 int length = syncStream.position() - position; //length must always be less than 127 bytes
                 if(length > 127)
                     throw new RuntimeException("Write size for entity of type " + group.getType() + " must not exceed 127!");
-                dataStream.writeByte(length);
             }
         }
     }
 
-    String getUUID(int connectionID){
-        return connections.get(connectionID).uuid;
-    }
-
     String fixName(String name){
+        name = name.trim();
+        if(name.equals("[") || name.equals("]")){
+            return "";
+        }
 
         for(int i = 0; i < name.length(); i++){
             if(name.charAt(i) == '[' && i != name.length() - 1 && name.charAt(i + 1) != '[' && (i == 0 || name.charAt(i - 1) != '[')){
@@ -495,7 +544,12 @@ public class NetServer extends Module{
             }
         }
 
-        return name.substring(0, Math.min(name.length(), maxNameLength));
+        StringBuilder result = new StringBuilder();
+        int curChar = 0;
+        while(curChar < name.length() && result.toString().getBytes().length < maxNameLength){
+            result.append(name.charAt(curChar++));
+        }
+        return result.toString();
     }
 
     String checkColor(String str){
@@ -540,12 +594,12 @@ public class NetServer extends Module{
                 if(!player.timer.get(Player.timerSync, serverSyncTime) || !connection.hasConnected) continue;
 
                 //if the player hasn't acknowledged that it has recieved the packet, send the same thing again
-                if(connection.currentBaseID < connection.lastSentSnapshotID){
-                    if(showSnapshotSize)
+                /*if(connection.currentBaseID < connection.lastSentSnapshotID){
+                    if(debugSnapshots)
                         Log.info("Re-sending snapshot: {0} bytes, ID {1} base {2} baselength {3}", connection.lastSentSnapshot.length, connection.lastSentSnapshotID, connection.lastSentBase, connection.currentBaseSnapshot.length);
                     sendSplitSnapshot(connection.id, connection.lastSentSnapshot, connection.lastSentSnapshotID, connection.lastSentBase);
                     return;
-                }
+                }*/
 
                 //reset stream to begin writing
                 syncStream.reset();
@@ -554,29 +608,28 @@ public class NetServer extends Module{
 
                 byte[] bytes = syncStream.toByteArray();
 
-                if(connection.currentBaseID == -1){
-                    //assign to last sent snapshot so that there is only ever one unique snapshot with ID 0
-                    if(connection.lastSentSnapshot != null){
+                int snapid = connection.lastSentSnapshotID ++;
+
+                if(connection.lastRecievedSnapshotID == -1){
+                    /*if(connection.lastSentSnapshot != null){
                         bytes = connection.lastSentSnapshot;
                     }else{
                         connection.lastSentRawSnapshot = bytes;
                         connection.lastSentSnapshot = bytes;
-                    }
+                    }*/
 
-                    if(showSnapshotSize) Log.info("Sent raw snapshot: {0} bytes.", bytes.length);
+                    if(debugSnapshots) Log.info("Sent raw snapshot: {0} bytes.", bytes.length);
                     ///Nothing to diff off of in this case, send the whole thing
-                    sendSplitSnapshot(connection.id, bytes, 0, -1);
+                    sendSplitSnapshot(connection.id, bytes, snapid, -1);
+                    connection.sent.put(snapid, bytes);
                 }else{
-                    connection.lastSentRawSnapshot = bytes;
-
                     //send diff, otherwise
-                    byte[] diff = ByteDeltaEncoder.toDiff(new ByteMatcherHash(connection.currentBaseSnapshot, bytes), encoder);
-                    if(showSnapshotSize)
-                        Log.info("Shrank snapshot: {0} -> {1}, Base {2} ID {3} base length = {4}", bytes.length, diff.length, connection.currentBaseID, connection.currentBaseID + 1, connection.currentBaseSnapshot.length);
-                    sendSplitSnapshot(connection.id, diff, connection.currentBaseID + 1, connection.currentBaseID);
-                    connection.lastSentSnapshot = diff;
-                    connection.lastSentSnapshotID = connection.currentBaseID + 1;
-                    connection.lastSentBase = connection.currentBaseID;
+                    byte[] diff = ByteDeltaEncoder.toDiff(new ByteMatcherHash(connection.sent.get(connection.lastRecievedSnapshotID), bytes), encoder);
+                    if(debugSnapshots)
+                        Log.info("Shrank snapshot: {0} -> {1}, Base {2}", bytes.length, diff.length, connection.lastRecievedSnapshotID);
+
+                    sendSplitSnapshot(connection.id, diff, snapid, connection.lastRecievedSnapshotID);
+                    connection.sent.put(snapid, bytes);
                 }
             }
 

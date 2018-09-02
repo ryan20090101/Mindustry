@@ -7,7 +7,6 @@ import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.entities.bullet.Bullet;
 import io.anuke.mindustry.game.Team;
 import io.anuke.mindustry.world.Tile;
-import io.anuke.mindustry.world.blocks.Wall;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.graphics.Draw;
@@ -17,9 +16,9 @@ import io.anuke.ucore.util.Physics;
 import static io.anuke.mindustry.Vars.tilesize;
 
 public class DeflectorWall extends Wall{
-    static final float hitTime = 10f;
+    public static final float hitTime = 10f;
 
-    protected float maxDamageDeflect = 5f;
+    protected float maxDamageDeflect = 10f;
     protected Rectangle rect = new Rectangle();
 
     public DeflectorWall(String name){
@@ -81,7 +80,7 @@ public class DeflectorWall extends Wall{
         return new DeflectorEntity();
     }
 
-    static class DeflectorEntity extends TileEntity{
+    public static class DeflectorEntity extends TileEntity{
         public float hit;
     }
 }

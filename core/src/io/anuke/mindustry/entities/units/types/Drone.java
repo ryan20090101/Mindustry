@@ -244,7 +244,7 @@ public class Drone extends FlyingUnit implements BuilderTrait{
         }
 
         public void update(){
-            if(health >= health){
+            if(health >= maxHealth()){
                 state.set(attack);
             }else if(!targetHasFlag(BlockFlag.repair)){
                 if(timer.get(timerTarget, 20)){
@@ -268,11 +268,11 @@ public class Drone extends FlyingUnit implements BuilderTrait{
     private static void initEvents(){
         if(initialized) return;
 
-        Events.on(BlockBuildEvent.class, (team, tile) -> {
-            EntityGroup<BaseUnit> group = unitGroups[team.ordinal()];
+        Events.on(BlockBuildEvent.class, event -> {
+            EntityGroup<BaseUnit> group = unitGroups[event.team.ordinal()];
 
-            if(!(tile.entity instanceof BuildEntity)) return;
-            BuildEntity entity = tile.entity();
+            if(!(event.tile.entity instanceof BuildEntity)) return;
+            BuildEntity entity = event.tile.entity();
 
             for(BaseUnit unit : group.all()){
                 if(unit instanceof Drone){
@@ -393,11 +393,6 @@ public class Drone extends FlyingUnit implements BuilderTrait{
     @Override
     public float drawSize(){
         return isBuilding() ? placeDistance * 2f : 30f;
-    }
-
-    @Override
-    public float getAmmoFraction(){
-        return inventory.getItem().amount / (float) type.itemCapacity;
     }
 
     protected void findItem(){

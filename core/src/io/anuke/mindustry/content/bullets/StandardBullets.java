@@ -1,31 +1,26 @@
 package io.anuke.mindustry.content.bullets;
 
+import com.badlogic.gdx.graphics.Color;
+import io.anuke.mindustry.content.fx.BulletFx;
 import io.anuke.mindustry.entities.bullet.BasicBulletType;
 import io.anuke.mindustry.entities.bullet.BulletType;
 import io.anuke.mindustry.graphics.Palette;
 import io.anuke.mindustry.type.ContentList;
 
 public class StandardBullets extends BulletList implements ContentList{
-    public static BulletType tungsten, lead, carbide, thorium, homing, tracer;
+    public static BulletType copper, dense, thorium, homing, tracer, mechSmall, glaive;
 
     @Override
     public void load(){
 
-        tungsten = new BasicBulletType(3.2f, 10, "bullet"){
-            {
-                bulletWidth = 9f;
-                bulletHeight = 11f;
-            }
-        };
-
-        lead = new BasicBulletType(2.5f, 5, "bullet"){
+        copper = new BasicBulletType(2.5f, 7, "bullet"){
             {
                 bulletWidth = 7f;
                 bulletHeight = 9f;
             }
         };
 
-        carbide = new BasicBulletType(3.5f, 18, "bullet"){
+        dense = new BasicBulletType(3.5f, 18, "bullet"){
             {
                 bulletWidth = 9f;
                 bulletHeight = 12f;
@@ -58,6 +53,27 @@ public class StandardBullets extends BulletList implements ContentList{
                 incendSpread = 3f;
                 incendAmount = 1;
                 incendChance = 0.3f;
+            }
+        };
+
+        glaive = new BasicBulletType(4f, 7.5f, "bullet"){
+            {
+                bulletWidth = 10f;
+                bulletHeight = 12f;
+                frontColor = Color.valueOf("feb380");
+                backColor = Color.valueOf("ea8878");
+                incendSpread = 3f;
+                incendAmount = 1;
+                incendChance = 0.3f;
+            }
+        };
+
+        mechSmall = new BasicBulletType(4f, 9, "bullet"){
+            {
+                bulletWidth = 11f;
+                bulletHeight = 14f;
+                lifetime = 40f;
+                despawneffect = BulletFx.hitBulletSmall;
             }
         };
     }

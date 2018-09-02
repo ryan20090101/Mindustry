@@ -5,13 +5,12 @@ import io.anuke.mindustry.content.Items;
 import io.anuke.mindustry.content.Liquids;
 import io.anuke.mindustry.content.fx.BlockFx;
 import io.anuke.mindustry.type.ContentList;
-import io.anuke.mindustry.type.Item;
 import io.anuke.mindustry.type.ItemStack;
 import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.blocks.production.*;
 
 public class CraftingBlocks extends BlockList implements ContentList{
-    public static Block smelter, arcsmelter, siliconsmelter, plastaniumCompressor, phaseWeaver, alloysmelter, alloyfuser,
+    public static Block smelter, arcsmelter, siliconsmelter, plastaniumCompressor, phaseWeaver, alloySmelter, alloyfuser,
             pyratiteMixer, blastMixer,
             cryofluidmixer, melter, separator, centrifuge, biomatterCompressor, pulverizer, solidifier, incinerator;
 
@@ -19,26 +18,26 @@ public class CraftingBlocks extends BlockList implements ContentList{
     public void load(){
         smelter = new Smelter("smelter"){{
             health = 70;
-            result = Items.carbide;
+            result = Items.densealloy;
             craftTime = 45f;
             burnDuration = 46f;
             useFlux = true;
 
-            consumes.items(new ItemStack[]{new ItemStack(Items.tungsten, 3)});
+            consumes.items(new ItemStack[]{new ItemStack(Items.copper, 1), new ItemStack(Items.lead, 2)});
             consumes.item(Items.coal).optional(true);
         }};
 
         arcsmelter = new PowerSmelter("arc-smelter"){{
             health = 90;
             craftEffect = BlockFx.smeltsmoke;
-            result = Items.carbide;
+            result = Items.densealloy;
             craftTime = 30f;
             size = 2;
 
             useFlux = true;
             fluxNeeded = 2;
 
-            consumes.items(new ItemStack[]{new ItemStack(Items.coal, 1), new ItemStack(Items.tungsten, 2)});
+            consumes.items(new ItemStack[]{new ItemStack(Items.copper, 1), new ItemStack(Items.lead, 2)});
             consumes.power(0.1f);
         }};
 
@@ -73,7 +72,6 @@ public class CraftingBlocks extends BlockList implements ContentList{
         }};
 
         phaseWeaver = new PhaseWeaver("phase-weaver"){{
-            health = 90;
             craftEffect = BlockFx.smeltsmoke;
             result = Items.phasematter;
             craftTime = 120f;
@@ -83,8 +81,7 @@ public class CraftingBlocks extends BlockList implements ContentList{
             consumes.power(0.5f);
         }};
 
-        alloysmelter = new PowerSmelter("alloy-smelter"){{
-            health = 90;
+        alloySmelter = new PowerSmelter("alloy-smelter"){{
             craftEffect = BlockFx.smeltsmoke;
             result = Items.surgealloy;
             craftTime = 50f;
@@ -93,12 +90,11 @@ public class CraftingBlocks extends BlockList implements ContentList{
             useFlux = true;
             fluxNeeded = 4;
 
-            consumes.power(0.3f);
-            consumes.items(new ItemStack[]{new ItemStack(Items.titanium, 2), new ItemStack(Items.lead, 4), new ItemStack(Items.silicon, 3), new ItemStack(Items.plastanium, 2)});
+            consumes.power(0.4f);
+            consumes.items(new ItemStack[]{new ItemStack(Items.titanium, 2), new ItemStack(Items.lead, 4), new ItemStack(Items.silicon, 3), new ItemStack(Items.copper, 2)});
         }};
 
         alloyfuser = new PowerSmelter("alloy-fuser"){{
-            health = 90;
             craftEffect = BlockFx.smeltsmoke;
             result = Items.surgealloy;
             craftTime = 30f;
@@ -112,7 +108,6 @@ public class CraftingBlocks extends BlockList implements ContentList{
         }};
 
         cryofluidmixer = new LiquidMixer("cryofluidmixer"){{
-            health = 200;
             outputLiquid = Liquids.cryofluid;
             liquidPerItem = 50f;
             itemCapacity = 50;
@@ -163,14 +158,14 @@ public class CraftingBlocks extends BlockList implements ContentList{
         }};
 
         separator = new Separator("separator"){{
-            results = new Item[]{
-                null, null, null, null, null, null, null, null, null, null,
-                Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand,
-                Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone,
-                Items.tungsten, Items.tungsten, Items.tungsten, Items.tungsten,
-                Items.lead, Items.lead,
-                Items.coal, Items.coal,
-                Items.titanium
+            results = new ItemStack[]{
+                new ItemStack(null, 10),
+                new ItemStack(Items.sand, 10),
+                new ItemStack(Items.stone, 9),
+                new ItemStack(Items.copper, 4),
+                new ItemStack(Items.lead, 2),
+                new ItemStack(Items.coal, 2),
+                new ItemStack(Items.titanium, 1),
             };
             filterTime = 40f;
             itemCapacity = 40;
@@ -181,15 +176,15 @@ public class CraftingBlocks extends BlockList implements ContentList{
         }};
 
         centrifuge = new Separator("centrifuge"){{
-            results = new Item[]{
-                null, null, null, null, null, null, null, null, null, null, null, null, null,
-                Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand, Items.sand,
-                Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone, Items.stone,
-                Items.tungsten, Items.tungsten, Items.tungsten, Items.tungsten, Items.tungsten,
-                Items.lead, Items.lead, Items.lead,
-                Items.coal, Items.coal, Items.coal,
-                Items.titanium, Items.titanium,
-                Items.thorium,
+            results = new ItemStack[]{
+                new ItemStack(null, 13),
+                new ItemStack(Items.sand, 12),
+                new ItemStack(Items.stone, 11),
+                new ItemStack(Items.copper, 5),
+                new ItemStack(Items.lead, 3),
+                new ItemStack(Items.coal, 3),
+                new ItemStack(Items.titanium, 2),
+                new ItemStack(Items.thorium, 1)
             };
 
             hasPower = true;
@@ -212,7 +207,7 @@ public class CraftingBlocks extends BlockList implements ContentList{
             itemCapacity = 50;
             craftTime = 25f;
             outputLiquid = Liquids.oil;
-            outputLiquidAmount = 1.2f;
+            outputLiquidAmount = 1.5f;
             size = 2;
             health = 320;
             hasLiquids = true;

@@ -3,12 +3,16 @@ package io.anuke.mindustry.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Base64Coder;
+import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.IntMap.Entry;
 import com.badlogic.gdx.utils.IntSet;
 import io.anuke.annotations.Annotations.PacketPriority;
 import io.anuke.annotations.Annotations.Remote;
 import io.anuke.annotations.Annotations.Variant;
 import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.entities.Player;
+import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.entities.traits.SyncTrait;
 import io.anuke.mindustry.entities.traits.TypeTrait;
 import io.anuke.mindustry.gen.Call;
@@ -18,6 +22,7 @@ import io.anuke.mindustry.net.Net.SendMode;
 import io.anuke.mindustry.net.NetworkIO;
 import io.anuke.mindustry.net.Packets.*;
 import io.anuke.mindustry.net.TraceInfo;
+import io.anuke.mindustry.world.modules.InventoryModule;
 import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.entities.Entities;
@@ -41,6 +46,7 @@ import static io.anuke.mindustry.Vars.*;
 public class NetClient extends Module{
     private final static float dataTimeout = 60 * 18;
     private final static float playerSyncTime = 2;
+    private final static IntArray removals = new IntArray();
 
     private Timer timer = new Timer(5);
     /**Whether the client is currently connecting.*/
@@ -54,8 +60,8 @@ public class NetClient extends Module{
 
     /**Last snapshot ID recieved.*/
     private int lastSnapshotBaseID = -1;
-    /**Last snapshot recieved.*/
-    private byte[] lastSnapshotBase;
+
+    private IntMap<byte[]> recievedSnapshots = new IntMap<>();
     /**Current snapshot that is being built from chinks.*/
     private byte[] currentSnapshot;
     /**Array of recieved chunk statuses.*/
@@ -80,18 +86,8 @@ public class NetClient extends Module{
 
             player.isAdmin = false;
 
-            Net.setClientLoaded(false);
-            removed.clear();
-            timeoutTime = 0f;
-            connecting = true;
-            quiet = false;
-            lastSent = 0;
-            lastSnapshotBase = null;
-            currentSnapshot = null;
-            currentSnapshotID = -1;
-            lastSnapshotBaseID = -1;
+            reset();
 
-            ui.chatfrag.clearMessages();
             ui.loadfrag.hide();
             ui.loadfrag.show("$text.connecting.data");
 
@@ -101,8 +97,6 @@ public class NetClient extends Module{
                 quiet = true;
                 Net.disconnect();
             });
-
-            Entities.clear();
 
             ConnectPacket c = new ConnectPacket();
             c.name = player.name;
@@ -161,6 +155,29 @@ public class NetClient extends Module{
         ui.loadfrag.hide();
     }
 
+    @Remote(variants = Variant.both)
+    public static void onInfoMessage(String message){
+        threads.runGraphics(() -> ui.showText("", message));
+    }
+
+    @Remote(variants = Variant.both)
+    public static void onWorldDataBegin(){
+        Entities.clear();
+        ui.chatfrag.clearMessages();
+        Net.setClientLoaded(false);
+
+        threads.runGraphics(() -> {
+            ui.loadfrag.show("$text.connecting.data");
+
+            ui.loadfrag.setButton(() -> {
+                ui.loadfrag.hide();
+                netClient.connecting = false;
+                netClient.quiet = true;
+                Net.disconnect();
+            });
+        });
+    }
+
     @Remote(variants = Variant.one)
     public static void onPositionSet(float x, float y){
         players[0].x = x;
@@ -180,12 +197,12 @@ public class NetClient extends Module{
 
     @Remote(variants = Variant.one, priority = PacketPriority.low, unreliable = true)
     public static void onSnapshot(byte[] chunk, int snapshotID, short chunkID, int totalLength, int base){
-        if(NetServer.showSnapshotSize)
+        if(NetServer.debugSnapshots)
             Log.info("Recieved snapshot: len {0} ID {1} chunkID {2} totalLength {3} base {4} client-base {5}", chunk.length, snapshotID, chunkID, totalLength, base, netClient.lastSnapshotBaseID);
 
         //skip snapshot IDs that have already been recieved OR snapshots that are too far in front
-        if(snapshotID < netClient.lastSnapshotBaseID || base != netClient.lastSnapshotBaseID){
-            if(NetServer.showSnapshotSize) Log.info("//SKIP SNAPSHOT");
+        if(base != -1 && (snapshotID < netClient.lastSnapshotBaseID || !netClient.recievedSnapshots.containsKey(base))){
+            if(NetServer.debugSnapshots) Log.info("//SKIP SNAPSHOT");
             return;
         }
 
@@ -224,7 +241,7 @@ public class NetClient extends Module{
                 snapshot = chunk;
             }
 
-            if(NetServer.showSnapshotSize)
+            if(NetServer.debugSnapshots)
                 Log.info("Finished recieving snapshot ID {0} length {1}", snapshotID, chunk.length);
 
             byte[] result;
@@ -232,20 +249,21 @@ public class NetClient extends Module{
             if(base == -1){ //fresh snapshot
                 result = snapshot;
                 length = snapshot.length;
-                netClient.lastSnapshotBase = Arrays.copyOf(snapshot, snapshot.length);
+                netClient.recievedSnapshots.put(snapshotID, Arrays.copyOf(snapshot, snapshot.length));
             }else{ //otherwise, last snapshot must not be null, decode it
-                if(NetServer.showSnapshotSize)
-                    Log.info("Base size: {0} Patch size: {1}", netClient.lastSnapshotBase.length, snapshot.length);
-                netClient.decoder.init(netClient.lastSnapshotBase, snapshot);
+                byte[] baseBytes = netClient.recievedSnapshots.get(base);
+                if(NetServer.debugSnapshots)
+                    Log.info("Base size: {0} Patch size: {1}", baseBytes.length, snapshot.length);
+                netClient.decoder.init(baseBytes, snapshot);
                 result = netClient.decoder.decode();
                 length = netClient.decoder.getDecodedLength();
                 //set last snapshot to a copy to prevent issues
-                netClient.lastSnapshotBase = Arrays.copyOf(result, length);
+                netClient.recievedSnapshots.put(snapshotID, Arrays.copyOf(result, length));
             }
 
             netClient.lastSnapshotBaseID = snapshotID;
 
-            //set stream bytes to begin snapshot reaeding
+            //set stream bytes to begin snapshot reading
             netClient.byteStream.setBytes(result, 0, length);
 
             //get data input for reading from the stream
@@ -255,6 +273,16 @@ public class NetClient extends Module{
 
             //confirm that snapshot has been recieved
             netClient.lastSnapshotBaseID = snapshotID;
+
+            removals.clear();
+            for(Entry<byte[]> entry : netClient.recievedSnapshots.entries()){
+                if(entry.key < base){
+                    removals.add(entry.key);
+                }
+            }
+            for(int i = 0; i < removals.size; i++){
+                netClient.recievedSnapshots.remove(removals.get(i));
+            }
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -269,7 +297,12 @@ public class NetClient extends Module{
         byte cores = input.readByte();
         for(int i = 0; i < cores; i++){
             int pos = input.readInt();
-            world.tile(pos).entity.items.read(input);
+            TileEntity entity = world.tile(pos).entity;
+            if(entity != null){
+                entity.items.read(input);
+            }else{
+                new InventoryModule().read(input);
+            }
         }
 
         long timestamp = input.readLong();
@@ -285,7 +318,6 @@ public class NetClient extends Module{
 
             //go through each entity
             for(int j = 0; j < amount; j++){
-                int position = netClient.byteStream.position(); //save position to check read/write correctness
                 int id = input.readInt();
                 byte typeID = input.readByte();
 
@@ -303,11 +335,6 @@ public class NetClient extends Module{
 
                 //read the entity
                 entity.read(input, timestamp);
-
-                byte readLength = input.readByte();
-                //if(netClient.byteStream.position() - position - 1 != readLength){
-                //    throw new RuntimeException("Error reading entity of type '" + group.getType() + "': Read length mismatch [write=" + readLength + ", read=" + (netClient.byteStream.position() - position - 1) + "]");
-                //}
 
                 if(add){
                     entity.add();
@@ -350,6 +377,22 @@ public class NetClient extends Module{
         Net.setClientLoaded(true);
         Gdx.app.postRunnable(Call::connectConfirm);
         Timers.runTask(40f, Platform.instance::updateRPC);
+    }
+
+    private void reset(){
+        Net.setClientLoaded(false);
+        removed.clear();
+        timeoutTime = 0f;
+        connecting = true;
+        quiet = false;
+        lastSent = 0;
+        recievedSnapshots.clear();
+        currentSnapshot = null;
+        currentSnapshotID = -1;
+        lastSnapshotBaseID = -1;
+
+        Entities.clear();
+        ui.chatfrag.clearMessages();
     }
 
     public void beginConnecting(){

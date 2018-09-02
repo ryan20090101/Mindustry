@@ -19,8 +19,7 @@ import io.anuke.ucore.function.Consumer;
 import io.anuke.ucore.util.Bits;
 import io.anuke.ucore.util.Geometry;
 
-import static io.anuke.mindustry.Vars.tilesize;
-import static io.anuke.mindustry.Vars.world;
+import static io.anuke.mindustry.Vars.*;
 
 
 public class Tile implements PosTrait, TargetTrait{
@@ -257,8 +256,12 @@ public class Tile implements PosTrait, TargetTrait{
         if(link == 0){
             return (block.destructible || block.breakable || block.update);
         }else{
-            return getLinked().breakable();
+            return getLinked() != this && getLinked().breakable();
         }
+    }
+
+    public boolean isEnemyCheat(){
+        return getTeam() == waveTeam && state.mode.autoSpawn;
     }
 
     public boolean isLinked(){

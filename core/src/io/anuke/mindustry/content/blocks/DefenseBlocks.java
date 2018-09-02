@@ -1,35 +1,33 @@
 package io.anuke.mindustry.content.blocks;
 
+import io.anuke.mindustry.content.Items;
 import io.anuke.mindustry.content.fx.BlockFx;
 import io.anuke.mindustry.type.ContentList;
 import io.anuke.mindustry.world.Block;
-import io.anuke.mindustry.world.blocks.Wall;
-import io.anuke.mindustry.world.blocks.defense.DeflectorWall;
-import io.anuke.mindustry.world.blocks.defense.Door;
-import io.anuke.mindustry.world.blocks.defense.PhaseWall;
+import io.anuke.mindustry.world.blocks.defense.*;
 
 public class DefenseBlocks extends BlockList implements ContentList{
-    public static Block tungstenWall, tungstenWallLarge, carbideWall, carbideWallLarge, thoriumWall, thoriumWallLarge, door, doorLarge, deflectorwall, deflectorwalllarge,
-            phasewall, phasewalllarge;
+    public static Block copperWall, copperWallLarge, compositeWall, compositeWallLarge, thoriumWall, thoriumWallLarge, door, doorLarge,
+            phaseWall, phaseWallLarge, surgeWall, surgeWallLarge, mendProjector;
 
     @Override
     public void load(){
-        int wallHealthMultiplier = 4;
+        int wallHealthMultiplier = 3;
 
-        tungstenWall = new Wall("tungsten-wall"){{
+        copperWall = new Wall("copper-wall"){{
             health = 80 * wallHealthMultiplier;
         }};
 
-        tungstenWallLarge = new Wall("tungsten-wall-large"){{
+        copperWallLarge = new Wall("copper-wall-large"){{
             health = 80 * 4 * wallHealthMultiplier;
             size = 2;
         }};
 
-        carbideWall = new Wall("carbide-wall"){{
+        compositeWall = new Wall("composite-wall"){{
             health = 110 * wallHealthMultiplier;
         }};
 
-        carbideWallLarge = new Wall("carbide-wall-large"){{
+        compositeWallLarge = new Wall("composite-wall-large"){{
             health = 110 * wallHealthMultiplier * 4;
             size = 2;
         }};
@@ -43,23 +41,22 @@ public class DefenseBlocks extends BlockList implements ContentList{
             size = 2;
         }};
 
-        deflectorwall = new DeflectorWall("deflector-wall"){{
+        phaseWall = new DeflectorWall("phase-wall"){{
             health = 150 * wallHealthMultiplier;
         }};
 
-        deflectorwalllarge = new DeflectorWall("deflector-wall-large"){{
+        phaseWallLarge = new DeflectorWall("phase-wall-large"){{
             health = 150 * 4 * wallHealthMultiplier;
             size = 2;
         }};
 
-        phasewall = new PhaseWall("phase-wall"){{
-            health = 150 * wallHealthMultiplier;
+        surgeWall = new SurgeWall("surge-wall"){{
+            health = 230 * wallHealthMultiplier;
         }};
 
-        phasewalllarge = new PhaseWall("phase-wall-large"){{
-            health = 150 * 4 * wallHealthMultiplier;
+        surgeWallLarge = new SurgeWall("surge-wall-large"){{
+            health = 230 * 4 * wallHealthMultiplier;
             size = 2;
-            regenSpeed = 0.5f;
         }};
 
         door = new Door("door"){{
@@ -71,6 +68,13 @@ public class DefenseBlocks extends BlockList implements ContentList{
             closefx = BlockFx.doorcloselarge;
             health = 100 * 4 * wallHealthMultiplier;
             size = 2;
+        }};
+
+        mendProjector = new MendProjector("mend-projector"){{
+            consumes.power(0.25f);
+            health = 100 * 4 * wallHealthMultiplier;
+            size = 2;
+            consumes.item(Items.phasematter).optional(true);
         }};
     }
 }

@@ -1,15 +1,14 @@
 package io.anuke.mindustry.ai;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.ObjectSet;
-import com.badlogic.gdx.utils.ObjectSet.ObjectSetIterator;
 import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.TimeUtils;
 import io.anuke.mindustry.game.EventType.TileChangeEvent;
 import io.anuke.mindustry.game.EventType.WorldLoadEvent;
 import io.anuke.mindustry.game.Team;
-import io.anuke.mindustry.game.TeamInfo.TeamData;
+import io.anuke.mindustry.game.Teams.TeamData;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.meta.BlockFlag;
@@ -26,34 +25,35 @@ public class Pathfinder{
     private IntArray blocked = new IntArray();
 
     public Pathfinder(){
-        Events.on(WorldLoadEvent.class, this::clear);
-        Events.on(TileChangeEvent.class, tile -> {
+        Events.on(WorldLoadEvent.class, event -> clear());
+        Events.on(TileChangeEvent.class, event -> {
             if(Net.client()) return;
 
-            for(TeamData data : state.teams.getTeams()){
-                if(data.team != tile.getTeam() && paths[data.team.ordinal()].weights[tile.x][tile.y] >= Float.MAX_VALUE){
-                    update(tile, data.team);
+            for(Team team : Team.all){
+                TeamData data = state.teams.get(team);
+                if(state.teams.isActive(team) && data.team != event.tile.getTeam() && paths[data.team.ordinal()].weights[event.tile.x][event.tile.y] >= Float.MAX_VALUE){
+                    update(event.tile, data.team);
                 }
             }
 
-            update(tile, tile.getTeam());
+            update(event.tile, event.tile.getTeam());
         });
     }
 
     public void update(){
         if(Net.client()) return;
 
-        ObjectSetIterator<TeamData> iterator = new ObjectSetIterator<>(state.teams.getTeams());
-
-        for(TeamData team : iterator){
-            updateFrontier(team.team, maxUpdate);
+        for(Team team : Team.all){
+            if(state.teams.isActive(team)){
+                updateFrontier(team, maxUpdate);
+            }
         }
     }
 
     public Tile getTargetTile(Team team, Tile tile){
         float[][] values = paths[team.ordinal()].weights;
 
-        if(values == null) return tile;
+        if(values == null || tile == null) return tile;
 
         float value = values[tile.x][tile.y];
 
@@ -107,7 +107,7 @@ public class Pathfinder{
 
             path.lastSearchTime = TimeUtils.millis();
 
-            ObjectSet<Tile> set = world.indexer().getEnemy(team, BlockFlag.target);
+            Array<Tile> set = world.indexer().getEnemy(team, BlockFlag.target);
             for(Tile other : set){
                 path.weights[other.x][other.y] = 0;
                 path.searches[other.x][other.y] = path.search;
@@ -173,11 +173,13 @@ public class Pathfinder{
         paths = new PathData[Team.all.length];
         blocked.clear();
 
-        for(TeamData data : state.teams.getTeams()){
+        for(Team team : Team.all){
             PathData path = new PathData();
-            paths[data.team.ordinal()] = path;
+            paths[team.ordinal()] = path;
 
-            createFor(data.team);
+            if(state.teams.isActive(team)){
+                createFor(team);
+            }
         }
 
         state.spawner.checkAllQuadrants();

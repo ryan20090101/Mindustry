@@ -5,7 +5,6 @@ import io.anuke.mindustry.entities.Predict;
 import io.anuke.mindustry.entities.Units;
 import io.anuke.mindustry.entities.traits.CarriableTrait;
 import io.anuke.mindustry.entities.traits.CarryTrait;
-import io.anuke.mindustry.graphics.Palette;
 import io.anuke.mindustry.graphics.Trail;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.type.AmmoType;
@@ -27,22 +26,6 @@ public abstract class FlyingUnit extends BaseUnit implements CarryTrait{
     protected Trail trail = new Trail(8);
     protected CarriableTrait carrying;
     protected final UnitState
-
-    resupply = new UnitState(){
-        public void entered(){
-            target = null;
-        }
-
-        public void update(){
-            if(inventory.totalAmmo() + 10 >= inventory.ammoCapacity()){
-                state.set(attack);
-            }else if(!targetHasFlag(BlockFlag.resupplyPoint)){
-                retarget(() -> targetClosestAllyFlag(BlockFlag.resupplyPoint));
-            }else{
-                circle(20f);
-            }
-        }
-    },
 
     idle = new UnitState(){
         public void update(){
@@ -75,9 +58,7 @@ public abstract class FlyingUnit extends BaseUnit implements CarryTrait{
                 target = null;
             }
 
-            if(!inventory.hasAmmo()){
-                state.set(resupply);
-            }else if(target == null){
+            if(target == null){
                 retarget(() -> {
                     targetClosest();
                     if(target == null) targetClosestEnemyFlag(BlockFlag.target);
@@ -91,10 +72,9 @@ public abstract class FlyingUnit extends BaseUnit implements CarryTrait{
             }else{
                 attack(150f);
 
-                if((Mathf.angNear(angleTo(target), rotation, 15f) || !inventory.getAmmo().bullet.keepVelocity) //bombers don't care about rotation
-                && distanceTo(target) < inventory.getAmmo().getRange()){
-                    AmmoType ammo = inventory.getAmmo();
-                    inventory.useAmmo();
+                if((Mathf.angNear(angleTo(target), rotation, 15f) || !getWeapon().getAmmo().bullet.keepVelocity) //bombers don't care about rotation
+                && distanceTo(target) < getWeapon().getAmmo().getRange()){
+                    AmmoType ammo = getWeapon().getAmmo();
 
                     Vector2 to = Predict.intercept(FlyingUnit.this, target, ammo.bullet.speed);
 
@@ -173,7 +153,7 @@ public abstract class FlyingUnit extends BaseUnit implements CarryTrait{
 
     @Override
     public void drawOver(){
-        trail.draw(Palette.lightTrail, 5f);
+        trail.draw(type.trailColor, 5f);
     }
 
     @Override
