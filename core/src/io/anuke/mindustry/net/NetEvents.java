@@ -12,7 +12,6 @@ import io.anuke.mindustry.gen.Call;
 import static io.anuke.mindustry.Vars.maxTextLength;
 import static io.anuke.mindustry.Vars.playerGroup;
 import static io.anuke.mindustry.gen.Call.sendMessage;
-import static io.anuke.mindustry.gen.Call.sendMessage;
 public class NetEvents{
     @Remote(called = Loc.server, targets = Loc.both, forward = true)
     public static void sendMessage(Player player, String message) throws Cancelled, ValidateException {

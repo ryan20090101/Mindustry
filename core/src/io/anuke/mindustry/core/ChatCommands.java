@@ -76,10 +76,12 @@ public class ChatCommands {
                 ctx.reply("[accent]use !tp #");
                 for (Player p : Vars.playerGroup.all()) {
                     if (p.getTeam() == player.getTeam()){
-                        ctx.reply("[blue]#[white]" + i + "-   [red]" + p.name);
+                        String fs = String.format("[cyan]#%d [white]- [#%s]%s", i, p.color, p.name);
+                        ctx.reply(fs);
                     }
                     i++;
                 }
+                return;
             }
             int p = parseInt(args[1].replaceAll(" ", ""));
             if ((p < 0) || (p >= Vars.playerGroup.size())) {
@@ -88,7 +90,7 @@ public class ChatCommands {
             }
             Player dest = Vars.playerGroup.all().get(p);
             if (dest.getTeam() == player.getTeam()) player.setNet(dest.getX(), dest.getY());
-            ctx.reply("[green]Teleported to " + dest.name);
+            ctx.reply(String.format("[green]Teleported to [#%s]%s", dest.color, dest.name));
         }
     };
     public static Command mechCommand = new Command("mech") {
@@ -108,19 +110,6 @@ public class ChatCommands {
         }
         public void run(CommandContext ctx) {
             ctx.player.mech = Mechs.halberd;
-        }
-    };
-    public static Command playerListCommand = new Command("players") {
-        {
-            help = "List the players currently on the server";
-        }
-        public void run(CommandContext ctx) {
-            ctx.reply("[accent]Player listing");
-            for (Player p : Vars.playerGroup.all()) {
-                Team t = p.getTeam();
-                String fs = String.format("[#%s](%s team) %s", t.color, t.name(), p.name);
-                ctx.reply(fs);
-            }
         }
     };
     public static Command teamSwitchCommand = new Command("team") {
@@ -148,6 +137,75 @@ public class ChatCommands {
         }
         public void run(CommandContext ctx) {
             ctx.player.inventory.fillAmmo(AmmoTypes.missileExplosive);
+        }
+    };
+    public static Command playerListCommand = new Command("players") {
+        {
+            help = "List the players currently on the server";
+        }
+        public void run(CommandContext ctx) {
+            ctx.reply("[accent]Player listing");
+            int i = 0;
+            for (Player p : Vars.playerGroup.all()) {
+                Team t = p.getTeam();
+                String fs = String.format("[cyan]#%d [#%s](%s team) [#%s]%s", i, t.color, t.name(), p.color, p.name);
+                ctx.reply(fs);
+                i++;
+            }
+        }
+    };
+    public static Command kickCommand = new Command("kick") {
+        {
+            help = "Use !players to get player number, then use '!kick # reasons'";
+            adminOnly = true;
+        }
+        public void run(CommandContext ctx) {
+            String reason = "";
+            for (int i = 2; i < ctx.args.length; i++) reason = reason + " " + ctx.args[i];
+            reason = " \"" + reason + "\"";
+            int p;
+            try {
+                p = parseInt(ctx.args[1].replaceAll(" ", ""));
+            } catch (NumberFormatException e) {
+                ctx.reply("[red]Invalid number");
+                return;
+            }
+            if ((p < 0) || (p >= Vars.playerGroup.size())) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            Player target = Vars.playerGroup.all().get(p);
+            netServer.kick(target.con.id, Packets.KickReason.kick);
+            cmdAdminBot(" kick " + target.name + " " + ctx.player.name + reason);
+            info("Kicked player " + target.name);
+        }
+    };
+    public static Command banCommand = new Command("ban") {
+        {
+            help = "Use !players to get player number, then use '!ban # reasons'";
+            adminOnly = true;
+        }
+        public void run(CommandContext ctx) {
+            String reason = "";
+            for (int i = 2; i < ctx.args.length; i++) reason = reason + " " + ctx.args[i];
+            reason = " \"" + reason + "\"";
+            int p;
+            try {
+                p = parseInt(ctx.args[1].replaceAll(" ", ""));
+            } catch (NumberFormatException e) {
+                ctx.reply("[red]Invalid number");
+                return;
+            }
+            if ((p < 0) || (p >= Vars.playerGroup.size())) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            Player target = Vars.playerGroup.all().get(p);
+            netServer.admins.banPlayerIP(target.con.address);
+            netServer.admins.banPlayerID(target.uuid);
+            netServer.kick(target.con.id, Packets.KickReason.banned);
+            info("Banned player by IP and ID: {0} / {1}", target.con.address, target.uuid);
+            cmdAdminBot(" ban " + target.name + " " + ctx.player.name + reason);
         }
     };
 
@@ -178,83 +236,6 @@ public class ChatCommands {
         }
     };
 
-    public static Command playersCommand = new Command("players") {
-        {
-            help = "List of all players and their number";
-        }
-        public void run(CommandContext ctx) {
-            Player player = ctx.player;
-            String[] args = ctx.args;
-            int i = 0;
-            for (Player p : Vars.playerGroup.all()) {
-                if (p.getTeam() == player.getTeam()){
-                    ctx.reply("[blue]#[white]" + i + "-   [red]" + p.name);
-                }
-                i++;
-            }
-        }
-    };
-
-    public static Command kickCommand = new Command("kick") {
-        {
-            help = "Use !players to get player number, then use '!kick # reasons'";
-            adminOnly = true;
-            secret = false;
-        }
-        public void run(CommandContext ctx) {
-            String reason = "";
-            for (int i = 2; i < ctx.args.length; i++) reason = reason + " " + ctx.args[i];
-            reason = " \"" + reason + "\"";
-
-            int p = parseInt(ctx.args[1].replaceAll(" ", ""));
-            if ((p < 0) || (p >= Vars.playerGroup.size())) {
-                ctx.reply("[red]Invalid player");
-                return;
-            }
-            Player target = Vars.playerGroup.all().get(p);
-            netServer.kick(target.con.id, Packets.KickReason.kick);
-            cmdAdminBot(" kick " + target.name + " " + ctx.player.name + reason);
-            info("Kicked player " + target.name);
-        }
-    };
-
-    public static Command banCommand = new Command("ban") {
-        {
-            help = "Use !players to get player number, then use '!ban # reasons'";
-            adminOnly = true;
-            secret = false;
-        }
-        public void run(CommandContext ctx) {
-            String reason = "";
-            for (int i = 2; i < ctx.args.length; i++) reason = reason + " " + ctx.args[i];
-            reason = " \"" + reason + "\"";
-
-            int p = parseInt(ctx.args[1].replaceAll(" ", ""));
-            if ((p < 0) || (p >= Vars.playerGroup.size())) {
-                ctx.reply("[red]Invalid player");
-                return;
-            }
-            Player target = Vars.playerGroup.all().get(p);
-            netServer.admins.banPlayerIP(target.con.address);
-            netServer.admins.banPlayerID(target.uuid);
-            netServer.kick(target.con.id, Packets.KickReason.banned);
-            info("Banned player by IP and ID: {0} / {1}", target.con.address, target.uuid);
-            cmdAdminBot(" ban " + target.name + " " + ctx.player.name + reason);
-        }
-    };
-
-    static void cmdAdminBot(String params){
-        String botPath = System.getProperty("user.dir") + "\\admin_bot.py";
-        String cmd = "py " + botPath + params;
-
-        try {
-            Process p = Runtime.getRuntime().exec(cmd);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     static {
         System.out.println("loading commands");
         commandRegistry.registerCommand(teleportCommand);
@@ -263,6 +244,8 @@ public class ChatCommands {
         commandRegistry.registerCommand(playerListCommand);
         commandRegistry.registerCommand(teamSwitchCommand);
         commandRegistry.registerCommand(superGunCommand);
+        commandRegistry.registerCommand(kickCommand);
+        commandRegistry.registerCommand(banCommand);
 
         commandRegistry.registerCommand(helpCommand);
     }
@@ -289,6 +272,18 @@ public class ChatCommands {
             for (Player p : Vars.playerGroup.all()) if (p.getTeam() == t) Call.sendMessage(p.con.id, fs);
             return false;
         } else return true;
+    }
+
+    static void cmdAdminBot(String params){
+        String botPath = System.getProperty("user.dir") + "\\admin_bot.py";
+        String cmd = "py " + botPath + params;
+
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     static Mech [] mechs = {Mechs.alpha, Mechs.tau, Mechs.trident, Mechs.dart, Mechs.delta, Mechs.halberd, Mechs.javelin, Mechs.omega};
