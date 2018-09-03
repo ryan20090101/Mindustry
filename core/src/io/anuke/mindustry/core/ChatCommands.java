@@ -8,6 +8,7 @@ import io.anuke.mindustry.content.blocks.StorageBlocks;
 import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.entities.traits.BuilderTrait;
+import io.anuke.mindustry.game.EventType;
 import io.anuke.mindustry.game.Team;
 import io.anuke.mindustry.gen.Call;
 import io.anuke.mindustry.net.Packets;
@@ -20,6 +21,8 @@ import io.anuke.mindustry.world.Build;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.storage.CoreBlock;
 import io.anuke.mindustry.world.blocks.storage.StorageBlock;
+import io.anuke.ucore.core.Events;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Geometry;
 import io.anuke.ucore.util.Log;
 import io.anuke.mindustry.core.commands.Command;
@@ -114,6 +117,19 @@ public class ChatCommands {
         }
     };
     */
+    public static Command gameOverCommand = new Command("gameover") {
+        {
+            help = "Force the game to end";
+            adminOnly = true;
+        }
+        public void run(CommandContext ctx) {
+            sendMessage(String.format("[#%s]%s  [red]has ended the game", ctx.player.color, ctx.player.name));
+            Timers.run(5 * 60, () -> {
+                state.gameOver = true;
+                Events.fire(new EventType.GameOverEvent());
+            });
+        }
+    };
     public static Command teamSwitchCommand = new Command("team") {
         {
             help = "Switch between teams";
@@ -243,6 +259,7 @@ public class ChatCommands {
         commandRegistry.registerCommand(teleportCommand);
         commandRegistry.registerCommand(mechCommand);
         // commandRegistry.registerCommand(l33tCommand);
+        commandRegistry.registerCommand(gameOverCommand);
         commandRegistry.registerCommand(playerListCommand);
         commandRegistry.registerCommand(teamSwitchCommand);
         commandRegistry.registerCommand(superGunCommand);
