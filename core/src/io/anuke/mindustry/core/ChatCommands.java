@@ -33,8 +33,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Consumer;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import static io.anuke.mindustry.Vars.*;
 import static io.anuke.mindustry.Vars.netServer;
@@ -177,21 +182,13 @@ public class ChatCommands {
             adminOnly = true;
         }
         public void run(CommandContext ctx) {
-            String reason = "";
-            for (int i = 2; i < ctx.args.length; i++) reason = reason + " " + ctx.args[i];
+            String reason = String.join(" ", Arrays.copyOfRange(ctx.args, 2, ctx.args.length));
             reason = " \"" + reason + "\"";
-            int p;
-            try {
-                p = parseInt(ctx.args[1].replaceAll(" ", ""));
-            } catch (NumberFormatException e) {
-                ctx.reply("[red]Invalid number");
-                return;
-            }
-            if ((p < 0) || (p >= Vars.playerGroup.size())) {
+            Player target = getPlayerByNumber(ctx.args[1]);
+            if (target == null) {
                 ctx.reply("[red]Invalid player");
                 return;
             }
-            Player target = Vars.playerGroup.all().get(p);
             netServer.kick(target.con.id, Packets.KickReason.kick);
             cmdAdminBot(" kick " + target.name + " " + ctx.player.name + reason);
             info("Kicked player " + target.name);
@@ -203,26 +200,130 @@ public class ChatCommands {
             adminOnly = true;
         }
         public void run(CommandContext ctx) {
-            String reason = "";
-            for (int i = 2; i < ctx.args.length; i++) reason = reason + " " + ctx.args[i];
+            String reason = String.join(" ", Arrays.copyOfRange(ctx.args, 2, ctx.args.length));
             reason = " \"" + reason + "\"";
-            int p;
-            try {
-                p = parseInt(ctx.args[1].replaceAll(" ", ""));
-            } catch (NumberFormatException e) {
-                ctx.reply("[red]Invalid number");
-                return;
-            }
-            if ((p < 0) || (p >= Vars.playerGroup.size())) {
+            Player target = getPlayerByNumber(ctx.args[1]);
+            if (target == null) {
                 ctx.reply("[red]Invalid player");
                 return;
             }
-            Player target = Vars.playerGroup.all().get(p);
             netServer.admins.banPlayerIP(target.con.address);
             netServer.admins.banPlayerID(target.uuid);
             netServer.kick(target.con.id, Packets.KickReason.banned);
             info("Banned player by IP and ID: {0} / {1}", target.con.address, target.uuid);
             cmdAdminBot(" ban " + target.name + " " + ctx.player.name + reason);
+        }
+    };
+    public static Command evalCommand = new Command("eval") {
+        private ScriptEngineManager manager = new ScriptEngineManager();
+        private ScriptEngine engine = manager.getEngineByName("nashorn");
+        {
+            help = "Evaluate a javascript expression";
+            accessLevel = 11;
+
+            try {
+                engine.put("game", engine.eval("Java.type('io.anuke.mindustry.Vars')"));
+                engine.put("mindustry", engine.eval("Packages.io.anuke.mindustry"));
+            } catch (ScriptException e) {
+                throw new RuntimeException("Script engine init failed (this should be impossible)");
+            }
+        }
+        public void run(CommandContext ctx) {
+            if (ctx.args.length < 1) {
+                ctx.reply("Not enough arguments, expected javascript expression");
+                return;
+            }
+
+            Object evalResult;
+            try {
+                evalResult = engine.eval(String.join(" ", Arrays.copyOfRange(ctx.args, 1, ctx.args.length)));
+            } catch (Throwable error) {
+                // something was thrown
+                evalResult = error;
+            }
+            if (evalResult == null) evalResult = "undefined or null";
+            ctx.reply(evalResult.toString());
+        }
+    };
+    public static Command isAdminCommand = new Command("isadmin") {
+        {
+            help = "Get whether a player is an admin, use as 'getadmin <player number>'";
+        }
+        public void run(CommandContext ctx) {
+            Player target = getPlayerByNumber(ctx.args[1]);
+            if (target == null) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            ctx.reply(new Boolean(netServer.admins.isAdmin(target.uuid, target.usid)).toString());
+        }
+    };
+    public static Command adminCommand = new Command("admin") {
+        {
+            help = "Make someone an admin, use as 'admin <player number>'";
+            accessLevel = 11;
+        }
+        public void run(CommandContext ctx) {
+            Player target = getPlayerByNumber(ctx.args[1]);
+            if (target == null) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            netServer.admins.adminPlayer(target.uuid, target.usid);
+            target.isAdmin = true;
+            ctx.reply("[accent]Admined player" + target.name);
+        }
+    };
+    public static Command unAdminCommand = new Command("unadmin") {
+        {
+            help = "Removes admin status from someone, use as 'unadmin <player number>'";
+            accessLevel = 11;
+        }
+        public void run(CommandContext ctx) {
+            Player target = getPlayerByNumber(ctx.args[1]);
+            if (target == null) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            netServer.admins.unAdminPlayer(target.uuid);
+            target.isAdmin = false;
+            ctx.reply("[accent]Un-admined player " + target.name);
+        }
+    };
+    public static Command getAccessCommand = new Command("getaccess") {
+        {
+            help = "Get the access level of a player, use as 'getaccess <player number>'";
+        }
+        public void run(CommandContext ctx) {
+            Player target = getPlayerByNumber(ctx.args[1]);
+            if (target == null) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            ctx.reply(new Integer(netServer.admins.getAccessLevel(target.uuid, target.usid)).toString());
+        }
+    };
+    public static Command setAccessCommand = new Command("setaccess") {
+        {
+            help = "Set access level for a user";
+            accessLevel = 11;
+        }
+        public void run(CommandContext ctx) {
+            Player target = getPlayerByNumber(ctx.args[1]);
+            if (target == null) {
+                ctx.reply("[red]Invalid player");
+                return;
+            }
+            int accessLevel;
+            try {
+                accessLevel = Integer.parseInt(ctx.args[2]);
+            } catch (NumberFormatException e) {
+                ctx.reply("[red]Invalid number for access level");
+                return;
+            }
+            netServer.admins.setAccessLevel(target.uuid, target.usid, accessLevel);
+            target.accessLevel = accessLevel;
+            ctx.reply("[accent]Set access level for " + target.name + " [accent] to " + accessLevel);
         }
     };
 
@@ -265,6 +366,12 @@ public class ChatCommands {
         commandRegistry.registerCommand(superGunCommand);
         commandRegistry.registerCommand(kickCommand);
         commandRegistry.registerCommand(banCommand);
+        commandRegistry.registerCommand(evalCommand);
+        commandRegistry.registerCommand(isAdminCommand);
+        commandRegistry.registerCommand(adminCommand);
+        commandRegistry.registerCommand(unAdminCommand);
+        commandRegistry.registerCommand(getAccessCommand);
+        commandRegistry.registerCommand(setAccessCommand);
 
         commandRegistry.registerCommand(helpCommand);
     }
@@ -305,6 +412,20 @@ public class ChatCommands {
         }
     }
 
+    static Player getPlayerByNumber(String number) {
+        int p;
+        try {
+            p = parseInt(number);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        if ((p < 0) || (p >= Vars.playerGroup.size())) return null;
+        return getPlayerByNumber(p);
+    }
+    
+    static Player getPlayerByNumber(int number) {
+        return Vars.playerGroup.all().get(number);
+    }
 
     /* old stuff that doesn't work anymore
     static Mech [] mechs = {Mechs.alpha, Mechs.tau, Mechs.trident, Mechs.dart, Mechs.delta, Mechs.halberd, Mechs.javelin, Mechs.omega};

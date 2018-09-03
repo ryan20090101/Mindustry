@@ -525,7 +525,7 @@ public class ServerControl extends Module{
             }
         });
 
-        handler.register("admin", "<username> [accessLevel]", "Make a user admin", arg -> {
+        handler.register("admin", "<username>", "Make a user admin", arg -> {
             if(!state.is(State.playing)){
                 err("Open the server first.");
                 return;
@@ -544,18 +544,6 @@ public class ServerControl extends Module{
                 netServer.admins.adminPlayer(target.uuid, target.usid);
                 target.isAdmin = true;
                 info("Admin-ed player by ID: {0} / {1}", target.uuid, arg[0]);
-                if (arg.length > 1) {
-                    int accessLevel;
-                    try {
-                        accessLevel = Integer.parseInt(arg[1]);
-                    } catch (NumberFormatException e) {
-                        info("Invalid number for access level");
-                        return;
-                    }
-                    netServer.admins.setAccessLevel(target.uuid, target.usid, accessLevel);
-                    target.accessLevel = accessLevel;
-                    info("Set access level of {0} to {1}", target.name, accessLevel);
-                }
             }else{
                 info("Nobody with that name could be found.");
             }
@@ -583,6 +571,35 @@ public class ServerControl extends Module{
             }else{
                 info("Nobody with that name could be found.");
             }
+        });
+
+        handler.register("setaccess", "<username> <accessLevel>", "Set access level for player", arg -> {
+            if(!state.is(State.playing)){
+                err("Open the server first.");
+                return;
+            }
+
+            Player target = null;
+
+            for(Player player : playerGroup.all()){
+                if(player.name.equalsIgnoreCase(arg[0])){
+                    target = player;
+                    break;
+                }
+            }
+
+            if (target == null) info("No such player");
+
+            int accessLevel;
+            try {
+                accessLevel = Integer.parseInt(arg[1]);
+            } catch (NumberFormatException e) {
+                info("Invalid number for access level");
+                return;
+            }
+            netServer.admins.setAccessLevel(target.uuid, target.usid, accessLevel);
+            target.accessLevel = accessLevel;
+            info("Set access level of {0} to {1}", target.name, accessLevel);
         });
 
         handler.register("admins", "List all admins.", arg -> {
