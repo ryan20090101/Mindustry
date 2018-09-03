@@ -15,15 +15,13 @@ import static io.anuke.mindustry.gen.Call.sendMessage;
 public class NetEvents{
     @Remote(called = Loc.server, targets = Loc.both, forward = true)
     public static void sendMessage(Player player, String message) throws Cancelled, ValidateException {
+        System.out.println(player.name + ": " + message);
+        if (!ChatCommands.parse(player, message)) throw new Cancelled("Intercepted by command");
         if(message.length() > maxTextLength){
             throw new ValidateException(player, "Player has sent a message above the text limit.");
         }
-
         if(Vars.ui != null) {
             Vars.ui.chatfrag.addMessage(message, player == null ? null : colorizeName(player.id, player.name));
-        } else {
-            System.out.println(player.name + ": " + message);
-            if (!ChatCommands.parse(player, message)) throw new Cancelled("Intercepted by command");
         }
     }
 
