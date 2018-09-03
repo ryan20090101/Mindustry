@@ -150,8 +150,7 @@ public class ChatCommands {
     public static Command superGunCommand = new Command("supergun") {
         {
             help = "idk what this does, honestly";
-            adminOnly = true;
-            secret = true; // or you could make it not secret
+            accessLevel = 10;
         }
         public void run(CommandContext ctx) {
             ctx.player.mech = Mechs.omega;
@@ -247,6 +246,7 @@ public class ChatCommands {
                 for (Command command : commandList) {
                     if (command.secret) continue;
                     if (command.adminOnly && !ctx.player.isAdmin) continue;
+                    if (ctx.player.accessLevel < command.accessLevel) continue;
                     l += commandPrefix + command.name + " ";
                 }
                 ctx.reply(l);

@@ -56,6 +56,7 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
     public String name = "name";
     public String uuid, usid;
     public boolean isAdmin, isTransferring, isShooting, isBoosting, isAlt, isMobile;
+    public int accessLevel;
     public float boostHeat, altHeat;
     public boolean achievedFlight;
     public Color color = new Color();

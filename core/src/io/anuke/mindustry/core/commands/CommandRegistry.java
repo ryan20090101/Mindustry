@@ -35,7 +35,7 @@ public class CommandRegistry {
             ctx.reply("No such command");
             return;
         }
-        if (!ctx.player.isAdmin && command.adminOnly) {
+        if ((!ctx.player.isAdmin && command.adminOnly) || (ctx.player.accessLevel < command.accessLevel)) {
             ctx.reply("No permissions");
             return;
         }

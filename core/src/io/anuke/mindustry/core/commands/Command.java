@@ -13,6 +13,10 @@ public abstract class Command {
      */
     public boolean adminOnly = false;
     /**
+     * Access level needed to run this command
+     */
+    public int accessLevel = 0;
+    /**
      * Whether or not to always hide the command in the command listing
      */
     public boolean secret = false;

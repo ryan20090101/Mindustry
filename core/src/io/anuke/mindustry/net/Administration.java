@@ -260,6 +260,13 @@ public class Administration{
         return true;
     }
 
+    public void setAccessLevel(String id, String usid, int accessLevel) {
+        PlayerInfo info = getCreateInfo(id);
+        info.adminUsid = usid;
+        info.accessLevel = accessLevel;
+        save();
+    }
+
     public boolean isIPBanned(String ip){
         return bannedIPs.contains(ip, false) || (findByIP(ip) != null && findByIP(ip).banned);
     }
@@ -271,6 +278,12 @@ public class Administration{
     public boolean isAdmin(String id, String usip){
         PlayerInfo info = getCreateInfo(id);
         return info.admin && usip.equals(info.adminUsid);
+    }
+
+    public int getAccessLevel(String id, String usid) {
+        PlayerInfo info = getCreateInfo(id);
+        if (!info.adminUsid.equals(usid)) return 0;
+        return info.accessLevel;
     }
 
     public Array<PlayerInfo> findByName(String name, boolean last){
@@ -342,6 +355,7 @@ public class Administration{
         public Array<String> ips = new Array<>();
         public Array<String> names = new Array<>();
         public String adminUsid;
+        public int accessLevel = 0;
         public int timesKicked;
         public int timesJoined;
         public int totalBlockPlaced;

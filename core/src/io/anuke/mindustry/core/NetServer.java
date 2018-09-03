@@ -164,6 +164,7 @@ public class NetServer extends Module{
 
             Player player = new Player();
             player.isAdmin = admins.isAdmin(uuid, packet.usid);
+            player.accessLevel = admins.getAccessLevel(uuid, packet.usid);
             player.con = Net.getConnection(id);
             player.usid = packet.usid;
             player.name = packet.name;
