@@ -29,9 +29,11 @@ import io.anuke.mindustry.core.commands.Command;
 import io.anuke.mindustry.core.commands.CommandContext;
 import io.anuke.mindustry.core.commands.CommandRegistry;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -182,16 +184,19 @@ public class ChatCommands {
             adminOnly = true;
         }
         public void run(CommandContext ctx) {
+            if (ctx.args.length < 2) {
+                ctx.reply("[red]Please provide a reason");
+                return;
+            }
             String reason = String.join(" ", Arrays.copyOfRange(ctx.args, 2, ctx.args.length));
-            reason = " \"" + reason + "\"";
             Player target = getPlayerByNumber(ctx.args[1]);
             if (target == null) {
                 ctx.reply("[red]Invalid player");
                 return;
             }
             netServer.kick(target.con.id, Packets.KickReason.kick);
-            cmdAdminBot(" kick " + target.name + " " + ctx.player.name + reason);
-            info("Kicked player " + target.name);
+            cmdAdminBot("kick", target.name, ctx.player.name, reason);
+            ctx.reply("[accent]Kicked player " + target.name);
         }
     };
     public static Command banCommand = new Command("ban") {
@@ -200,8 +205,11 @@ public class ChatCommands {
             adminOnly = true;
         }
         public void run(CommandContext ctx) {
+            if (ctx.args.length < 2) {
+                ctx.reply("[red]Please provide a reason");
+                return;
+            }
             String reason = String.join(" ", Arrays.copyOfRange(ctx.args, 2, ctx.args.length));
-            reason = " \"" + reason + "\"";
             Player target = getPlayerByNumber(ctx.args[1]);
             if (target == null) {
                 ctx.reply("[red]Invalid player");
@@ -210,8 +218,8 @@ public class ChatCommands {
             netServer.admins.banPlayerIP(target.con.address);
             netServer.admins.banPlayerID(target.uuid);
             netServer.kick(target.con.id, Packets.KickReason.banned);
-            info("Banned player by IP and ID: {0} / {1}", target.con.address, target.uuid);
-            cmdAdminBot(" ban " + target.name + " " + ctx.player.name + reason);
+            cmdAdminBot("ban", target.name, ctx.player.name, reason);
+            ctx.reply("[accent]Banned player " + target.name);
         }
     };
     public static Command evalCommand = new Command("eval") {
@@ -400,16 +408,30 @@ public class ChatCommands {
         } else return true;
     }
 
-    static void cmdAdminBot(String params){
-        String botPath = System.getProperty("user.dir") + "\\admin_bot.py";
-        String cmd = "py " + botPath + params;
+    static void cmdAdminBot(String action, String destUser, String sourceUser, String reason) {
+        String botPath = "admin_bot.py";
 
-        try {
-            Process p = Runtime.getRuntime().exec(cmd);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        String[] launchArgs = new String[]{"python3", botPath, action, destUser, sourceUser, reason};
+        Thread reportingThread = new Thread(() -> {
+            try {
+                Process p = Runtime.getRuntime().exec(launchArgs);
+                BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                while ((line = input.readLine()) != null) {
+                    System.out.println(line);
+                }
+                input.close();
+                BufferedReader error = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                while ((line = error.readLine()) != null) {
+                    System.out.println(line);
+                }
+                error.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, "Administrative Reporting Thread");
+        reportingThread.setDaemon(true);
+        reportingThread.start();
     }
 
     static Player getPlayerByNumber(String number) {
