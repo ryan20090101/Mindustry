@@ -423,7 +423,8 @@ public class ChatCommands {
             return false;
         } else if (message.startsWith(teamChatPrefix) ^ !globalByDefault) {
             Team t = player.getTeam();
-            String fs = String.format("[#%s](%s team) %s : [white] %s", t.color, t.name(), player.name, message);
+            String fs = String.format("[#%s](%s team) [#%s]%s: [white] %s", t.color, t.name(),
+                player.color, player.name, message);
             for (Player p : Vars.playerGroup.all()) if (p.getTeam() == t) Call.sendMessage(p.con.id, fs);
             return false;
         } else return true;

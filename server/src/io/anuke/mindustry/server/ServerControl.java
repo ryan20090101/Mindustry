@@ -588,7 +588,10 @@ public class ServerControl extends Module{
                 }
             }
 
-            if (target == null) info("No such player");
+            if (target == null) {
+                info("No such player");
+                return;
+            }
 
             int accessLevel;
             try {
