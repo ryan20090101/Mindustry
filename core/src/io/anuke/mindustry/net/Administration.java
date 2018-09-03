@@ -282,7 +282,7 @@ public class Administration{
 
     public int getAccessLevel(String id, String usid) {
         PlayerInfo info = getCreateInfo(id);
-        if (!info.adminUsid.equals(usid)) return 0;
+        if (!usid.equals(info.adminUsid)) return 0;
         return info.accessLevel;
     }
 
