@@ -258,6 +258,10 @@ public class ChatCommands {
             help = "Get whether a player is an admin, use as 'getadmin <player number>'";
         }
         public void run(CommandContext ctx) {
+            if (ctx.args.length < 2) {
+                ctx.reply("[red]Not enough arguments");
+                return;
+            }
             Player target = getPlayerByNumber(ctx.args[1]);
             if (target == null) {
                 ctx.reply("[red]Invalid player");
@@ -272,6 +276,10 @@ public class ChatCommands {
             accessLevel = 11;
         }
         public void run(CommandContext ctx) {
+            if (ctx.args.length < 2) {
+                ctx.reply("[red]Not enough arguments");
+                return;
+            }
             Player target = getPlayerByNumber(ctx.args[1]);
             if (target == null) {
                 ctx.reply("[red]Invalid player");
@@ -288,6 +296,10 @@ public class ChatCommands {
             accessLevel = 11;
         }
         public void run(CommandContext ctx) {
+            if (ctx.args.length < 2) {
+                ctx.reply("[red]Not enough arguments");
+                return;
+            }
             Player target = getPlayerByNumber(ctx.args[1]);
             if (target == null) {
                 ctx.reply("[red]Invalid player");
@@ -303,6 +315,10 @@ public class ChatCommands {
             help = "Get the access level of a player, use as 'getaccess <player number>'";
         }
         public void run(CommandContext ctx) {
+            if (ctx.args.length < 2) {
+                ctx.reply("[red]Not enough arguments");
+                return;
+            }
             Player target = getPlayerByNumber(ctx.args[1]);
             if (target == null) {
                 ctx.reply("[red]Invalid player");
@@ -313,10 +329,14 @@ public class ChatCommands {
     };
     public static Command setAccessCommand = new Command("setaccess") {
         {
-            help = "Set access level for a user";
+            help = "Set access level for a user, use as 'setaccess <player number> <level>'";
             accessLevel = 11;
         }
         public void run(CommandContext ctx) {
+            if (ctx.args.length < 3) {
+                ctx.reply("[red]Not enough arguments");
+                return;
+            }
             Player target = getPlayerByNumber(ctx.args[1]);
             if (target == null) {
                 ctx.reply("[red]Invalid player");
