@@ -70,7 +70,7 @@ public class Weapons implements ContentList{
         swarmer = new Weapon("swarmer"){{
             length = 1.5f;
             recoil = 4f;
-            reload = 15f;
+            reload = 60f;
             shots = 4;
             spacing = 8f;
             inaccuracy = 8f;
