@@ -242,6 +242,7 @@ public class ChatCommands {
                 return;
             }
 
+            engine.put("ctx", ctx);
             Object evalResult;
             try {
                 evalResult = engine.eval(String.join(" ", Arrays.copyOfRange(ctx.args, 1, ctx.args.length)));
@@ -428,7 +429,7 @@ public class ChatCommands {
         } else return true;
     }
 
-    static void cmdAdminBot(String action, String destUser, String sourceUser, String reason) {
+    public static void cmdAdminBot(String action, String destUser, String sourceUser, String reason) {
         String botPath = "admin_bot.py";
 
         String[] launchArgs = new String[]{"python3", botPath, action, destUser, sourceUser, reason};
@@ -454,7 +455,7 @@ public class ChatCommands {
         reportingThread.start();
     }
 
-    static Player getPlayerByNumber(String number) {
+    public static Player getPlayerByNumber(String number) {
         int p;
         try {
             p = parseInt(number);
@@ -465,7 +466,7 @@ public class ChatCommands {
         return getPlayerByNumber(p);
     }
     
-    static Player getPlayerByNumber(int number) {
+    public static Player getPlayerByNumber(int number) {
         return Vars.playerGroup.all().get(number);
     }
 
