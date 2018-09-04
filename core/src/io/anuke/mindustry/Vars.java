@@ -25,6 +25,7 @@ import io.anuke.ucore.scene.ui.layout.Unit;
 import io.anuke.ucore.util.OS;
 import io.anuke.ucore.util.Translator;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 public class Vars{
@@ -37,7 +38,6 @@ public class Vars{
     //team of the enemy in waves
     public static final Team waveTeam = Team.none;
 
-    //discord group URL
     public static final String discordURL = "https://discord.gg/mindustry";
     public static final String releasesURL = "https://api.github.com/repos/Anuken/Mindustry/releases";
     public static final String crashReportURL = "http://mindustry.us.to/report";
@@ -146,6 +146,8 @@ public class Vars{
                 locales[i] = new Locale(code);
             }
         }
+
+        Arrays.sort(locales, (l1, l2) -> Platform.instance.getLocaleName(l1).compareTo(Platform.instance.getLocaleName(l2)));
 
         Version.init();
 

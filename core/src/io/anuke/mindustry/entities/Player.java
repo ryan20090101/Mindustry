@@ -27,7 +27,6 @@ import io.anuke.mindustry.world.Block;
 import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.Floor;
 import io.anuke.mindustry.world.blocks.storage.CoreBlock.CoreEntity;
-import io.anuke.mindustry.world.blocks.units.MechFactory;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.entities.EntityGroup;
 import io.anuke.ucore.entities.trait.SolidTrait;
@@ -75,7 +74,7 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
     private Tile mining;
     private CarriableTrait carrying;
     private Trail trail = new Trail(12);
-    private Vector2 movement = new Vector2();
+    private Vector2 movement = new Translator();
     private boolean moved;
 
     public Player() {
@@ -228,10 +227,6 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
     public void set(float x, float y) {
         this.x = x;
         this.y = y;
-
-        if (isFlying() && isLocal) {
-            Core.camera.position.set(x, y, 0f);
-        }
     }
 
     @Override
@@ -613,12 +608,17 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
         if (moveTarget != null && !moveTarget.isDead()) {
             targetX = moveTarget.getX();
             targetY = moveTarget.getY();
+            boolean tapping = moveTarget instanceof TileEntity && moveTarget.getTeam() == team;
             attractDst = 0f;
 
-            if (distanceTo(moveTarget) < 2f) {
-                if (moveTarget instanceof CarriableTrait) {
+            if(tapping){
+                velocity.setAngle(Mathf.slerpDelta(velocity.angle(), angleTo(moveTarget), 0.1f));
+            }
+
+            if(distanceTo(moveTarget) < 2f){
+                if(moveTarget instanceof CarriableTrait){
                     carry((CarriableTrait) moveTarget);
-                } else if (moveTarget instanceof TileEntity && ((TileEntity) moveTarget).tile.block() instanceof MechFactory) {
+                }else if(tapping){
                     Tile tile = ((TileEntity) moveTarget).tile;
                     tile.block().tapped(tile, this);
                 }
