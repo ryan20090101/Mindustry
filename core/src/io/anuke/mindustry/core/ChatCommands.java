@@ -9,8 +9,12 @@ import io.anuke.mindustry.entities.Player;
 import io.anuke.mindustry.entities.TileEntity;
 import io.anuke.mindustry.entities.traits.BuilderTrait;
 import io.anuke.mindustry.game.EventType;
+import io.anuke.mindustry.game.GameMode;
 import io.anuke.mindustry.game.Team;
 import io.anuke.mindustry.gen.Call;
+import io.anuke.mindustry.io.SaveIO;
+import io.anuke.mindustry.maps.Map;
+import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.net.Packets;
 import io.anuke.mindustry.net.ValidateException;
 import io.anuke.mindustry.type.Item;
@@ -22,12 +26,14 @@ import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.storage.CoreBlock;
 import io.anuke.mindustry.world.blocks.storage.StorageBlock;
 import io.anuke.ucore.core.Events;
+import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Geometry;
 import io.anuke.ucore.util.Log;
 import io.anuke.mindustry.core.commands.Command;
 import io.anuke.mindustry.core.commands.CommandContext;
 import io.anuke.mindustry.core.commands.CommandRegistry;
+import io.anuke.ucore.util.Strings;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -46,7 +52,10 @@ import javax.script.ScriptException;
 import static io.anuke.mindustry.Vars.*;
 import static io.anuke.mindustry.Vars.netServer;
 import static io.anuke.mindustry.gen.Call.sendMessage;
+import static io.anuke.mindustry.net.NetEvents.sendMessage;
+import static io.anuke.ucore.util.Log.err;
 import static io.anuke.ucore.util.Log.info;
+import static io.anuke.ucore.util.Log.print;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.round;
 
@@ -130,7 +139,7 @@ public class ChatCommands {
             adminOnly = true;
         }
         public void run(CommandContext ctx) {
-            sendMessage(String.format("[#%s]%s  [red]has ended the game", ctx.player.color, ctx.player.name));
+            Call.sendMessage(String.format("[#%s]%s  [red]has ended the game", ctx.player.color, ctx.player.name));
             Timers.run(5 * 60, () -> {
                 state.gameOver = true;
                 Events.fire(new EventType.GameOverEvent());
@@ -142,7 +151,11 @@ public class ChatCommands {
             help = "Switch between teams";
         }
         public void run(CommandContext ctx) {
-            if (ctx.player.health < 50) {
+            if (!state.mode.isPvp) {
+                ctx.reply("[red] You can only switch teams in pvp mode");
+                return;
+            }
+            if ((ctx.player.health < 50) && (state.teams.get(ctx.player.getTeam()).cores.size != 0) ){
                 ctx.reply("[red]You must have more than 50 health to switch teams");
                 ctx.reply("[red]Consider reconnecting to the game");
                 return;
@@ -154,6 +167,21 @@ public class ChatCommands {
             ctx.player.damage(1000);
         }
     };
+    public static Command statusCommand = new Command("status") {
+        {
+            help = "Return status of game";
+        }
+        public void run(CommandContext ctx) {
+                ctx.reply("Status: Playing on map " + Strings.capitalize(world.getMap().name)  +
+                        " Mode:" + Strings.capitalize(state.mode.name()) +
+                        (!state.mode.isPvp ?
+                                (" Wave: " + state.wave +
+                                " Difficulty: " + state.difficulty.name() +
+                                " Enemies: " + unitGroups[Team.red.ordinal()].size() +
+                                " NextWave: " + (state.wavetime / 60)) :""));
+        }
+    };
+
     public static Command superGunCommand = new Command("supergun") {
         {
             help = "idk what this does, honestly";
@@ -163,6 +191,58 @@ public class ChatCommands {
             ctx.player.mech = Mechs.omega;
         }
     };
+
+    public static Command resetCommand = new Command("reset") {
+        {
+            help = "soft-restart of server.";
+            adminOnly = true;
+        }
+        public void run(CommandContext ctx) {
+            try {
+                Net.closeServer();
+                Timers.clear();
+                state.set(GameState.State.menu);
+                netServer.reset();
+                Log.info("Stopped server.");
+                Map map = world.maps().getByName("pvp56");
+                logic.reset();
+                world.loadMap(map);
+                logic.play();
+                info("Map loaded.");
+                Net.host(Settings.getInt("port"));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    public static Command loginCommand = new Command("login") {
+        {
+            help = "!login username password";
+        }
+        public void run(CommandContext ctx) {
+            if (ctx.player.account.signedIn()) ctx.reply("Already loggd in");
+            else if (ctx.args.length > 3) ctx.reply("Invalid login, too many args");
+            else if (ctx.args.length < 3) ctx.reply("Invalid login, not enough args");
+            else {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ctx.player.account.tryLogin(ctx.args[1], ctx.args[2]);
+                        while (ctx.player.account.debug == "init") {
+                        }
+                        if (ctx.player.account.debug == "success") ctx.reply("log in successful");
+                        else {
+                            ctx.reply("log in failed," + debug);
+                            ctx.player.account.debug = "init";
+                        }
+                    }
+                }).start();
+            }
+        }
+    };
+
     public static Command playerListCommand = new Command("players") {
         {
             help = "List the players currently on the server";
@@ -178,6 +258,22 @@ public class ChatCommands {
             }
         }
     };
+
+    public static Command saveCommand = new Command("save") {
+        {
+            help = "List the players currently on the server";
+        }
+        public void run(CommandContext ctx) {
+            ctx.reply("[accent]saved ");
+            threads.run(() -> {
+                int slot = Strings.parseInt(ctx.args[1]);
+                SaveIO.saveToSlot(slot);
+                info("Saved to slot {0}.", slot);
+            });
+        }
+    };
+
+
     public static Command kickCommand = new Command("kick") {
         {
             help = "Use !players to get player number, then use '!kick # reasons'";
@@ -401,8 +497,11 @@ public class ChatCommands {
         commandRegistry.registerCommand(unAdminCommand);
         commandRegistry.registerCommand(getAccessCommand);
         commandRegistry.registerCommand(setAccessCommand);
-
+        commandRegistry.registerCommand(statusCommand);
         commandRegistry.registerCommand(helpCommand);
+        commandRegistry.registerCommand(loginCommand);
+        commandRegistry.registerCommand(resetCommand);
+
     }
 
     /**

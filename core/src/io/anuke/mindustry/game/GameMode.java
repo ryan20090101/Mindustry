@@ -22,7 +22,8 @@ public enum GameMode{
         disableWaves = true;
         isPvp = true;
         hidden = true;
-        enemyCoreBuildRadius = 600f;
+            enemyCoreBuildRadius = 300f;
+        enemyCoreShieldRadius = 1f;
         respawnTime = 60 * 10;
     }};
 

@@ -408,7 +408,8 @@ public class NetServer extends Module{
         if (player.isAdmin) Call.sendMessage("[scarlet]Admin  " + player.name + "[white]  has[royal]  arrived.");
         else Call.sendMessage("[accent]" + player.name + " [accent]has connected.");
         Call.sendMessage(player.con.id, ". . . . . . . . . . . . . . . . . ");
-        Call.sendMessage(player.con.id, "[scarlet]Welcome [white]to [royal] indielm [white] on [scarlet] PVP MODE");
+        if (state.mode.isPvp) Call.sendMessage(player.con.id, "[scarlet]Welcome [white]to [royal] indielm [white] on [scarlet] PVP MODE");
+        else Call.sendMessage(player.con.id, "[scarlet]Welcome [white]to [royal] indielm [white]");
         Call.sendMessage(player.con.id,"[scarlet]Use !help for help with chat commands");
         Call.sendMessage(player.con.id,"[royal]visit the discord [white]at [scarlet] discord.indielm.com");
         Log.info("&y{0} has connected.", player.name);

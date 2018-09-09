@@ -8,6 +8,7 @@ import io.anuke.mindustry.game.EventType.GameOverEvent;
 import io.anuke.mindustry.game.EventType.PlayEvent;
 import io.anuke.mindustry.game.EventType.ResetEvent;
 import io.anuke.mindustry.game.EventType.WaveEvent;
+import io.anuke.mindustry.game.Team;
 import io.anuke.mindustry.game.Teams;
 import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.type.Item;
@@ -93,7 +94,26 @@ public class Logic extends Module{
 
     //this never triggers in PvP; only for checking sector game-overs
     private void checkGameOver(){
-        if(state.teams.get(defaultTeam).cores.size == 0 && !state.gameOver){
+        if(state.mode.isPvp) checkPvPGameOver();
+
+        else if(state.teams.get(defaultTeam).cores.size == 0 && !state.gameOver){
+            state.gameOver = true;
+            Events.fire(new GameOverEvent());
+        }
+    }
+
+    private void checkPvPGameOver() {
+        Team alive = null;
+
+        for (Team team : Team.all) {
+            if (state.teams.get(team).cores.size > 0) {
+                if (alive != null) {
+                    return;
+                }
+                alive = team;
+            }
+        }
+        if (alive != null && !state.gameOver) {
             state.gameOver = true;
             Events.fire(new GameOverEvent());
         }

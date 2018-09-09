@@ -11,6 +11,7 @@ import io.anuke.annotations.Annotations.Remote;
 import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.content.Mechs;
 import io.anuke.mindustry.content.fx.UnitFx;
+import io.anuke.mindustry.core.commands.Account;
 import io.anuke.mindustry.entities.effect.ItemDrop;
 import io.anuke.mindustry.entities.effect.ScorchDecal;
 import io.anuke.mindustry.entities.traits.*;
@@ -62,13 +63,13 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
     public Mech mech;
     public int spawner;
 
+    public Account account;
     public NetConnection con;
     public int playerIndex = 0;
     public boolean isLocal = false;
     public Timer timer = new Timer(4);
     public TargetTrait target;
     public TargetTrait moveTarget;
-
     private float walktime;
     private Queue<BuildRequest> placeQueue = new ThreadQueue<>();
     private Tile mining;
@@ -80,6 +81,7 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
     public Player() {
         hitbox.setSize(5);
         hitboxTile.setSize(4f);
+        account = new Account();
     }
 
     //endregion
@@ -447,10 +449,12 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
             isBoosting = false;
             boostHeat = 0f;
             updateRespawning();
+
             return;
         } else {
             spawner = -1;
         }
+
 
         Tile tile = world.tileWorld(x, y);
 
@@ -469,6 +473,12 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
             }
 
             if (Net.server()) {
+                //System.out.println("signedIn:" + account.signedIn() + "  health:" + health + account.debug);
+                if ( (health>0)&& !account.signedIn()) {
+                    damage(1000, false);
+                    Call.sendMessage(con.id,"You must log in, visit discord.indielm.com");
+                }
+
                 updateShooting(); //server simulates player shooting
             }
             return;

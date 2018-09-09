@@ -947,7 +947,9 @@ public class ServerControl extends Module{
 
     @Override
     public void update(){
-
+        if(!inExtraRound && state.mode.isPvp){
+            checkPvPGameOver();
+        }
         if(state.is(State.playing) && world.getSector() != null && !inExtraRound && !debug){
             //all assigned missions are complete
             if(world.getSector().completedMissions >= world.getSector().missions.size){

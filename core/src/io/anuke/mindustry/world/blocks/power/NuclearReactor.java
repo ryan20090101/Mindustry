@@ -40,8 +40,8 @@ public class NuclearReactor extends PowerGenerator{
     protected float coolantPower = 0.015f; //how much heat decreases per coolant unit
     protected float smokeThreshold = 0.3f; //threshold at which block starts smoking
     protected float maxLiquidUse = 2f; //max liquid use per frame
-    protected int explosionRadius = 19;
-    protected int explosionDamage = 135;
+    protected int explosionRadius = 9;
+    protected int explosionDamage = 35;
     protected float flashThreshold = 0.46f; //heat threshold at which the lights start flashing
 
     protected TextureRegion topRegion, lightsRegion;

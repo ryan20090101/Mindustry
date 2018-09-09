@@ -58,6 +58,7 @@ public class BuildBlock extends Block{
         world.setBlock(tile, block, team);
         Effects.effect(Fx.placeBlock, tile.drawx(), tile.drawy(), block.size);
 
+
         //last builder was this local client player, call placed()
         if(!headless && builderID == players[0].id){
             //this is run delayed, since if this is called on the server, all clients need to recieve the onBuildFinish()
