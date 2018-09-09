@@ -1,0 +1,4 @@
+bottoken
+ownerID
+botsChannelName
+moderationChannelName
