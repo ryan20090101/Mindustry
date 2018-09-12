@@ -81,7 +81,7 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
     public Player() {
         hitbox.setSize(5);
         hitboxTile.setSize(4f);
-        account = new Account();
+        account = new Account(this);
     }
 
     //endregion
@@ -449,7 +449,7 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
             isBoosting = false;
             boostHeat = 0f;
             updateRespawning();
-
+            mech =(isMobile ? Mechs.starterMobile :Mechs.starterDesktop);
             return;
         } else {
             spawner = -1;
@@ -474,9 +474,10 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
 
             if (Net.server()) {
                 //System.out.println("signedIn:" + account.signedIn() + "  health:" + health + account.debug);
+                //mech = Mechs.starterDesktop;
                 if ( (health>0)&& !account.signedIn()) {
                     damage(1000, false);
-                    Call.sendMessage(con.id,"You must log in, visit discord.indielm.com");
+                    Call.sendMessage(con.id, "You must log in! Visit discord.indielm.com and !signup in #pvp-account");
                 }
 
                 updateShooting(); //server simulates player shooting

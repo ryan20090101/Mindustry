@@ -199,6 +199,23 @@ public class NetServer extends Module{
 
             sendWorldData(player, id);
 
+
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    player.account.tryLogin("\"\"", "\"\"", player.uuid, player.con.address);
+                    while (player.account.debug == "init") {
+                    }
+                    if (player.account.debug.contains("loginSuccess")) Call.sendMessage(player.con.id, player.account.debug);
+                    else {
+                        Call.sendMessage(player.con.id, "You must log in! Visit discord.indielm.com and !signup in #pvp-account");
+                        Call.onInfoMessage(player.con.id, "You must log in! Visit discord.indielm.com and !signup in #pvp-account");
+                        player.account.debug = "init";
+                    }
+                }
+            }).start();
+
             Platform.instance.updateRPC();
         });
 

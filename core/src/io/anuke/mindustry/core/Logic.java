@@ -92,10 +92,8 @@ public class Logic extends Module{
         Events.fire(new WaveEvent());
     }
 
-    //this never triggers in PvP; only for checking sector game-overs
     private void checkGameOver(){
         if(state.mode.isPvp) checkPvPGameOver();
-
         else if(state.teams.get(defaultTeam).cores.size == 0 && !state.gameOver){
             state.gameOver = true;
             Events.fire(new GameOverEvent());
@@ -103,19 +101,10 @@ public class Logic extends Module{
     }
 
     private void checkPvPGameOver() {
-        Team alive = null;
-
-        for (Team team : Team.all) {
-            if (state.teams.get(team).cores.size > 0) {
-                if (alive != null) {
-                    return;
-                }
-                alive = team;
-            }
-        }
-        if (alive != null && !state.gameOver) {
+        if ((state.teams.get(Team.red).cores.size < 1) || (state.teams.get(Team.blue).cores.size < 1)){
             state.gameOver = true;
             Events.fire(new GameOverEvent());
+            return;
         }
     }
 

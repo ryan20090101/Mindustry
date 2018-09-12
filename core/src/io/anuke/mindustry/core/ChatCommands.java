@@ -229,16 +229,20 @@ public class ChatCommands {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        ctx.player.account.tryLogin(ctx.args[1], ctx.args[2]);
+                        ctx.player.account.tryLogin(ctx.args[1], ctx.args[2], ctx.player.uuid, ctx.player.con.address);
                         while (ctx.player.account.debug == "init") {
                         }
-                        if (ctx.player.account.debug == "success") ctx.reply("log in successful");
+                        if (ctx.player.account.debug.contains("loginSuccess")) Call.sendMessage(ctx.player.con.id, ctx.player.account.debug);
                         else {
-                            ctx.reply("log in failed," + debug);
+                            Call.sendMessage(ctx.player.con.id, "Log in failed");
                             ctx.player.account.debug = "init";
                         }
                     }
                 }).start();
+
+
+
+
             }
         }
     };
@@ -476,6 +480,7 @@ public class ChatCommands {
                     l += commandPrefix + command.name + " ";
                 }
                 ctx.reply(l);
+
             }
         }
     };
