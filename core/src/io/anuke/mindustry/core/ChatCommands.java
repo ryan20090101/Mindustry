@@ -226,23 +226,21 @@ public class ChatCommands {
             else if (ctx.args.length > 3) ctx.reply("Invalid login, too many args");
             else if (ctx.args.length < 3) ctx.reply("Invalid login, not enough args");
             else {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ctx.player.account.tryLogin(ctx.args[1], ctx.args[2], ctx.player.uuid, ctx.player.con.address);
-                        while (ctx.player.account.debug == "init") {
-                        }
-                        if (ctx.player.account.debug.contains("loginSuccess")) Call.sendMessage(ctx.player.con.id, ctx.player.account.debug);
-                        else {
-                            Call.sendMessage(ctx.player.con.id, "Log in failed");
-                            ctx.player.account.debug = "init";
+                new Thread(() -> {
+                    ctx.player.account.tryLogin(ctx.args[1], ctx.args[2], ctx.player.uuid, ctx.player.con.address);
+                    while (ctx.player.account.debug.equals("init")) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            // why was this thread interrupted anyawys
                         }
                     }
-                }).start();
-
-
-
-
+                    if (ctx.player.account.debug.equals("loginSuccess")) ctx.reply(ctx.player.account.debug);
+                    else {
+                        ctx.reply("Log in failed");
+                        ctx.player.account.debug = "init";
+                    }
+                }, "Login processing thread").start();
             }
         }
     };
