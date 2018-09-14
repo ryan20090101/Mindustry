@@ -305,6 +305,7 @@ public class NetServer extends Module{
                 Player player = connections.get(id);
                 if (player == null) return;
                 RemoteReadServer.readPacket(packet.writeBuffer, packet.type, player);
+                System.out.println(player.name + packet.type + packet.toString());
             } catch (RuntimeException e) {
                 Throwable cause = e.getCause();
                 if (!(cause instanceof Cancelled)) throw e;

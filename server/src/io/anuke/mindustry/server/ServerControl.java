@@ -94,7 +94,9 @@ public class ServerControl extends Module{
         }
 
         Events.on(GameOverEvent.class, event -> {
-            if(inExtraRound) return;
+            System.out.print("game over event!");
+            System.out.print("inExtraRound:" + inExtraRound);
+            //if(inExtraRound) return;
             info("Game over!");
 
             if(mode != ShuffleMode.off){
@@ -947,7 +949,7 @@ public class ServerControl extends Module{
 
     @Override
     public void update(){
-        if(!inExtraRound && state.mode.isPvp){
+        if(state.mode.isPvp){//if(!inExtraRound && state.mode.isPvp){
             checkPvPGameOver();
         }
         if(state.is(State.playing) && world.getSector() != null && !inExtraRound && !debug){

@@ -202,8 +202,10 @@ public interface BuilderTrait extends Entity{
         if(!(tile.block() instanceof BuildBlock) ){
             if(canCreateBlocks() && !current.remove && Build.validPlace(unit.getTeam(), current.x, current.y, current.recipe.result, current.rotation)){
                 Build.beginPlace(unit.getTeam(), current.x, current.y, current.recipe, current.rotation);
+                world.recorder.saveConstruct(unit.id, current.recipe.getContentName(), tile.x, tile.y);
             }else if(canCreateBlocks() && current.remove && Build.validBreak(unit.getTeam(), current.x, current.y)){
                 Build.beginBreak(unit.getTeam(), current.x, current.y);
+                world.recorder.saveDeconstruct(unit.id, current.recipe.getContentName(), tile.x, tile.y);
             }else{
                 getPlaceQueue().removeFirst();
                 return;

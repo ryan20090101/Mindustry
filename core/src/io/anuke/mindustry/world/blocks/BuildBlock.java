@@ -194,6 +194,14 @@ public class BuildBlock extends Block{
         private float[] totalAccumulator;
 
         public void construct(Unit builder, TileEntity core, float amount){
+
+            if (totalAccumulator[0] ==0 ){
+                //System.out.println( amount + " " + accumulator[0] + " " + totalAccumulator[0]);
+                //System.out.println(playerGroup.getByID(builder.id).name);
+                //world.recorder.saveLine(builder.id + ","+ tile.x + "," + tile.y + "," + recipe.getContentName());
+                //world.recorder.saveConstruct(builder.id, recipe.getContentName(), tile.x, tile.y);
+            }
+
             if(recipe == null){
                 damage(99999);
                 return;
@@ -223,9 +231,11 @@ public class BuildBlock extends Block{
             Recipe recipe = Recipe.getByResult(previous);
 
             if(recipe != null){
+                //if (progress == 1) world.recorder.saveDeconstruct(builder.id, recipe.getContentName(), tile.x, tile.y);
                 ItemStack[] requirements = recipe.requirements;
                 if(requirements.length != accumulator.length || totalAccumulator.length != requirements.length){
                     setDeconstruct(previous);
+
                 }
 
                 for(int i = 0; i < requirements.length; i++){

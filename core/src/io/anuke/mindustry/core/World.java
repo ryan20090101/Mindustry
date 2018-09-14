@@ -7,6 +7,7 @@ import io.anuke.mindustry.ai.BlockIndexer;
 import io.anuke.mindustry.ai.Pathfinder;
 import io.anuke.mindustry.content.blocks.Blocks;
 import io.anuke.mindustry.core.GameState.State;
+import io.anuke.mindustry.core.commands.Recorder;
 import io.anuke.mindustry.game.EventType.TileChangeEvent;
 import io.anuke.mindustry.game.EventType.WorldLoadEvent;
 import io.anuke.mindustry.game.Team;
@@ -27,6 +28,7 @@ import io.anuke.ucore.util.Tmp;
 import static io.anuke.mindustry.Vars.*;
 
 public class World extends Module{
+    public Recorder recorder = new Recorder();
     private Map currentMap;
     private Sector currentSector;
     private Tile[][] tiles;
@@ -243,6 +245,10 @@ public class World extends Module{
     }
 
     public void loadMap(Map map){
+        if (headless){
+
+            recorder.initOutputStream(map.name);
+        }
         currentSector = null;
         beginMapLoad();
         this.currentMap = map;
