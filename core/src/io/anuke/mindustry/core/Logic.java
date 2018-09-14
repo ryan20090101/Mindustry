@@ -93,8 +93,8 @@ public class Logic extends Module{
     }
 
     private void checkGameOver(){
-        if(state.mode.isPvp) checkPvPGameOver();
-        else if(state.teams.get(defaultTeam).cores.size == 0 && !state.gameOver){
+        //if(state.mode.isPvp) checkPvPGameOver();
+         if(state.teams.get(defaultTeam).cores.size == 0 && !state.gameOver){
             state.gameOver = true;
             Events.fire(new GameOverEvent());
         }

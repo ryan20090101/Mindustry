@@ -235,7 +235,7 @@ public class ChatCommands {
                             // why was this thread interrupted anyawys
                         }
                     }
-                    if (ctx.player.account.debug.equals("loginSuccess")) ctx.reply(ctx.player.account.debug);
+                    if (ctx.player.account.debug.startsWith("loginSuccess")) ctx.reply(ctx.player.account.debug);
                     else {
                         ctx.reply("Log in failed");
                         ctx.player.account.debug = "init";

@@ -949,7 +949,7 @@ public class ServerControl extends Module{
 
     @Override
     public void update(){
-        if(state.mode.isPvp){//if(!inExtraRound && state.mode.isPvp){
+        if(!inExtraRound && state.mode.isPvp){//if(!inExtraRound && state.mode.isPvp){
             checkPvPGameOver();
         }
         if(state.is(State.playing) && world.getSector() != null && !inExtraRound && !debug){
