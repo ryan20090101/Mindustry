@@ -205,7 +205,9 @@ public interface BuilderTrait extends Entity{
                 world.recorder.saveConstruct(unit.id, current.recipe.getContentName(), tile.x, tile.y);
             }else if(canCreateBlocks() && current.remove && Build.validBreak(unit.getTeam(), current.x, current.y)){
                 Build.beginBreak(unit.getTeam(), current.x, current.y);
-                world.recorder.saveDeconstruct(unit.id, current.recipe.getContentName(), tile.x, tile.y);
+                if (unit!=null && current != null && current.recipe != null && tile!= null) {
+                    world.recorder.saveDeconstruct(unit.id, current.recipe.getContentName(), tile.x, tile.y);
+                }
             }else{
                 getPlaceQueue().removeFirst();
                 return;
