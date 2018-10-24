@@ -69,8 +69,9 @@ android{
     }
 
     defaultConfig{
-        Integer vcode = new Properties().with{p -> p.load(new FileInputStream(file('../core/assets/version.properties'))); return p }['androidBuildCode']?.toInteger() ?: 1
-        def versionNameResult = "$versionNumber-$versionType-${getBuildVersion().replace(" ", "-")}"
+        def props = new Properties().with{p -> p.load(new FileInputStream(file('../core/assets/version.properties'))); return p }
+        Integer vcode = props['androidBuildCode'].toInteger() ?: 1
+        def versionNameResult = "$versionNumber-$versionType-${getBuildVersion().replace(" ", "-")}-${props['commit']}"
 
         applicationId "io.anuke.mindustry"
         minSdkVersion 14

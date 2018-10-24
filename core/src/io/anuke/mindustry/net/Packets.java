@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 public class Packets{
 
     public enum KickReason{
-        kick, clientOutdated, serverOutdated, banned, gameover(true), recentKick,
+        kick, clientOutdated, serverOutdated, commitMismatch, banned, gameover(true), recentKick,
         nameInUse, idInUse, nameEmpty, customClient, serverClose, vote, typeMismatch, whitelist, playerLimit;
 
         public final boolean quiet;
@@ -65,6 +65,7 @@ public class Packets{
     public static class ConnectPacket implements Packet{
         public int version;
         public String versionType;
+        public String commit;
         public String name, uuid, usid;
         public boolean mobile;
         public int color;
@@ -73,6 +74,8 @@ public class Packets{
         public void write(ByteBuffer buffer){
             buffer.putInt(Version.build);
             TypeIO.writeString(buffer, versionType);
+            if (Version.commit != null) TypeIO.writeString(buffer, Version.commit);
+            else TypeIO.writeString(buffer, "null");
             TypeIO.writeString(buffer, name);
             TypeIO.writeString(buffer, usid);
             buffer.put(mobile ? (byte)1 : 0);
@@ -84,6 +87,7 @@ public class Packets{
         public void read(ByteBuffer buffer){
             version = buffer.getInt();
             versionType = TypeIO.readString(buffer);
+            commit = TypeIO.readString(buffer);
             name = TypeIO.readString(buffer);
             usid = TypeIO.readString(buffer);
             mobile = buffer.get() == 1;

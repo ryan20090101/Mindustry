@@ -146,6 +146,10 @@ public class NetServer implements ApplicationListener{
                 con.kick(packet.version > Version.build ? KickReason.serverOutdated : KickReason.clientOutdated);
                 return;
             }
+            if (Version.commit != null && !Version.commit.equals(packet.commit)) {
+                con.kick(KickReason.commitMismatch);
+                return;
+            }
 
             if(packet.version == -1){
                 con.modclient = true;
