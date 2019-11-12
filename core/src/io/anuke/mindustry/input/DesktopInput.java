@@ -438,6 +438,10 @@ public class DesktopInput extends InputHandler{
                 Core.settings.put("lasersopacity", 0);
             }
         }
+
+        if(Core.input.keyTap(Binding.skip_building)){
+            Call.onSkipCurrentBuild(player);
+        }
     }
 
     @Override
