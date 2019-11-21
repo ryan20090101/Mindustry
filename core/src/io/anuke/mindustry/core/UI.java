@@ -261,7 +261,7 @@ public class UI implements ApplicationListener, Loadable{
     public void resize(int width, int height){
         if(Core.scene == null) return;
         Core.scene.resize(width, height);
-        Events.fire(new ResizeEvent());
+        events.fire(ResizeEvent.class, ResizeEvent::new);
     }
 
     @Override

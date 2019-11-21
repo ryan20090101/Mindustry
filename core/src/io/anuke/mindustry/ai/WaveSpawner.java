@@ -26,7 +26,7 @@ public class WaveSpawner{
     private boolean spawning = false;
 
     public WaveSpawner(){
-        Events.on(WorldLoadEvent.class, e -> reset());
+        events.on(WorldLoadEvent.class, e -> reset());
     }
 
     public int countSpawns(){

@@ -57,20 +57,20 @@ public class PlacementFragment extends Fragment{
     };
 
     public PlacementFragment(){
-        Events.on(WorldLoadEvent.class, event -> {
+        events.on(WorldLoadEvent.class, event -> {
             Core.app.post(() -> {
                 control.input.block = null;
                 rebuild();
             });
         });
 
-        Events.on(UnlockEvent.class, event -> {
+        events.on(UnlockEvent.class, event -> {
             if(event.content instanceof Block){
                 rebuild();
             }
         });
 
-        Events.on(ResetEvent.class, event -> {
+        events.on(ResetEvent.class, event -> {
             selectedBlocks.clear();
         });
     }
@@ -277,7 +277,7 @@ public class PlacementFragment extends Fragment{
                                 if(unlocked(lastDisplay)){
                                     header.addButton("?", Styles.clearPartialt, () -> {
                                         ui.content.show(lastDisplay);
-                                        Events.fire(new BlockInfoEvent());
+                                        events.fire(BlockInfoEvent.class, BlockInfoEvent::new);
                                     }).size(8 * 5).padTop(-5).padRight(-5).right().grow().name("blockinfo");
                                 }
                             }).growX().left();

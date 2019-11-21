@@ -45,7 +45,7 @@ public class SNet implements SteamNetworkingCallback, SteamMatchmakingCallback, 
     public SNet(NetProvider provider){
         this.provider = provider;
 
-        Events.on(ClientLoadEvent.class, e -> Core.app.addListener(new ApplicationListener(){
+        events.on(ClientLoadEvent.class, e -> Core.app.addListener(new ApplicationListener(){
             //read packets
             int length;
             SteamID from = new SteamID();
@@ -96,7 +96,7 @@ public class SNet implements SteamNetworkingCallback, SteamMatchmakingCallback, 
             }
         }));
 
-        Events.on(WaveEvent.class, e -> {
+        events.on(WaveEvent.class, e -> {
             if(currentLobby != null && net.server()){
                 smat.setLobbyData(currentLobby, "wave", state.wave + "");
             }

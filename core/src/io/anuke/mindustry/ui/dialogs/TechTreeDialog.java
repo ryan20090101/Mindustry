@@ -42,7 +42,7 @@ public class TechTreeDialog extends FloatingDialog{
         margin(0f).marginBottom(8);
         Stack stack = cont.stack(view = new View(), items = new ItemsDisplay()).grow().get();
 
-        Events.on(ContentReloadEvent.class, e -> {
+        events.on(ContentReloadEvent.class, e -> {
             nodes.clear();
             root = new TechTreeNode(TechTree.root, null);
             checkNodes(root);
@@ -295,7 +295,7 @@ public class TechTreeDialog extends FloatingDialog{
             rebuild();
             Core.scene.act();
             Sounds.unlock.play();
-            Events.fire(new ResearchEvent(node.block));
+            events.fire(ResearchEvent.class, ResearchEvent::new, e -> e.set(node.block));
         }
 
         void rebuild(){

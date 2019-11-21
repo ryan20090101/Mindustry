@@ -56,7 +56,7 @@ public class MapsDialog extends FloatingDialog{
                     hide();
                     ui.editor.show();
                     ui.editor.editor.getTags().put("name", text);
-                    Events.fire(new MapMakeEvent());
+                    events.fire(MapMakeEvent.class, MapMakeEvent::new);
                 });
 
                 if(maps.byName(text) != null){

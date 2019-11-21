@@ -45,7 +45,7 @@ public class BlockIndexer{
     private Array<Tile> returnArray = new Array<>();
 
     public BlockIndexer(){
-        Events.on(TileChangeEvent.class, event -> {
+        events.on(TileChangeEvent.class, event -> {
             if(typeMap.get(event.tile.pos()) != null){
                 TileIndex index = typeMap.get(event.tile.pos());
                 for(BlockFlag flag : index.flags){
@@ -56,7 +56,7 @@ public class BlockIndexer{
             updateQuadrant(event.tile);
         });
 
-        Events.on(WorldLoadEvent.class, event -> {
+        events.on(WorldLoadEvent.class, event -> {
             scanOres.clear();
             scanOres.addAll(Item.getAllOres());
             damagedTiles = new ObjectSet[Team.all.length];

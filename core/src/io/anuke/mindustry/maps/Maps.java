@@ -80,7 +80,7 @@ public class Maps{
     }
 
     public Maps(){
-        Events.on(ClientLoadEvent.class, event -> {
+        events.on(ClientLoadEvent.class, event -> {
             maps.sort();
         });
 

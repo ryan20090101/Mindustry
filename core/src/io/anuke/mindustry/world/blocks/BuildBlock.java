@@ -17,6 +17,7 @@ import io.anuke.mindustry.game.EventType.*;
 import io.anuke.mindustry.game.*;
 import io.anuke.mindustry.gen.*;
 import io.anuke.mindustry.graphics.*;
+import io.anuke.mindustry.graphics.Shaders.BlockBuild;
 import io.anuke.mindustry.type.*;
 import io.anuke.mindustry.ui.*;
 import io.anuke.mindustry.world.*;
@@ -58,7 +59,7 @@ public class BuildBlock extends Block{
         Team team = tile.getTeam();
         Effects.effect(Fx.breakBlock, tile.drawx(), tile.drawy(), block.size);
         world.removeBlock(tile);
-        Events.fire(new BlockBuildEndEvent(tile, playerGroup.getByID(builderID), team, true));
+        events.fire(BlockBuildEndEvent.class, BlockBuildEndEvent::new, e -> e.set(tile, playerGroup.getByID(builderID), team, true));
         if(shouldPlay()) Sounds.breaks.at(tile, calcPitch(false));
     }
 
@@ -107,7 +108,7 @@ public class BuildBlock extends Block{
         Call.onConstructFinish(tile, block, builderID, rotation, team, skipConfig);
         tile.block().placed(tile);
 
-        Events.fire(new BlockBuildEndEvent(tile, playerGroup.getByID(builderID), team, false));
+        events.fire(BlockBuildEndEvent.class, BlockBuildEndEvent::new, e -> e.set(tile, playerGroup.getByID(builderID), team, false));
         if(shouldPlay()) Sounds.place.at(tile, calcPitch(true));
     }
 

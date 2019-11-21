@@ -29,13 +29,16 @@ public class MinimapRenderer implements Disposable{
     private float zoom = 4;
 
     public MinimapRenderer(){
-        Events.on(WorldLoadEvent.class, event -> {
+        events.on(WorldLoadEvent.class, event -> {
             reset();
             updateAll();
         });
 
         //make sure to call on the graphics thread
-        Events.on(TileChangeEvent.class, event -> Core.app.post(() -> update(event.tile)));
+        events.on(TileChangeEvent.class, event -> {
+            Tile tile = event.tile;
+            Core.app.post(() -> update(tile));
+        });
     }
 
     public Pixmap getPixmap(){

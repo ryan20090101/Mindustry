@@ -122,7 +122,7 @@ public abstract class ClientLauncher extends ApplicationCore implements Platform
                 }
                 mods.each(Mod::init);
                 finished = true;
-                Events.fire(new ClientLoadEvent());
+                events.fire(ClientLoadEvent.class, ClientLoadEvent::new);
                 super.resize(graphics.getWidth(), graphics.getHeight());
                 app.post(() -> app.post(() -> app.post(() -> app.post(() -> super.resize(graphics.getWidth(), graphics.getHeight())))));
             }

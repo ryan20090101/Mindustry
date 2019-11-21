@@ -63,7 +63,7 @@ public class UnitFactory extends Block{
             unit.set(tile.drawx() + Mathf.range(4), tile.drawy() + Mathf.range(4));
             unit.add();
             unit.velocity().y = factory.launchVelocity;
-            Events.fire(new UnitCreateEvent(unit));
+            events.fire(UnitCreateEvent.class, UnitCreateEvent::new, e -> e.set(unit));
         }
     }
 

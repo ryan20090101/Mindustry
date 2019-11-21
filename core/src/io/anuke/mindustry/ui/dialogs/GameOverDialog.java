@@ -23,9 +23,9 @@ public class GameOverDialog extends FloatingDialog{
         this.winner = winner;
         show();
         if(winner == player.getTeam()){
-            Events.fire(new WinEvent());
+            events.fire(WinEvent.class, WinEvent::new);
         }else{
-            Events.fire(new LoseEvent());
+            events.fire(LoseEvent.class, LoseEvent::new);
         }
     }
 

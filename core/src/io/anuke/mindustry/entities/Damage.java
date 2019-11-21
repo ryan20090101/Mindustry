@@ -189,7 +189,7 @@ public class Damage{
             entity.velocity().add(tr.setLength((1f - dst / radius) * 2f / entity.mass()));
 
             if(complete && damage >= 9999999f && entity == player){
-                Events.fire(Trigger.exclusionDeath);
+                events.fire(ExclusionDeathEvent.class, ExclusionDeathEvent::new);
             }
         };
 

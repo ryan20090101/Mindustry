@@ -100,7 +100,7 @@ public class BlockInventoryFragment extends Fragment{
                         holding = false;
                         holdTime = 0f;
 
-                        Events.fire(new WithdrawEvent());
+                        events.fire(WithdrawEvent.class, WithdrawEvent::new);
                     }
                 }
 
@@ -153,7 +153,7 @@ public class BlockInventoryFragment extends Fragment{
                             lastItem = item;
                             holding = true;
                             holdTime = 0f;
-                            Events.fire(new WithdrawEvent());
+                            events.fire(WithdrawEvent.class, WithdrawEvent::new);
                         }
                         return true;
                     }

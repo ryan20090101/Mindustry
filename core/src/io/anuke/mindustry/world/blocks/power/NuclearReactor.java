@@ -109,7 +109,7 @@ public class NuclearReactor extends PowerGenerator{
         entity.heat = Mathf.clamp(entity.heat);
 
         if(entity.heat >= 0.999f){
-            Events.fire(Trigger.thoriumReactorOverheat);
+            events.fire(ThoriumReactorOverheatEvent.class, ThoriumReactorOverheatEvent::new);
             entity.kill();
         }
     }

@@ -166,7 +166,7 @@ public class IOSLauncher extends IOSApplication.Delegate{
             openURL(((NSURL)options.get(UIApplicationLaunchOptions.Keys.URL())));
         }
 
-        Events.on(ClientLoadEvent.class, e -> {
+        events.on(ClientLoadEvent.class, e -> {
             Core.app.post(() -> Core.app.post(() -> {
                 Core.scene.table(Styles.black9, t -> {
                     t.visible(() -> {

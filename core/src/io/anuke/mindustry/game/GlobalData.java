@@ -143,7 +143,7 @@ public class GlobalData{
         if(unlocked.getOr(content.getContentType(), ObjectSet::new).add(content.name)){
             modified = true;
             content.onUnlock();
-            Events.fire(new UnlockEvent(content));
+            events.fire(UnlockEvent.class, UnlockEvent::new, e -> e.set(content));
         }
     }
 

@@ -41,7 +41,7 @@ public class BlockRenderer implements Disposable{
             requests.set(i, new BlockRequest());
         }
 
-        Events.on(WorldLoadEvent.class, event -> {
+        events.on(WorldLoadEvent.class, event -> {
             shadowEvents.clear();
             lastCamY = lastCamX = -99; //invalidate camera position so blocks get updated
 
@@ -94,7 +94,7 @@ public class BlockRenderer implements Disposable{
             fog.end();
         });
 
-        Events.on(TileChangeEvent.class, event -> {
+        events.on(TileChangeEvent.class, event -> {
             shadowEvents.add(event.tile);
 
             int avgx = (int)(camera.position.x / tilesize);

@@ -33,7 +33,7 @@ import static io.anuke.mindustry.Vars.*;
 public class Logic implements ApplicationListener{
 
     public Logic(){
-        Events.on(WaveEvent.class, event -> {
+        events.on(WaveEvent.class, event -> {
             for(Player p : playerGroup.all()){
                 p.respawns = state.rules.respawns;
             }
@@ -43,7 +43,7 @@ public class Logic implements ApplicationListener{
             }
         });
 
-        Events.on(BlockDestroyEvent.class, event -> {
+        events.on(BlockDestroyEvent.class, event -> {
             //blocks that get broken are appended to the team's broken block queue
             Tile tile = event.tile;
             Block block = tile.block();
@@ -78,7 +78,7 @@ public class Logic implements ApplicationListener{
             data.brokenBlocks.addFirst(new BrokenBlock(tile.x, tile.y, tile.rotation(), block.id, tile.entity.config()));
         });
 
-        Events.on(BlockBuildEndEvent.class, event -> {
+        events.on(BlockBuildEndEvent.class, event -> {
             if(!event.breaking){
                 TeamData data = state.teams.get(event.team);
                 Iterator<BrokenBlock> it = data.brokenBlocks.iterator();
@@ -103,7 +103,7 @@ public class Logic implements ApplicationListener{
     public void play(){
         state.set(State.playing);
         state.wavetime = state.rules.waveSpacing * 2; //grace period of 2x wave time before game starts
-        Events.fire(new PlayEvent());
+        events.fire(PlayEvent.class, PlayEvent::new);
 
         //add starting items
         if(!world.isZone()){
@@ -131,7 +131,7 @@ public class Logic implements ApplicationListener{
         Time.clear();
         TileEntity.sleepingEntities = 0;
 
-        Events.fire(new ResetEvent());
+        events.fire(ResetEvent.class, ResetEvent::new);
     }
 
     public void runWave(){
@@ -139,13 +139,13 @@ public class Logic implements ApplicationListener{
         state.wave++;
         state.wavetime = world.isZone() && world.getZone().isLaunchWave(state.wave) ? state.rules.waveSpacing * state.rules.launchWaveMultiplier : state.rules.waveSpacing;
 
-        Events.fire(new WaveEvent());
+        events.fire(WaveEvent.class, WaveEvent::new);
     }
 
     private void checkGameOver(){
         if(!state.rules.attackMode && state.teams.get(defaultTeam).cores.size == 0 && !state.gameOver){
             state.gameOver = true;
-            Events.fire(new GameOverEvent(waveTeam));
+            events.fire(GameOverEvent.class, GameOverEvent::new, e -> e.set(waveTeam));
         }else if(state.rules.attackMode){
             Team alive = null;
 
@@ -163,7 +163,8 @@ public class Logic implements ApplicationListener{
                     //in attack maps, a victorious game over is equivalent to a launch
                     Call.launchZone();
                 }else{
-                    Events.fire(new GameOverEvent(alive));
+                    Team _alive = alive;
+                    events.fire(GameOverEvent.class, GameOverEvent::new, e -> e.set(_alive));
                 }
                 state.gameOver = true;
             }
@@ -194,9 +195,9 @@ public class Logic implements ApplicationListener{
             }
             state.launched = true;
             state.gameOver = true;
-            Events.fire(new LaunchEvent());
+            events.fire(LaunchEvent.class, LaunchEvent::new);
             //manually fire game over event now
-            Events.fire(new GameOverEvent(defaultTeam));
+            events.fire(GameOverEvent.class, GameOverEvent::new);
         });
     }
 

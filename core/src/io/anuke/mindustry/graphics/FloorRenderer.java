@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 import static io.anuke.mindustry.Vars.tilesize;
 import static io.anuke.mindustry.Vars.world;
+import static io.anuke.mindustry.Vars.events;
 
 public class FloorRenderer implements Disposable{
     private final static int chunksize = 64;
@@ -28,7 +29,7 @@ public class FloorRenderer implements Disposable{
     private ObjectSet<CacheLayer> used = new ObjectSet<>();
 
     public FloorRenderer(){
-        Events.on(WorldLoadEvent.class, event -> clearTiles());
+        events.on(WorldLoadEvent.class, event -> clearTiles());
     }
 
     public void drawFloor(){

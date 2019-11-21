@@ -80,7 +80,7 @@ public class ImpactReactor extends PowerGenerator{
             }
 
             if(!prevOut && (getPowerProduction(tile) > consumes.getPower().requestedPower(entity))){
-                Events.fire(Trigger.impactPower);
+                events.fire(ImpactPowerEvent.class, ImpactPowerEvent::new);
             }
 
             if(entity.timer.get(timerUse, itemDuration / entity.timeScale)){

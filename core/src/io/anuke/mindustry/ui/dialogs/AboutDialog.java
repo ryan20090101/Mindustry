@@ -65,7 +65,7 @@ public class AboutDialog extends FloatingDialog{
             }).padLeft(8);
 
             table.addImageButton(Icon.link, () -> {
-                if(link.name.equals("wiki")) Events.fire(Trigger.openWiki);
+                if(link.name.equals("wiki")) events.fire(OpenWikiEvent.class, OpenWikiEvent::new);
 
                 if(!Core.net.openURI(link.link)){
                     ui.showErrorMessage("$linkfail");

@@ -45,7 +45,7 @@ public class FloatingDialog extends Dialog{
     }
 
     protected void onResize(Runnable run){
-        Events.on(ResizeEvent.class, event -> {
+        events.on(ResizeEvent.class, event -> {
             if(isShown() && Core.scene.getDialog() == this){
                 run.run();
                 updateScrollFocus();

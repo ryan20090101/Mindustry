@@ -46,13 +46,13 @@ public class Schematics implements Loadable{
     private long lastClearTime;
 
     public Schematics(){
-        Events.on(DisposeEvent.class, e -> {
+        events.on(DisposeEvent.class, e -> {
             previews.each((schem, m) -> m.dispose());
             previews.clear();
             shadowBuffer.dispose();
         });
 
-        Events.on(ContentReloadEvent.class, event -> {
+        events.on(ContentReloadEvent.class, event -> {
             previews.each((schem, m) -> m.dispose());
             previews.clear();
             load();

@@ -115,7 +115,7 @@ public class ItemTurret extends CooledTurret{
         if(entity == null) return;
 
         if(item == Items.pyratite){
-            Events.fire(Trigger.flameAmmo);
+            events.fire(FlameAmmoEvent.class, FlameAmmoEvent::new);
         }
 
         BulletType type = ammo.get(item);
@@ -138,7 +138,7 @@ public class ItemTurret extends CooledTurret{
 
         //fire events for the tutorial
         if(state.rules.tutorial){
-            Events.fire(new TurretAmmoDeliverEvent());
+            events.fire(TurretAmmoDeliverEvent.class, TurretAmmoDeliverEvent::new);
         }
     }
 

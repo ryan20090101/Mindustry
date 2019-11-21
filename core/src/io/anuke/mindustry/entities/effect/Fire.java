@@ -74,7 +74,7 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait{
             Fire fire = map.get(tile.pos());
             fire.time += intensity * Time.delta();
             if(fire.time >= fire.lifetime()){
-                Events.fire(Trigger.fireExtinguish);
+                events.fire(FireExtinguishEvent.class, FireExtinguishEvent::new);
             }
         }
     }

@@ -9,6 +9,7 @@ import io.anuke.arc.scene.*;
 import io.anuke.arc.scene.ui.*;
 import io.anuke.arc.scene.ui.layout.*;
 import io.anuke.arc.util.*;
+import io.anuke.mindustry.Vars;
 import io.anuke.mindustry.content.*;
 import io.anuke.mindustry.game.EventType.*;
 import io.anuke.mindustry.graphics.*;
@@ -28,20 +29,20 @@ public class Tutorial{
     public TutorialStage stage = TutorialStage.values()[0];
 
     public Tutorial(){
-        Events.on(BlockBuildEndEvent.class, event -> {
+        Vars.events.on(BlockBuildEndEvent.class, event -> {
             if(!event.breaking){
                 blocksPlaced.getAndIncrement(event.tile.block(), 0, 1);
             }
         });
 
-        Events.on(LineConfirmEvent.class, event -> events.add("lineconfirm"));
-        Events.on(TurretAmmoDeliverEvent.class, event -> events.add("ammo"));
-        Events.on(CoreItemDeliverEvent.class, event -> events.add("coreitem"));
-        Events.on(BlockInfoEvent.class, event -> events.add("blockinfo"));
-        Events.on(DepositEvent.class, event -> events.add("deposit"));
-        Events.on(WithdrawEvent.class, event -> events.add("withdraw"));
+        Vars.events.on(LineConfirmEvent.class, event -> events.add("lineconfirm"));
+        Vars.events.on(TurretAmmoDeliverEvent.class, event -> events.add("ammo"));
+        Vars.events.on(CoreItemDeliverEvent.class, event -> events.add("coreitem"));
+        Vars.events.on(BlockInfoEvent.class, event -> events.add("blockinfo"));
+        Vars.events.on(DepositEvent.class, event -> events.add("deposit"));
+        Vars.events.on(WithdrawEvent.class, event -> events.add("withdraw"));
 
-        Events.on(ClientLoadEvent.class, e -> {
+        Vars.events.on(ClientLoadEvent.class, e -> {
             for(TutorialStage stage : TutorialStage.values()){
                 stage.load();
             }
@@ -183,7 +184,7 @@ public class Tutorial{
                 state.wave = 5;
 
                 //end tutorial, never show it again
-                Events.fire(Trigger.tutorialComplete);
+                Vars.events.fire(TutorialCompleteEvent.class, TutorialCompleteEvent::new);
                 Core.settings.put("playedtutorial", true);
                 Core.settings.save();
             }

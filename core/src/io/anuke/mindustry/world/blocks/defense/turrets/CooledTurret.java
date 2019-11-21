@@ -14,6 +14,7 @@ import io.anuke.mindustry.world.meta.*;
 import io.anuke.mindustry.world.meta.values.*;
 
 import static io.anuke.mindustry.Vars.tilesize;
+import static io.anuke.mindustry.Vars.events;
 
 public class CooledTurret extends Turret{
     /** How much reload is lowered by for each unit of liquid of heat capacity. */
@@ -38,7 +39,7 @@ public class CooledTurret extends Turret{
     @Override
     public void handleLiquid(Tile tile, Tile source, Liquid liquid, float amount){
         if(tile.entity.liquids.currentAmount() <= 0.001f){
-            Events.fire(Trigger.turretCool);
+            events.fire(TurretCoolEvent.class, TurretCoolEvent::new);
         }
 
         super.handleLiquid(tile, source, liquid, amount);

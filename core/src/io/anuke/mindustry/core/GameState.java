@@ -35,7 +35,7 @@ public class GameState{
     }
 
     public void set(State astate){
-        Events.fire(new StateChangeEvent(state, astate));
+        events.fire(StateChangeEvent.class, StateChangeEvent::new, e -> e.set(state, astate));
         state = astate;
     }
 

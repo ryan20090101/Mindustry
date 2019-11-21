@@ -491,7 +491,7 @@ public class MobileInput extends InputHandler implements GestureListener{
 
             if(mode == placing && isPlacing()){
                 flushSelectRequests(lineRequests);
-                Events.fire(new LineConfirmEvent());
+                events.fire(LineConfirmEvent.class, LineConfirmEvent::new);
             }else if(mode == breaking){
                 removeSelection(lineStartX, lineStartY, tileX, tileY, true);
             }

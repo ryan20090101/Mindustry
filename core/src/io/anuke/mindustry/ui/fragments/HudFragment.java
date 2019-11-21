@@ -281,9 +281,7 @@ public class HudFragment extends Fragment{
             float[] coreAttackTime = {0};
             float[] coreAttackOpacity = {0};
 
-            Events.on(Trigger.teamCoreDamage, () -> {
-                coreAttackTime[0] = notifDuration;
-            });
+            events.on(TeamCoreDamageEvent.class, () -> coreAttackTime[0] = notifDuration);
 
             t.top().visible(() -> {
                 if(state.is(State.menu) || state.teams.get(player.getTeam()).cores.size == 0 || state.teams.get(player.getTeam()).cores.first().entity == null){
@@ -325,7 +323,7 @@ public class HudFragment extends Fragment{
             };
 
             resize.run();
-            Events.on(ResizeEvent.class, e -> resize.run());
+            events.on(ResizeEvent.class, e -> resize.run());
         });
 
         //paused table

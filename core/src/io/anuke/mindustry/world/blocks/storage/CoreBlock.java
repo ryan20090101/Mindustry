@@ -139,7 +139,7 @@ public class CoreBlock extends StorageBlock{
     @Override
     public float handleDamage(Tile tile, float amount){
         if(player != null && tile.getTeam() == player.getTeam()){
-            Events.fire(Trigger.teamCoreDamage);
+            events.fire(TeamCoreDamageEvent.class, TeamCoreDamageEvent::new);
         }
         return amount;
     }
@@ -195,7 +195,7 @@ public class CoreBlock extends StorageBlock{
         if(net.server() || !net.active()){
             super.handleItem(item, tile, source);
             if(state.rules.tutorial){
-                Events.fire(new CoreItemDeliverEvent());
+                events.fire(CoreItemDeliverEvent.class, CoreItemDeliverEvent::new);
             }
         }
     }

@@ -10,6 +10,7 @@ import io.anuke.arc.scene.ui.layout.*;
 import io.anuke.arc.util.*;
 import io.anuke.mindustry.ai.*;
 import io.anuke.mindustry.core.*;
+import io.anuke.mindustry.core.Events;
 import io.anuke.mindustry.entities.*;
 import io.anuke.mindustry.entities.effect.*;
 import io.anuke.mindustry.entities.traits.*;
@@ -144,6 +145,7 @@ public class Vars implements Loadable{
     /** list of all locales that can be switched to */
     public static Locale[] locales;
 
+    public static Events events = new Events();
     public static FileTree tree;
     public static Net net;
     public static ContentLoader content;

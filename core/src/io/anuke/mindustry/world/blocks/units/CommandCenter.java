@@ -120,7 +120,7 @@ public class CommandCenter extends Block{
             unit.onCommand(command);
         }
 
-        Events.fire(new CommandIssueEvent(tile, command));
+        events.fire(CommandIssueEvent.class, CommandIssueEvent::new, e -> e.set(tile, command));
     }
 
     public class CommandCenterEntity extends TileEntity{

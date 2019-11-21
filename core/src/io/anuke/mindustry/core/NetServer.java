@@ -201,7 +201,7 @@ public class NetServer implements ApplicationListener{
 
             platform.updateRPC();
 
-            Events.fire(new PlayerConnect(player));
+            events.fire(PlayerConnect.class, PlayerConnect::new, e -> e.set(player));
         });
 
         net.handleServer(InvokePacket.class, (con, packet) -> {
@@ -431,7 +431,7 @@ public class NetServer implements ApplicationListener{
 
         if(!player.con.hasDisconnected){
             if(player.con.hasConnected){
-                Events.fire(new PlayerLeave(player));
+                events.fire(PlayerLeave.class, PlayerLeave::new, e -> e.set(player));
                 Call.sendMessage("[accent]" + player.name + "[accent] has disconnected.");
                 Call.onPlayerDisconnect(player.id);
             }
@@ -573,7 +573,7 @@ public class NetServer implements ApplicationListener{
         Call.sendMessage("[accent]" + player.name + "[accent] has connected.");
         Log.info("&lm[{1}] &y{0} has connected. ", player.name, player.uuid);
 
-        Events.fire(new PlayerJoin(player));
+        events.fire(PlayerJoin.class, PlayerJoin::new, e -> e.set(player));
     }
 
     public boolean isWaitingForPlayers(){

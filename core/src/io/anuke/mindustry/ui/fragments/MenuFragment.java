@@ -28,7 +28,7 @@ public class MenuFragment extends Fragment{
     public MenuFragment(){
         assets.load("sprites/logo.png", Texture.class);
         assets.finishLoading();
-        Events.on(DisposeEvent.class, event -> {
+        events.on(DisposeEvent.class, event -> {
             renderer.dispose();
         });
     }
@@ -51,10 +51,10 @@ public class MenuFragment extends Fragment{
 
             if(!mobile){
                 buildDesktop();
-                Events.on(ResizeEvent.class, event -> buildDesktop());
+                events.on(ResizeEvent.class, event -> buildDesktop());
             }else{
                 buildMobile();
-                Events.on(ResizeEvent.class, event -> buildMobile());
+                events.on(ResizeEvent.class, event -> buildMobile());
             }
         });
 

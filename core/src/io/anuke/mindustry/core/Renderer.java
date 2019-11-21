@@ -155,7 +155,7 @@ public class Renderer implements ApplicationListener{
             bloom.dispose();
             bloom = null;
         }
-        Events.fire(new DisposeEvent());
+        events.fire(DisposeEvent.class, DisposeEvent::new);
     }
 
     @Override

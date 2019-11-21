@@ -190,7 +190,7 @@ public class NetClient implements ApplicationListener{
             }
         }
 
-        Events.fire(new PlayerChatEvent(player, message));
+        events.fire(PlayerChatEvent.class, PlayerChatEvent::new, e -> e.set(player, message));
     }
 
     public static String colorizeName(int id, String name){
@@ -347,7 +347,7 @@ public class NetClient implements ApplicationListener{
         try{
             if(wave > state.wave){
                 state.wave = wave;
-                Events.fire(new WaveEvent());
+                events.fire(WaveEvent.class, WaveEvent::new);
             }
 
             state.wavetime = waveTime;

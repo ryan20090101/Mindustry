@@ -42,7 +42,7 @@ public class Build{
         tile.<BuildEntity>entity().setDeconstruct(previous);
         tile.entity.health = tile.entity.maxHealth() * prevPercent;
 
-        Core.app.post(() -> Events.fire(new BlockBuildBeginEvent(tile, team, true)));
+        Core.app.post(() -> events.fire(BlockBuildBeginEvent.class, BlockBuildBeginEvent::new, e -> e.set(tile, team, true)));
     }
 
     /** Places a BuildBlock at this location. */
@@ -63,7 +63,7 @@ public class Build{
         world.setBlock(tile, sub, team, rotation);
         tile.<BuildEntity>entity().setConstruct(previous, result);
 
-        Core.app.post(() -> Events.fire(new BlockBuildBeginEvent(tile, team, false)));
+        Core.app.post(() -> events.fire(BlockBuildBeginEvent.class, BlockBuildBeginEvent::new, e -> e.set(tile, team, false)));
     }
 
     /** Returns whether a tile can be placed at this location by this team. */

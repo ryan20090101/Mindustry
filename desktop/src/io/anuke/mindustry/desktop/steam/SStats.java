@@ -6,6 +6,7 @@ import io.anuke.arc.collection.*;
 import io.anuke.arc.util.*;
 import io.anuke.mindustry.*;
 import io.anuke.mindustry.content.*;
+import io.anuke.mindustry.core.Events.Event;
 import io.anuke.mindustry.entities.type.*;
 import io.anuke.mindustry.entities.units.*;
 import io.anuke.mindustry.game.EventType.*;
@@ -27,7 +28,7 @@ public class SStats implements SteamUserStatsCallback{
     public SStats(){
         stats.requestCurrentStats();
 
-        Events.on(ClientLoadEvent.class, e -> {
+        events.on(ClientLoadEvent.class, e -> {
             mechs = Core.settings.getObject("mechs", ObjectSet.class, ObjectSet::new);
 
             Core.app.addListener(new ApplicationListener(){
@@ -75,7 +76,7 @@ public class SStats implements SteamUserStatsCallback{
     }
 
     private void registerEvents(){
-        Events.on(UnitDestroyEvent.class, e -> {
+        events.on(UnitDestroyEvent.class, e -> {
             if(ncustom()){
                 if(e.unit.getTeam() != Vars.player.getTeam()){
                     SStat.unitsDestroyed.add();
@@ -87,25 +88,25 @@ public class SStats implements SteamUserStatsCallback{
             }
         });
 
-        Events.on(ZoneConfigureCompleteEvent.class, e -> {
+        events.on(ZoneConfigureCompleteEvent.class, e -> {
             if(!content.zones().contains(z -> !z.canConfigure())){
                 configAllZones.complete();
             }
         });
 
-        Events.on(Trigger.newGame, () -> Core.app.post(() -> {
+        events.on(NewGameEvent.class, () -> Core.app.post(() -> {
             if(campaign() && player.getClosestCore() != null && player.getClosestCore().items.total() >= 10 * 1000){
                 drop10kitems.complete();
             }
         }));
 
-        Events.on(CommandIssueEvent.class, e -> {
+        events.on(CommandIssueEvent.class, e -> {
             if(campaign() && e.command == UnitCommand.attack){
                 issueAttackCommand.complete();
             }
         });
 
-        Events.on(BlockBuildEndEvent.class, e -> {
+        events.on(BlockBuildEndEvent.class, e -> {
             if(campaign() && e.player == player && !e.breaking){
                 SStat.blocksBuilt.add();
 
@@ -133,17 +134,17 @@ public class SStats implements SteamUserStatsCallback{
             }
         });
 
-        Events.on(BlockDestroyEvent.class, e -> {
+        events.on(BlockDestroyEvent.class, e -> {
             if(campaign() && e.tile.getTeam() != player.getTeam()){
                 SStat.blocksDestroyed.add();
             }
         });
 
-        Events.on(MapMakeEvent.class, e -> SStat.mapsMade.add());
+        events.on(MapMakeEvent.class, e -> SStat.mapsMade.add());
 
-        Events.on(MapPublishEvent.class, e -> SStat.mapsPublished.add());
+        events.on(MapPublishEvent.class, e -> SStat.mapsPublished.add());
 
-        Events.on(UnlockEvent.class, e -> {
+        events.on(UnlockEvent.class, e -> {
             if(e.content == Items.thorium) obtainThorium.complete();
             if(e.content == Items.titanium) obtainTitanium.complete();
 
@@ -152,41 +153,41 @@ public class SStats implements SteamUserStatsCallback{
             }
         });
 
-        Events.on(Trigger.openWiki, openWiki::complete);
+        events.on(OpenWikiEvent.class, openWiki::complete);
 
-        Events.on(Trigger.exclusionDeath, dieExclusion::complete);
+        events.on(ExclusionDeathEvent.class, dieExclusion::complete);
 
-        Events.on(Trigger.drown, drown::complete);
+        events.on(DrownEvent.class, drown::complete);
 
-        trigger(Trigger.impactPower, powerupImpactReactor);
+        trigger(ImpactPowerEvent.class, powerupImpactReactor);
 
-        trigger(Trigger.flameAmmo, useFlameAmmo);
+        trigger(FlameAmmoEvent.class, useFlameAmmo);
 
-        trigger(Trigger.turretCool, coolTurret);
+        trigger(TurretCoolEvent.class, coolTurret);
 
-        trigger(Trigger.suicideBomb, suicideBomb);
+        trigger(SuicideBombEvent.class, suicideBomb);
 
-        Events.on(Trigger.enablePixelation, enablePixelation::complete);
+        events.on(EnablePixelationEvent.class, enablePixelation::complete);
 
-        Events.on(Trigger.thoriumReactorOverheat, () -> {
+        events.on(ThoriumReactorOverheatEvent.class, () -> {
             if(campaign()){
                 SStat.reactorsOverheated.add();
             }
         });
 
-        trigger(Trigger.shock, shockWetEnemy);
+        trigger(ShockEvent.class, shockWetEnemy);
 
-        trigger(Trigger.phaseDeflectHit, killEnemyPhaseWall);
+        trigger(PhaseDeflectHitEvent.class, killEnemyPhaseWall);
 
-        trigger(Trigger.itemLaunch, launchItemPad);
+        trigger(ItemLaunchEvent.class, launchItemPad);
 
-        Events.on(UnitCreateEvent.class, e -> {
+        events.on(UnitCreateEvent.class, e -> {
             if(campaign() && e.unit.getTeam() == player.getTeam()){
                 SStat.unitsBuilt.add();
             }
         });
 
-        Events.on(LoseEvent.class, e -> {
+        events.on(LoseEvent.class, e -> {
             if(campaign()){
                 if(world.getZone().metCondition() && (state.wave - world.getZone().conditionWave) / world.getZone().launchPeriod >= 1){
                     skipLaunching2Death.complete();
@@ -194,7 +195,7 @@ public class SStats implements SteamUserStatsCallback{
             }
         });
 
-        Events.on(LaunchEvent.class, e -> {
+        events.on(LaunchEvent.class, e -> {
             int total = 0;
             for(Item item : Vars.content.items()){
                 total += Vars.state.stats.itemsDelivered.get(item, 0);
@@ -208,7 +209,7 @@ public class SStats implements SteamUserStatsCallback{
             SStat.itemsLaunched.add(total);
         });
 
-        Events.on(WaveEvent.class, e -> {
+        events.on(WaveEvent.class, e -> {
             if(ncustom()){
                 SStat.maxWavesSurvived.max(Vars.state.wave);
 
@@ -218,13 +219,13 @@ public class SStats implements SteamUserStatsCallback{
             }
         });
 
-        Events.on(PlayerJoin.class, e -> {
+        events.on(PlayerJoin.class, e -> {
             if(Vars.net.server()){
                 SStat.maxPlayersServer.max(Vars.playerGroup.size());
             }
         });
 
-        Events.on(ResearchEvent.class, e -> {
+        events.on(ResearchEvent.class, e -> {
             if(e.content == Blocks.router) researchRouter.complete();
 
             if(!TechTree.all.contains(t -> t.block.locked())){
@@ -232,7 +233,7 @@ public class SStats implements SteamUserStatsCallback{
             }
         });
 
-        Events.on(WinEvent.class, e -> {
+        events.on(WinEvent.class, e -> {
             if(campaign()){
                 if(Vars.state.wave <= 5 && state.rules.attackMode){
                     defeatAttack5Waves.complete();
@@ -252,7 +253,7 @@ public class SStats implements SteamUserStatsCallback{
             }
         });
 
-        Events.on(MechChangeEvent.class, e -> {
+        events.on(MechChangeEvent.class, e -> {
             if(campaign()){
                 if(mechs.add(e.mech.name)){
                     SStat.zoneMechsUsed.max(mechs.size);
@@ -263,8 +264,8 @@ public class SStats implements SteamUserStatsCallback{
         });
     }
 
-    private void trigger(Trigger trigger, SAchievement ach){
-        Events.on(trigger, () -> {
+    private <T extends Event> void trigger(Class<T> event, SAchievement ach){
+        events.on(event, () -> {
             if(campaign()){
                 ach.complete();
             }

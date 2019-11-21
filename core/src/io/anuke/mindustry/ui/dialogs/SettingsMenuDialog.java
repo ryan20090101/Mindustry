@@ -319,7 +319,7 @@ public class SettingsMenuDialog extends SettingsDialog{
         graphics.checkPref("bloom", !mobile, val -> renderer.toggleBloom(val));
         graphics.checkPref("pixelate", false, val -> {
             if(val){
-                Events.fire(Trigger.enablePixelation);
+                events.fire(EnablePixelationEvent.class, EnablePixelationEvent::new);
             }
         });
 

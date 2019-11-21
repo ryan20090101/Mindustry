@@ -76,7 +76,7 @@ public class MechPad extends Block{
         if(resetSpawner) entity.player.lastSpawner = null;
         entity.player = null;
 
-        Events.fire(new MechChangeEvent(player, player.mech));
+        events.fire(MechChangeEvent.class, MechChangeEvent::new, e -> e.set(player, player.mech));
     }
 
     protected static boolean checkValidTap(Tile tile, Player player){

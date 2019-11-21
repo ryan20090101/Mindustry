@@ -35,7 +35,7 @@ public class Saves{
     public Saves(){
         Core.assets.setLoader(Texture.class, ".spreview", new SavePreviewLoader());
 
-        Events.on(StateChangeEvent.class, event -> {
+        events.on(StateChangeEvent.class, event -> {
             if(event.to == State.menu){
                 totalPlaytime = 0;
                 lastTimestamp = 0;

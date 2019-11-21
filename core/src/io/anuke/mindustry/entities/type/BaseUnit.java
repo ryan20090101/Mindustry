@@ -90,7 +90,7 @@ public abstract class BaseUnit extends Unit implements ShooterTrait{
         if(entity instanceof Bullet && ((Bullet)entity).getOwner() instanceof DeflectorEntity && player != null && getTeam() != player.getTeam()){
             Core.app.post(() -> {
                 if(isDead()){
-                    Events.fire(Trigger.phaseDeflectHit);
+                    events.fire(PhaseDeflectHitEvent.class, PhaseDeflectHitEvent::new);
                 }
             });
         }

@@ -110,10 +110,10 @@ public abstract class Unit extends DestructibleEntity implements SaveTrait, Targ
         item.amount = 0;
         drownTime = 0f;
         status.clear();
-        Events.fire(new UnitDestroyEvent(this));
+        events.fire(UnitDestroyEvent.class, UnitDestroyEvent::new, e -> e.set(this));
 
         if(explosiveness > 7f && this == player){
-            Events.fire(Trigger.suicideBomb);
+            events.fire(SuicideBombEvent.class, SuicideBombEvent::new);
         }
     }
 
@@ -332,7 +332,7 @@ public abstract class Unit extends DestructibleEntity implements SaveTrait, Targ
             if(drownTime >= 0.999f && !net.client()){
                 damage(health + 1);
                 if(this == player){
-                    Events.fire(Trigger.drown);
+                    events.fire(DrownEvent.class, DrownEvent::new);
                 }
             }
 

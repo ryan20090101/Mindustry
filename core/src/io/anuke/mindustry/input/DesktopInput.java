@@ -411,7 +411,7 @@ public class DesktopInput extends InputHandler{
             if(mode == placing && block != null){ //touch up while placing, place everything in selection
                 flushRequests(lineRequests);
                 lineRequests.clear();
-                Events.fire(new LineConfirmEvent());
+                events.fire(LineConfirmEvent.class, LineConfirmEvent::new);
             }else if(mode == breaking){ //touch up while breaking, break everything in selection
                 removeSelection(selectX, selectY, cursorX, cursorY);
             }

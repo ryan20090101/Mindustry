@@ -152,7 +152,7 @@ public class ServerControl implements ApplicationListener{
             maps.setShuffleMode(ShuffleMode.all);
         }
 
-        Events.on(GameOverEvent.class, event -> {
+        events.on(GameOverEvent.class, event -> {
             if(inExtraRound) return;
             if(state.rules.waves){
                 info("&lcGame over! Reached wave &ly{0}&lc with &ly{1}&lc players online on map &ly{2}&lc.", state.wave, playerGroup.size(), Strings.capitalize(world.getMap().name()));
@@ -805,7 +805,7 @@ public class ServerControl implements ApplicationListener{
 
             info("&lyCore destroyed.");
             inExtraRound = false;
-            Events.fire(new GameOverEvent(Team.crux));
+            events.fire(GameOverEvent.class, GameOverEvent::new, e -> e.set(Team.crux));
         });
 
         handler.register("info", "<IP/UUID/name...>", "Find player info(s). Can optionally check for all names or IPs a player has had.", arg -> {

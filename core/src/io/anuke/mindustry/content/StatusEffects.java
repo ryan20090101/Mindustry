@@ -8,6 +8,7 @@ import io.anuke.mindustry.game.EventType.*;
 import io.anuke.mindustry.type.StatusEffect;
 
 import static io.anuke.mindustry.Vars.waveTeam;
+import static io.anuke.mindustry.Vars.events;
 
 public class StatusEffects implements ContentList{
     public static StatusEffect none, burning, freezing, wet, melting, tarred, overdrive, shielded, shocked, corroded, boss;
@@ -44,7 +45,7 @@ public class StatusEffects implements ContentList{
             trans(() -> shocked, ((unit, time, newTime, result) -> {
                 unit.damage(20f);
                 if(unit.getTeam() == waveTeam){
-                    Events.fire(Trigger.shock);
+                    events.fire(ShockEvent.class, ShockEvent::new);
                 }
                 result.set(this, time);
             }));

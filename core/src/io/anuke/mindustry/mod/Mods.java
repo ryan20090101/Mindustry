@@ -321,7 +321,7 @@ public class Mods implements Loadable{
         data.load();
         requiresReload = false;
 
-        Events.fire(new ContentReloadEvent());
+        events.fire(ContentReloadEvent.class, ContentReloadEvent::new);
     }
 
     /** Creates all the content found in mod files. */

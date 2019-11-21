@@ -18,6 +18,7 @@ import io.anuke.mindustry.world.Tile;
 import io.anuke.mindustry.world.blocks.BlockPart;
 
 import static io.anuke.mindustry.Vars.tilesize;
+import static io.anuke.mindustry.Vars.events;
 
 public class MapRenderer implements Disposable{
     private static final int chunkSize = 64;
@@ -32,9 +33,7 @@ public class MapRenderer implements Disposable{
         this.editor = editor;
         this.texture = Core.atlas.find("clear-editor").getTexture();
 
-        Events.on(ContentReloadEvent.class, e -> {
-            texture = Core.atlas.find("clear-editor").getTexture();
-        });
+        events.on(ContentReloadEvent.class, e -> texture = Core.atlas.find("clear-editor").getTexture());
     }
 
     public void resize(int width, int height){

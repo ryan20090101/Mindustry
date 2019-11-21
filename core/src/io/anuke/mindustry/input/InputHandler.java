@@ -111,7 +111,7 @@ public abstract class InputHandler implements InputProcessor, GestureListener{
         int[] remaining = {accepted, accepted};
         Block block = tile.block();
 
-        Core.app.post(() -> Events.fire(new DepositEvent(tile, player, item, accepted)));
+        Core.app.post(() -> events.fire(DepositEvent.class, DepositEvent::new, e -> e.set(tile, player, item, accepted)));
 
         for(int i = 0; i < sent; i++){
             boolean end = i == sent - 1;
@@ -145,14 +145,14 @@ public abstract class InputHandler implements InputProcessor, GestureListener{
         if(tile == null || player == null) return;
         if(!Units.canInteract(player, tile)) return;
         tile.block().tapped(tile, player);
-        Core.app.post(() -> Events.fire(new TapEvent(tile, player)));
+        Core.app.post(() -> events.fire(TapEvent.class, TapEvent::new, e -> e.set(tile, player)));
     }
 
     @Remote(targets = Loc.both, called = Loc.both, forward = true)
     public static void onTileConfig(Player player, Tile tile, int value){
         if(tile == null || !Units.canInteract(player, tile)) return;
         tile.block().configured(tile, player, value);
-        Core.app.post(() -> Events.fire(new TapConfigEvent(tile, player, value)));
+        Core.app.post(() -> events.fire(TapConfigEvent.class, TapConfigEvent::new, e -> e.set(tile, player, value)));
     }
 
     public Eachable<BuildRequest> allRequests(){

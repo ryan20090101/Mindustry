@@ -19,6 +19,7 @@ import io.anuke.mindustry.world.meta.StatUnit;
 
 import static io.anuke.mindustry.Vars.data;
 import static io.anuke.mindustry.Vars.world;
+import static io.anuke.mindustry.Vars.events;
 
 public class LaunchPad extends StorageBlock{
     protected final int timerLaunch = timers++;
@@ -75,7 +76,7 @@ public class LaunchPad extends StorageBlock{
 
         if(world.isZone() && entity.cons.valid() && world.isZone() && entity.items.total() >= itemCapacity && entity.timer.get(timerLaunch, launchTime / entity.timeScale)){
             for(Item item : Vars.content.items()){
-                Events.fire(Trigger.itemLaunch);
+                events.fire(ItemLaunchEvent.class, ItemLaunchEvent::new);
                 Effects.effect(Fx.padlaunch, tile);
                 int used = Math.min(entity.items.get(item), itemCapacity);
                 data.addItem(item, used);

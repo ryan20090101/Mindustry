@@ -149,7 +149,7 @@ public class Map implements Comparable<Map>, Publishable{
         }catch(Exception e){
             Log.err(e);
         }
-        Events.fire(new MapPublishEvent());
+        events.fire(MapPublishEvent.class, MapPublishEvent::new);
     }
 
     @Override

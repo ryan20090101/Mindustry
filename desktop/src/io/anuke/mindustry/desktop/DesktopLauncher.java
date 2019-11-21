@@ -101,7 +101,7 @@ public class DesktopLauncher extends ClientLauncher{
                   }
             });
 
-            Events.on(ClientLoadEvent.class, event -> {
+            events.on(ClientLoadEvent.class, event -> {
                 Label[] label = {null};
                 boolean[] visible = {false};
                 Core.scene.table(t -> {
@@ -196,7 +196,7 @@ public class DesktopLauncher extends ClientLauncher{
         SVars.user = new SUser();
         boolean[] isShutdown = {false};
 
-        Events.on(ClientLoadEvent.class, event -> {
+        events.on(ClientLoadEvent.class, event -> {
             player.name = SVars.net.friends.getPersonaName();
             Core.settings.defaults("name", SVars.net.friends.getPersonaName());
             Core.settings.put("name", player.name);
@@ -224,7 +224,7 @@ public class DesktopLauncher extends ClientLauncher{
             });
         });
 
-        Events.on(DisposeEvent.class, event -> {
+        events.on(DisposeEvent.class, event -> {
             SteamAPI.shutdown();
             isShutdown[0] = true;
         });

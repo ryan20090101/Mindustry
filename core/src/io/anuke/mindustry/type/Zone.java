@@ -116,12 +116,13 @@ public class Zone extends UnlockableContent{
         closure.run();
         for(ZoneObjective objective : incomplete){
             if(objective.complete()){
-                Events.fire(new ZoneRequireCompleteEvent(objective.zone, content.zones().find(z -> z.requirements.contains(objective)), objective));
+                events.fire(ZoneRequireCompleteEvent.class, ZoneRequireCompleteEvent::new,
+                        e -> e.set(objective.zone, content.zones().find(z -> z.requirements.contains(objective)), objective));
             }
         }
 
         if(!wasConfig && configureObjective.complete()){
-            Events.fire(new ZoneConfigureCompleteEvent(this));
+            events.fire(ZoneConfigureCompleteEvent.class, ZoneConfigureCompleteEvent::new, e -> e.set(this));
         }
     }
 

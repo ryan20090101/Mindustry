@@ -53,7 +53,7 @@ public class Control implements ApplicationListener, Loadable{
         tutorial = new Tutorial();
         music = new MusicControl();
 
-        Events.on(StateChangeEvent.class, event -> {
+        events.on(StateChangeEvent.class, event -> {
             if((event.from == State.playing && event.to == State.menu) || (event.from == State.menu && event.to != State.menu)){
                 Time.runTask(5f, platform::updateRPC);
                 for(Sound sound : assets.getAll(Sound.class, new Array<>())){
@@ -62,7 +62,7 @@ public class Control implements ApplicationListener, Loadable{
             }
         });
 
-        Events.on(PlayEvent.class, event -> {
+        events.on(PlayEvent.class, event -> {
             player.setTeam(state.rules.pvp ? netServer.assignTeam(player, playerGroup.all()) : defaultTeam);
             player.setDead(true);
             player.add();
@@ -70,7 +70,7 @@ public class Control implements ApplicationListener, Loadable{
             state.set(State.playing);
         });
 
-        Events.on(WorldLoadEvent.class, event -> {
+        events.on(WorldLoadEvent.class, event -> {
             Core.app.post(() -> Core.app.post(() -> {
                 if(net.active() && player.getClosestCore() != null){
                     //set to closest core since that's where the player will probably respawn; prevents camera jumps
@@ -82,7 +82,7 @@ public class Control implements ApplicationListener, Loadable{
             }));
         });
 
-        Events.on(ResetEvent.class, event -> {
+        events.on(ResetEvent.class, event -> {
             player.reset();
             tutorial.reset();
 
@@ -91,7 +91,7 @@ public class Control implements ApplicationListener, Loadable{
             saves.resetSave();
         });
 
-        Events.on(WaveEvent.class, event -> {
+        events.on(WaveEvent.class, event -> {
             if(world.getMap().getHightScore() < state.wave){
                 hiscore = true;
                 world.getMap().setHighScore(state.wave);
@@ -100,7 +100,7 @@ public class Control implements ApplicationListener, Loadable{
             Sounds.wave.play();
         });
 
-        Events.on(GameOverEvent.class, event -> {
+        events.on(GameOverEvent.class, event -> {
             state.stats.wavesLasted = state.wave;
             Effects.shake(5, 6, Core.camera.position.x, Core.camera.position.y);
             //the restart dialog can show info for any number of scenarios
@@ -114,7 +114,7 @@ public class Control implements ApplicationListener, Loadable{
         });
 
         //autohost for pvp maps
-        Events.on(WorldLoadEvent.class, event -> {
+        events.on(WorldLoadEvent.class, event -> {
             if(state.rules.pvp && !net.active()){
                 try{
                     net.host(port);
@@ -126,9 +126,9 @@ public class Control implements ApplicationListener, Loadable{
             }
         });
 
-        Events.on(UnlockEvent.class, e -> ui.hudfrag.showUnlock(e.content));
+        events.on(UnlockEvent.class, e -> ui.hudfrag.showUnlock(e.content));
 
-        Events.on(BlockBuildEndEvent.class, e -> {
+        events.on(BlockBuildEndEvent.class, e -> {
             if(e.team == player.getTeam()){
                 if(e.breaking){
                     state.stats.buildingsDeconstructed++;
@@ -138,31 +138,31 @@ public class Control implements ApplicationListener, Loadable{
             }
         });
 
-        Events.on(BlockDestroyEvent.class, e -> {
+        events.on(BlockDestroyEvent.class, e -> {
             if(e.tile.getTeam() == player.getTeam()){
                 state.stats.buildingsDestroyed++;
             }
         });
 
-        Events.on(UnitDestroyEvent.class, e -> {
+        events.on(UnitDestroyEvent.class, e -> {
             if(e.unit.getTeam() != player.getTeam()){
                 state.stats.enemyUnitsDestroyed++;
             }
         });
 
-        Events.on(ZoneRequireCompleteEvent.class, e -> {
+        events.on(ZoneRequireCompleteEvent.class, e -> {
             if(e.objective.display() != null){
                 ui.hudfrag.showToast(Core.bundle.format("zone.requirement.complete", e.zoneForMet.localizedName, e.objective.display()));
             }
         });
 
-        Events.on(ZoneConfigureCompleteEvent.class, e -> {
+        events.on(ZoneConfigureCompleteEvent.class, e -> {
             if(e.zone.configureObjective.display() != null){
                 ui.hudfrag.showToast(Core.bundle.format("zone.config.unlocked", e.zone.configureObjective.display()));
             }
         });
 
-        Events.on(Trigger.newGame, () -> {
+        events.on(NewGameEvent.class, () -> {
             TileEntity core = player.getClosestCore();
 
             if(core == null) return;
@@ -176,7 +176,7 @@ public class Control implements ApplicationListener, Loadable{
             });
         });
 
-        Events.on(UnitDestroyEvent.class, e -> {
+        events.on(UnitDestroyEvent.class, e -> {
             if(e.unit instanceof BaseUnit && world.isZone()){
                 data.unlockContent(((BaseUnit)e.unit).getType());
             }
@@ -220,7 +220,7 @@ public class Control implements ApplicationListener, Loadable{
             player.add();
         }
 
-        Events.on(ClientLoadEvent.class, e -> input.add());
+        events.on(ClientLoadEvent.class, e -> input.add());
     }
 
     public void setInput(InputHandler newInput){
@@ -245,7 +245,7 @@ public class Control implements ApplicationListener, Loadable{
             if(settings.getBool("savecreate") && !world.isInvalidMap()){
                 control.saves.addSave(map.name() + " " + new SimpleDateFormat("MMM dd h:mm", Locale.getDefault()).format(new Date()));
             }
-            Events.fire(Trigger.newGame);
+            events.fire(NewGameEvent.class, NewGameEvent::new);
         });
     }
 
@@ -264,7 +264,7 @@ public class Control implements ApplicationListener, Loadable{
             state.set(State.playing);
             control.saves.zoneSave();
             logic.play();
-            Events.fire(Trigger.newGame);
+            events.fire(NewGameEvent.class, NewGameEvent::new);
         });
     }
 
@@ -317,7 +317,7 @@ public class Control implements ApplicationListener, Loadable{
             state.rules.waveSpacing = 60f * 30;
             state.rules.buildCostMultiplier = 0.3f;
             state.rules.tutorial = true;
-            Events.fire(Trigger.newGame);
+            events.fire(NewGameEvent.class, NewGameEvent::new);
         });
     }
 

@@ -37,7 +37,7 @@ public class Pathfinder implements Runnable{
     Thread thread;
 
     public Pathfinder(){
-        Events.on(WorldLoadEvent.class, event -> {
+        events.on(WorldLoadEvent.class, event -> {
             stop();
 
             //reset and update internal tile array
@@ -58,9 +58,9 @@ public class Pathfinder implements Runnable{
             start();
         });
 
-        Events.on(ResetEvent.class, event -> stop());
+        events.on(ResetEvent.class, event -> stop());
 
-        Events.on(TileChangeEvent.class, event -> updateTile(event.tile));
+        events.on(TileChangeEvent.class, event -> updateTile(event.tile));
     }
 
     /** Packs a tile into its internal representation. */

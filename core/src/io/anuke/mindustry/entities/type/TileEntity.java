@@ -273,7 +273,7 @@ public class TileEntity extends BaseEntity implements TargetTrait, HealthTrait{
         if(!dead){
             dead = true;
 
-            Events.fire(new BlockDestroyEvent(tile));
+            events.fire(BlockDestroyEvent.class, BlockDestroyEvent::new, e -> e.set(tile));
             block.breakSound.at(tile);
             block.onDestroyed(tile);
             world.removeBlock(tile);

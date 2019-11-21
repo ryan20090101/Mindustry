@@ -40,7 +40,7 @@ public class DeployDialog extends FloatingDialog{
         super("", Styles.fullDialog);
 
         treeLayout();
-        Events.on(ContentReloadEvent.class, e -> treeLayout());
+        events.on(ContentReloadEvent.class, e -> treeLayout());
 
         addCloseButton();
         buttons.addImageTextButton("$techtree", Icon.tree, () -> ui.tech.show()).size(230f, 64f);

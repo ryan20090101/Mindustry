@@ -27,10 +27,10 @@ public class MusicControl{
     private boolean silenced;
 
     public MusicControl(){
-        Events.on(ClientLoadEvent.class, e -> reload());
+        events.on(ClientLoadEvent.class, e -> reload());
 
         //only run music 10 seconds after a wave spawns
-        Events.on(WaveEvent.class, e -> Time.run(60f * 10f, () -> {
+        events.on(WaveEvent.class, e -> Time.run(60f * 10f, () -> {
             if(Mathf.chance(musicWaveChance)){
                 playRandom();
             }

@@ -182,7 +182,7 @@ public class World{
         entities.all().each(group -> group.resize(-finalWorldBounds, -finalWorldBounds, tiles.length * tilesize + finalWorldBounds * 2, tiles[0].length * tilesize + finalWorldBounds * 2));
 
         generating = false;
-        Events.fire(new WorldLoadEvent());
+        events.fire(WorldLoadEvent.class, WorldLoadEvent::new);
     }
 
     public void setGenerating(boolean gen){
@@ -271,7 +271,7 @@ public class World{
 
     public void notifyChanged(Tile tile){
         if(!generating){
-            Core.app.post(() -> Events.fire(new TileChangeEvent(tile)));
+            Core.app.post(() -> events.fire(TileChangeEvent.class, TileChangeEvent::new, e -> e.set(tile)));
         }
     }
 
