@@ -509,11 +509,6 @@ public class Mods implements Loadable{
 
         //make sure the main class exists before loading it; if it doesn't just don't put it there
         if(mainFile.exists()){
-            //other platforms don't have standard java class loaders
-            if(!headless && Version.build != -1){
-                throw new IllegalArgumentException("Java class mods are currently unsupported outside of custom builds.");
-            }
-
             URLClassLoader classLoader = new URLClassLoader(new URL[]{sourceFile.file().toURI().toURL()}, ClassLoader.getSystemClassLoader());
             Class<?> main = classLoader.loadClass(mainClass);
             metas.put(main, meta);

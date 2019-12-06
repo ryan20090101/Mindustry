@@ -22,6 +22,8 @@ public class Version{
     public static int revision = 0;
     /** Whether version loading is enabled. */
     public static boolean enabled = true;
+    /** Commit which this build was built from */
+    public static String commit;
 
     public static void init(){
         if(!enabled) return;
@@ -47,6 +49,7 @@ public class Version{
             }else{
                 build = Strings.canParseInt(map.get("build")) ? Integer.parseInt(map.get("build")) : -1;
             }
+            commit = map.get("commit");
         }catch(IOException e){
             throw new RuntimeException(e);
         }

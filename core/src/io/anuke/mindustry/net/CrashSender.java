@@ -91,7 +91,7 @@ public class CrashSender{
             //add all relevant info, ignoring exceptions
             ex(() -> value.addChild("versionType", new JsonValue(Version.type)));
             ex(() -> value.addChild("versionNumber", new JsonValue(Version.number)));
-            ex(() -> value.addChild("versionModifier", new JsonValue(Version.modifier)));
+            ex(() -> value.addChild("versionModifier", new JsonValue(Version.modifier + " commit " + Version.commit)));
             ex(() -> value.addChild("build", new JsonValue(Version.build)));
             ex(() -> value.addChild("revision", new JsonValue(Version.revision)));
             ex(() -> value.addChild("net", new JsonValue(fn)));

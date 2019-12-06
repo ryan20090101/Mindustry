@@ -164,6 +164,11 @@ public class NetServer implements ApplicationListener{
                 return;
             }
 
+            if (Version.commit != null && !Version.commit.equals(packet.commit)) {
+                con.kick(KickReason.commitMismatch);
+                return;
+            }
+
             if(packet.version == -1){
                 con.modclient = true;
             }

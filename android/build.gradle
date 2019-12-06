@@ -71,9 +71,9 @@ android{
     defaultConfig{
         Properties props = loadVersionProps()
         Integer vcode = props['androidBuildCode']?.toInteger() ?: 1
-        def versionNameResult = "$versionNumber-$versionType-${getBuildVersion().replace(" ", "-")}"
+        def versionNameResult = "$versionNumber-$versionType-${getBuildVersion().replace(" ", "-")}-${props['commit']}"
 
-        applicationId "io.anuke.mindustry"
+        applicationId "io.anuke.mindustry.bytelogic"
         minSdkVersion 14
         targetSdkVersion 29
         
@@ -160,5 +160,5 @@ task run(type: Exec){
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'io.anuke.mindustry/io.anuke.mindustry.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'io.anuke.mindustry.bytelogic/io.anuke.mindustry.AndroidLauncher'
 }
