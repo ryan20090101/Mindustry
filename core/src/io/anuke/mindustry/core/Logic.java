@@ -251,6 +251,8 @@ public class Logic implements ApplicationListener{
 
                 playerGroup.update();
 
+                auto.update();
+
                 //effect group only contains item transfers in the headless version, update it!
                 if(headless){
                     effectGroup.update();

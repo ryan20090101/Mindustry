@@ -188,6 +188,8 @@ public class Vars implements Loadable{
 
     public static Player player;
 
+    public static Auto auto = new Auto();
+
     @Override
     public void loadAsync(){
         loadSettings();

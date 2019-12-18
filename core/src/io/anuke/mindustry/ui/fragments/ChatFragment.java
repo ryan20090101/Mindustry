@@ -175,6 +175,8 @@ public class ChatFragment extends Table{
 
         history.insert(1, message);
 
+        if (auto.runCommand(message)) return;
+
         Call.sendChatMessage(message);
     }
 
