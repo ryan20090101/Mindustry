@@ -64,6 +64,7 @@ public class CommandHandler {
         addCommand("logactions", settingsToggle("logactions", "log all actions captured by the action log", v -> griefWarnings.logActions = v));
         addCommand("getactions", this::getactions);
         addCommand("undoactions", this::undoactions);
+        addCommand("griefPower", this::griefPower);
 
         // mods context not yet initialized here
         scriptContext = scriptContextFactory.enterContext();
@@ -651,5 +652,8 @@ public class CommandHandler {
             if (action.undo() == UndoResult.mismatch) reply("[scarlet]mismatch");
             if (count > 0 && ++j >= count) break;
         }
+    }
+    public void griefPower(CommandContex ctx) {
+        griefWarnings.fixer.griefPower();
     }
 }
