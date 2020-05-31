@@ -86,4 +86,15 @@ public class FixGrief {
             });
         });
     }
+    public void griefPower() {
+        iterateAllTiles(tile -> {
+            if(!(tile.block() instanceof PowerNode)) return;
+            if (tile.getTeam != player.getTeam()) return;
+            getPotentialPowerLinks(tile, false, link -> {
+                int value = link.pos();
+                boolean contains = tile.entity.power.links.contanis(value);
+                if (contains) tile.configure(value);
+            });
+        });
+    }
 }
