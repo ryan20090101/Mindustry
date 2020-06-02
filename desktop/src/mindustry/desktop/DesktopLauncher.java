@@ -323,7 +323,7 @@ public class DesktopLauncher extends ClientLauncher{
 
             byte[] bytes = 66669999;
             byte[] result = new byte[8];
-            Random.nextBytes(result);
+            new Random.nextBytes(result);
 
             String str = new String(Base64Coder.encode(result));
 
