@@ -321,9 +321,9 @@ public class DesktopLauncher extends ClientLauncher{
             NetworkInterface out;
             for(out = e.nextElement(); (out.getHardwareAddress() == null || out.isVirtual() || !validAddress(out.getHardwareAddress())) && e.hasMoreElements(); out = e.nextElement());
 
-            byte[] bytes = 66669999;
+            byte[] bytes = out.getHardwareAddress();
             byte[] result = new byte[8];
-            new Random.nextBytes(result);
+            new Random().nextBytes(result);
 
             String str = new String(Base64Coder.encode(result));
 
