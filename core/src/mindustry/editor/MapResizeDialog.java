@@ -7,7 +7,7 @@ import mindustry.gen.*;
 import mindustry.ui.dialogs.*;
 
 public class MapResizeDialog extends FloatingDialog{
-    private static final int minSize = 50, maxSize = 500, increment = 50;
+    private static final int minSize = 50, maxSize = 1000, increment = 50;
     int width, height;
 
     public MapResizeDialog(MapEditor editor, Intc2 cons){
